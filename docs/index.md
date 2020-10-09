@@ -1,37 +1,43 @@
-## Welcome to GitHub Pages
+# Advanced Statistics
+**Instructor**: Matthew Talluto
 
-You can use the [editor on GitHub](https://github.com/mtalluto/vu_advanced_statistics/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+**Office**: Technikerstraße 25, Room 506
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+**Meeting location**:  
+Lectures: virtual  
+Practicals: RR 26
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Course Description
 
-```markdown
-Syntax highlighted code block
+## Learning Objectives
 
-# Header 1
-## Header 2
-### Header 3
+## Schedule
 
-- Bulleted
-- List
+|Dates       |Topics                                                    |Tuesday    |Thursday |
+| :---       |  :---                                                    |   :---    |:---     |
+|29.10       |Probability & distributions                               |           |Lecture  |
+|03.11, 05.11|Probability, Maximum likelihood<br/>Optimisation          |Lecture    |Practical|
+|10.11, 12.11|Bayes' Theorem, Univariate MCMC<br/>SCAM                  |Lecture    |Practical|
+|17.11, 19.11|GLM, Laplace Approximation                                |Lecture    |Practical|
+|24.11, 26.11|Hierarchical Models, Stan Language<br/>Priors, Diagnostics|Lecture    |Practical|
+|01.12, 03.12|Finite mixtures<br/>Model selection, visualisation        |Lecture    |Practical|
+|08.12, 10.12|Spatial Models                                            |**Holiday**|Lecture  |
+|15.12, 17.12|Spatial Models                                            |Practical  |**Presentations**|
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
+## Exercises
+Most lectures will include exercises, which can be completed individually or in groups. Exercises will not be graded, but feedback will be given and completing them will count as course participation. You can submit exercises for feedback by email for up to one week after the practical sessions. You do not need to submit them if you don't want feedback, but you *do* need to to do them. If you work in groups, please send a single file with all of your names. 
 
-[Link](url) and ![Image](src)
-```
+## Projects
+Everyone will complete a data analysis group project using a Bayesian analysis of your choice. I am happy to provide feedback to your group as you are developing your project to help steer you toward the proper analysis. Projects will be presented (via Zoom, unless COVID restrictions change greatly) on the last day of instruction, 17. December. Presentations should be roughly 10 minutes, and should include a brief description of the data and the scientific questions, an explanation of the model structure and why the structure is appropriate, other technical details that will help the group understand your model, and the status (MCMC diagnostics, preliminary results, etc). All group members should participate to some extent in the presentations.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+In addition to the *group* presentations, everyone should submit an *individual* written project report. These should be short (similar to a short-format report found in *Nature*, *Science*, etc.). These should be focused more on the scientific aspects of the project, including any introduction needed, a brief presentation of the results, max 2 paragraphs of discussion, and a detailed methods section. The methods need not present the details behind the data collection, but should give all the relevant details from your modelling exercise. Figures should include both diagnostics as well as results. Note that, although these are individual writeups, it is expected that you will consult with the owner of the dataset you used for information for the introduction and methods.
 
-### Jekyll Themes
+## Assessment
+* Participation: 20% (mostly completing practicals)
+* Project presentation: 40%
+* Project writeup: 40%
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/mtalluto/vu_advanced_statistics/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
