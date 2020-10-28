@@ -1,0 +1,24 @@
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-bottom: 84px;
+}
+
+.reference {
+	bottom: 0%;
+    position: fixed;
+    font-size: small;
+}
+
+.bullet2 {
+	margin-left: 100px;
+	margin-top: -20px;
+	margin-bottom: 20px;
+	font-size: smaller;
+}
+
+.smallcode {
+	font-size: small !important;
+}
+
+a, a:visited {
+	color: #2FA4E7 !important;
+}
