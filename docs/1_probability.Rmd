@@ -1,0 +1,256 @@
+---
+title: "Course Intro & Probability"
+author: "Matthew Talluto"
+date: "29.10.2020"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+library(ggplot2)
+library(xtable)
+```
+
+
+
+## Course Introduction
+
+> - Introduce ourselves - name, research area, what you want from this course
+> - The [course web page](https://mtalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
+
+
+
+## Why Bayes?
+>- Why statistics? What is the goal of statistical analysis?
+
+
+
+## Why Bayes?
+>- I want to describe some phenomenon (“model”)
+>- I have some general (“prior”) knowledge about the question
+>- I gather additional information (“data”)
+
+## Why Bayes?
+* I want to describe some phenomenon (“model”)
+* I have some general (“prior”) knowledge about the question
+* I gather additional information (“data”)
+
+What is the probability that my model is correct given what I already know about it and what I’ve learned?
+
+
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+Imagine a box with a total area of 1, representing all possible events
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+c1 = "#dddddd"
+rect(0, 1, 1, 0, col = c1)
+```
+</div>
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+* An event A has some probability of occurring: *pr(A)* (**marginal probability**)
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+c2 = "#8da0cb77"
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+text(0.1, 0.8, "pr(A)", pos=4)
+text(0.55, 0.55, "1 - pr(A)", pos=4)
+
+```
+</div>
+
+
+
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+* An event A has some probability of occurring: *pr(A)*
+* A second event, B, has multiple possible relationships to A:
+  - Independence
+
+```{r echo = FALSE, results='asis'}
+kb = matrix(c("1 - pr(A) - pr(B)", "pr(A)", "pr(B)", "0"), ncol = 2, dimnames = list(c("!A", "A"), c("!B", "B")))
+tab = xtable(kb)
+print(tab, type='html')
+```
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+c3 = "#fc8d6277"
+rect(0.6, 0.1, 0.9, 0.6, col = c3)
+```
+</div>
+
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+* An event A has some probability of occurring: *pr(A)*
+* A second event, B, has multiple possible relationships to A:
+  - Independence
+  - Conditional dependence
+
+```{r echo = FALSE, results='asis'}
+kb = matrix(c("1 - pr(A) - pr(B) + pr(A,B)", "pr(A) - pr(A,B)", "pr(B) - pr(A,B)", "pr(A,B)"), ncol = 2, dimnames = list(c("!A", "A"), c("!B", "B")))
+
+tab = xtable(kb)
+print(tab, type='html')
+```
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+rect(0.4, 0.3, 0.7, 0.8, col = c3)
+```
+</div>
+
+
+
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+* An event A has some probability of occurring: *pr(A)*
+* A second event, B, has multiple possible relationships to A:
+  - Independence
+  - Conditional dependence
+* pr(A) + pr(B) = the chance of either A, or B, OR both
+* pr(A,B) = the probability of both
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+rect(0.4, 0.3, 0.7, 0.8, col = c3)
+```
+</div>
+
+
+
+## Independence
+
+<div class='left' style='float:left;width:48%'>
+* A and B are independent if pr(A) is not influenced by whether B has occurred, and vice-versa
+* $pr(A,B) = pr(A)pr(B)$ (**joint probability**)
+* $pr(A|B) = pr(A)$
+* $pr(B|A) = pr(B)$
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+rect(0.6, 0.1, 0.9, 0.6, col = c3)
+```
+</div>
+
+
+## Conditional probability
+<div class='left' style='float:left;width:48%'>
+* $pr(A|B)$ is the probability that $A$ occurs, given that we already know $B$ has occurred
+* We notate the opposite (pr that $A$ occurs given that $B$ has not): $pr(A|'B)$
+* We can define conditional probabilities in terms of **joint** and **marginal** probabilities
+
+$$pr(A,B) = pr(A|B)pr(B)$$
+</div>
+
+
+<div class='right' style='float:right;width:48%'>
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+rect(0.4, 0.3, 0.7, 0.8, col = c3)
+```
+</div>
+
+
+## Manipulating conditional probabilities
+
+<div class='left' style='float:left;width:48%'>
+**Are you a (latent) zombie?**
+
+**The problem**:<br />
+0.1% of the population is infected with a parasite that will turn them into zombies. We have a test, but it is imperfect, with a *false negative rate* = 0.5% and a *false positive rate* = 1%. 
+
+You take the test, and the result is positive. What is the probability that you are actually going to become a zombie?
+</div>
+
+<div class='right' style='float:right;width:48%'>
+![](img/zomb.png){width=15%}
+</div>
+
+
+
+## Manipulating conditional probabilities
+
+<div class='left' style='float:left;width:48%'>
+**Are you a (latent) zombie?**
+
+**The problem**:<br />
+0.1% of the population is infected with a parasite that will turn them into zombies. We have a test, but it is imperfect, with a *false negative rate* = 0.5% and a *false positive rate* = 1%. 
+
+You take the test, and the result is positive. What is the probability that you are actually going to become a zombie?
+
+
+**Hints**
+
+* Define the partitions:
+   - Zombie ($Z$) or not a zombie ($'Z = 1 - Z$)
+   - Positive test ($T$) or negative test ($'T = 1 - T$)
+* Assign known numbers to statements of **joint**, **marginal**, or **conditional** probabilities
+* Compute unknowns using the conditional probability rule: $pr(A,B) = pr(A|B)pr(B)$
+* Assign concrete numbers: imagine testing 1,000,000 people. How many are zombies? How many test positive? How many test positive and are zombies?
+</div>
+
+<div class='right' style='float:right;width:48%'>
+![](img/zomb.png){width=15%}
+
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+rect(0.1, 0.5, 0.5, 0.9, col = c2)
+rect(0.4, 0.3, 0.7, 0.8, col = c3)
+text(0.1, 0.85, "Z,'T", pos=4)
+text(0, 0.1, "'Z,'T", pos=4)
+text(0.7, 0.75, "'Z,T", pos=2)
+text(0.5, 0.6, "Z,T", pos=2)
+```
+
+</div>
+
+
