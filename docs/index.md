@@ -5,7 +5,7 @@
 
 **Meeting location**:  
 Lectures: virtual  
-Practicals: RR 26
+Practicals: RR 26 (if possible, otherwise virtual)
 
 
 ## Course Description
@@ -25,8 +25,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 |Dates       |Topics                                                    |Tuesday    |Thursday |
 | :---       |  :---                                                    |   :---    |:---     |
-|29.10       |[Probability & distributions](1_probability)              |           |Lecture  |
-|03.11, 05.11|Probability, Maximum likelihood<br/>Optimisation          |Lecture    |Practical|
+|29.10       |Intro, Probability review                                 |           |[Lecture notes](1_probability)|
+|03.11, 05.11|Distributions, Maximum likelihood<br/>Optimisation        |Lecture    |Practical|
 |10.11, 12.11|Bayes' Theorem, Univariate MCMC<br/>SCAM                  |Lecture    |Practical|
 |17.11, 19.11|GLM, Laplace Approximation                                |Lecture    |Practical|
 |24.11, 26.11|Hierarchical Models, Stan Language<br/>Priors, Diagnostics|Lecture    |Practical|
