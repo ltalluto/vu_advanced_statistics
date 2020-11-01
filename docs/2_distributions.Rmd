@@ -1,0 +1,321 @@
+---
+title: "Probability & Distributions"
+author: "Matthew Talluto"
+date: "03.11.2020"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+library(ggplot2)
+library(xtable)
+```
+
+
+## Detecting Zombies
+
+<div class="left lt">
+
+*Intuitively*: the test is good, so the probability that a positive testing individual is a zombie should be high <br/>
+(many people answer 99%, given the false positive rate of 1%).
+
+*Unintuitively*: zombies are very rare, so when testing many people randomly, many tests will be false positives.
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+## Detecting Zombies
+
+<div class="left lt">
+**Contingency table example first**
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+* First translate numbers to probabilities
+
+> 0.1% of the population is infected with a parasite that will turn them into zombies.
+
+* $pr(Z) = 0.001$
+* This is the **prevalence** of zombies or the **prior probability** that a randomly selected person is a zombie
+
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+* First translate numbers to probabilities
+
+> 0.1% of the population is infected with a parasite that will turn them into zombies.
+
+* $pr(Z) = 0.001$
+* This is the **prevalence** of zombies or the **prior probability** that a randomly selected person is a zombie
+
+> *false negative rate* = 0.5% <br/>
+> *false positive rate* = 1%
+
+* $pr('T | Z) = 0.005$ 
+* $pr(T | 'Z) = 0.01$
+
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+* Use probability rules to find other easy unknowns
+* True positive rate:
+
+$pr(T | Z) = 1 - pr('T | Z) = 1 - 0.005 = 0.995$
+
+* True negative rate:
+
+$pr('T | 'Z) = 1 - pr(T | 'Z) = 1 - 0.01 = 0.99$
+
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+
+**Given**
+
+$pr(Z) = 0.001$
+
+$pr('T | Z) = 0.005$ 
+
+$pr(T | 'Z) = 0.01$
+
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+* Use the product rule to compute the **joint probability**
+
+$pr(Z,T) = pr(T|Z)pr(Z) = 0.995 \times 0.001 = 0.000995$
+
+* The product rule is reversible:
+* $pr(Z,T) = pr(T|Z)pr(Z) = pr(Z|T)pr(T)$
+* Simple algebra can solve for the quantity we desire
+
+$$pr(Z|T) = \frac{pr(T|Z)pr(Z)}{pr(T)}$$
+
+
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+
+**Given**
+
+$pr(Z) = 0.001$
+
+$pr('T | Z) = 0.005$ 
+
+$pr(T | 'Z) = 0.01$
+
+**Known**
+
+$pr(T | Z) = 0.995$
+
+$pr('T | 'Z) = 0.99$
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+
+$$pr(Z|T) = \frac{pr(T|Z)pr(Z)}{pr(T)}$$
+
+* We are missing a single value: $pr(T)$
+* There are two ways to get a positive test:
+* positive, and a zombie: $pr(Z,T)$
+* positive, and not a zombie: $pr('Z,T)$
+
+$$
+\begin{aligned}
+pr(T) & = pr(T,Z) + pr(T,'Z) \\
+      & = pr(T|Z)pr(Z) + pr(T|'Z)pr('Z) \\
+      & = 0.995 \times 0.001 + 0.01 \times 0.999 \\
+      & = 0.000995 + 0.000999 \\
+      & = 0.010985
+\end{aligned}
+$$
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+
+**Given**
+
+$pr(Z) = 0.001$
+
+$pr('T | Z) = 0.005$ 
+
+$pr(T | 'Z) = 0.01$
+
+**Known**
+
+$pr(T | Z) = 0.995$
+
+$pr('T | 'Z) = 0.99$
+
+$pr(Z,T) = 0.000995$
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+
+
+## Detecting Zombies
+<div class='left' style='float:left;width:48%'>
+
+$$
+\begin{aligned}
+pr(Z|T) & = \frac{pr(T|Z)pr(Z)}{pr(T)} \\
+        & = \frac{0.995 \times 0.001}{0.010985} \\ 
+        & = 0.0906
+\end{aligned}
+$$
+</div>
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+
+**Given**
+
+$pr(Z) = 0.001$
+
+$pr('T | Z) = 0.005$ 
+
+$pr(T | 'Z) = 0.01$
+
+**Known**
+
+$pr(T | Z) = 0.995$
+
+$pr('T | 'Z) = 0.99$
+
+$pr(Z,T) = 0.000995$
+
+$pr(T) = 0.010985$
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+##
+
+
+
+
+
+
+
+
+## Notes to cover
+-- the zombie example is cute, but it is a real biological problem
+"True" state is often hidden, we have an imperfect signal
+
+bird example
+(show a figure of empidonax flycatchers)
+we have a state we want to detect (is an endangered species present or absent)
+we have an imperfect indicator (an expert records it as either observed or not)
+we can make a 2x2 contingency table
+we can experimentally estimate the probabilities in the table, then use a model to estimate pr(Present | Observed)
+
+chain rule
+
+have a review slide - marginal, conditional, joint, 
+product rule: pr(A,B) = pr(A|B)*pr(B) (what about independence? then pr(A|B) = pr(A))
+chain rule: pr(⋂E_i..n) = pr(E_n | E_i..n-1) pr(⋂E_i..n-1)
+addition rule: pr(A⋃B) = pr(A) + pr(B) - pr(A⋂B)
+complementary rule: pr('A) = 1 - pr(A)
+
+, chain rule, addition rule, complementary rule
+
+
+get into distributions, what are they for, how to choose them
+
+
+## 
+
+for binomial distribution, we sample for 10 zombies. what's the prob that all 10 are zombies? Z^10
+this is because only one way to get 10 zombies
+what is pr(0)? pr(2)
+

@@ -22,3 +22,13 @@ h1, .h1, h2, .h2, h3, .h3 {
 a, a:visited {
 	color: #2FA4E7 !important;
 }
+
+.lt {
+	float: left;
+	width: 48%;
+}
+
+.rt {
+	float: right;
+	width: 48%;
+}
