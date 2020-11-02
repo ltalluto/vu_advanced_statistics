@@ -857,7 +857,7 @@ pc
 ```{r}
 dat = expand.grid(x=seq(-6,6, length.out=100), mu=0, sd = c(0.2, 1, 2))
 dat$pdf = with(dat, dnorm(x, mu, sd))
-dat$cdf = with(dat, dnorm(x, mu, sd))
+dat$cdf = with(dat, pnorm(x, mu, sd))
 ```
 
 </div>
@@ -916,7 +916,7 @@ pc
 
 ## Distribution functions
 
-* A **probability density function---PDF--** (continuous) is a function f(x) that:
+* A **probability density function** (PDF) is a function f(x) that:
     - is defined on an interval [a,b] (may be infinite)
     - is positive
     - is regular---one value of f(x) for every value of (x), and $\frac{df(x)}{dx}$ is finite
