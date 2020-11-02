@@ -13,7 +13,7 @@ output:
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="svg")
 library(ggplot2)
 library(xtable)
 ```
@@ -61,7 +61,7 @@ print(ztab, type='html')
 ```
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -89,7 +89,7 @@ print(ztab, type='html')
 ```
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -117,7 +117,7 @@ print(ztab, type='html')
 ```
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -149,7 +149,7 @@ print(ztab, type='html')
 ```
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -178,7 +178,7 @@ print(ztab, type='html')
 ```
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -200,7 +200,7 @@ print(ztab, type='html')
 **Desired outcome**: $pr(Z | T)$<br/>
 (if I test positive, what is the probability I am a zombie?)
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -227,7 +227,7 @@ print(ztab, type='html')
 **Desired outcome**: $pr(Z | T)$<br/>
 (if I test positive, what is the probability I am a zombie?)
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -264,7 +264,7 @@ $pr(T | Z') = 0.01$
 
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -306,7 +306,7 @@ $pr(T | Z) = 0.995$
 $pr(T' | Z') = 0.99$
 
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -356,7 +356,7 @@ $pr(T' | Z') = 0.99$
 
 $pr(Z,T) = 0.000995$
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -400,7 +400,7 @@ $pr(Z,T) = 0.000995$
 
 $pr(T) = 0.010985$
 
-![](img/zomb.png){width=15%}
+<!-- ![](img/zomb.png){width=15%} -->
 
 </div>
 
@@ -428,7 +428,7 @@ $pr(T) = 0.010985$
 </div>
 
 <div class='right rt'>
-![](img/empid.jpg){width=80%}
+![](img/empid.jpg){width=60%}
 
 ```{r echo = FALSE, results='asis'}
 emat = matrix(rep("?", 4), ncol=2, dimnames=list(c("Present", "Absent"), c("Observed", "Not Observed")))
