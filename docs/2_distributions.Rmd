@@ -44,13 +44,22 @@ library(xtable)
 ## Detecting Zombies
 
 <div class="left lt">
-**Contingency table example first**
+* Consider a population of a million people, in a contingency table.
 </div>
 
 
 <div class='right rt'>
 **Desired outcome**: $pr(Z | T)$<br/>
 (if I test positive, what is the probability I am a zombie?)
+
+```{r echo = FALSE, results='asis'}
+zmat = matrix(rep("--", 9), ncol=3, dimnames=list(c("Zombie", "Not Zombie", "Sum"), c("Test+", "Test-", "Sum")))
+zmat[3,3] = "1,000,000"
+ztab = xtable(zmat, align = "lccc")
+print(ztab, type='html')
+
+```
+
 
 ![](img/zomb.png){width=15%}
 
@@ -59,9 +68,125 @@ library(xtable)
 
 
 
+## Detecting Zombies
+
+<div class="left lt">
+* Consider a population of a million people, in a contingency table.
+* 0.1% of the population is infected with a parasite that will turn them into zombies (1000 zombies)
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+```{r echo = FALSE, results='asis'}
+zmat[1,3] = "1,000"
+zmat[2,3] = "999,000"
+ztab = xtable(zmat, align = "lccc")
+print(ztab, type='html')
+
+```
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+
+<div class="left lt">
+* Consider a population of a million people, in a contingency table.
+* 0.1% of the population is infected with a parasite that will turn them into zombies (1000 zombies)
+* 0.5% of zombies will falsely test negative (false negative rate): 5 negative zombies, 995 positive ones
+
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+```{r echo = FALSE, results='asis'}
+zmat[1,1] = "995"
+zmat[1,2] = "5"
+ztab = xtable(zmat, align = "lccc")
+print(ztab, type='html')
+
+```
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+## Detecting Zombies
+
+<div class="left lt">
+* Consider a population of a million people, in a contingency table.
+* 0.1% of the population is infected with a parasite that will turn them into zombies (1000 zombies)
+* 0.5% of zombies will falsely test negative (false negative rate): 5 negative zombies, 995 positive ones
+* 1% of non-zombies will falsely test positive: 9990 positive normals, 989010 negative normals
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+```{r echo = FALSE, results='asis'}
+zmat[2,1] = "9,990"
+zmat[2,2] = "989,010"
+zmat[3,1] = "10,985"
+zmat[3,2] = "989,015"
+ztab = xtable(zmat, align = "lccc")
+print(ztab, type='html')
+
+```
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+## Detecting Zombies
+
+<div class="left lt">
+* Consider a population of a million people, in a contingency table.
+* 0.1% of the population is infected with a parasite that will turn them into zombies (1000 zombies)
+* 0.5% of zombies will falsely test negative (false negative rate): 5 negative zombies, 995 positive ones
+* 1% of non-zombies will falsely test positive: 9990 positive normals, 989010 negative normals
+* Positive test is a given; thus only 995 of 10985 positive tests are zombies, or 9.06%
+</div>
+
+
+<div class='right rt'>
+**Desired outcome**: $pr(Z | T)$<br/>
+(if I test positive, what is the probability I am a zombie?)
+
+```{r echo = FALSE, results='asis'}
+zmat[,2] = zmat[,3] = ""
+ztab = xtable(zmat, align = "lccc")
+print(ztab, type='html')
+
+```
+
+
+![](img/zomb.png){width=15%}
+
+</div>
+
+
+
+
+## Detecting Zombies
+<div class="left lt">
 * First translate numbers to probabilities
 
 > 0.1% of the population is infected with a parasite that will turn them into zombies.
@@ -82,7 +207,7 @@ library(xtable)
 
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+<div class="left lt">
 * First translate numbers to probabilities
 
 > 0.1% of the population is infected with a parasite that will turn them into zombies.
@@ -93,8 +218,8 @@ library(xtable)
 > *false negative rate* = 0.5% <br/>
 > *false positive rate* = 1%
 
-* $pr('T | Z) = 0.005$ 
-* $pr(T | 'Z) = 0.01$
+* $pr(T' | Z) = 0.005$ 
+* $pr(T | Z') = 0.01$
 
 </div>
 
@@ -112,15 +237,15 @@ library(xtable)
 
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+<div class="left lt">
 * Use probability rules to find other easy unknowns
 * True positive rate:
 
-$pr(T | Z) = 1 - pr('T | Z) = 1 - 0.005 = 0.995$
+$pr(T | Z) = 1 - pr(T' | Z) = 1 - 0.005 = 0.995$
 
 * True negative rate:
 
-$pr('T | 'Z) = 1 - pr(T | 'Z) = 1 - 0.01 = 0.99$
+$pr(T' | Z') = 1 - pr(T | Z') = 1 - 0.01 = 0.99$
 
 </div>
 
@@ -133,9 +258,9 @@ $pr('T | 'Z) = 1 - pr(T | 'Z) = 1 - 0.01 = 0.99$
 
 $pr(Z) = 0.001$
 
-$pr('T | Z) = 0.005$ 
+$pr(T' | Z) = 0.005$ 
 
-$pr(T | 'Z) = 0.01$
+$pr(T | Z') = 0.01$
 
 
 
@@ -147,7 +272,7 @@ $pr(T | 'Z) = 0.01$
 
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+<div class="left lt">
 * Use the product rule to compute the **joint probability**
 
 $pr(Z,T) = pr(T|Z)pr(Z) = 0.995 \times 0.001 = 0.000995$
@@ -170,15 +295,15 @@ $$pr(Z|T) = \frac{pr(T|Z)pr(Z)}{pr(T)}$$
 
 $pr(Z) = 0.001$
 
-$pr('T | Z) = 0.005$ 
+$pr(T' | Z) = 0.005$ 
 
-$pr(T | 'Z) = 0.01$
+$pr(T | Z') = 0.01$
 
 **Known**
 
 $pr(T | Z) = 0.995$
 
-$pr('T | 'Z) = 0.99$
+$pr(T' | Z') = 0.99$
 
 
 ![](img/zomb.png){width=15%}
@@ -190,19 +315,19 @@ $pr('T | 'Z) = 0.99$
 
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+<div class="left lt">
 
 $$pr(Z|T) = \frac{pr(T|Z)pr(Z)}{pr(T)}$$
 
 * We are missing a single value: $pr(T)$
 * There are two ways to get a positive test:
 * positive, and a zombie: $pr(Z,T)$
-* positive, and not a zombie: $pr('Z,T)$
+* positive, and not a zombie: $pr(Z',T)$
 
 $$
 \begin{aligned}
-pr(T) & = pr(T,Z) + pr(T,'Z) \\
-      & = pr(T|Z)pr(Z) + pr(T|'Z)pr('Z) \\
+pr(T) & = pr(T,Z) + pr(T,Z') \\
+      & = pr(T|Z)pr(Z) + pr(T|Z')pr(Z') \\
       & = 0.995 \times 0.001 + 0.01 \times 0.999 \\
       & = 0.000995 + 0.000999 \\
       & = 0.010985
@@ -219,15 +344,15 @@ $$
 
 $pr(Z) = 0.001$
 
-$pr('T | Z) = 0.005$ 
+$pr(T'| Z) = 0.005$ 
 
-$pr(T | 'Z) = 0.01$
+$pr(T | Z') = 0.01$
 
 **Known**
 
 $pr(T | Z) = 0.995$
 
-$pr('T | 'Z) = 0.99$
+$pr(T' | Z') = 0.99$
 
 $pr(Z,T) = 0.000995$
 
@@ -241,7 +366,7 @@ $pr(Z,T) = 0.000995$
 
 
 ## Detecting Zombies
-<div class='left' style='float:left;width:48%'>
+<div class="left lt">
 
 $$
 \begin{aligned}
@@ -261,15 +386,15 @@ $$
 
 $pr(Z) = 0.001$
 
-$pr('T | Z) = 0.005$ 
+$pr(T' | Z) = 0.005$ 
 
-$pr(T | 'Z) = 0.01$
+$pr(T | Z') = 0.01$
 
 **Known**
 
 $pr(T | Z) = 0.995$
 
-$pr('T | 'Z) = 0.99$
+$pr(T' | Z') = 0.99$
 
 $pr(Z,T) = 0.000995$
 
@@ -279,43 +404,526 @@ $pr(T) = 0.010985$
 
 </div>
 
-##
+
+
+
+
+## Signal detection problems
+
+*  the zombie example is cute, but it is a real biological problem
+* "True" state is often hidden, we have an imperfect signal
+
+
+## Signal detection problems
+
+*  the zombie example is cute, but it is a real biological problem
+* "True" state is often hidden, we have an imperfect signal
+
+<div class='left lt'>
+* Desired outcome: presence/absence of endangered species
+* Imperfect indicator (expert observation)
+* Desire to know $pr(present | observed)$
+
+
+</div>
+
+<div class='right rt'>
+![](img/empid.jpg){width=80%}
+
+```{r echo = FALSE, results='asis'}
+emat = matrix(rep("?", 4), ncol=2, dimnames=list(c("Present", "Absent"), c("Observed", "Not Observed")))
+etab = xtable(emat, align = "lcc")
+print(etab, type='html')
+
+```
+</div>
+
+
+## Product rule => Chain rule
+
+$$
+\begin{aligned}
+pr(A,B) & = pr(A|B)pr(B) \\
+\end{aligned}
+$$
+
+## Product rule => Chain rule
+
+$$
+\begin{aligned}
+pr(A,B) & = pr(A|B)pr(B) \\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+pr(A,B,C) & = pr(A|B,C)pr(B,C) \\
+          & = pr(A|B,C)pr(B|C)pr(C)
+\end{aligned}
+$$
+
+
+
+## Product rule => Chain rule
+
+$$
+\begin{aligned}
+pr(A,B) & = pr(A|B)pr(B) \\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+pr(A,B,C) & = pr(A|B,C)pr(B,C) \\
+          & = pr(A|B,C)pr(B|C)pr(C)
+\end{aligned}
+$$
+
+
+$$
+\begin{aligned}
+pr(\bigcap_{k=1}^{n} A_k) & = pr(A_n | \bigcap_{k=1}^{n-1} A_k )pr(\bigcap_{k=1}^{n-1} A_k) \\
+          & =\prod_{k=1}^{n}pr(A_k | \bigcap_{j=1}^{k-1}A_j)
+\end{aligned}
+$$
+
+
+## Probability Concepts/Rules
+
+* **Marginal probability**: $pr(A)$
+* **Conditional probability**: $pr(A|B)$
+* **Joint probability**: $pr(A,B) = pr(A \cap B)$
+
+
+## Probability Concepts/Rules
+
+* **Marginal probability**: $pr(A)$
+* **Conditional probability**: $pr(A|B)$
+* **Joint probability**: $pr(A,B) = pr(A \cap B)$
+
+<hr/>
+
+* **Complementary rule**: $pr(A') = 1 - pr(A)$
+* **Addition rule**: $pr(A \cup B) = pr(A) + pr(B) - pr(A \cap B)$
+   - For *disjoint* events: $pr(A \cap B) = 0$
+* **Product rule**: $pr(A,B) = pr(A|B)pr(B)$
+   - For *independent* events: $pr(A|B) = pr(A)$
+* **Chain rule**: $pr(\bigcap_{k=1}^{n} A_k) =\prod_{k=1}^{n}pr(A_k | \bigcap_{j=1}^{k-1}A_j)$
+
+
+
+## Probability distributions
+
+> - Our test gets more useful if $pr(Z) = 0.3$
+> - Testing one person randomly taken from a (effectively) infinite population, 30% of the time the person is a zombie
+> - Trivially, doing this 10 times would result in 3 zombies, 7 normals.
+> - But the sampling is random! Sometimes we will see 4 zombies, sometimes 2, etc. How often?
+
+
+## Probability distributions
+
+<div class="left lt">
+* Generally, what is the probability of $k$ zombies when we sample $n$ people?
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+dat = data.frame(Probability = rep(0, 11), k = seq(0,10))
+ym = 0.4
+pt = function(p) p + geom_bar(aes(y = Probability, x = k), stat='identity') + ylim(0,ym) + 
+  scale_x_continuous(breaks=0:10, labels=0:10)
+pl = ggplot(data = dat)
+pt(pl)
+```
+
+</div>
+
+
+
+## Probability distributions
+
+<div class="left lt">
+* Generally, what is the probability of $k$ zombies when we sample $n$ people?
+* There is only one possible way to have 10 normal people. The probability: 
+
+$$pr(k = 0 | n = 10, p = 0.3) = (0.7 \times \ldots 0.7) = 0.7^{10} \approx 0.028 $$
+
+* The same logic applies for 10 zombies: 
+
+$$pr(k = 0 | n = 10, p = 0.3) = 0.3^{10} \approx 0.000 $$
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+dat$Probability[dat$k == 0] = 0.7^10
+dat$Probability[dat$k == 10] = 0.3^10
+pl = ggplot(data = dat)
+pt(pl)
+```
+
+</div>
+
+
+
+
+
+## Probability distributions
+
+<div class="left lt">
+* Generally, what is the probability of $k$ zombies when we sample $n$ people?
+* There are 10 ways to have exactly one zombie (*why?*). 
+* The probability of *one* of those ways:
+
+$$pr(Z_1,Z'_{2..10}) = 0.3 \times0.7^9 \approx 0.012 $$
+
+* Using the **addition rule**:
+
+$$pr(k=1|n=10,p=0.3) = 10 \times 0.3 \times0.7^9 \approx 0.121$$
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+dat$Probability[dat$k == 01] = dbinom(1,10,0.3)
+pl = ggplot(data = dat)
+pt(pl)
+```
+
+</div>
+
+
+## Probability distributions
+
+<div class="left lt">
+* Generally, what is the probability of $k$ zombies when we sample $n$ people?
+* Generalising, the the probability that we will get any one result (i.e., order matters):
+
+$$pr(Z_{a}, Z'_{a'}) = p^k(1 - p)^{(n - k)}$$
+
+* The number of different ways to achieve a given result is the **binomial function** ("n choose k")
+* It follows:
+
+$$pr(k|n,p) = {n \choose k} p^k(1-p)^{(n-k)}$$ 
+```{r}
+choose(n = 10, k = 0:10)
+round(dbinom(0:10, 10, 0.3), 3)
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+dat$Probability = dbinom(0:10, 10, 0.3)
+pl = ggplot(data = dat)
+pt(pl)
+```
+
+</div>
+
+
+## Binomial distribution
+
+<div class="left lt">
+* This is the **probability mass function (PMF)** of the **binomial distribution** (`dbinom` in R)
+$$pr(k|n,p) = {n \choose k} p^k(1-p)^{(n-k)}$$ 
+
+* What is the probability of observing $k$ events out of $n$ independent trials, when $pr(k) = p$?
+</div> 
+<div class="right rt">
+
+```{r echo = FALSE}
+pt(pl)
+```
+
+</div>
 
 
 
 
 
 
+## Binomial distribution
+
+<div class="left lt">
+* This is the **probability mass function (PMF)** of the **binomial distribution** (`dbinom` in R)
+$$pr(k|n,p) = {n \choose k} p^k(1-p)^{(n-k)}$$ 
+
+* What is the probability of observing $k$ events out of $n$ independent trials, when $pr(k) = p$?
+* What is the probability of observing $ \le k$ events? **Cumulative distribution function (CDF)** 
+
+$$
+pr(X \le k|n,p) = \sum_{i=0}^{k} {n \choose i}p^i(1-p)^{(n-i)}
+$$
+
+```{r}
+k = 0:10
+y = pbinom(k, 10, 0.3)
+round(y, 3)
+round(sum(dbinom(0:2,10,0.3)), 3)
+```
 
 
-## Notes to cover
--- the zombie example is cute, but it is a real biological problem
-"True" state is often hidden, we have an imperfect signal
+</div>
 
-bird example
-(show a figure of empidonax flycatchers)
-we have a state we want to detect (is an endangered species present or absent)
-we have an imperfect indicator (an expert records it as either observed or not)
-we can make a 2x2 contingency table
-we can experimentally estimate the probabilities in the table, then use a model to estimate pr(Present | Observed)
+<div class="right rt">
 
-chain rule
+```{r echo = FALSE}
+ggplot(data = data.frame(k = k, y = y), aes(x=k, y = y)) + geom_bar(stat='identity') + ylab(expression(pr(X<=k))) +
+  xlab("k") + scale_x_continuous(breaks=0:10, labels=0:10)
+```
 
-have a review slide - marginal, conditional, joint, 
-product rule: pr(A,B) = pr(A|B)*pr(B) (what about independence? then pr(A|B) = pr(A))
-chain rule: pr(⋂E_i..n) = pr(E_n | E_i..n-1) pr(⋂E_i..n-1)
-addition rule: pr(A⋃B) = pr(A) + pr(B) - pr(A⋂B)
-complementary rule: pr('A) = 1 - pr(A)
-
-, chain rule, addition rule, complementary rule
+</div>
 
 
-get into distributions, what are they for, how to choose them
+
+## Poisson distribution
+
+<div class="left lt">
+* Probability of observing $x$ events in a fixed time/space given a rate of $\lambda$
+* Limit of binomial as $n \rightarrow \infty$ and $p \rightarrow 0$
+* mean = variance = $\lambda$
+* Commonly used for "simple" counts
+
+```{r}
+lam = 5
+pois_dat = data.frame(x = 0:20)
+pois_dat$pmf = dpois(pois_dat$x, lam)
+pois_dat$cdf = ppois(pois_dat$x, lam)
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pp = ggplot(data = pois_dat, aes(x=x, y = pmf)) + geom_line() + ylab("pr(x)") + xlab("x") + theme_minimal()
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = pois_dat, aes(x=x, y = cdf)) + geom_line() + ylab(expression(pr(X<=x)))  + xlab("x")  + theme_minimal()
+pc
+```
+
+</div>
 
 
-## 
+## Poisson distribution
 
-for binomial distribution, we sample for 10 zombies. what's the prob that all 10 are zombies? Z^10
-this is because only one way to get 10 zombies
-what is pr(0)? pr(2)
+<div class="left lt">
+* Probability of observing $x$ events in a fixed time/space given a rate of $\lambda$
+* Limit of binomial as $n \rightarrow \infty$ and $p \rightarrow 0$
+* mean = variance = $\lambda$
+* Commonly used for "simple" counts
 
+```{r}
+lam = c(0.5, 2, 5, 20)
+pois_dat = expand.grid(x=0:50, lam=lam)
+pois_dat$pmf = dpois(pois_dat$x, pois_dat$lam)
+pois_dat$cdf = ppois(pois_dat$x, pois_dat$lam)
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+
+pp = ggplot(data = pois_dat, aes(x=x, y = pmf, colour = factor(lam))) + geom_line() + 
+  ylab("pr(x)") + xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = pois_dat, aes(x=x, y = cdf, colour = factor(lam))) + geom_line() + 
+  ylab(expression(pr(X<=x)))  + xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pc
+```
+</div>
+
+
+## Negative binomial distribution
+
+<div class="left lt">
+* Choose one person from the population where $p = pr(Z) = 0.3$. Is she/he a zombie? Repeat...
+* How many non-zombies will I observe before I find $r$ zombies?
+* In biology, often parameterized by mean ($\mu$) and dispersion ($r$) instead of size ($r$) and probability ($p$), used for "overdispersed" counts
+
+$$\mu = \frac{pr}{1-p}$$
+$$
+s^2 = \mu + \frac{\mu^2}{r}
+$$
+```{r}
+dat = expand.grid(x = 0:60, mu = c(10,20), size = c(5, 2))
+dat$pmf = with(dat, dnbinom(x, mu=mu, size=size))
+dat$cdf = with(dat, pnbinom(x, mu=mu, size=size))
+```
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+dat$params = factor(paste0("mu=", dat$mu, ", r=", dat$size))
+pp = ggplot(data = dat, aes(x=x, y = pmf, colour = params)) + geom_line() + 
+  ylab("pr(x)") + xlab("x")  + theme_minimal()
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = dat, aes(x=x, y = cdf, colour = params)) + geom_line() + 
+  ylab(expression(pr(X<=x))) + xlab("x")  + theme_minimal()
+pc
+```
+
+</div>
+
+
+
+
+
+## Exponential distribution
+
+<div class="left lt">
+* Complement to Poisson, models the time between events of a Poisson process with rate $\lambda$
+* $\mu = \frac{1}{\lambda}$
+* Continuous, defined on $(0, \infty)$
+
+```{r}
+lam = c(0.5, 2, 5, 20)
+dat = expand.grid(x=seq(0,15, length.out=100), lam=lam)
+dat$pdf = dexp(dat$x, dat$lam)
+dat$cdf = pexp(dat$x, dat$lam)
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4, warning=FALSE}
+pp = ggplot(data = dat, aes(x=x, y = pdf, colour=factor(lam))) + geom_line() + ylab("pr(x)") + 
+  xlab("x") + theme_minimal() + labs(color = expression(lambda)) + ylim(0,5)
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = dat, aes(x=x, y = cdf, colour=factor(lam))) + geom_line() + ylab(expression(pr(X<=x))) + 
+  xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pc
+```
+</div>
+
+
+## Gamma distribution
+
+<div class="left lt">
+* Expenential is a special case of Gamma where shape = 1
+* Continuous, defined on $(0, \infty)$
+* Highly generalised distribution, used in many cases for strictly positive variables
+* If there is a mixture of Poisson distributions, where the $\lambda$ for each X comes from a Gamma distribution, then $X$ will follow a negative binomial distribution
+
+```{r}
+dat = expand.grid(x=seq(0,15, length.out=100), shape=c(0.5, 4), rate = c(0.2, 2))
+dat$pdf = with(dat, dgamma(x, shape=shape, rate = rate))
+dat$cdf = with(dat, pgamma(x, shape=shape, rate = rate))
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4, warning=FALSE}
+dat$params = factor(paste0("shape=", dat$shape, ", rate=", dat$rate))
+pp = ggplot(data = dat, aes(x=x, y = pdf, colour=params)) + geom_line() + ylab("pr(x)") + 
+  xlab("x") + theme_minimal() + labs(color = expression(lambda)) + ylim(0,1.5)
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = dat, aes(x=x, y = cdf, colour=params)) + geom_line() + ylab(expression(pr(X<=x))) + 
+  xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pc
+```
+</div>
+
+
+
+
+## Normal distribution
+
+<div class="left lt">
+* Produced by additive processes (log-normal produced by multiplicative processes)
+* Continuous, defined on $(-\infty, \infty)$
+
+```{r}
+dat = expand.grid(x=seq(-6,6, length.out=100), mu=0, sd = c(0.2, 1, 2))
+dat$pdf = with(dat, dnorm(x, mu, sd))
+dat$cdf = with(dat, dnorm(x, mu, sd))
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4, warning=FALSE}
+dat$params = factor(paste0("mean=", dat$mu, ", sd=", dat$sd))
+pp = ggplot(data = dat, aes(x=x, y = pdf, colour=params)) + geom_line() + ylab("pr(x)") + 
+  xlab("x") + theme_minimal() + labs(color = expression(lambda))
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = dat, aes(x=x, y = cdf, colour=params)) + geom_line() + ylab(expression(pr(X<=x))) + 
+  xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pc
+```
+</div>
+
+
+
+## Beta distribution
+
+<div class="left lt">
+* Closely related to Binomial; often models the $p$ parameter for non-stationary Binomials
+* Also used to model proportions
+* Continuous, defined on $(0, 1)$
+
+```{r}
+dat = expand.grid(x=seq(0,1, length.out=100), alpha=c(0.5, 1, 2), beta = c(0.5, 1, 2))
+dat$pdf = with(dat, dbeta(x, alpha, beta))
+dat$cdf = with(dat, pbeta(x, alpha, beta))
+```
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5.5, fig.height=4, warning=FALSE}
+dat = dat[which(!(dat$alpha == 0.5 & dat$beta == 1)), ]
+dat = dat[which(!(dat$alpha == 0.5 & dat$beta == 2)), ]
+dat = dat[which(!(dat$alpha == 1 & dat$beta == 2)), ]
+dat = dat[which(!(dat$alpha == 2 & dat$beta == 0.5)), ]
+dat$params = factor(paste0("alpha=", dat$alpha, ", beta=", dat$beta))
+pp = ggplot(data = dat, aes(x=x, y = pdf, colour=params)) + geom_line() + ylab("pr(x)") + 
+  xlab("x") + theme_minimal() + labs(color = expression(lambda)) + ylim(0,2)
+pp
+```
+
+```{r echo = FALSE, fig.width=5.5, fig.height=4}
+pc = ggplot(data = dat, aes(x=x, y = cdf, colour=params)) + geom_line() + ylab(expression(pr(X<=x))) + 
+  xlab("x")  + theme_minimal() + labs(color = expression(lambda))
+pc
+```
+</div>
+
+
+## Distribution functions
+
+* A **probability density function---PDF--** (continuous) is a function f(x) that:
+    - is defined on an interval [a,b] (may be infinite)
+    - is positive
+    - is regular---one value of f(x) for every value of (x), and $\frac{df(x)}{dx}$ is finite
+    - $\int_a^b f(x)dx = 1$
+    - `d` functions in R (probability **d**ensity) -- `dnorm`, `dgamma`, etc
+* The every PDF has a CDF
+    - $F(x) = \int_a^x f(x)dx$
+    - The probability of a value between $a$ and $x$
+    - `p` functions in R (cumulative **p**robability) -- `pnorm`, `pgamma`, etc
+* Discrete distributions have instead a **probability mass function**

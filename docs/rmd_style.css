@@ -32,3 +32,9 @@ a, a:visited {
 	float: right;
 	width: 48%;
 }
+
+th {
+    font-weight: normal;
+}
+
+
