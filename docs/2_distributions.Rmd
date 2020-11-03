@@ -283,6 +283,7 @@ $pr(Z,T) = pr(T|Z)pr(Z) = 0.995 \times 0.001 = 0.000995$
 
 $$pr(Z|T) = \frac{pr(T|Z)pr(Z)}{pr(T)}$$
 
+> (Bayes' Theorem)
 
 </div>
 
@@ -509,7 +510,7 @@ $$
 * **Product rule**: $pr(A,B) = pr(A|B)pr(B)$
    - For *independent* events: $pr(A|B) = pr(A)$
 * **Chain rule**: $pr(\bigcap_{k=1}^{n} A_k) =\prod_{k=1}^{n}pr(A_k | \bigcap_{j=1}^{k-1}A_j)$
-
+* **Bayes' theorem**: $pr(B|A) = \frac{pr(A|B)pr(B)}{pr(A)}$
 
 
 ## Probability distributions
