@@ -163,6 +163,7 @@ $$
 
 
 
+<!-- 1 & = \frac{{n \choose k}kp^{k-1}(1-p)^{(n-k)}}{{n \choose k} p^k (n-k)(1-p)^{(n-k-1)}} \\ -->
 
 
 
@@ -170,7 +171,6 @@ $$
 
 $$
 \begin{aligned}
-1 & = \frac{{n \choose k}kp^{k-1}(1-p)^{(n-k)}}{{n \choose k} p^k (n-k)(1-p)^{(n-k-1)}} \\
 1 & = \frac{k(1-p)}{p(n-k)} \\
 pn - pk & = k-pk \\
 pn & = k \\
