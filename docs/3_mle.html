@@ -588,8 +588,12 @@ Matthew Talluto
 </div>
 <div id="solving-for-the-mle" class="slide section level2">
 <h1>Solving for the MLE</h1>
-<p>$$ \begin{aligned} (k,n|p) &amp; = {n k} p<sup>k(1-p)</sup>{(n-k)} \</p>
-<p>$$</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{L}(k,n|p) &amp; = {n \choose k} p^k(1-p)^{(n-k)} \\
+\frac{d \mathcal{L}(k,n|p)}{dp} &amp; = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+\end{aligned}
+\]</span></p>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->
