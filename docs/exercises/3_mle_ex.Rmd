@@ -1,0 +1,45 @@
+---
+title: "MLE Exercises"
+date: "05.11.2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load the tsuga dataset from this repository.
+
+```{r}
+library(data.table)
+tsuga = readRDS("data/tsuga.rds")
+```
+
+This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate.
+
+1. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
+2. Write a function taking three parametrs:
+   a. `p`: a *single value*, the probability that a randomly chosen individual is dead
+   b. `n`: a *vector*, the number of trees in each plot
+   c. `k`: a *vetor*, the number of dead trees in each plot
+   d. The function should return the *log likelihood*: $\log pr(n,k|p)$
+```{r}
+# n and k are vectors
+lfun = function(p, n, k) {
+   ## function body
+   return() ## a single value!
+}
+```
+
+   
+3. Plot the log likelihood across various values of `p`
+4. Use `optim` to find the MLE for `p`
+5. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
+6. Repeat the above, but this time estimate the **mean number** of trees per plot.
+    a. What is an appropriate likelihood function?
+    b. What is the MLE?
+    c. How does the MLE compare to `mean(dat$n)`?
+7. Use the MLE and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+   a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?
+   b. Consider how you could improve this **generative model** to better describe the dataset. Do you need a new likelihood function?
+
