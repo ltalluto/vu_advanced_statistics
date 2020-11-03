@@ -148,16 +148,18 @@ pl
 
 ## Solving for the MLE
 
+<!-- \frac{d \mathcal{L}(k,n|p)}{dp} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\ -->
+<!-- 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\ -->
+<!-- {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} \\ -->
+<!-- 1 & = \frac{{n \choose k}kp^{k-1}(1-p)^{(n-k)}}{{n \choose k} p^k (n-k)(1-p)^{(n-k-1)}} \\ -->
+
+
 $$
 \begin{aligned}
 \mathcal{L}(k,n|p) & = {n \choose k} p^k(1-p)^{(n-k)} \\
 \\
-\frac{d \mathcal{L}(k,n|p)}{dp} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
-0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
-{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} \\
-1 & = \frac{{n \choose k}kp^{k-1}(1-p)^{(n-k)}}{{n \choose k} p^k (n-k)(1-p)^{(n-k-1)}} \\
 \end{aligned}
-$$ 
+$$
 
 
 
