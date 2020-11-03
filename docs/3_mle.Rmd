@@ -144,4 +144,12 @@ pl
 </div>
 
 
+## Solving for the MLE
+
+
+$$
+\begin{aligned}
+\mathcal{L}(k,n|p) & = {n \choose k} p^k(1-p)^{(n-k)} \\
+
+$$
 
