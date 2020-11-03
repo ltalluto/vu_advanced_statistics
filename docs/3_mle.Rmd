@@ -166,3 +166,35 @@ pn & = k \\
 p & = \frac{k}{n} \\
 \end{aligned}
 $$
+
+ 
+
+## Generalising to multiple observations
+* Remember the product rule: for two independent events, $pr(A,B) = pr(A)pr(B)$
+* Likelihoods are probabilities, and we like to assume each data point is independent. Thus:
+
+$$
+\mathcal{L}(X_{1..n}|\theta) = \prod_{i=1}^{n} \mathcal{L}(X_i|\theta)
+$$
+
+## Optimisation
+
+> - In many (most) cases, analytical solutions are unavailable or impractical.
+> - We turn to various algorithms for numerical optimisation
+
+
+## Optimisation
+
+* In many (most) cases, analytical solutions are unavailable or impractical.
+* We turn to various algorithms for numerical optimisation
+
+```{r}
+n = 25
+k = 7
+lfun = function(p, n, k) {
+  dbinom(k, n, p, log=TRUE) ## why log??
+}
+p_init = 0.5
+optim(p_init, lfun, method = "Brent", n = n, k = k, control = list(fnscale = -1), lower=0, upper=1)
+```
+
