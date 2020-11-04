@@ -198,3 +198,263 @@ p_init = 0.5
 optim(p_init, lfun, method = "Brent", n = n, k = k, control = list(fnscale = -1), lower=0, upper=1)
 ```
 
+
+## Why Bayes?
+* I want to describe some phenomenon ("model"; $\theta$)
+* I have some general ("prior") knowledge about the question: $pr(\theta)$
+* I gather additional information ("data"; $X$)
+
+What is the probability that my model is correct given what I already know about it and what I’ve learned?
+
+$$ pr(\theta | X) $$
+
+## Applying Bayes' Theorem
+
+* We already know an expression for this:
+
+$$
+pr(\theta | X) = \frac{pr(X|\theta)pr(\theta)}{pr(X)}
+$$
+
+## Applying Bayes' Theorem
+
+* We already know an expression for this:
+
+$$
+pr(\theta | X) = \frac{pr(X|\theta)pr(\theta)}{pr(X)}
+$$
+
+* The goal, $pr(\theta | X)$, is called the **posterior probability of $\theta$**
+* We have already seen $pr(X|\theta)$; this is the **likelihood** of the data
+* $pr(\theta)$ is often called the **prior probability of $\theta$**. Could also be called "other information about $\theta$"
+* What about $pr(X)$? This is the **normalizing constant**
+
+When we do Bayesian inference, each of these terms is a full **probability distribution**
+
+
+## The normalizing constant
+
+> - For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
+> - $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+> - $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
+> - What about for continuous problems? There are infinitely many possible datasets if X is real-valued, and infinte possible models if $pr(\theta)$ is a continuous PDF.
+
+
+
+## The normalizing constant
+
+* For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
+* $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+* $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
+* What about for continuous problems? There are infinitely many possible datasets if X is real-valued, and infinte possible models if $pr(\theta)$ is a continuous PDF.
+
+$$
+pr(X) = \int_a^b pr(X|\theta)pr(\theta)d \theta
+$$
+
+* This integral can be challenging to compute
+
+
+## Proportional Bayes' Theorem
+
+> - $pr(X)$ is a *constant*; it adjusts the height of the distribution so that the posterior integrates to 1
+> - If all we want to do is estimate the maximum value, we can safely ignore it
+
+## Proportional Bayes' Theorem
+
+* $pr(X)$ is a *constant*; it adjusts the height of the distribution so that the posterior integrates to 1
+* If all we want to do is estimate the maximum value, we can safely ignore it
+
+$$
+pr(\theta|X) \propto pr(X|\theta)pr{\theta}
+$$
+
+
+
+
+## Maximum A Posteriori Estimation
+
+* $pr(X)$ is a *constant*; it adjusts the height of the distribution so that the posterior integrates to 1
+* If all we want to do is estimate the maximum value, we can safely ignore it
+
+$$
+pr(\theta|X) \propto pr(X|\theta)pr{\theta}
+$$
+
+* This is know as the **maximum a posteriori** (MAP) estimate, Bayesian equivalent to the MLE
+
+```{r}
+n = 25
+k = 7
+log_lfun = function(p, n, k) {
+  dbinom(k, n, p, log=TRUE)
+}
+log_prior = function(p, alpha, beta) {
+  dbeta(p, alpha, beta, log = TRUE)
+}
+log_posterior = function(p, n, k, alpha, beta) {
+  log_lfun(p, n, k) + log_prior(p, alpha, beta)  ## why +?
+}
+
+## starting value for the optimisation
+p_init = 0.5
+
+## we choose an "uninformative" prior
+alpha = 1
+beta = 1
+```
+
+
+## Maximum A Posteriori Estimation
+
+<div class="left lt">
+```{r}
+optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha, beta = beta, 
+      control = list(fnscale = -1), lower=0, upper=1)
+```
+
+This prior has no influence on the posterior
+</div>
+
+
+<div class="right rt">
+```{r echo=FALSE, figure.width = 3, figure.height = 3}
+p = seq(0,1,length.out=100)
+par(mar = c(5,5,0,1), bty='n', mfrow=c(2,2))
+plot(p, exp(log_lfun(p, n, k)), xlab = "", ylab = "Likelihood", col = 'red', type='l', lwd=3)
+plot(p, exp(log_prior(p, alpha, beta)), xlab = "", ylab = "Prior", col = 'blue', type='l', lwd=3)
+plot(p, exp(log_posterior(p, n, k, alpha, beta)), xlab = "", ylab = "Unnormalized Posterior", col = 'purple', type='l', lwd=3)
+mtext("p", side = 1, outer=TRUE, line=-2)
+```
+
+</div>
+
+
+## Changing the prior
+<div class="left lt">
+```{r}
+alpha = 2; beta = 2
+optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha, beta = beta, 
+      control = list(fnscale = -1), lower=0, upper=1)$par
+```
+
+```{r}
+alpha2 = 3; beta2 = 1.5
+optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha2, beta = beta2, 
+      control = list(fnscale = -1), lower=0, upper=1)$par
+```
+This prior is informative, but relatively weak (our data has the weight equivalent to alpha=7, beta=18)
+
+</div>
+
+
+<div class="right rt">
+```{r echo=FALSE, figure.width = 3, figure.height = 3}
+par(mar = c(5,5,0,1), bty='n', mfrow=c(2,2))
+plot(p, exp(log_lfun(p, n, k)), xlab = "", ylab = "Likelihood", col = 'red', type='l', lwd=3)
+plot(p, exp(log_prior(p, alpha, beta)), xlab = "", ylab = "Prior", col = 'blue', type='l', lwd=3, ylim=c(0, 1.8))
+lines(p, exp(log_prior(p, alpha2, beta2)), col = 'blue', lwd=2, lty=2)
+plot(p, exp(log_posterior(p, n, k, alpha, beta)), xlab = "", ylab = "Unnormalized Posterior", col = 'purple', type='l', lwd=3)
+lines(p, exp(log_posterior(p, n, k, alpha2, beta2)), col = 'purple', lwd=2, lty=2)
+mtext("p", side = 1, outer=TRUE, line=-2)
+```
+
+</div>
+
+
+
+## Changing the prior
+
+<div class="left lt">
+
+What if we had already conducted an identical prior sample, with 20 zombies and 5 normals?
+
+```{r}
+alpha3 = 20; beta3 = 5
+optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha3, beta = beta3, 
+      control = list(fnscale = -1), lower=0, upper=1)$par
+```
+</div>
+
+<div class="right rt">
+```{r echo=FALSE, figure.width = 3, figure.height = 3}
+par(mar = c(5,5,0,1), bty='n', mfrow=c(2,2))
+plot(p, exp(log_lfun(p, n, k)), xlab = "", ylab = "Likelihood", col = 'red', type='l', lwd=3)
+plot(p, exp(log_prior(p, alpha3, beta3)), xlab = "", ylab = "Prior", col = 'blue', type='l', lwd=3)
+plot(p, exp(log_posterior(p, n, k, alpha3, beta3)), xlab = "", ylab = "Unnormalized Posterior", col = 'purple', type='l', lwd=3)
+mtext("p", side = 1, outer=TRUE, line=-2)
+```
+
+</div>
+
+
+## Geting a normalized posterior
+
+> - We often want to know the full posterior distribution
+> - For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+
+## Geting a normalized posterior
+
+* We often want to know the full posterior distribution
+* For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+* For the beta-binomial, if:
+
+$$
+\begin{aligned}
+pr(p) & = \mathrm{Beta}(\alpha, \beta) \\
+pr(k,n | p) & = \mathrm{Binomial}(k, n, p)
+\end{aligned}
+$$
+
+## Geting a normalized posterior
+
+* We often want to know the full posterior distribution
+* For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+* For the beta-binomial, if:
+
+$$
+\begin{aligned}
+pr(p) & = \mathrm{Beta}(\alpha, \beta) \\
+pr(k,n | p) & = \mathrm{Binomial}(k, n, p) \\
+pr(p | k,n,\alpha, \beta) &= \mathrm{Beta}(\alpha + k, \beta + n - k)
+\end{aligned}
+$$
+
+## Geting a normalized posterior
+
+* We often want to know the full posterior distribution
+* For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+* In many cases, the shape of the log posterior is appoximately quadratic (the posterior is approximately normal)
+* **Laplace approximation** (or Quadratic approximation) is a method for approximating the shape of this curve
+
+
+## Geting a normalized posterior
+
+* We often want to know the full posterior distribution
+* For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+* In many cases, the shape of the log posterior is appoximately quadratic (the posterior is approximately normal)
+* Laplace (or Quadratic) approximation is a method for approximating the shape of this curve
+
+```{r, echo = FALSE}
+alpost = alpha3 + k
+bepost = beta3 + n - k
+plot(p, dbeta(p, alpost, bepost, log=TRUE), type='l', xlab = "p", ylab = "Log Posterior", 
+     col = 'purple', lwd=2, xlim=c(0.4, 0.7), ylim=c(-1.5, 2), bty='n')
+
+## quick estimate of the mean/variance of the posterior
+stdev = sqrt((alpost*bepost)/((alpost+bepost)^2 * (alpost+bepost+1)))
+mu = alpost / (alpost + bepost)
+## quadratic estimation
+lines(p, dnorm(p, mu, stdev, log=TRUE), col='red', lwd=2, lty=2)
+legend("bottomleft", legend = c("Normalized posterior", "Quadratic Estimate"), col=c("purple", "red"), lty=c(1,2), lwd=2, bty='n')
+```
+
+
+
+## Geting a normalized posterior
+
+* We often want to know the full posterior distribution
+* For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
+* In many cases, the shape of the log posterior is appoximately quadratic (the posterior is approximately normal)
+* Laplace (or Quadratic) approximation is a method for approximating the shape of this curve
+* When the above are unavailable, we can use simulations (e.g., MCMC)
