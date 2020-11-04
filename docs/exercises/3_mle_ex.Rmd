@@ -35,11 +35,17 @@ lfun = function(p, n, k) {
 3. Plot the log likelihood across various values of `p`
 4. Use `optim` to find the MLE for `p`
 5. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
-6. Repeat the above, but this time estimate the **mean number** of trees per plot.
-    a. What is an appropriate likelihood function?
-    b. What is the MLE?
-    c. How does the MLE compare to `mean(dat$n)`?
-7. Use the MLE and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+6. Write two more functions, one to estimate a prior for *p*, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that *p* must be between zero and one.
+    a. Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters
+    b. Compute the maximum a posteriori estimate for *p* using `optim`.
+
+### Bonus
+
+6. Repeat number 6, but this time estimate the **mean number** of trees per plot.
+    a. What is an appropriate likelihood function? prior?
+    b. Compute the MLE and MAP estimates.
+    c. How do the MLE/MAP compare to `mean(dat$n)`?
+7. Use the MAP estimate and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
    a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?
    b. Consider how you could improve this **generative model** to better describe the dataset. Do you need a new likelihood function?
 

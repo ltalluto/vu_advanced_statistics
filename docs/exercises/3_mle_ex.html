@@ -390,18 +390,28 @@ lfun = function(p, n, k) {
 <li>Plot the log likelihood across various values of <code>p</code></li>
 <li>Use <code>optim</code> to find the MLE for <code>p</code></li>
 <li>Is the answer different from <code>mean(dat$died/dat$n)</code>? If so, why?</li>
-<li>Repeat the above, but this time estimate the <strong>mean number</strong> of trees per plot.
+<li>Write two more functions, one to estimate a prior for <em>p</em>, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that <em>p</em> must be between zero and one.
 <ol style="list-style-type: lower-alpha">
-<li>What is an appropriate likelihood function?</li>
-<li>What is the MLE?</li>
-<li>How does the MLE compare to <code>mean(dat$n)</code>?</li>
+<li>Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters</li>
+<li>Compute the maximum a posteriori estimate for <em>p</em> using <code>optim</code>.</li>
 </ol></li>
-<li>Use the MLE and the <code>r****()</code> function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+</ol>
+<div id="bonus" class="section level3">
+<h3>Bonus</h3>
+<ol start="6" style="list-style-type: decimal">
+<li>Repeat number 6, but this time estimate the <strong>mean number</strong> of trees per plot.
+<ol style="list-style-type: lower-alpha">
+<li>What is an appropriate likelihood function? prior?</li>
+<li>Compute the MLE and MAP estimates.</li>
+<li>How do the MLE/MAP compare to <code>mean(dat$n)</code>?</li>
+</ol></li>
+<li>Use the MAP estimate and the <code>r****()</code> function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
 <ol style="list-style-type: lower-alpha">
 <li>Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?</li>
 <li>Consider how you could improve this <strong>generative model</strong> to better describe the dataset. Do you need a new likelihood function?</li>
 </ol></li>
 </ol>
+</div>
 
 
 
