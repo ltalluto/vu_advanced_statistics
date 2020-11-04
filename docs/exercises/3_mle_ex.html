@@ -367,14 +367,25 @@ summary {
 </div>
 
 
-<p>Load the tsuga dataset from this repository.</p>
+<ol style="list-style-type: decimal">
+<li>On slide 12 (“Generalising to multiple observations”) we use the sum of the log-likelihoods of each data point, instead of the product of the likelihoods.
+<ol style="list-style-type: lower-alpha">
+<li>Why should this matter?</li>
+<li>Is the answer different if you use <code>prod(dbinom(k, n, p, log=FALSE))</code> as the likelihood?</li>
+<li>Sometimes outliers can reveal flaws in our algorithms. Try using <code>optim</code> to find the MLE for the following dataset using the two methods (sum of the log likelihoods vs product of likelihoods). The answers will probably be very different. Which seems correct? What is going on here that these two (mathematically equivalent) equations yield such different results?</li>
+</ol></li>
+</ol>
+<pre class="r"><code>n_vec = c(25, 12, 134, 2000)
+k_vec = c(7, 4, 27, 0)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Load the tsuga dataset from this repository.</li>
+</ol>
 <pre class="r"><code>library(data.table)
 tsuga = readRDS(&quot;data/tsuga.rds&quot;)</code></pre>
-<p>This dataset gives statistics about <em>Tsuga canadensis</em> observed over multiple years in forest plots in eastern Canada. Included are the number of trees <code>born</code>, the number observed to have <code>died</code> that year, the total number of trees (including dead ones) <code>n</code>, and the climate.</p>
-<ol style="list-style-type: decimal">
-<li>Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (<code>n &gt; 0</code>)</li>
-<li>Write a function taking three parametrs:
+<p>This dataset gives statistics about <em>Tsuga canadensis</em> observed over multiple years in forest plots in eastern Canada. Included are the number of trees <code>born</code>, the number observed to have <code>died</code> that year, the total number of trees (including dead ones) <code>n</code>, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (<code>n &gt; 0</code>)</p>
 <ol style="list-style-type: lower-alpha">
+<li>Write a function taking three parametrs:
+<ol style="list-style-type: lower-roman">
 <li><code>p</code>: a <em>single value</em>, the probability that a randomly chosen individual is dead</li>
 <li><code>n</code>: a <em>vector</em>, the number of trees in each plot</li>
 <li><code>k</code>: a <em>vetor</em>, the number of dead trees in each plot</li>
@@ -386,26 +397,24 @@ lfun = function(p, n, k) {
    ## function body
    return() ## a single value!
 }</code></pre>
-<ol start="3" style="list-style-type: decimal">
+<ol start="2" style="list-style-type: lower-alpha">
 <li>Plot the log likelihood across various values of <code>p</code></li>
 <li>Use <code>optim</code> to find the MLE for <code>p</code></li>
 <li>Is the answer different from <code>mean(dat$died/dat$n)</code>? If so, why?</li>
-<li>Write two more functions, one to estimate a prior for <em>p</em>, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that <em>p</em> must be between zero and one.
-<ol style="list-style-type: lower-alpha">
+<li>Write two more functions, one to estimate a prior for <em>p</em>, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that <em>p</em> must be between zero and one.</li>
 <li>Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters</li>
 <li>Compute the maximum a posteriori estimate for <em>p</em> using <code>optim</code>.</li>
-</ol></li>
 </ol>
 <div id="bonus" class="section level3">
 <h3>Bonus</h3>
-<ol start="6" style="list-style-type: decimal">
-<li>Repeat number 6, but this time estimate the <strong>mean number</strong> of trees per plot.
+<ol start="3" style="list-style-type: decimal">
+<li>Repeat 2e-2g, but this time estimate the <strong>mean number</strong> of trees per plot.
 <ol style="list-style-type: lower-alpha">
 <li>What is an appropriate likelihood function? prior?</li>
 <li>Compute the MLE and MAP estimates.</li>
 <li>How do the MLE/MAP compare to <code>mean(dat$n)</code>?</li>
 </ol></li>
-<li>Use the MAP estimate and the <code>r****()</code> function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+<li>Use the MAP estimate from 3b and the <code>r****()</code> function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
 <ol style="list-style-type: lower-alpha">
 <li>Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?</li>
 <li>Consider how you could improve this <strong>generative model</strong> to better describe the dataset. Do you need a new likelihood function?</li>
