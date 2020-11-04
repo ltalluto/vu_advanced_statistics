@@ -8,21 +8,31 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load the tsuga dataset from this repository.
+1. On slide 12 ("Generalising to multiple observations") we use the sum of the log-likelihoods of each data point, instead of the product of the likelihoods. 
+    a. Why should this matter?
+    b. Is the answer different if you use `prod(dbinom(k, n, p, log=FALSE))` as the likelihood?
+    c. Sometimes outliers can reveal flaws in our algorithms. Try using `optim` to find the MLE for the following dataset using the two methods (sum of the log likelihoods vs product of likelihoods). The answers will probably be very different. Which seems correct? What is going on here that these two (mathematically equivalent) equations yield such different results?
+```{r}
+n_vec = c(25, 12, 134, 2000)
+k_vec = c(7, 4, 27, 0)
+```
+
+
+
+2. Load the tsuga dataset from this repository.
 
 ```{r}
 library(data.table)
 tsuga = readRDS("data/tsuga.rds")
 ```
 
-This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate.
+This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
 
-1. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
-2. Write a function taking three parametrs:
-   a. `p`: a *single value*, the probability that a randomly chosen individual is dead
-   b. `n`: a *vector*, the number of trees in each plot
-   c. `k`: a *vetor*, the number of dead trees in each plot
-   d. The function should return the *log likelihood*: $\log pr(n,k|p)$
+   a. Write a function taking three parametrs:
+      i. `p`: a *single value*, the probability that a randomly chosen individual is dead
+      ii. `n`: a *vector*, the number of trees in each plot
+      iii. `k`: a *vetor*, the number of dead trees in each plot
+      iv. The function should return the *log likelihood*: $\log pr(n,k|p)$
 ```{r}
 # n and k are vectors
 lfun = function(p, n, k) {
@@ -32,20 +42,21 @@ lfun = function(p, n, k) {
 ```
 
    
-3. Plot the log likelihood across various values of `p`
-4. Use `optim` to find the MLE for `p`
-5. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
-6. Write two more functions, one to estimate a prior for *p*, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that *p* must be between zero and one.
-    a. Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters
-    b. Compute the maximum a posteriori estimate for *p* using `optim`.
+   b. Plot the log likelihood across various values of `p`
+   c. Use `optim` to find the MLE for `p`
+   d. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
+   e. Write two more functions, one to estimate a prior for *p*, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that *p* must be between zero and one.
+   f. Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters
+   g. Compute the maximum a posteriori estimate for *p* using `optim`.
 
 ### Bonus
 
-6. Repeat number 6, but this time estimate the **mean number** of trees per plot.
+3. Repeat 2e-2g, but this time estimate the mean **number of trees per plot.**
     a. What is an appropriate likelihood function? prior?
     b. Compute the MLE and MAP estimates.
     c. How do the MLE/MAP compare to `mean(dat$n)`?
-7. Use the MAP estimate and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+
+4. Use the MAP estimate from 3b and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
    a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?
    b. Consider how you could improve this **generative model** to better describe the dataset. Do you need a new likelihood function?
 

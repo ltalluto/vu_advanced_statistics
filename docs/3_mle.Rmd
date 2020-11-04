@@ -168,15 +168,6 @@ p & = \frac{k}{n} \\
 $$
 
  
-
-## Generalising to multiple observations
-* Remember the product rule: for two independent events, $pr(A,B) = pr(A)pr(B)$
-* Likelihoods are probabilities, and we like to assume each data point is independent. Thus:
-
-$$
-\mathcal{L}(X_{1..n}|\theta) = \prod_{i=1}^{n} \mathcal{L}(X_i|\theta)
-$$
-
 ## Optimisation
 
 > - In many (most) cases, analytical solutions are unavailable or impractical.
@@ -197,6 +188,28 @@ lfun = function(p, n, k) {
 p_init = 0.5
 optim(p_init, lfun, method = "Brent", n = n, k = k, control = list(fnscale = -1), lower=0, upper=1)
 ```
+
+
+
+## Generalising to multiple observations
+* Remember the product rule: for two independent events, $pr(A,B) = pr(A)pr(B)$
+* Likelihoods are probabilities, and we like to assume each data point is independent. Thus:
+
+$$
+\mathcal{L}(X_{1..n}|\theta) = \prod_{i=1}^{n} \mathcal{L}(X_i|\theta)
+$$
+
+```{r}
+n_vec = c(25, 12, 134)
+k_vec = c(7, 4, 27)
+lfun = function(p, n, k) {
+  sum(dbinom(k, n, p, log=TRUE)) ## why log?? why sum??
+}
+p_init = 0.5
+optim(p_init, lfun, method = "Brent", n = n_vec, k = k_vec, control = list(fnscale = -1), lower=0, upper=1)
+```
+
+
 
 
 ## Why Bayes?
