@@ -1,0 +1,255 @@
+---
+title: "MLE Exercises"
+date: "05.11.2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. On slide 12 ("Generalising to multiple observations") we use the sum of the log-likelihoods of each data point, instead of the product of the likelihoods. 
+    a. Why should this matter?
+    b. Is the answer different if you use `prod(dbinom(k, n, p, log=FALSE))` as the likelihood?
+    c. Sometimes outliers can reveal flaws in our algorithms. Try using `optim` to find the MLE for the following dataset using the two methods (sum of the log likelihoods vs product of likelihoods). The answers will probably be very different. Which seems correct? What is going on here that these two (mathematically equivalent) equations yield such different results?
+```{r}
+n_vec = c(25, 12, 134, 2000)
+k_vec = c(7, 4, 27, 0)
+lfun = function(p, n, k, log=TRUE) {
+   vals = dbinom(k, n, p, log=log)
+   if(log) {
+      return(sum(vals))
+   } else {
+      return(prod(vals))
+   }
+}
+
+p_init = 0.5
+optim(p_init, lfun, method = "Brent", n = n_vec, k = k_vec, log=TRUE, control = list(fnscale = -1), lower=0, upper=1)$par
+optim(p_init, lfun, method = "Brent", n = n_vec, k = k_vec, log=FALSE, control = list(fnscale = -1), lower=0, upper=1)$par
+```
+
+*The answers are very different. Looking at the likelihood for individual points can be enlightening*
+
+```{r}
+dbinom(k_vec, n_vec, p_init, log=FALSE)
+```
+
+*Liklihoods are probabilities, and often the probability of any given data point is very small. Lots of small probabilities, multiplied together, is often a very small number. Sometimes, it is so small that it is beyond the capabilities of the computer to represent it.*
+
+```{r}
+prod(dbinom(k_vec, n_vec, p_init, log=FALSE))
+```
+
+*A better guess for the initial value can help:*
+
+```{r}
+prod(dbinom(k_vec, n_vec, 0.01, log=FALSE))
+```
+
+*But using the sum of the log likelihood is always safer. In any real problem, forgetting to set* `log=TRUE` *will almost certainly give the wrong answer.*
+
+2. Load the tsuga dataset from this repository.
+
+```{r}
+library(data.table)
+tsuga = readRDS("data/tsuga.rds")
+```
+
+This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
+
+   a. Write a function taking three parametrs:
+      i. `p`: a *single value*, the probability that a randomly chosen individual is dead
+      ii. `n`: a *vector*, the number of trees in each plot
+      iii. `k`: a *vetor*, the number of dead trees in each plot
+      iv. The function should return the *log likelihood*: $\log pr(n,k|p)$
+```{r}
+# n and k are vectors
+lfun = function(p, n, k) {
+   ## function body
+   return(sum(dbinom(k, n, p, log=TRUE))) ## a single value!
+}
+```
+
+   
+   b. Plot the log likelihood across various values of `p`
+
+```{r}
+tsuga = tsuga[year == 2005 & n > 0]
+p_plot = seq(0,1,length.out=100)
+ll_plot = sapply(p_plot, lfun, n = tsuga$n, k = tsuga$died) ## sapply because p_plot is a vector, but lfun expects a single value
+plot(p_plot, ll_plot, type='l', col='blue', lwd=2, xlab='p', ylab='log likelihood')
+```
+
+   c. Use `optim` to find the MLE for `p`
+   
+```{r}
+# choosing a smaller initial value, because mortality is unlikely to be 50% and because the plot above demonstrates this
+optim(0.1, lfun, method = "Brent", n = tsuga$n, k = tsuga$died, control = list(fnscale = -1), lower=0, upper=1)$par
+```
+
+   d. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
+   
+```{r}
+mean(tsuga$died/tsuga$n)
+```
+
+*Taking the mean of the probability in each plot forgets to account for the different sample sizes in each plot; a plot with 100 trees tells us a lot more about mortality probability than a plot with only one tree*
+   
+   e. Write two more functions, one to estimate a prior for *p*, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that *p* must be between zero and one.
+
+```{r}
+lpr = function(p, alpha, beta) dbeta(p, alpha, beta, log=TRUE)
+lpost = function(p, alpha, beta, n, k) lfun(p, n, k) + lpr(p, alpha, beta)
+
+## we try two different priors, one weakly informative and one highly informative
+## weak prior: we assume deaths are rarer than survival, but that lots of values are possible
+al_weak = 0.5
+be_weak = 4
+
+## stronger prior, we use prior_mu from the dataset to be the average prior probability, and assume this is based on a prior
+## sample of 1000 trees
+al_strong = tsuga$prior_mu[1] * 1000
+be_strong = 1000 - al_strong
+```
+   
+   f. Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters
+   
+```{r}
+library(ggplot2)
+prior_dat = data.table(p = p_plot, weak = lpr(p_plot, al_weak, be_weak),
+                       strong = lpr(p_plot, al_strong, be_strong))
+prior_dat = melt(prior_dat, id = "p")
+ggplot(prior_dat, aes(x=p, y=value, colour=variable)) + geom_line() +
+   ylab("log prior") + xlab("p") + theme_minimal()
+
+posterior_dat = data.table(p = p_plot,
+      weak = sapply(p_plot, function(pr) lpost(pr, al_weak, be_weak, tsuga$n, tsuga$died)),
+      strong = sapply(p_plot, function(pr) lpost(pr, al_strong, be_strong, tsuga$n, tsuga$died)))
+posterior_dat = melt(posterior_dat, id = "p")
+ggplot(posterior_dat, aes(x=p, y=value, colour=variable)) + geom_line() +
+   ylab("log unnormalized posterior") + xlab("p") + theme_minimal()
+
+```
+   
+   g. Compute the maximum a posteriori estimate for *p* using `optim`.
+   
+```{r}
+optim(0.1, lpost, method = "Brent", n = tsuga$n, k = tsuga$died, alpha=al_weak, 
+      beta=be_weak, control = list(fnscale = -1), lower=0, upper=1)$par
+optim(0.1, lpost, method = "Brent", n = tsuga$n, k = tsuga$died, alpha=al_strong, 
+      beta=be_strong, control = list(fnscale = -1), lower=0, upper=1)$par
+
+```
+
+**The MLE (using just the current dataset) was around 0.15. The MAP estimates were lower, depending on how strong the prior was, but still quite a bit higher than the prior_mu given in the dataset**
+
+### Bonus
+
+3. Repeat 2e-2g, but this time estimate the mean **number of trees per plot.**
+
+```{r}
+## reload the data, this time we want the zeros
+tsuga = readRDS("data/tsuga.rds")
+tsuga = tsuga[year == 2005]
+```
+
+    a. What is an appropriate likelihood function? prior?
+    
+*These are counts, so sounds like a Poisson problem. Gamma priors go nicely with the Poisson because the lambda parameter of the Poisson must be positive. We don't know much about this distribution, but we can guess that 1 is a likely value, 10 is also quite probable, 100 or 1000 possible, 1000000 very unlikely. The ratios of these likelihoods can help us calibrate prior hyperparameters*
+
+```{r}
+
+llik = function(lambda, n) sum(dpois(n, lambda, log=TRUE))
+lpr = function(lambda, shape = 1, rate = 1) dgamma(lambda, shape = shape, rate = rate, log=TRUE)
+lpost = function(lambda, n, shape = 1, rate = 1) llik(lambda, n) + lpr(lambda, shape, rate)
+
+shape = 1
+rate = 1
+lpr(1, shape, rate) - lpr(100, shape, rate)
+lpr(1, shape, rate) - lpr(1e6, shape, rate)
+```
+
+*Under this prior, observing a rate of 1 tree per plot is 100x more likely than 1000 trees, but 1 million times more likely than 1 million trees. This is not strongly informative, but still injects some common sense.*
+    
+    b. Compute the MLE and MAP estimates.
+    
+```{r}
+lam_start = 5
+## Note that method=BFGS is needed because Nelder-Mead is not good for one-dimensional problems
+## and Brent needs finite lower and upper bounds; we could also use brent with upper=some really large number
+mle = optim(lam_start, llik, method = "BFGS", n = tsuga$n,
+      control = list(fnscale = -1))$par
+map = optim(lam_start, lpost, method = "BFGS", n = tsuga$n, shape = shape, rate = rate, 
+      control = list(fnscale = -1))$par
+```
+
+    c. How do the MLE/MAP compare to `mean(dat$n)`?
+    
+```{r}
+c(mle = mle, map = map, mean = mean(tsuga$n))
+```
+    
+
+4. Use the MAP estimate from 3b and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+
+```{r}
+samp = rpois(nrow(tsuga), map)
+```
+
+   a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?
+   
+```{r}
+hdat = rbind(data.table(n = samp, source="sim"), data.table(n=tsuga$n, source="data"))
+ggplot(hdat, aes(x=n, fill=source)) + 
+   geom_histogram(position="dodge", binwidth=1) + 
+   theme_minimal() + 
+   annotate("text", x=15, y=25, 
+            label=paste0("mean=", round(mean(hdat[source=='data', n]), 3), "; var=", 
+                         round(var(hdat[source=='data', n]), 3)), 
+            colour="#F8766D", fontface=2, hjust=0, vjust=1) + 
+   annotate("text", x=15, y=22, 
+            label=paste0("mean=", round(mean(hdat[source=='sim', n]), 3), "; var=", 
+                         round(var(hdat[source=='sim', n]), 3)), 
+            colour="#00BFC4", fontface=2, hjust=0, vjust=1)
+```
+
+   b. Consider how you could improve this **generative model** to better describe the dataset. Do you need a new likelihood function?
+
+*The variance is much too low, so we should try a negative binomial likelihood*
+
+```{r}
+llik_nb = function(phi, mu, n) sum(dnbinom(n, size=phi, mu=mu, log=TRUE))
+lpr_nb = function(phi, mu) dgamma(phi, 0.1, 0.1, log=TRUE) + dgamma(phi, 0.1, 0.1, log=TRUE)
+lpost_nb = function(params, n) {
+   phi = params['phi']
+   mu = params['mu']
+   ## phi and mu must be positive, so we have to guard against that here
+   if(phi <= 0 | mu <= 0) {
+      return(-Inf)
+   } else {
+      return(llik_nb(phi, mu, n) + lpr_nb(phi, mu))      
+   }
+}
+
+inits = c(phi = 1, mu = 1)
+map = optim(inits, lpost_nb, method = "Nelder-Mead", n = tsuga$n, 
+      control = list(fnscale = -1))$par
+
+samp_nb = rnbinom(nrow(tsuga), size=map['phi'], mu=map['mu'])
+
+hdat_nb = rbind(data.table(n = samp_nb, source="sim"), data.table(n=tsuga$n, source="data"))
+ggplot(hdat_nb, aes(x=n, fill=source)) + 
+   geom_histogram(position="dodge", binwidth=1) + 
+   theme_minimal() + 
+   annotate("text", x=15, y=25, 
+            label=paste0("mean=", round(mean(hdat_nb[source=='data', n]), 3), "; var=", 
+                         round(var(hdat_nb[source=='data', n]), 3)), 
+            colour="#F8766D", fontface=2, hjust=0, vjust=1) + 
+   annotate("text", x=15, y=22, 
+            label=paste0("mean=", round(mean(hdat_nb[source=='sim', n]), 3), "; var=", 
+                         round(var(hdat_nb[source=='sim', n]), 3)), 
+            colour="#00BFC4", fontface=2, hjust=0, vjust=1)
+
+```
+

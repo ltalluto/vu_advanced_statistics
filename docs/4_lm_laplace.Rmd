@@ -1,0 +1,390 @@
+---
+title: "Linear Models"
+author: "Matthew Talluto"
+date: "05.11.2020"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+library(igraph)
+library(ggplot2)
+library(ggnetwork)
+library(data.table)
+library(mvtnorm)
+library(plotly)
+options(digits=4)
+
+# library(xtable)
+```
+
+## Regression problems
+
+<div class="left lt">
+* Many applied problems take the form of a set of observations $y$ along with one or more covariates $x$
+* We want to know how $y$ changes (on average) with $x$, and how much variance there is in $y$
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=4, fig.height=9}
+n = 50
+x = runif(n, -1, 1)
+a = 0.5
+b1 = 2.7; b2 = 2.1; b3 = 3.7
+s = 1.4
+y1 = rnorm(n, a + b1 * x, s)
+y2 = rpois(n, exp(a + b2 * x))
+y3 = rbinom(n, 1, plogis(a + b3 * x))
+
+par(mfrow = c(3, 1), bty='n', mar=c(4,4,0,0))
+plot(x, y1, pch=16, ylab=expression(y[1]), xlab="")
+plot(x, y2, pch=16, ylab=expression(y[2]), xlab="")
+plot(x, y3, pch=16, ylab=expression(y[3]), xlab="x")
+
+```
+
+</div>
+
+
+## Regression problems
+
+<div class="left lt">
+* We can draw a line through the points that minimizes the sum of squared residuals $\sum_i (y_i - \mathbb{E}[y|x_i])^2$
+* $\mathbb{E}[y|x_i]$ is the expectation of $y$ conditional on x
+   - what do we expect $y$ to be, on average, for any value of $x$
+</div>
+
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=4, fig.height=9}
+xpr = seq(min(x), max(x), length.out=100)
+par(mfrow = c(3, 1), bty='n', mar=c(4,4,0,0))
+plot(x, y1, pch=16, ylab=expression(y[1]), xlab="")
+lines(xpr, a + b1*xpr, col='red', lwd=2)
+plot(x, y2, pch=16, ylab=expression(y[2]), xlab="")
+lines(xpr, exp(a + b2*xpr), col='red', lwd=2)
+plot(x, y3, pch=16, ylab=expression(y[3]), xlab="x")
+lines(xpr, plogis(a + b3*xpr), col='red', lwd=2)
+```
+
+</div>
+
+
+## Regression problems
+
+<div class="left lt">
+* We can draw a line through the points that minimizes the sum of squared residuals $\sum_i (y_i - \mathbb{E}[y|x_i])^2$
+* $\mathbb{E}[y|x_i]$ is the expectation of $y$ conditional on x
+   - what do we expect $y$ to be, on average, for any value of $x$
+* This line has two parameters, an intercept $a$ and a slope $b$
+   - $\mathbb{E}(y|x_i)  = a + bx_i$
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5, fig.height=5}
+xex = -0.3
+ypr = function(xx) a + b1*xx 
+par(bty='n', mar=c(4,4,0,0))
+plot(x, y1, pch=16, cex=0.8, col="#777777", ylab="y", xlab="x")
+lines(xpr, ypr(xpr), col='red', lwd=2)
+points(xex, ypr(xex), col='blue', pch=16, cex=2)
+legend("bottomright", legend=paste("x =", xex), bty='n', pch=16, cex=1.3, col='blue')
+```
+
+</div>
+
+
+## Regression problems
+
+<div class="left lt">
+* We can draw a line through the points that minimizes the sum of squared residuals $\sum_i (y_i - \mathbb{E}[y|x_i])^2$
+* $\mathbb{E}[y|x_i]$ is the expectation of $y$ conditional on x
+   - what do we expect $y$ to be, on average, for any value of $x$
+* This line has two parameters, an intercept $a$ and a slope $b$
+   - $\mathbb{E}(y|x_i)  = a + bx_i$
+* $y \sim \mathcal{N}(a + bx, s)$
+   - "y is distributed as"
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5, fig.height=5}
+par(bty='n', mar=c(4,4,0,0))
+plot(x, y1, pch=16, cex=0.8, col="#777777", ylab="y", xlab="x")
+lines(xpr, ypr(xpr), col='red', lwd=2)
+legend("bottomright", legend=paste("x =", xex), bty='n', pch=16, cex=1.3, col='blue')
+
+yex = ypr(xex) + seq(-1.25, 1.25, 0.25)*s
+ycex = dnorm(yex, ypr(xex), s)
+ycex = 2 * ycex / max(ycex)
+points(rep(xex, length(yex)), yex, col='blue', pch=16, cex=ycex)
+```
+</div>
+
+
+## Regression problems
+
+<div class="left lt">
+* We can draw a line through the points that minimizes the sum of squared residuals $\sum_i (y_i - \mathbb{E}[y|x_i])^2$
+* $\mathbb{E}[y|x_i]$ is the expectation of $y$ conditional on x
+   - what do we expect $y$ to be, on average, for any value of $x$
+* This line has two parameters, an intercept $a$ and a slope $b$
+   - $\mathbb{E}(y|x_i)  = a + bx_i$
+* $y \sim \mathcal{N}(a + bx, s)$
+   - "y is distributed as"
+* Key assumptions:
+   - $y$ is *iid*
+   - $y$ has constant variance with respect to $x$
+   - the residuals are normally distributed (or $y|x$ is normally distributed)
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.width=5, fig.height=5}
+par(bty='n', mar=c(4,4,0,0))
+plot(x, y1, pch=16, cex=0.8, col="#777777", ylab="y", xlab="x")
+lines(xpr, ypr(xpr), col='red', lwd=2)
+legend("bottomright", legend=paste("x =", xex), bty='n', pch=16, cex=1.3, col='blue')
+points(rep(xex, length(yex)), yex, col='blue', pch=16, cex=ycex)
+
+xex2 = 0.5
+yex2 = ypr(xex2) + seq(-1.25, 1.25, 0.25)*s
+points(rep(xex2, length(yex2)), yex2, col='blue', pch=16, cex=ycex)
+
+```
+</div>
+
+
+## Graphing the model
+
+
+<div class="left lt">
+* It is always a good idea to graph your model
+* The graph represents *knowns* and *unknowns* as **nodes**, with relationships as **edges**
+* Variables (**nodes**) may be either *random* or *deterministic* 
+* Your model must estimate all unknowns
+   - **random unknowns** are usually parameters
+   - **deterministic unknowns** must be computed somewhere in your model
+   - **random knowns** usually appear as the first parameter is a probability statement like `dnorm`
+</div>
+
+<div class="right rt">
+```{r, echo = FALSE}
+gr = graph_from_literal(a-+"E(y)", b-+"E(y)", s-+y, x-+"E(y)", "E(y)"-+y)
+V(gr)$type = c("random", "deterministic", "random", "random", "random", "deterministic")
+V(gr)$source = c("unknown", "unknown", "unknown", "unknown", "known", "known")
+layout = matrix(c(0.5,2,  0.5,1,  1,2,  1.5,2,  1.25,0, 0,2), byrow=TRUE, ncol=2)
+
+
+n = ggnetwork(gr, layout=layout)
+pl = ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1)
+pl
+```
+</div>
+
+
+
+## Regression likelihood
+
+<div class="left lt">
+* Your model must estimate all unknowns
+   - **random unknowns** are usually parameters
+   - **deterministic unknowns** must be computed somewhere in your model
+   - **random knowns** usually appear as the first parameter is a probability statement like `dnorm`
+   
+```{r}
+#' params: named vector of parameters
+#' data: list or data frame of all data
+log_liklihood = function(a, b, s, x, y) {
+  # compute mu, the expectation of y
+  mu = a + b*x
+  
+  # liklihood of y|x,a,b,s
+  sum(dnorm(y, mu, s, log=TRUE))
+}
+```
+
+</div>
+
+<div class="right rt">
+```{r, echo = FALSE}
+pl
+```
+</div>
+
+## Regression prior and posterior
+
+<div class="left lt">
+* All random variables must appear in a probability statement, i.e. `d****()`
+   - knowns belong in the likelihood
+   - unknowns need a prior
+
+```{r}
+#' params: named vector of parameters
+#' data: list or data frame of all data
+log_prior = function(a, b, s) {
+  ## here the prior hyperparameters are hard-coded
+  dnorm(a, 0, 10, log=TRUE) + dnorm(b, 0, 5, log=TRUE) + dexp(s, 0.2, log=TRUE)  
+}
+
+log_posterior = function(params, data) {
+  # unpack params and data
+  x = data[['x']]
+  y = data[['y']]
+  a = params['a']
+  b = params['b']
+  s = params['s']
+
+    # s must be positive; if we try an invalid value, we have to return something sensible
+  if(s <= 0)
+    return(-Inf) ## probability is 0, so log probability is -Inf
+
+  log_liklihood(a, b, s, x, y) + log_prior(a, b, s)
+}
+```
+
+</div>
+
+<div class="right rt">
+```{r, echo = FALSE}
+pl
+```
+</div>
+
+
+
+## Estimation
+
+<div class="left lt">
+```{r}
+data('iris')
+iris = iris[iris$Species != "setosa",]
+data = with(iris, data.frame(x = Sepal.Length, y = Petal.Length))
+
+param_init = c(a=0, b=0, s=1)
+mod_map = optim(param_init, log_posterior, data = data, 
+                method="Nelder-Mead", control=list(fnscale=-1))
+mod_lm = lm(y~x, data=data)
+
+mod_map$par
+coef(mod_lm)
+sd(mod_lm$residuals)
+```
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, fig.height=4}
+apr = seq(-2, 2, length.out = 100)
+bpr = seq(-2, 2, length.out = 100)
+spr = seq(0, 4, length.out = 100)
+a = mod_map$par[1]
+b = mod_map$par[2]
+s = mod_map$par[3]
+
+par(mfrow=c(2, 3), bty='l', mar=c(4,4,0,0))
+plot(apr, exp(sapply(apr, function(aa) log_liklihood(aa, b, s, data$x, data$y))), type='l', xlab='', ylab='pr(a | x,b,s)', col='red', lwd=2, xaxt='n')
+plot(bpr, exp(sapply(bpr, function(bb) log_liklihood(a, bb, s, data$x, data$y))), type='l', xlab='', ylab='pr(b | x,a,s)', col='red', lwd=2, xaxt='n')
+plot(spr, exp(sapply(spr, function(ss) log_liklihood(a, b, ss, data$x, data$y))), type='l', xlab='', ylab='pr(s | x,a,b)', col='red', lwd=2, xaxt='n')
+plot(apr, exp(sapply(apr, function(aa) log_prior(aa, b, s))), type='l', xlab='a', ylab='pr(a)', col='blue', lwd=2)
+plot(bpr, exp(sapply(bpr, function(bb) log_prior(a, bb, s))), type='l', xlab='b', ylab='pr(b)', col='blue', lwd=2)
+plot(spr, exp(sapply(spr, function(ss) log_prior(a, b, ss))), type='l', xlab='s', ylab='pr(s)', col='blue', lwd=2)
+```
+```{r echo=FALSE, fig.height=4.5}
+par(bty='l', mar=c(4,4,6,0))
+plot(data$x, data$y, pch=16, col='#80b1d3', xlab='Sepal Length', ylab = "Petal Length")
+abline(a=a, b=b, lwd=2, col="#fb8072")
+abline(coef=coef(mod_lm), lwd=2, lty=3, col="#fdb462")
+legend("bottomright", legend=c("MAP", "GLM (MLE)"), lwd=2, lty=c(1,2), col=c("#fb8072", "#fdb462"), bty='n')
+```
+
+</div>
+
+
+## Estimating the entire posterior
+<div class="left lt">
+> - Reminder: we want to estimate the **joint posterior** $pr(a,b,s|x,y)$
+> - Often, **the conditional posterior**---e.g., $pr(a|b,s,x,y)$---is approximatly normal, and the log-posterior is a parabola
+> - Constrained parameters can often be easily transformed: $pr(\log(s)|a,b,x,y)$ will be approximately normal
+> - It follows that the joint posterior will often follow a multivariate normal
+> - This is a consequence of the central limit theorem
+
+</div>
+
+<div class="right rt">
+```{r echo = FALSE, fig.height=4.5, fig.width=4}
+apr=seq(-1.7, -1.4, length.out=100)
+bpr=seq(1, 1.06, length.out=100)
+dat_a = data.table(x = apr, ylog = sapply(apr, function(aa) log_posterior(c(a=aa,b,s), data)))
+dat_a[,y := exp(ylog)]
+dat_b = data.table(x = bpr, ylog = sapply(bpr, function(bb) log_posterior(c(a,b=bb,s), data)))
+dat_b[,y := exp(ylog)]
+
+par(mfrow=c(2,2), bty='n', mar=c(4,4,3,0))
+plot(y~x, data=dat_a, ylab="pr(a|b,s,x)", xlab='a', type='l', col='#66c2a5', lwd=2)
+plot(ylog~x, data=dat_a, ylab="log pr(a|b,s,x)", xlab='a', type='l', col='#66c2a5', lwd=2)
+plot(y~x, data=dat_b, ylab="pr(b|a,s,x)", xlab='b', type='l', col='#8da0cb', lwd=2)
+plot(ylog~x, data=dat_b, ylab="log r(b|a,s,x)", xlab='b', type='l', col='#8da0cb', lwd=2)
+```
+
+```{r echo = FALSE, fig.height=4, fig.width=4}
+val = optim(param_init, log_posterior, data = data, 
+                method="Nelder-Mead", control=list(fnscale=-1), hessian = TRUE)
+vcv = solve(-val$hessian)
+dat3d = expand.grid(a=apr, b=bpr, s = val$par[3])
+dat3d$z = dmvnorm(as.matrix(dat3d), val$par, vcv)
+
+pl3d = plot_ly(x = apr, y = bpr, z = matrix(dat3d$z, ncol=length(apr)))
+pl3d = add_surface(pl3d)
+pl3d = hide_colorbar(layout(pl3d, scene = list(xaxis=list(title="a"), 
+          yaxis=list(title="b"), zaxis=list(title="pr(a,b|s,x,y)"))))
+pl3d
+```
+
+</div>
+
+## Laplace Approximation
+
+<div class="left lt">
+* With LA, we find the maximum of the (joint) posterior distribution, and then estimate the Hessian matrix 
+* Hessian is a matrix of second derivatives, tells you how curvy the function is in each direction
+* The inverse of the Hessian gives us the variance-covariance matrix of a multivariate normal distribution
+* The posterior is now fully characterized
+   - `fit$par` gives us the mean/best-fit for each parameter
+   - `vcv` tells us the variance-covariance matrix of the multivariate normal distribution
+* Now what??
+</div>
+
+<div class="right rt">
+```{r}
+log_posterior_la = function(params, data) {
+  # unpack params and data
+  x = data[['x']]
+  y = data[['y']]
+  a = params['a']
+  b = params['b']
+  s = exp(params['log_s'])
+
+  log_liklihood(a, b, s, x, y) + log_prior(a, b, s)
+}
+param_init = c(a=0, b=0, log_s=0)
+fit = optim(param_init, log_posterior_la, data = data, method="Nelder-Mead", 
+            control=list(fnscale=-1), hessian = TRUE)
+vcv = solve(-fit$hessian)
+
+fit$par
+vcv
+
+sds = sqrt(diag(vcv))
+sds
+```
+
+</div>
