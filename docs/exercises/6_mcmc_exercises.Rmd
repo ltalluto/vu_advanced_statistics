@@ -1,0 +1,100 @@
+---
+title: "MCMC Exercises"
+date: "17.11.2020"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+1. **Optional** (but recommended). Implement your own Metropolis algorithm for generating MCMC samples. See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. You can test the code using any of the log_posterior functions we've written so far (this gives you a chance to compare the results when you know the answer), or you can try it out using exercise number 2.
+
+2. Recall the German tank problem presented in lecture. Use the following captured serial numbers:
+
+```{r}
+s = c(147, 126, 183, 88, 9, 203, 16, 10, 112, 205)
+```
+
+Your goal is to estimate a single parameter, $N_{max}$, the highest possible serial number (indicating the number of tanks actually produced).
+
+a. Write a log likelihood function that computes $\log pr(s | N_{max})$. What distribution is appropriate? Assume that the observations in $s$ are independent and random; $s$ can be any number between 1 and $N_{max}$, and the probability of any number in that range being observed is the same as for any other number.
+b. Write a log prior for $N_{max}$, and combine it with the log likelihood into a log posterior function.
+c. This posterior distribution cannot be estimated using Laplace approximation. However you can still use optim to get a MAP estimate. Get the MAP estimate, then plot the log_posterior against many values of $N_{max}$. Does your MAP estiamte make sense?
+
+
+3. Use a metropolis sampler to generate 20000 samples from the posterior distribution for the German tank problem. You can either use the sampler you wrote for question 1, or use one provided for you. It can be found in `r/metrop.r` in this repository.
+   a. Play with the scale parameter in the algorithm for short runs (2000 iterations is plenty). How does changing the scale influence the acceptance rate? Either use automatic adaptation, or play with the scale manually until you have an acceptance rate between 0.35 and 0.5.
+   b. Evaluate your samples using `mcmc_trace()` and `mcmc_hist()` from the `bayesplot` package (or implement your own versions). Compare the histogram of samples to the posterior density plot you made in 2c.
+   c. Generate a 90% highest posterior density interval (hpdi). A function for this is in `r/metrop.r`. Compare these credible intervals with the usual quantile intervals we have computed thus far. If they are meaningfully different, why?
+
+
+## Scaffolding for implementing the Metropolis algorithm
+
+```{r}
+#' Simple single-parameter metropolis algorithm
+#' @param target Target function (returning log unnormalised posterior density);
+#' 	this function should take the parameter as its first argument and a data list as its second
+#' @param initial Initial value of the parameter
+#' @param data Data to pass to the target
+#' @param iter Number of iterations
+#' @param scale Scale for the proposal distribution; defaults to 1
+#' 
+#' @return A list, with three components: 'chain' is the markov chain, 'scale' 
+#' 		is the scale parameter used, and 'accept' is the acceptance rate
+metropolis = function(target, initial, data, iter = 5000, scale = 1) {
+
+
+	##### OPTIONAL
+	## here, you can run an adaptation phase to set the scale. 
+	## The steps should be a repeat of everything below
+	## The only addition: if you accept the proposal: scale = scale * 1.1 (or some other constant)
+	## if you reject: scale = scale / 1.1
+	## At the end of adaptation, discard the chain, you can't use those samples
+
+	# set up the markov chain
+	# here we preallocate a vector to hold the state of the chain
+	chain = numeric(iter)
+
+	# it is important to keep track of how many times we accept the proposals
+	# the acceptance rate is an important diagnostic
+	accept = 0
+
+
+	# the first step in the chain gets initial values
+	chain[1] = initial
+
+	for(i in 2:iter) {
+
+		## STEPS FOR THE ALGORITHM
+		## 1. generate a proposal for chain[i]
+		##     this proposal should be draw from a proposal distribution centred around
+		##     chain[i-1] and using the scale to determine how wide the distribution is
+		##
+		## 2. Compute the acceptance probability of the proposal
+		##     remember that this is the ratio of the probabilities from the target distribution
+		##     target(proposal, data)/target(chain[i-1], data)
+		##     If your target returns a log probability (it should), then you need to convert
+		##     from log-scale to probability scale
+		##     
+		## 3. Do a bernoulli trial - on a success, accept the proposal, on a failure, reject it
+		## 
+		## 4. Save the result; if you accepted, chain[i] gets the proposal. 
+		##    If not, chain[i] will be the same as chain[i-1]. Don't forget to track acceptances. 
+
+	}
+
+
+	return(list(chain = chain, accept = accept/iter, scale = scale))
+}
+
+
+
+log_posterior = function(params, data) {
+	## fill in a log posterior for the problem you are working here
+}
+
+# fill in initial values, data, and the guess at the scale
+## fit = metropolis(log_posterior, initial = , data = , scale = )
+```
+

@@ -1,0 +1,253 @@
+---
+title: "Linear Modelling Exercises"
+date: "05.11.2020"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For these exercises, you will need the `Howell1` dataset from the `rethinking` package.
+
+```{r message=FALSE, results="hide"}
+## if you don't have the rethinking package, run these lines
+## install.packages("devtools")
+## devtools::install_github("rmcelreath/rethinking")
+library(rethinking)
+data(Howell1)
+```
+
+These data, collected by anthropologist Nancy Howell in the 1960s, provide the age, height, weight, and sex sampled from a population of !Kung in Dobe (Namibia & Botswana). Note that the `male` variable is categorical, and is equal to 1 if the subject is male, and 0 if female.
+
+1. Do some graphical data exploration. The data are multivariate, so multiple plots may be necessary.
+2. Design a regression model with `height` as the **response** (i.e., outcome, y) variable. For your initial model, use only `weight` as a predictor.
+    a. Write out the model, using the syntax from [slide 6 on Tuesday](../4_lm_laplace.html#(6)). Be sure that all unknowns (including parameters) appear on the left side of either ~ or =.
+    
+$$
+\begin{aligned}
+height & \sim \mathcal{N}(\mu, \sigma) \\
+\mu & = a + b \times weight \\
+a & \sim \mathcal{N}(0, 20) \\
+b & \sim \mathcal{N}(0, 5) \\
+\sigma & \sim exponential(0.2)
+\end{aligned}
+$$
+
+b. Draw a graph of the model as in [slide 7](../4_lm_laplace.html#(7))
+c. Write likelihood, prior, and posterior functions, and choose prior hyperparemeters for all parameters
+
+```{r}
+log_liklihood = function(a, b, s, weight, height) {
+  # compute mu, the expectation of y
+  mu = a + b*weight
+  
+  # liklihood of y|x,a,b,s
+  sum(dnorm(height, mu, s, log=TRUE))
+}
+
+log_prior = function(a, b, s) {
+  ## here the prior hyperparameters are hard-coded
+  dnorm(a, 0, 50, log=TRUE) + dnorm(b, 0, 10, log=TRUE) + dexp(s, 0.2, log=TRUE)  
+}
+
+log_posterior = function(params, data) {
+  # unpack params and data
+  height = data[['height']]
+  weight = data[['weight']]
+  a = params['a']
+  b = params['b']
+  s = exp(params['log_s']) ## we use log_s to help normalize the shape of the posterior
+
+  log_liklihood(a, b, s, weight, height) + log_prior(a, b, s)
+}
+```
+
+d. Compute a MAP estimate using `optim`.
+e. Make a plot of the best-fit line; include the original data on the plot as well.
+
+```{r}
+library(ggplot2)
+fit = optim(c(a=0,b=0,log_s=0), log_posterior, method="Nelder-Mead", data =Howell1, control=list(fnscale=-1))$par
+round(fit, 3)
+ggplot(Howell1, aes(x=weight, y=height)) + geom_point() + theme_minimal() + geom_abline(slope=fit['b'], intercept=fit['a'])
+```
+
+
+3. Plotting this model will likely reveal it to be inadequate, because there is a substantial "curve" in the height-weight relationship. Repeat the exercise for #2, but update your model to better predict height. Possible approaches might include filtering the data (but I encourage you to use it all if possible), writing a curvilinear equation, or adding additional predictors. Compare the results of your attempts, and choose a single model that you think works "best." Repeat a-e above for this model. Note any changes in the relationship between height and weight caused by your changes to the model. Additionally:
+
+> Many models are possible. I show two; adding a curve by fitting the log weight, one more complicated, using a categorical variable for whether someone is an adult
+
+
+
+```{r}
+log_posterior_1 = function(params, data) {
+    # unpack params and data
+    height = data[['height']]
+    weight = data[['weight']]
+    a = params['a']
+    b = params['b']
+    s = exp(params['log_s']) ## we use log_s to help normalize the shape of the posterior
+
+    # likelihood
+    mu = a + b*log(weight)
+    prob = sum(dnorm(height, mu, s, log=TRUE))
+
+    # prior
+    prob = prob + 
+        dnorm(a, 0, 50, log=TRUE) + 
+        dnorm(b, 0, 20, log=TRUE) + 
+        dexp(s, 0.2, log=TRUE)  
+}
+
+log_posterior_2 = function(params, data) {
+    # unpack params and data
+    height = data[['height']]
+    weight = data[['weight']]
+    adult = data[['adult']]
+    a1 = params['a1']
+    a2 = params['a2']
+    b1 = params['b1']
+    b2 = params['b2']
+    s = exp(params['log_s']) ## we use log_s to help normalize the shape of the posterior
+
+    # likelihood
+    mu = a1 + a2*adult + b1*weight + b2*weight*adult
+    prob = sum(dnorm(height, mu, s, log=TRUE))
+
+    # prior
+    prob = prob + 
+        dnorm(a1, 0, 50, log=TRUE) + 
+        dnorm(a2, 0, 50, log=TRUE) + 
+        dnorm(b1, 0, 10, log=TRUE) + 
+        dnorm(b2, 0, 10, log=TRUE) + 
+        dexp(s, 0.2, log=TRUE)  
+}
+
+Howell1$adult = ifelse(Howell1$age > 16, 1, 0)
+fit1 = optim(c(a=0,b=20,log_s=0), log_posterior_1, method="Nelder-Mead", 
+             data =Howell1, control=list(fnscale=-1))$par
+
+# lots of parameters, so I give it a better starting guess and more iterations
+fit2 = optim(c(a1=20,a2=20,b1=5,b2=2,log_s=2), log_posterior_2, method="Nelder-Mead", 
+             data =Howell1, control=list(fnscale=-1, maxit=2000))$par
+round(fit1, 3)
+round(fit2, 3)
+
+curve = data.frame(x = seq(min(Howell1$weight), max(Howell1$weight), length.out=500))
+curve$y = fit1['a'] + fit1['b']*log(curve$x)
+linedat = data.frame(x = c(0,30, 30, 65), adult = c(0,0,1,1))
+linedat$y = with(linedat, fit2['a1'] + fit2['a2']*adult + fit2['b1']*x + fit2['b2']*x*adult)
+ggplot(Howell1, aes(x=weight, y=height, colour=factor(adult))) + geom_point() + theme_minimal() + 
+    geom_line(data = curve, aes(x=x,y=y), colour="black") + 
+    geom_line(data = linedat, aes(x=x, y=y), colour="purple") 
+
+```
+
+
+f. Estimate the entire posterior using Laplace approximation
+
+> I use only the first (curvilinear) regression
+
+```{r}
+fit = optim(c(a=20,b=5,log_s=2), log_posterior_1, method="Nelder-Mead", 
+             data =Howell1, control=list(fnscale=-1, maxit=2000), hessian=TRUE)
+vcv = solve(-fit$hessian)
+library(mvtnorm)
+samples = rmvnorm(5000, fit$par, vcv)
+
+par(mfrow=c(1,3))
+for(i in 1:ncol(samples))
+    hist(samples[,i], xlab=colnames(samples)[i], main="")
+```
+
+g. What are the credible intervals for the parameters of your model?
+
+```{r}
+round(t(apply(samples, 2, quantile, c(0.05, 0.9))),3)
+```
+
+
+h. What is the probability that the height of a 24-year-old female with a weight of 41 kg is between 120 and 125 cm? What about for a male?
+
+> To answer this, we need to do posterior predictive simulations on this case. Female/male is irrelevant, because it's not in my model
+
+```{r}
+## compute mu for each sample
+mu = samples[,'a'] + samples[,'b'] * log(41)
+
+## draw a new posterior predictive sample for each mu and s
+case_samples = rnorm(nrow(samples), mu, exp(samples[,'log_s']))
+sum(case_samples >= 120 & case_samples <= 125)/length(case_samples)
+
+## the prob is very small, so many samples needed for non-zero result
+case_samples = mapply(function(m, s) rnorm(1000, m, s), m = mu, s = exp(samples[,'log_s']))
+sum(case_samples >= 120 & case_samples <= 125)/length(case_samples)
+```
+
+
+i. Compute a posterior prediction interval for each case in the original dataset. You should have a median or MAP estimate and an interval for height along side the actual measured values for height from the original data. Plot the original height observations on the x-axis, and the predicted MAP/median on the y-axis. Experiment with the `segments` function to see if you can draw the predictions as vertical lines on the plot. What does this plot tell you about your model fit? What is the expected relationship for a "good" model?
+
+> Here is a more general function for getting posterior simulations. This can be easily updated to change mu if the model changes, or to change rnorm if the likelihood function changes
+
+```{r}
+#' Posterior predictive simulations
+#' Produces n_sim simulations for a single set of parameters (i.e., not an entire posterior)
+#' @param params A named parameter vector from the model
+#' @param newdata x-variables (y not needed) for predictions
+#' @return A matrix of simulated outcomes, each case in newdata is a column, each row is a simulation
+ppsim = function(params, newdata) {
+    mu = params['a'] + params['b']*log(newdata[['weight']])
+    rnorm(length(mu), mu, exp(params['log_s']))
+}
+
+# ppsim works for one set of parameters, but we need to average across the whole posterior
+# macs/unix/linux machines can do this more quickly using mclapply. Windows users can look at
+# ?parallel::parLapply, but this is harder to use
+# sims = do.call(rbind, parallel::mclapply(1:nrow(samples), function(i) {
+#     ppsim(params = samples[i,], newdata = Howell1)
+# }, mc.cores = 6))
+
+## for single core machines
+## output here gives one row per data point, one column per posterior simulation
+sims = apply(samples, 1, ppsim, newdata = Howell1)
+
+# here I compute 3 quantiles, to give a 90% interval and the median
+predictions = apply(sims, 1, quantile, c(0.5, 0.05, 0.95))
+
+# plot the median prediction against the original data
+# I add the 1:1 line to show "perfect" predictions
+lims = range(c(predictions, Howell1$height)) # compute the range of all predictions + data
+plot(Howell1$height, predictions[1,], pch=16, cex=0.7, col="#444499", xlim=lims, ylim=lims, bty='n',
+     xlab = "Data", ylab = "Posterior Predictions")
+abline(0, 1, lty=2)
+
+# and add segments to show the prediction intervals
+segments(Howell1$height, predictions[2,], Howell1$height, predictions[3,])
+
+
+## The same plot in ggplot
+ggdat = data.frame(dat = Howell1$height, median = predictions[1,], lower = predictions[2,], upper = predictions[3,])
+ggplot(ggdat, aes(x = dat, y = median)) + 
+    geom_errorbar(aes(ymin=lower, ymax=upper), width=0, size=0.5) +
+    geom_point(size=0.8) + 
+    geom_abline(intercept=0, slope=1, lty=2) + 
+    theme_minimal() + xlab("Data") + ylab("Posterior Predictions") + xlim(lims[1], lims[2]) + ylim(lims[1], lims[2])
+```
+
+
+
+## Bonus
+
+4. Return to one of the plots you made showing height against weight. It appears that the variance in height is not constant with respect to weight. This is one of the key assumptions in linear regression, and you probably made this implicitly in your model (the s parameter, the standard deviation, is constant). However, Bayesian models need not be so rigid. 
+   a. Can you design a model that allows the variance to increase as weight increases? Use whatever predictors for height that you think are best.
+   b. Fit the model and compare the fit to your original model.
+5. Buried in the bottom of a field notebook, you find two cases that were missing from the original dataset. The first is an individual with a weight of 43.72; no height, age, or sex data is recorded. The second is a 38-year-old female with a height of 135.
+   a. Using the model from #3 above, can you predict a 90% credible interval for height of the first missing case? Is it easier if you use the model from #2?
+   b. The second missing case is more interesting; we have the outcome of our model, but we are missing the weight. How could you estimate a 90% CI for weight, using the model from #3 (i.e., keeping height as the response variable)?
+6. Look at [slide 10 from Thursday](../5_posterior_inference.html#(10)). Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the `%*%` operator, and also the `apply` statement. Try the help file for both of them (use ?"%*%" to get help for the operator). Also run the code yourself and inspect the output. 
+    a. How many rows and columns are in `mu_samples`? 
+    b. How does this compare to the number of rows/columns in the inputs (`as.matrix(good_sample[,1:2])` and `t(x_predict)`)? 
+    c. What does each row in `mu_samples` represent? What about each column?
+    d. What does `apply` do here?
+
+
