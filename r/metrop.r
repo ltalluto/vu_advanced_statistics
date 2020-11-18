@@ -6,12 +6,11 @@
 #' @param iter Number of iterations
 #' @param scale Scale for the proposal distribution, if NA, the algorithm will adaptively
 #' 		choose a scale
-#' @param discrete If TRUE the sampler will ensure the parameters can only be integers.
 #' @param ... Additional named parameters to pass to m_adapt
 #' 
 #' @return A list, with three components: 'chain' is the markov chain, 'scale' 
 #' 		is the scale parameter used, and 'accept' is the acceptance rate
-metropolis = function(target, initial, data, iter = 5000, scale = NA, discrete = FALSE, ...) {
+metropolis = function(target, initial, data, iter = 5000, scale = NA, ...) {
 
 	# check that the target distribution is defined at the initial value
 	if(!is.finite(target(initial, data)))
@@ -19,10 +18,10 @@ metropolis = function(target, initial, data, iter = 5000, scale = NA, discrete =
 
 	# adaptation, if needed
 	if(is.na(scale))
-		scale = m_adapt(target, initial, data, discrete, ...)
+		scale = m_adapt(target, initial, data, ...)
 
 	# do the sampling
-	result = m_sample(target, initial, data, scale, iter, discrete)
+	result = m_sample(target, initial, data, scale, iter)
 	
 	# save the scale as well, because this allows resuming the chain
 	result$scale = scale
@@ -38,9 +37,8 @@ metropolis = function(target, initial, data, iter = 5000, scale = NA, discrete =
 #' @param data Data to pass to the target
 #' @param iter Number of iterations
 #' @param scale Scale for the proposal distribution
-#' @param discrete If TRUE the sampler will ensure the parameters can only be integers.
 #' @return A list with two elements, chain (the markov chan) and accept, the acceptance rate
-m_sample = function(target, state, data, scale, iter, discrete) {
+m_sample = function(target, state, data, scale, iter) {
 	# set up the markov chain
 	chain = numeric(iter)
 
@@ -50,7 +48,7 @@ m_sample = function(target, state, data, scale, iter, discrete) {
 
 	for(i in 1:iter) {
 		# propose a value and accept/reject, updating the chain with the new value
-		chain[i] = m_propose(state, scale, target, data, discrete)
+		chain[i] = m_propose(state, scale, target, data)
 		
 		if(chain[i] != state) {
 			# if the value changed, that was an acceptance
@@ -67,7 +65,6 @@ m_sample = function(target, state, data, scale, iter, discrete) {
 #' @param target Target function
 #' @param initial Initial value of the parameter
 #' @param data Data to pass to the target
-#' @param discrete If TRUE the sampler will ensure the parameters can only be integers.
 #' @param chunk_size Number of iterations in each chunk before adapting
 #' @param max_chunk Maximum number of chunks before stopping adaptation
 #' @param accept_range Target range of acceptance rates
@@ -75,14 +72,14 @@ m_sample = function(target, state, data, scale, iter, discrete) {
 #' @param scale_step By how much should we multiply the scale if the acceptance is too large,
 #' 		or divide if the acceptance rate is too small
 #' @return Scale parameter after adaptation
-m_adapt = function(target, initial, data, discrete, chunk_size = 100, max_chunk = 100, 
+m_adapt = function(target, initial, data, chunk_size = 100, max_chunk = 100, 
 			accept_range = c(0.2, 0.4), scale = 1, scale_step = 1.1) {
 
 	accept_rate = 0
 	nchunk = 0
 	while(nchunk < max_chunk & (accept_rate < min(accept_range) | 
 							accept_rate > max(accept_range))) {
-		chunk = m_sample(target, initial, data, scale, iter = chunk_size, discrete = discrete)
+		chunk = m_sample(target, initial, data, scale, iter = chunk_size)
 		accept_rate = chunk$accept
 		initial = chunk$chain[length(chunk$chain)]
 
@@ -104,15 +101,14 @@ m_adapt = function(target, initial, data, discrete, chunk_size = 100, max_chunk 
 #' @param initial Initial value of the parameter
 #' @param data Data to pass to the target
 #' @param scale Initial guess for the scale
-#' @param discrete If TRUE the sampler will ensure the parameters can only be integers.
-m_adapt_simple = function(target, initial, data, scale = 1, adapt_iter = 5000, discrete = FALSE) {
+m_adapt_simple = function(target, initial, data, scale = 1, adapt_iter = 5000) {
 	accept = 0
 	chain = numeric(adapt_iter)
 
 	state = initial
 	for(i in 1:adapt_iter) {
 		# propose a value and accept/reject, updating the current state with the new value
-		chain[i] = m_propose(state, scale, target, data, discrete)
+		chain[i] = m_propose(state, scale, target, data)
 
 			if(chain[i] == state) {  
 				## rejection, decrease the scale
@@ -136,14 +132,9 @@ m_adapt_simple = function(target, initial, data, scale = 1, adapt_iter = 5000, d
 #' @param target Target distribution density function
 #' @param data Data for the target distribution
 #' @return New value in the chain
-m_propose = function(state, scale, target, data, discrete = FALSE) {
+m_propose = function(state, scale, target, data) {
 	# choose a candidate value from the proposal distribution
-	if(discrete) {
-		# uniform works a little better for discrete problems
-		candidate = as.integer(runif(1, state - scale, state + scale))
-	} else {
-		candidate = rnorm(1, state, scale)
-	}
+	candidate = rnorm(1, state, scale)
 
 	# compute the log posterior density at the current state and the candidate value
 	ld_cand = target(candidate, data)
