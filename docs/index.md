@@ -28,7 +28,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |29.10       |Intro, Probability review                                 |           |[Lecture notes](1_probability)|
 |03.11, 05.11|Distributions, Maximum likelihood<br/>Optimisation        |[Lecture Notes](2_distributions)<br/>[Exercises](exercises/2_distributions_ex.html)<br/>[Solutions](exercises/2_distributions_soln.html)|[Lecture Notes](3_mle)<br/>[Exercises](exercises/3_mle_ex.html)<br/>[Solutions](exercises/3_mle_soln.html)|
 |10.11, 12.11|Linear Models, Laplace Approximation<br/>Posterior Inference, Sampling |[Lecture Notes](4_lm_laplace)<br/> [Exercises](exercises/4_5_lm_exercises.html)<br/>[Solutions](exercises/4_5_lm_soln.html)|[Lecture Notes](5_posterior_inference)|
-|17.11, 19.11|Generalised linear models<br/>Markov-chain Monte Carlo   |[Lecture Notes](6_mcmc)<br/>[Exercises](exercises/6_mcmc_exercises.html)|Lecture/Practice|
+|17.11, 19.11|Generalised linear models<br/>Markov-chain Monte Carlo   |[Lecture Notes](6_mcmc)<br/>[Exercises](exercises/6_mcmc_exercises.html)|[Lecture Notes](7_glm)<br/>[Exercises](exercises/7_glm_exercises.html)|
 |24.11, 26.11|Hierarchical Models, Stan Language<br/>Priors, Diagnostics|Lecture/Practice    |Lecture/Practice|
 |01.12, 03.12|Finite mixtures<br/>Model selection, visualisation        |Lecture/Practice    |Lecture/Practice|
 |08.12, 10.12|Spatial Models                                            |**Holiday**|Lecture/Practice  |

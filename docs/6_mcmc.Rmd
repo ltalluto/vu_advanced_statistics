@@ -477,7 +477,7 @@ mcmc_trace(samples)
 
 ```
 
-## Hamiltonia monte carlo
+## Hamiltonian monte carlo
 - Only gets a mention here, we won't implement this
 - We will use this when we start using Stan
 - HMC imagines the posterior density is a frictionless bowl; more probable locations are lower
