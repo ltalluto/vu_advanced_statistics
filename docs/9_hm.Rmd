@@ -7,19 +7,18 @@ output:
     theme: cerulean
     toc_depth: 2
     css: rmd_style.css
-  beamer_presentation: default
 ---
 
 ```{r setup, include=FALSE, results = "hide"}
 # knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
 
-library(rethinking)
 library(ggplot2)
 library(igraph)
 library(ggnetwork)
 library(data.table)
 library(gridExtra)
+library(rstan)
 
 cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 
@@ -154,21 +153,22 @@ generated quantities {
 
 <div class="left lt">
 
-```{r message = FALSE}
+```{r message = FALSE, cache=TRUE}
 library(bayesplot)
 standat = list(n = nrow(frogs), surv = frogs$surv, tadpole = frogs$tadpole)
 fit_pool = sampling(frog1_pool, data = standat, iter=2000, refresh=0, chains=1)
 samples_pool = as.matrix(fit_pool)
-mcmc_intervals(samples_pool, pars="p") + xlim(c(0,1))
+pl_int_pool = mcmc_intervals(samples_pool, pars="p") + xlim(c(0,1))
+pl_int_pool
 ```
 </div>
 
 <div class="right rt">
-```{r message = FALSE}
+```{r message = FALSE, cache=TRUE}
 fit_nopool = sampling(frog1_nopool, data = standat, iter=2000, refresh=0, chains=1)
 samples_nopool = as.matrix(fit_nopool, pars="p")
-mcmc_intervals(samples_nopool) + xlim(0,1)
-
+pl_int_nopool = mcmc_intervals(samples_nopool) + xlim(0,1)
+pl_int_nopool
 ```
 </div>
 
@@ -211,7 +211,7 @@ grpl3
 </div>
 
 <div class="right rt">
-```{stan output.var="frog1_ppool", cache = TRUE}
+```{stan output.var="frog1_ppool", cache = TRUE, warning=FALSE}
 data {
 	int <lower=0> n; // number of data points
 	int <lower=0> surv [n]; // number surviving
@@ -239,12 +239,33 @@ generated quantities {
    }
 }
 ```
+
+
+
+```{r message = FALSE, warning=FALSE, cache=TRUE}
+fit_ppool = sampling(frog1_ppool, data = standat, iter=2000, refresh=0, chains=1)
+samples_ppool = as.matrix(fit_ppool, pars="p")
+pl_int_ppool = mcmc_intervals(samples_ppool) + xlim(0,1)
+```
 </div>
 
+## Partial pooling is a (small) compromise
 
+<div class="left lt">
 
+```{r echo = FALSE, fig.height = 12}
+grid.arrange(pl_int_pool, pl_int_nopool, pl_int_ppool, nrow=3, ncol=1, heights = c(0.5, 1, 1))
+```
+</div>
 
+<div class="right rt">
 
+```{r echo = FALSE, fig.height = 4, warning=FALSE, message=FALSE}
+hparams = as.matrix(fit_ppool, pars=c("mua", "siga"))
+hparams = cbind(hparams, mup = plogis(hparams[,"mua"]))
+mcmc_intervals(hparams, pars="mup") + xlim(c(0,1))
+```
+</div>
 
 
 
