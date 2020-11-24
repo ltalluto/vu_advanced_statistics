@@ -7,7 +7,6 @@ output:
     theme: cerulean
     toc_depth: 2
     css: rmd_style.css
-  beamer_presentation: default
 ---
 
 
@@ -87,7 +86,7 @@ model {
 
 ```{r eval=FALSE}
 library(rstan)
-fit = rstan(stancode, iter=5000, data = data)
+fit = stan(stancode, iter=5000, data = data)
 samples = as.matrix(fit)
 ```
 
