@@ -1,0 +1,662 @@
+---
+title: "Model Selection & Comparison"
+author: "Matthew Talluto"
+date: "03.12.2020"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+---
+
+```{r setup, include=FALSE, results = "hide"}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+
+library(ggplot2)
+# library(igraph)
+# library(ggnetwork)
+library(data.table)
+# library(gridExtra)
+library(rstan)
+library(bayesplot)
+library(loo)
+cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
+
+```
+
+
+## There is no right solution to evaluation
+
+Important to assess modelling goals *before* comparing models
+
+* Fit to calibration data
+* Predictive performance (new data)
+* Hypothesis testing
+* Avoiding overfitting
+
+<br/>
+**Rule of thumb**: out-of-sample performance is the gold standard!
+<br/>
+
+* We can always improve fit to training/in-sample data by adding variables to the model
+
+
+## Information content & deviance
+
+* Entropy: how "predictable" is a distribution
+* High entropy means knowing the distribution tells us little about future observations
+* A useful metric is the average log probability
+* For $n$ possible events, each with probability $p_i$:
+
+$$
+H = -\mathbb{E}\left [\log \left (p \right) \right ] = -\sum_{i=1}^n p_i\log(p_i)
+$$
+
+## Entropy
+
+Imagine a series of rolls from a weighted die:
+
+```{r}
+rolls = c(1,2,1,4,1,1,5,3,1,6)
+table(rolls)/length(rolls)
+```
+
+A fair die has high entropy; each face has a probability of $/frac{1}{6}, 
+this (or any) sequence cannot help us predict the next roll
+
+```{r}
+pr_fair = rep(1/6, 6)
+-sum(pr_fair * log(pr_fair))
+```
+
+An unfair die has lower entropy; if we know which face is weighted, we can predict easily what the next outcome will be
+
+```{r}
+pr_unfair = c(0.5, rep(0.1, 5))
+-sum(pr_unfair * log(pr_unfair))
+```
+
+### Principle of maximum entropy
+
+* The best model in a set is the one that maximizes the entropy of the residuals
+* After applying the model, the value of the residuals should tell us as little as possible about the next residual
+
+
+
+## Divergence
+
+<div class="left lt">
+* We can use entropy predict the cost (how wrong will be be) of using the wrong model $q$, compared with a correct true model $p$
+* Formally, how much extra entropy do we introduce by using model $q$, if model $p$ is the right one?
+* This is known as the *Kullback-Leibler* (or K-L) divergence.
+
+$$
+D_{KL} = \sum_{i=1}^n p_i\log \left (\frac{p_i}{q_i} \right)
+$$
+
+```{r}
+sum(pr_unfair * log(pr_unfair/pr_fair))
+```
+
+This tells us how much entropy we get from assuming our unfair die is fair. If we assume it's unfair in the wrong way, we get even higher divergences.
+
+```{r}
+pr_unfair6 = c(rep(0.01, 5), 0.95)
+sum(pr_unfair * log(pr_unfair/pr_unfair6))
+```
+
+</div>
+
+<div class="right rt">
+
+```{r}
+pr1s = seq(0, 1, 0.01)
+dkl = sapply(pr1s, function(pr1) {
+	prs = c(pr1, rep((1-pr1)/5, 5))
+	sum(pr_unfair * log(pr_unfair/prs))
+})
+plot(pr1s, dkl, type='l', bty='n', xlab="pr(roll=1)", ylab="K-L Divergence")
+abline(v = pr_unfair[1], lty=2)
+```
+
+</div>
+
+
+## The "true" model is unknown
+
+<div class = "left lt">
+* We never have access to the true model $p$ from this equation
+
+$$
+D_{KL} = \sum_{i=1}^n p_i\log \left (\frac{p_i}{q_i} \right)
+$$
+
+* We suspect our die is weighted from the rolls, but we don't know the probs
+* Instead we estimate them by performing an experiment (rolling the die) and building a model
+
+* We have two competing hypotheses: call them $\theta_{map}$ and $\theta_{fair}$
+
+$$
+\begin{aligned}
+D_{KL, \theta_{map}} & = \sum_{i=1}^n \theta_{true}\log \frac{\theta_{true}}{\theta_{map}} \\
+D_{KL, \theta_{fair}} & = \sum_{i=1}^n \theta_{true}\log  \frac{\theta_{true}}{\theta_{fair}} \\
+\end{aligned}
+$$
+
+* $\theta_{true}$ cancels!
+* We can compare the models' relative performance without knowing anything about $\theta_{true}$
+
+</div>
+
+<div class = "right rt">
+```{r}
+log_liklihood = function(prob1, rolls)
+	sum(dmultinom(table(rolls), prob = c(prob1, rep((1-prob1)/5, 5)), log=TRUE))
+log_posterior = function(prob1, rolls) {
+	log_liklihood(prob1, rolls) + dbeta(prob1, 1, 5, log=TRUE) # a priori we expect 1 one and 5 not-ones
+}
+
+map = optim(pr_fair[1], method="Brent", log_posterior, rolls=rolls, control=list(fnscale=-1), lower=0, upper=1)
+prs_map = c(map$par, rep((1-map$par)/5, 5))
+round(prs_map, 2)
+```
+</div>
+
+
+## Deviance
+
+$$
+\begin{aligned}
+D_{KL, \theta_{map}} & = \sum_{i=1}^n \theta_{true}\log \frac{\theta_{true}}{\theta_{map}} \\
+D_{KL, \theta_{fair}} & = \sum_{i=1}^n \theta_{true}\log  \frac{\theta_{true}}{\theta_{fair}} \\
+\end{aligned}
+$$
+
+* $\theta_{true}$ cancels!
+* We can compare the models' relative performance without knowing anything about $\theta_{true}$
+* We just need to know the entropy of each model: $H_{\theta} = -\mathbb{E}\left [\log  pr \left(x | \theta \right) \right ]$
+* **Deviance** is an estimate of the entropy of a model:
+
+$$
+	D = -2 \sum \log pr \left(x | \theta \right)
+$$
+
+* This is simply twice the log liklihood
+
+```{r}
+round(c(map = -2 * log_liklihood(prs_map[1], rolls), fair =  -2 * log_liklihood(pr_fair[1], rolls)), 3)
+```
+
+* The MAP estimate has lower deviance, meaning it will predict new observations better than the hypothesis that the die is fair
+
+
+## Information criteria
+
+* Take two models, $\theta_1$ has one parameter, $\theta_2$ has two
+* If the models are nested ($\theta_1$ is a subset of $\theta_2$)
+* $D_1$ will always be greater than $D_2$
+    - This is due to the increased flexibility gained by adding parameters
+* Thus we need a way of estimating *out-of-sample* deviance
+    - How well do the models fit data that were not used for calibration
+* Information criteria approximate this by penalizing models for complexity
+
+$$
+	\mathrm{AIC} = 2k - D\left [ \mathbb{E} \left (\theta \right ) \right ]
+$$
+
+## AIC for the Tsuga model
+
+* Last time, we had three varieties of models for the effect of temperature on *Tsuga* mortality
+   1. Completely pooled
+   2. Unpooled intercepts (one intercept per year)
+   3. Partially pooled intercepts (hierarchical model)
+
+```{r echo = FALSE}
+trees = fread("exercises/data/treedata.csv")
+tsuga = trees[grep("Tsuga", species_name)]
+temperature = scale(tsuga$annual_mean_temp) ## note that I have rescaled temperature
+standat = with(tsuga, list(
+	n = length(died),
+	n_trees = n,
+	died = died,
+	temperature = temperature[,1]))  
+standat$year_id = as.integer(as.factor(tsuga$year))
+standat$n_years = max(standat$year_id)
+
+
+```
+
+```{stan output.var="tsuga_h1", cache = TRUE, echo = FALSE}
+data {
+	int <lower=0> n; // number of data points
+	int <lower=1> n_trees [n]; // number of trees in each plot
+	int <lower=0> died [n]; // number died
+
+	vector [n] temperature;
+}
+parameters {
+	real a;
+	real b;
+}
+transformed parameters {
+	vector <lower=0, upper=1> [n] p;
+	p = inv_logit(a + b * temperature);
+}
+model {
+	died ~ binomial(n_trees, p);
+	a ~ normal(0, 10);
+	b ~ normal(0, 5);
+}
+generated quantities {
+	real deviance = 0;
+	vector [n] loglik;
+	int ppd_died [n];
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+		ppd_died[i] = binomial_rng(10, p[i]);
+	}
+	deviance = -2 * deviance;
+}
+```
+
+```{stan output.var="tsuga_h2", cache = TRUE, echo = FALSE}
+data {
+	int <lower=0> n; // number of data points
+	
+	// response
+	int <lower=1> n_trees [n]; // number of trees in each plot
+	int <lower=0> died [n]; // number died
+
+	// predictors
+	vector [n] temperature;
+	
+	// grouping
+	int <lower=1> n_years;
+	int <lower=1> year_id [n];
+}
+parameters {
+	vector [n_years] a;
+	real b;
+}
+transformed parameters {
+	vector <lower=0, upper=1> [n] p;
+	for(i in 1:n) {
+		p[i] = inv_logit(a[year_id[i]] + b * temperature[i]);
+	}
+}
+model {
+	died ~ binomial(n_trees, p);
+	a ~ normal(0, 10);
+	b ~ normal(0, 5);
+}
+generated quantities {
+	real deviance = 0;
+	vector [n] loglik;
+	int ppd_died [n];
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+		ppd_died[i] = binomial_rng(10, p[i]);
+	}
+	deviance = -2 * deviance;
+}
+```
+
+```{stan output.var="tsuga_h2pp", cache = TRUE, echo = FALSE}
+data {
+	int <lower=0> n; // number of data points
+	
+	// response
+	int <lower=1> n_trees [n]; // number of trees in each plot
+	int <lower=0> died [n]; // number died
+
+	// predictors
+	vector [n] temperature;
+	
+	// grouping
+	int <lower=1> n_years;
+	int <lower=1> year_id [n];
+}
+parameters {
+	vector [n_years] a;
+	real b;
+	
+	real a_mu; // average intercept by year
+	real <lower=0> a_sig; // sd of intercepts
+}
+transformed parameters {
+	vector [n] p;
+	for(i in 1:n) {
+		p[i] = inv_logit(a[year_id[i]] + b * temperature[i]);
+	}
+}
+model {
+	died ~ binomial(n_trees, p);
+	// priors
+	a ~ normal(a_mu, a_sig); // hierarchical prior for a
+	b ~ normal(0, 5);
+
+	a_mu ~ normal(0, 10);
+	a_sig ~ gamma(0.1, 0.1);
+}
+generated quantities {
+	real deviance = 0;
+	vector [n] loglik;
+	int ppd_died [n];
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+		ppd_died[i] = binomial_rng(10, p[i]);
+	}
+	deviance = -2 * deviance;
+}
+
+```
+
+
+```{stan output.var="tsuga_h3", cache = TRUE, echo = FALSE}
+data {
+	int <lower=0> n; // number of data points
+	
+	// response
+	int <lower=1> n_trees [n]; // number of trees in each plot
+	int <lower=0> died [n]; // number died
+
+	// predictors
+	vector [n] temperature;
+	
+	// grouping
+	int <lower=1> n_years;
+	int <lower=1> year_id [n];
+}
+parameters {
+	vector [n_years] a;
+	vector [n_years] b;
+
+	real a_mu; // average intercept by year
+	real <lower=0> a_sig; // sd of intercepts
+	real b_mu; // average slope by year
+	real <lower=0> b_sig; // sd of slopes
+}
+transformed parameters {
+	vector [n] p;
+	for(i in 1:n) {
+		p[i] = inv_logit(a[year_id[i]] + b[year_id[i]] * temperature[i]);
+	}
+}
+model {
+	died ~ binomial(n_trees, p);
+	// priors
+	a ~ normal(a_mu, a_sig); // hierarchical prior for a
+	b ~ normal(b_mu, b_sig); // hierarchical prior for a
+
+	a_mu ~ normal(0, 10);
+	a_sig ~ gamma(0.1, 0.1);
+	b_mu ~ normal(0, 10);
+	b_sig ~ gamma(0.1, 0.1);
+}
+generated quantities {
+	real deviance = 0;
+	vector [n] loglik;
+	int ppd_died [n];
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+		ppd_died[i] = binomial_rng(10, p[i]);
+	}
+	deviance = -2 * deviance;
+}
+
+```
+
+
+## AIC for the Tsuga model
+
+* Last time, we had three varieties of models for the effect of temperature on *Tsuga* mortality
+   1. Completely pooled
+   2. Unpooled intercepts (one intercept per year)
+   3. Partially pooled intercepts (hierarchical model)
+* We can estimate the MAP values for the parameters using `rstan::optimizing`
+* We just need to modify the Stan program to compute the log likelihood and the deviance
+
+```{stan output.var="nomodel", eval=FALSE}
+generated quantities {
+	real deviance = 0;
+	vector [n] loglik;
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+	}
+	deviance = -2 * deviance;
+}
+```
+
+
+## AIC for the Tsuga model
+
+```{r cache = TRUE}
+library(rstan)
+map1 = optimizing(tsuga_h1, standat)
+map2 = optimizing(tsuga_h2, standat)
+k1 = sum(grepl("^[a|b]", names(map1$par)))  # 2 parameters
+k2 = sum(grepl("^[a|b]", names(map2$par)))  # 17 parameters
+aic = c(2*k1 - map1$par["deviance"], 2*k2 - map2$par["deviance"])
+res = rbind(aic, aic - min(aic)); rownames(res) = c("AIC", "delta"); colnames(res) = c("Pooled", "Unpooled")
+res
+```
+
+* The pooled model is much better. However, AIC has caveats:
+    - Priors must be uninformative or totally overwhelmed by the data
+    - Posterior must be multivariate normal
+    - Sample size must be very large relative to the number of parameters (n > ~25*k)
+* Moreover, AIC not well-defined for the hierarchial model
+    - Parameters are not independent, so the model is less "complex" than the unpooled
+
+
+## Deviance information critereon
+
+* Bayesian models often have difficult-to-estimate numbers of parameters
+* We can instead use posterior samples to approximate model complexity
+    - How much to models differ from the "best" model, on average
+
+$$
+\begin{aligned}
+p_D & = \mathbb{E} \left[ D \left (\theta \right ) \right] - D\left [ \mathbb{E} \left (\theta \right ) \right ] \\
+\mathrm{DIC} &= D\left [ \mathbb{E} \left (\theta \right ) \right ] + 2p_D
+\end{aligned}
+$$
+
+```{r cache = TRUE, warning=FALSE}
+fit1 = sampling(tsuga_h1, standat, iter=5000, refresh=0, chains=1)
+fit2 = sampling(tsuga_h2, standat, iter=5000, refresh=0, chains=1)
+fit2pp = sampling(tsuga_h2pp, standat, iter=5000, refresh=0, chains=1)
+fit3 = sampling(tsuga_h3, standat, iter=5000, refresh=0, chains=1)
+
+## note for the hierarchical model, a MAP is hard to find,
+## here we use the min deviance as a quick and dirty estimate
+## a better estimate is to compute the mean of all parameters, then 
+## compute the deviance with those values
+pd = c(Pooled = mean(as.matrix(fit1, pars="deviance")) - map1$par["deviance"],
+	Unpooled = mean(as.matrix(fit2, pars="deviance")) - map2$par["deviance"],
+	Hierarchical = mean(as.matrix(fit2pp, pars="deviance")) - min(as.matrix(fit2pp, pars="deviance")),
+	Hierarchical_slopes = mean(as.matrix(fit3, pars="deviance")) - min(as.matrix(fit3, pars="deviance")))
+dic = 1*pd + c(map1$par["deviance"], map2$par["deviance"], min(as.matrix(fit2pp, pars="deviance")),
+			 min(as.matrix(fit3, pars="deviance")))
+dic = rbind(dic, dic - min(dic)); rownames(dic) = c("DIC", "delta")
+dic
+```
+
+
+
+## Log predictive pointwise density
+
+* For real models, DIC has some problems
+    - assumes posterior is multivariate normal
+    - only assesses the "best" fit, doesn't fully use the posterior
+    - these can strongly influence inference, as well will see
+* Instead of considering deviance of each model, we can consider the probability of each *data point*
+    - This is closely related (but more fine-grained) to the penalty applied for DIC
+    - Instead of averaging within models, we average for each point across $S$ posterior samples
+
+$$
+\mathrm{lppd} = \sum_{i=1}^n \log \frac{1}{S} \sum_{j=1}^S pr(y_i | \theta_j)
+$$
+
+
+## Cross validation
+
+* To best understand model performance, we should compare *out-of-sample*
+* Holdout/validation dataset
+    - separate, independent dataset not used for calibration
+* k-fold
+    - separate model into k "folds"
+    - For each fold, fit the model to all data not in fold
+    - validate against model in fold
+    - best model has best average performace across all folds
+* LOO
+    - For $n$ data points, you fit $n$ models
+    - Each time, you leave out one data point for validation
+
+
+
+
+## LOO
+
+> - We can use the lppd to approximate LOO without the cost of fitting $n$ models
+> - Conceptually, AIC and DIC are attempts at *approximating* LOO
+> - WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+
+
+## LOO
+
+* We can use the lppd to approximate LOO without the cost of fitting $n$ models
+* Conceptually, AIC and DIC are attempts at *approximating* LOO
+* WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+    - It is pointwise, so it approximates the cost to model fitting of leaving out each point
+    - Averaged across the entire posterior
+
+## LOO
+
+* We can use the lppd to approximate LOO without the cost of fitting $n$ models
+* Conceptually, AIC and DIC are attempts at *approximating* LOO
+* WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+    - It is pointwise, so it approximates the cost to model fitting of leaving out each point
+    - Averaged across the entire posterior
+* Another technique, *importance sampling*, can directly approximate LOO
+    - These methods don't always work, but when they doo, LOO/WAIC provide more robust estimates than DIC/AIC
+    
+## LOO for trees
+
+Package `loo` can estimate LOO-IC and WAIC for us. All that is needed is to compute the lpd (log pointwise density) in your Stan model.
+
+```{stan output.var="nomodel", eval=FALSE}
+generated quantities {
+	vector [n] loglik; // vector, one per data point, because this is the pointwise density
+	for (i in 1:n) {
+		// here change binomial to whatever likelihood function applies to the model
+		// lpmf: "log probability mass function"
+		// for continuous distributions, use lpdf, e.g., normal_lpdf
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+	}
+}
+```
+
+
+## LOO for trees
+
+```{r message = FALSE, cache = TRUE, warning = FALSE}
+## put all models into a list for convenience when doing repeated operations
+fits = list(mod1=fit1, mod2=fit2, mod2pp=fit2pp, mod3=fit3)
+
+## get a loo object for each model
+loos = lapply(fits, loo, pars="loglik")
+
+loos$mod1
+```
+
+```{r message = FALSE}
+print(loo_compare(loos), simplify = FALSE)
+```
+
+
+## Model weights
+
+* LOO/W/A/D IC can choose a "best" model for us
+* But all models are wrong, and even models that aren't the best contain information
+* Akaike weights are a computationally simple way of performing mulimodel inference
+    - Roughly speaking, $w_i$ is the probability that model $i$ is the best model in the set of $m$ models
+    - if using `loo`'s `elpd_diff`, can omit the $-\frac{1}{2}$
+    
+$$
+w_i = \frac{e^{-\frac{1}{2}\Delta \mathrm{*IC}_i}}
+{\sum_{j=1}^m e^{-\frac{1}{2}\Delta \mathrm{*IC}_j}}
+$$
+
+```{r}
+looics = sapply(loos, function(x) x$estimates['looic', 'Estimate'])
+delta_looic = looics - min(looics)
+wi = exp(-0.5*delta_looic) / sum(exp(-0.5*delta_looic))
+round(rbind(looic = looics, dlooic = delta_looic, weight = wi), 2)
+```
+
+
+## Weights for multimodel inference
+
+* Akaike weights can help us decide how much to trust a single 'best' model
+* They underestimate information contained in the posteriors of the worse models
+* A more Bayesian approach is to make predictions, averaging the uncertainty from all models
+* For this we use **stacking weights**, which choose weights based on maximising the `elpd` from LOO
+
+```{r}
+wts = loo_model_weights(loos)
+wts
+```
+
+
+## Bayesian model averaging
+
+* We can produce a posterior predictive distribution in Stan
+
+```{stan output.var="nomodel", eval=FALSE}
+generated quantities {
+	vector [n] loglik; // vector, one per data point, because this is the pointwise density
+	int ppd_died [n]; // predicted number of trees dying at each point in the original dataset
+	for (i in 1:n) {
+		// here change binomial to whatever likelihood function applies to the model
+		// lpmf: "log probability mass function"
+		// for continuous distributions, use lpdf, e.g., normal_lpdf
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		ppd_died[i] = binomial_rng(10, p[i]); // here I give a ppd assuming a sample size of 10 trees
+	}
+}
+```
+
+* Then apply the weights to our predictions
+
+```{r}
+ppd = lapply(fits, as.matrix, pars="ppd_died")
+weighted_ppd = Map(`*`, ppd, wts)
+avg_predictions = Reduce(`+`, weighted_ppd)
+
+## now get some quantile intervals, put them alongside the original values and the temperature
+quants = lapply(ppd, function(x) cbind(data.table(t(apply(x, 2, quantile, c(0.5, 0.05, 0.95)))), tsuga))
+quants$ensemble = cbind(data.table(t(apply(avg_predictions, 2, quantile, c(0.5, 0.05, 0.95)))), tsuga)
+quants = rbindlist(quants, idcol="model")
+colnames(quants)[2:4] = c("median", "lower", "upper")
+
+pl = ggplot(quants[year %in% c(2005:2008, 2011:2012)], aes(x=annual_mean_temp, y = median/10, colour = model)) + 
+	geom_line() + 
+	geom_ribbon(aes(x=annual_mean_temp, ymin= lower/10, ymax=upper/10, fill = model), alpha = 0.5, show.legend = FALSE) + 
+	facet_grid(model ~ year) + theme_minimal() + geom_point(aes(x=annual_mean_temp, y = died/n), size=0.6) + 
+	xlab("Annual Mean Temperature") + ylab("Proportion dying")
+	
+```
+
+## Bayesian model averaging results
+
+```{r echo = FALSE, fig.width=18, fig.height = 11}
+pl
+```
+

@@ -30,7 +30,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |10.11, 12.11|Linear Models, Laplace Approximation<br/>Posterior Inference, Sampling |[Lecture Notes](4_lm_laplace)<br/> [Exercises](exercises/4_5_lm_exercises.html)<br/>[Solutions](exercises/4_5_lm_soln.html)|[Lecture Notes](5_posterior_inference)|
 |17.11, 19.11|Generalised linear models<br/>Markov-chain Monte Carlo   |[Lecture Notes](6_mcmc)<br/>[Exercises](exercises/6_mcmc_exercises.html)<br/>[Solutions](exercises/6_mcmc_soln.html)|[Lecture Notes](7_glm)<br/>[Exercises](exercises/7_glm_exercises.html)<br/>[Solutions](8_stan.html#(16))|
 |24.11, 26.11|Stan Language, Priors, Diagnostics<br/>|[Lecture Notes](8_stan)    | (Project work only)|
-|01.12, 03.12|Hierarchical Models<br/>Model selection, comparison        |[Lecture Notes](9_hm)<br/>[Exercises](exercises/9_hm_exercises.html)<br/>Solutions|Lecture/Practice|
+|01.12, 03.12|Hierarchical Models<br/>Model selection, comparison        |[Lecture Notes](9_hm)<br/>[Exercises](exercises/9_hm_exercises.html)<br/>Solutions|[Lecture Notes](10_model_selection)|
 |08.12, 10.12|Finite mixtures                                            |**Holiday**|Lecture/Practice  |
 |15.12, 17.12|Spatial Models                                            |Lecture/Practice  |Lecture/Practice |
 |TBD (January)|**Presentations**|
