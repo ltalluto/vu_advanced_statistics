@@ -31,7 +31,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |17.11, 19.11|Generalised linear models<br/>Markov-chain Monte Carlo                 |[Lecture Notes](6_mcmc)<br/>[Exercises](exercises/6_mcmc_exercises.html)<br/>[Solutions](exercises/6_mcmc_soln.html)|[Lecture Notes](7_glm)<br/>[Exercises](exercises/7_glm_exercises.html)<br/>[Solutions](8_stan.html#(16))|
 |24.11, 26.11|Stan Language, Priors, Diagnostics<br/>                                |[Lecture Notes](8_stan)    | (Project work only)|
 |01.12, 03.12|Hierarchical Models			                                             |[Lecture Notes](9_hm)<br/>[Exercises](exercises/9_hm_exercises.html)<br/>Solutions|(Project work only)|
-|08.12, 10.12|Model selection, comparison                                            |**Holiday**|[Lecture Notes](10_model_selection)<br/><div style="font-size:x-small;">(Exercises continue from 1.12)<div>  |
+|08.12, 10.12|Model selection, comparison                                            |**Holiday**|[Lecture Notes](10_model_selection)<br/><div style="font-size:x-small;">(Exercises continue from 1.12)</div>  |
 |15.12, 17.12|Finite mixtures<br/>Spatial Models                                     |[Lecture Notes](11_fm)<br/>[Exercises](exercises/11_fm_exercises.html)|[Lecture Notes](12_spatial)<br/>[Exercises](exercises/12_spatial_exercises.html) |
 |TBD (January)|**Presentations**|
 |02.02.21|**Project reports due**|

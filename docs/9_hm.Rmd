@@ -62,7 +62,7 @@ ggplot(tab, aes(x = species_name, y = as.factor(year), fill=value)) +
 * We return to the mortality of trees in North American forests
 * The dataset contains information for multiple species and years
 * For now, we focus on *Tsuga canadensis*
-* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**No pooling**, 2 params)
+* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**Complete pooling**, 2 params)
 
 </div>
 
@@ -95,7 +95,7 @@ grpl_pool
 * We return to the mortality of trees in North American forests
 * The dataset contains information for multiple species and years
 * For now, we focus on *Tsuga canadensis*
-* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**No pooling**, 2 params)
+* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**Complete pooling**, 2 params)
 * **Hypothesis 2**: The *average survival* varies by year, but the slope between temperature and mortality is constant (**Unpooled intercepts, pooled slopes**, 17 params)
     - Sample size by year ranges from 1 to 208
 </div>
@@ -137,7 +137,7 @@ grpl_slpool
 * We return to the mortality of trees in North American forests
 * The dataset contains information for multiple species and years
 * For now, we focus on *Tsuga canadensis*
-* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**No pooling**, 2 params)
+* **Hypothesis 1**: The temperature-mortality relationship is the same across all years (**Complete pooling**, 2 params)
 * **Hypothesis 2**: The *average survival* varies by year, but the slope between temperature and mortality is constant (**Unpooled intercepts, pooled slopes**, 17 params)
     - Sample size by year ranges from 1 to 208
 * **Hypothesis 3**: There is a different regression line for each year (**No pooling**, 32 parameters)
@@ -516,7 +516,7 @@ grid.arrange(intpl_h1 + ggtitle("Pooled"),
 data {
 	// group-level objects
 	int <lower=1> n_groups;
-	int <lower=1, upper=n_groups> group_id;
+	int <lower=1, upper=n_groups> group_id [n];
 }
 parameters {
 	vector [n_groups] a; 
@@ -589,7 +589,7 @@ data {
 	int <lower=1, upper=n_group1> group1_id [n];
 
 	int <lower=1> n_group2;
-	int <lower=1, upper=n_group2> group2_id [n_group1];
+	int <lower=1, upper=n_group2> group2_id [n];
 }
 parameters {
 	vector [n_group1] a1; 
