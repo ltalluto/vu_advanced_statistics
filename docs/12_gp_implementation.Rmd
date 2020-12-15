@@ -1,0 +1,148 @@
+---
+title: "Spatial Models & Gaussian Processes"
+author: "Matthew Talluto"
+date: "15.12.2020"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+---
+
+```{r setup, include=FALSE, results = "hide"}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+
+library(sf)
+library(mvtnorm)
+library(raster)
+library(gstat)
+library(loo)
+library(bayesplot)
+
+
+# # library(igraph)
+# # library(ggnetwork)
+# 
+# # library(gridExtra)
+cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
+
+```
+
+
+
+## Fitting the model
+
+* We compare 4 models
+   - Spatial + temperature effect
+   - Spatial only
+   - Temperature only
+   - Spatial + temperature + precipitation
+
+
+```{r cache=TRUE, warning=FALSE, message = FALSE}
+set.seed(12345)
+tsuga = readRDS("exercises/data/tsuga_spatial.rds")
+tsuga = tsuga[Y > 2300000]
+ind = which(tsuga$X > 1500000)
+ind2 = sample(ind, length(ind)/2)
+tsuga = rbind(tsuga[-ind], tsuga[ind2])
+nrow(tsuga)
+
+ggplot(tsuga, aes(x=X, y=Y, colour = died/n)) + geom_point()
+
+
+xvars = as.matrix(tsuga[, .(annual_mean_temp, tot_annual_pp)])
+xvars = scale(xvars)
+
+# rescale coordinates to be from 0 to 1
+coords = as.matrix(tsuga[, .(X, Y)])
+coords = scale(coords)
+
+
+## two different datasets, one with precip, one without
+standat = list(
+	n = nrow(tsuga),
+	died = tsuga$died,
+	ntrees = tsuga$n,
+	x = xvars[,1,drop=FALSE],
+	coords = coords
+)
+standat$k = ncol(standat$x)
+standat_pp = standat
+standat_pp$x = xvars
+standat_pp$k = ncol(standat_pp$x)
+
+mod_t = stan("../R/tsuga_nonspatial.stan", data = standat, chains = 4, iter=5000, refresh = 500)
+
+
+
+
+
+mod_gp_temp = sampling(tsuga_gp, chains=4, iter=3000, refresh=0, data = standat)
+mod_gp = sampling(tsuga_gp_only, chains=4, iter=3000, refresh=0, data = standat)
+mod_temp = sampling(tsuga_temp, chains=4, iter=3000, refresh=0, data = standat)
+
+xvars2 = as.matrix(tsuga[, .(annual_mean_temp, tot_annual_pp)])
+xvars2 = scale(xvars2)
+standat2 = standat
+standat2$x = xvars2
+
+mod_gp_tp = sampling(tsuga_gp, chains=4, iter=3000, refresh=0, data = standat2)
+
+fits = list(gp_temp_precip = mod_gp_tp, gp_temp=mod_gp_temp, gp=mod_gp, temp=mod_temp)
+loos = lapply(fits, loo, pars="loglik")
+print(loo_compare(loos), simplify = FALSE)
+
+```
+
+
+
+## Visualising the effects
+
+```{r, echo = FALSE}
+
+sig = as.matrix(mod_gp, pars="Sig")
+sig_med = colMeans(sig)
+Sig = matrix(sig_med, nrow=sqrt(length(sig_med)), byrow=TRUE)
+dists = dist(as.matrix(tsuga[, .(X, Y)]))
+dmat = as.matrix(dists)
+
+plot(dists, Sig, xlim=c(0, 50000))
+
+
+
+matern = function(d, s = 0.5, rho = 0.8) {
+	s^2 * (1 + (sqrt(3) * d)/rho) * exp(-(sqrt(3)*d)/rho)
+}
+
+mat_gpt = as.matrix(mod_gp_temp, pars=c("rho", "sigma"))
+mat_gp = as.matrix(mod_gp, pars=c("rho", "sigma"))
+
+dists = dist(standat$coords)
+gdata = data.table(dist = seq(0, 10, length.out=200))
+covar = sapply(gdata$dist, matern, s = mat_gpt[,'sigma'], rho = mat_gpt[,'rho'])
+gdata[, c("covariance", "up", "low") := .(apply(covar, 2, median), 
+ 					apply(covar, 2, quantile, 0.05), apply(covar,2,quantile,0.95))]
+ggplot(gdata, aes(x=dist, y=covariance)) + geom_line() + 
+	geom_ribbon(aes(ymin = up, ymax=low), fill = "#55555555") + xlab("distance") + 
+	xlim(0, 1000) + theme_minimal()
+
+
+mus = lapply(fits, as.matrix, pars="mu")
+pldat = lapply(mus, function(x) {
+	vals = apply(x, 2, quantile, c(0.5, 0.05, 0.95))
+	vals = data.table(vals)
+	colnames(vals) = c("median", "lower", "upper")
+	vals$temperature = standat$x[,1]
+	vals
+})
+pldat = rbindlist(pldat, idcol="model")
+ggplot(pldat, aes(x=temperature, y=median, colour=model)) + geom_line() + 
+	geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.3) + ylab("Prob of death") + 
+	theme_minimal()
+
+
+
+```
+
