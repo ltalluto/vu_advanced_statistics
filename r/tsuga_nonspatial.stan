@@ -8,16 +8,16 @@ data {
 }
 parameters {
 	// regression parameters
-	real alpha;
-	vector [k] beta;
+	real a;
+	vector [k] b;
 }
 transformed parameters {
 	vector [n] mu; // expectation of y
-	mu = inv_logit(alpha + x * beta);
+	mu = inv_logit(a + x * b);
 }
 model {
-	alpha ~ normal(0, 10);
-	beta ~ normal(0, 5);
+	a ~ normal(0, 10);
+	b ~ normal(0, 5);
 	died ~ binomial(ntrees, mu);
 }
 generated quantities {

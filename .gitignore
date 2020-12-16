@@ -39,3 +39,6 @@ vignettes/*.pdf
 .Renviron
 
 *.Rproj
+
+scratch/*
+r/*.rds

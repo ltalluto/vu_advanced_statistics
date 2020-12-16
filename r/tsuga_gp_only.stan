@@ -3,14 +3,19 @@ data {
 
 	int died [n]; // response
 	int ntrees [n];
-	matrix [n,2] coords; // spatial coordinates, x first, then y
+	vector [2] coords [n]; // spatial coordinates, x first, then y
+}
+transformed data {
+	real delta = 1e-9;
+	print(coords[1]);
 }
 parameters {
 	// hyperparameters
 	real <lower=0> rho; // spatial process lengthscale
-	real <lower=0> sigma; // error term in VCV matrix
+	real <lower=0> alpha; // this is a covariance kernel parameter, NOT an intercept
 
-	
+	real a; // here is the intercept
+
 	// scaled latent GP effect
 	vector [n] eta;
 }
@@ -22,15 +27,19 @@ transformed parameters {
 		matrix[n, n] L_Sig; // cholesky decomposition of VCV matrix
 		vector [n] gamma; // additive effect of GP, at response scale
 		
-		Sig = matern_cov(d, rho, sigma, delta);
+		Sig = cov_exp_quad(coords, alpha, rho);
+
+		// adjust diagonals
+		for (i in 1:n)
+    		Sig[i, i] = Sig[i, i] + delta;
 		L_Sig = cholesky_decompose(Sig);
 		gamma = L_Sig * eta;
-		mu = inv_logit(gamma);
+		mu = inv_logit(gamma + a);
 	}
 }
 model {
 	rho ~ inv_gamma(5, 5);
-	sigma ~ normal(0, 5);
+	alpha ~ std_normal();
 	eta ~ std_normal();
 
 	died ~ binomial(ntrees, mu);
