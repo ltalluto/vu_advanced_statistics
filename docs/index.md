@@ -32,7 +32,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |24.11, 26.11|Stan Language, Priors, Diagnostics<br/>                                |[Lecture Notes](8_stan)    | (Project work only)|
 |01.12, 03.12|Hierarchical Models			                                             |[Lecture Notes](9_hm)<br/>[Exercises](exercises/9_hm_exercises.html)<br/>Solutions|(Project work only)|
 |08.12, 10.12|Model selection, comparison                                            |**Holiday**|[Lecture Notes](10_model_selection)<br/>(Exercises continue from 1.12)  |
-|15.12, 17.12|Spatial Models                                     |[Lecture Notes](11_spatial_gp)|[Lecture Notes](12_spatial_gp_implementation)<br/> |
+|15.12, 17.12|Spatial Models                                     |[Lecture Notes](11_spatial_gp)|[Lecture Notes](12_gp_implementation)<br/> |
 |TBD (January)|**Presentations**|
 |02.02.21|**Project reports due**|
 
