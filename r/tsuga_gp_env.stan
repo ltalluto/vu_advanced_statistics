@@ -10,7 +10,6 @@ data {
 }
 transformed data {
 	real delta = 1e-9;
-	print(coords[1]);
 }
 parameters {
 	// hyperparameters
@@ -46,6 +45,8 @@ model {
 	rho ~ inv_gamma(5, 5);
 	alpha ~ normal(0, 10);
 	eta ~ std_normal();
+	a ~ normal(0, 10);
+	b ~ normal(0, 5);
 
 	died ~ binomial(ntrees, mu);
 }
