@@ -41,6 +41,7 @@ model {
 	rho ~ inv_gamma(5, 5);
 	alpha ~ std_normal();
 	eta ~ std_normal();
+	a ~ normal(0, 10);
 
 	died ~ binomial(ntrees, mu);
 }
