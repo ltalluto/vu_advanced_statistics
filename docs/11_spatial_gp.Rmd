@@ -283,7 +283,7 @@ $$
 \begin{aligned}
 \mathbb{E}(y_i) & = \alpha + \gamma_{i} + \beta X \\
 y & \sim \mathcal{N}\left (\mathbb{E} \left (y \right ), \sigma \right) \\
-\gamma_i & \sim \mathcal{N} \left( \frac{\sum w_{ij} \gamma_j}{\frac{n^2}{2}-n}, \sigma_\gamma \right)
+\gamma_i & \sim \mathcal{N} \left( \frac{\sum_{j=1}^{n} w_{ij} \gamma_j}{\sum_{j=1}^{n}w_{ij}}, \sigma_\gamma \right)
 \end{aligned}
 $$
 
