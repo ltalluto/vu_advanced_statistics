@@ -181,11 +181,11 @@ hpdi = function(samples, posterior, data, density = 0.9) {
 	dens = dens[ind]
 	samples = samples[ind, ]
 
-	# compute the width for each variable, them the area in the parameter dimension
+	# compute the width for each variable, then the area in the parameter dimension
 	area = mapply(function(l, u, samp) 
 		prod(apply(samp, 2, function(x) x[u[i]] - x[l[i]])), 
 		l = lower, u = upper, moreArgs = list(samp = samples))
 
 	i = which.min(area)
-	cbind(samples[lower[i], ], sampples[upper[i], ])
+	cbind(samples[lower[i], ], samples[upper[i], ])
 }
