@@ -1,7 +1,7 @@
 ---
 title: "Probability & Distributions"
 author: "Matthew Talluto"
-date: "03.11.2020"
+date: "03.05.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -655,7 +655,7 @@ pt(pl)
 $$pr(k|n,p) = {n \choose k} p^k(1-p)^{(n-k)}$$ 
 
 * What is the probability of observing $k$ events out of $n$ independent trials, when $pr(k) = p$?
-* What is the probability of observing $ \le k$ events? **Cumulative distribution function (CDF)** 
+* What is the probability of observing $\le k$ events? **Cumulative distribution function (CDF)** 
 
 $$
 pr(X \le k|n,p) = \sum_{i=0}^{k} {n \choose i}p^i(1-p)^{(n-i)}
@@ -821,7 +821,13 @@ pc
 * Expenential is a special case of Gamma where shape = 1
 * Continuous, defined on $(0, \infty)$
 * Highly generalised distribution, used in many cases for strictly positive variables
-* If there is a mixture of Poisson distributions, where the $\lambda$ for each X comes from a Gamma distribution, then $X$ will follow a negative binomial distribution
+
+<br/><br/>
+
+* Imagine observing a variable $X$, such that:
+* $X_i \sim \mathrm{Poisson}(\lambda_i)$ (i.e., a mixture of Poisson distribtutions)
+* $\lambda \sim \mathrm{Gamma}$
+* It follows that $X \sim \mathrm{Negative Binomial}$
 
 ```{r}
 dat = expand.grid(x=seq(0,15, length.out=100), shape=c(0.5, 4), rate = c(0.2, 2))
@@ -923,8 +929,8 @@ pc
     - is regular---one value of f(x) for every value of (x), and $\frac{df(x)}{dx}$ is finite
     - $\int_a^b f(x)dx = 1$
     - `d` functions in R (probability **d**ensity) -- `dnorm`, `dgamma`, etc
-* The every PDF has a CDF
+    - For discrete distributions, called a **probability mass function** (PMF)
+* Every PDF/PMF has a CDF
     - $F(x) = \int_a^x f(x)dx$
     - The probability of a value between $a$ and $x$
     - `p` functions in R (cumulative **p**robability) -- `pnorm`, `pgamma`, etc
-* Discrete distributions have instead a **probability mass function**
