@@ -7,21 +7,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-For these exercises, you will need the `Howell1` dataset from the `rethinking` package.
+For these exercises, you will need the `Howell1` dataset from the `rethinking` package. We don't need the rest of the package, so we will just download the data directly from the package's github repository
 
-```{r message=FALSE, results="hide"}
-## if you don't have the rethinking package, run these lines
-## install.packages("devtools")
-## devtools::install_github("rmcelreath/rethinking")
-library(rethinking)
-data(Howell1)
+```{r message=FALSE, eval = FALSE}
+library(data.table)
+Howell1 = fread("https://github.com/rmcelreath/rethinking/raw/master/data/Howell1.csv")
+
 ```
 
 These data, collected by anthropologist Nancy Howell in the 1960s, provide the age, height, weight, and sex sampled from a population of !Kung in Dobe (Namibia & Botswana). Note that the `male` variable is categorical, and is equal to 1 if the subject is male, and 0 if female.
 
 1. Do some graphical data exploration. The data are multivariate, so multiple plots may be necessary.
 2. Design a regression model with `height` as the **response** (i.e., outcome, y) variable. For your initial model, use only `weight` as a predictor.
-    a. Write out the model, using the syntax from [slide 6 on Tuesday](../4_lm_laplace.html#(6)). Be sure that all unknowns (including parameters) appear on the left side of either ~ or =.
+    a. Write out the model, using the syntax from [slide 6](../4_lm_laplace.html#(6)) from the lm lecture. Be sure that all unknowns (including parameters) appear on the left side of either ~ or =.
     b. Draw a graph of the model as in [slide 7](../4_lm_laplace.html#(7))
     c. Write likelihood, prior, and posterior functions, and choose prior hyperparemeters for all parameters
     d. Compute a MAP estimate using `optim`.
@@ -41,7 +39,7 @@ These data, collected by anthropologist Nancy Howell in the 1960s, provide the a
 5. Buried in the bottom of a field notebook, you find two cases that were missing from the original dataset. The first is an individual with a weight of 43.72; no height, age, or sex data is recorded. The second is a 38-year-old female with a height of 135.
    a. Using the model from #3 above, can you predict a 90% credible interval for height of the first missing case? Is it easier if you use the model from #2?
    b. The second missing case is more interesting; we have the outcome of our model, but we are missing the weight. How could you estimate a 90% CI for weight, using the model from #3 (i.e., keeping height as the response variable)?
-6. Look at [slide 10 from Thursday](../5_posterior_inference.html#(10)). Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the `%*%` operator, and also the `apply` statement. Try the help file for both of them (use ?"%*%" to get help for the operator). Also run the code yourself and inspect the output. 
+6. Look at [slide 10](../5_posterior_inference.html#(10)) from the inference lecture. Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the `%*%` operator, and also the `apply` statement. Try the help file for both of them (use ?"%*%" to get help for the operator). Also run the code yourself and inspect the output. 
     a. How many rows and columns are in `mu_samples`? 
     b. How does this compare to the number of rows/columns in the inputs (`as.matrix(good_sample[,1:2])` and `t(x_predict)`)? 
     c. What does each row in `mu_samples` represent? What about each column?
