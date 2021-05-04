@@ -203,7 +203,14 @@ pl
 ```{r}
 #' params: named vector of parameters
 #' data: list or data frame of all data
-log_liklihood = function(a, b, s, x, y) {
+log_liklihood = function(params, data) {
+  # unpack params and data
+  a = params['a']
+  b = params['b']
+  s = params['s']
+  x = data[['x']]
+  y = data[['y']]
+  
   # compute mu, the expectation of y
   mu = a + b*x
   
@@ -229,25 +236,21 @@ pl
 
 ```{r}
 #' params: named vector of parameters
-#' data: list or data frame of all data
-log_prior = function(a, b, s) {
+log_prior = function(params) {
   ## here the prior hyperparameters are hard-coded
-  dnorm(a, 0, 10, log=TRUE) + dnorm(b, 0, 5, log=TRUE) + dexp(s, 0.2, log=TRUE)  
+  dnorm(params['a'], 0, 10, log=TRUE) + 
+    dnorm(params['b'], 0, 5, log=TRUE) + 
+    dexp(params['s'], 0.2, log=TRUE)  
 }
 
+#' params: named vector of parameters
+#' data: list or data frame of all data
 log_posterior = function(params, data) {
-  # unpack params and data
-  x = data[['x']]
-  y = data[['y']]
-  a = params['a']
-  b = params['b']
-  s = params['s']
-
     # s must be positive; if we try an invalid value, we have to return something sensible
-  if(s <= 0)
+  if(params['s'] <= 0)
     return(-Inf) ## probability is 0, so log probability is -Inf
 
-  log_liklihood(a, b, s, x, y) + log_prior(a, b, s)
+  log_liklihood(params, data) + log_prior(params)
 }
 ```
 
@@ -283,20 +286,31 @@ sd(mod_lm$residuals)
 <div class="right rt">
 
 ```{r echo=FALSE, fig.height=4}
-apr = seq(-2, 2, length.out = 100)
-bpr = seq(-2, 2, length.out = 100)
-spr = seq(0, 4, length.out = 100)
+# extract model parameters
 a = mod_map$par[1]
 b = mod_map$par[2]
 s = mod_map$par[3]
 
+# create dummy data for plotting
+plot_data = data.table(
+  ap = seq(-2, 2, length.out = 100),
+  bp = seq(-2, 2, length.out = 100),
+  sp = seq(0, 4, length.out = 100)
+)
+plot_data[, l_a := exp(sapply(ap, function(aa) log_liklihood(c(a = aa, b, s), data)))]
+plot_data[, l_b := exp(sapply(bp, function(bb) log_liklihood(c(a, b = bb, s), data)))]
+plot_data[, l_s := exp(sapply(sp, function(ss) log_liklihood(c(a, b, s=ss), data)))]
+plot_data[, pr_a := exp(sapply(ap, function(aa) log_prior(c(a = aa, b, s))))]
+plot_data[, pr_b := exp(sapply(bp, function(bb) log_prior(c(a, b = bb, s))))]
+plot_data[, pr_s := exp(sapply(sp, function(ss) log_prior(c(a, b, s=ss))))]
+
 par(mfrow=c(2, 3), bty='l', mar=c(4,4,0,0))
-plot(apr, exp(sapply(apr, function(aa) log_liklihood(aa, b, s, data$x, data$y))), type='l', xlab='', ylab='pr(a | x,b,s)', col='red', lwd=2, xaxt='n')
-plot(bpr, exp(sapply(bpr, function(bb) log_liklihood(a, bb, s, data$x, data$y))), type='l', xlab='', ylab='pr(b | x,a,s)', col='red', lwd=2, xaxt='n')
-plot(spr, exp(sapply(spr, function(ss) log_liklihood(a, b, ss, data$x, data$y))), type='l', xlab='', ylab='pr(s | x,a,b)', col='red', lwd=2, xaxt='n')
-plot(apr, exp(sapply(apr, function(aa) log_prior(aa, b, s))), type='l', xlab='a', ylab='pr(a)', col='blue', lwd=2)
-plot(bpr, exp(sapply(bpr, function(bb) log_prior(a, bb, s))), type='l', xlab='b', ylab='pr(b)', col='blue', lwd=2)
-plot(spr, exp(sapply(spr, function(ss) log_prior(a, b, ss))), type='l', xlab='s', ylab='pr(s)', col='blue', lwd=2)
+plot(plot_data$ap, plot_data$l_a, type='l', xlab='', ylab='pr(a | x,b,s)', col='red', lwd=2, xaxt='n')
+plot(plot_data$bp, plot_data$l_b, type='l', xlab='', ylab='pr(b | x,a,s)', col='red', lwd=2, xaxt='n')
+plot(plot_data$sp, plot_data$l_s, type='l', xlab='', ylab='pr(s | x,a,b)', col='red', lwd=2, xaxt='n')
+plot(plot_data$ap, plot_data$pr_a, type='l', xlab='a', ylab='pr(a)', col='blue', lwd=2)
+plot(plot_data$bp, plot_data$pr_b, type='l', xlab='b', ylab='pr(b)', col='blue', lwd=2)
+plot(plot_data$sp, plot_data$pr_s, type='l', xlab='s', ylab='pr(s)', col='blue', lwd=2)
 ```
 ```{r echo=FALSE, fig.height=4.5}
 par(bty='l', mar=c(4,4,6,0))
@@ -366,14 +380,12 @@ pl3d
 <div class="right rt">
 ```{r}
 log_posterior_la = function(params, data) {
-  # unpack params and data
-  x = data[['x']]
-  y = data[['y']]
-  a = params['a']
-  b = params['b']
-  s = exp(params['log_s'])
+  ## s must be positive, but optim doesn't know this.
+  ## We also want the parameter we optimize to be conditionally normal
+  ## working with the log of the parameter can solve both problems
+  params['s'] = exp(params['log_s'])
 
-  log_liklihood(a, b, s, x, y) + log_prior(a, b, s)
+  log_liklihood(params, data) + log_prior(params)
 }
 param_init = c(a=0, b=0, log_s=0)
 fit = optim(param_init, log_posterior_la, data = data, method="Nelder-Mead", 
