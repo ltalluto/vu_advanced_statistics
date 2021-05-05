@@ -24,7 +24,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 |Date  |Topics                                                    |Lecture Notes |Exercises |
 | :--- |  :---                                                                 |   :---    | :--- |
-|03.05 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)|[Exercises: Distributions](exercises/2_distributions_ex.html)<p style="font-size: small;	margin-top: 0em;padding-left: 1.5em;">[Solutions](exercises/2_distributions_soln.html)</p>|
+|03.05 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)|[Exercises: Distributions](exercises/2_distributions_ex.html)<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)|
 |05.05 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: MLE](3_mle)<br/>[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Exercises: LM](exercises/4_5_lm_exercises.html)|
 |07.05 |Generalised linear models<br/>Markov-chain Monte Carlo                 |||
 |10.05 |Stan Language<br/>Priors, Diagnostics<br/>Project work                              |||
