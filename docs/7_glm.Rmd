@@ -29,14 +29,14 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 ## More linear models
 
 <div class="left lt">
-* Our linear model last week used a single x-variable: $\mathbb{E}(y) = a + bx$
+* Our linear model used a single x-variable: $\mathbb{E}(y) = a + bx$
 * It is trivial to add additional predictors to a model: $\mathbb{E}(y) = a + b_1x_1 + b_2x_2 + \dots + b_nx_n$
 </div>
 
 ## More linear models
 
 <div class="left lt">
-* Our linear model last week used a single x-variable: $\mathbb{E}(y) = a + bx$
+* Our linear model used a single x-variable: $\mathbb{E}(y) = a + bx$
 * It is trivial to add additional predictors to a model: $\mathbb{E}(y) = a + b_1x_1 + b_2x_2 + \dots + b_nx_n$
 * You can also easily add a "curve" in the relationship between x and y by transforming x:
 
@@ -71,7 +71,8 @@ ggplot(Howell1, aes(x = weight, y = height)) + geom_point() +
 ```{r}
 Howell1$age_cat = factor(with(Howell1, ifelse(age <= 12, "child", 
                        ifelse(age > 22, "adult", "young"))))
-pl = ggplot(Howell1, aes(x=weight, y = height, colour=age_cat)) + geom_point() + theme_minimal()
+pl = ggplot(Howell1, aes(x=weight, y = height, colour=age_cat)) + 
+  geom_point() + theme_minimal()
 ```
 </div>
 
@@ -89,17 +90,21 @@ Howell1$agecat_child = ifelse(Howell1$age_cat == "child", 1, 0)
 Howell1$agecat_young = ifelse(Howell1$age_cat == "young", 1, 0)
 
 ## equivalent of lm(height ~ age_cat + weight)
-log_liklihood1 = function(a, b_child, b_young, b_weight, s, height, weight, agecat_child, agecat_young) {
-  mu = a + b_child*agecat_child + b_young*agecat_young + b_weight * weight
-  sum(dnorm(height, mu, s, log=TRUE))
+log_liklihood1 = function(params, data) {
+  mu = params['a'] + params['b_child']*data[['agecat_child']] + 
+    params['b_young']*data[['agecat_young']] + 
+    params['b_weight']*data[['weight']]
+  sum(dnorm(data[['height']], mu, params['s'], log=TRUE))
 }
 
 ## equivalent of lm(height ~ age_cat * weight)
-log_liklihood2 = function(a, b_child, b_young, b_weight, b_cw, b_yw, s, 
-                          height, weight, agecat_child, agecat_young) {
-  mu = a + b_child*agecat_child + b_young*agecat_young + b_weight * weight  + 
-    b_cw * agecat_child * weight + b_yw * agecat_young * weight
-  sum(dnorm(height, mu, s, log=TRUE))
+log_liklihood2 = function(params, data) {
+  mu = params['a'] + params['b_child']*data[['agecat_child']] + 
+    params['b_young']*data[['agecat_young']] + 
+    params['b_weight']*data[['weight']] + 
+    params['b_cw']*data[['agecat_child']]*data[['weight']] + 
+    params['b_yw']*data[['agecat_young']]*data[['weight']]
+  sum(dnorm(data[['height']], mu, params['s'], log=TRUE))
 }
 
 ```
@@ -262,7 +267,8 @@ $$
 * Running optim produces warnings, but seems to work.
 
 ```{r}
-fit = optim(c(a=0.5, b=0), log_posterior, data = tsuga[n > 0], method = "Nelder-Mead", control=list(fnscale=-1))
+fit = optim(c(a=0.5, b=0), log_posterior, data = tsuga[n > 0], 
+            method = "Nelder-Mead", control=list(fnscale=-1))
 
 ```
 </div>
@@ -299,6 +305,7 @@ p & = \mathrm{logit}^{-1} (a + \mathbf{BX}) \\
 p & = \frac{e^{a + \mathbf{BX}}}{1 + e^{a + \mathbf{BX}}}
 \end{aligned}
 $$
+
 * In R, we can use `p = plogis(a + X %*% B)`
 
 </div>
@@ -396,7 +403,7 @@ $$
 
 * This is the **generalised linear model**, suitable for many applied problems
 * Linear regression is a special case of the GLM, where
-   - $\mathcal{D}$ is a normal distribution with mean $\mathbb{E}(y)$ and constant variance $\sigma^2 = /phi$
+   - $\mathcal{D}$ is a normal distribution with mean $\mathbb{E}(y)$ and constant variance $\sigma^2 = 1/phi$
    - $\mathrm{L}(y)$ is the **identity function**: $\mathrm{L}(y) = y$
 
 
@@ -420,11 +427,9 @@ Other distributions have typical link functions, but need reparameterization
 
 
 
-## Count Data
+## Count Data: Poisson
 
-* For counts where the number of trials is unkown or non-sensical
-
-### Poisson
+* For counts where the number of trials is unkown or nonsensical
 
 $$
 \begin{aligned}
@@ -446,7 +451,7 @@ y \sim \mathrm{Poisson}(u\lambda)
 $$
 
 
-## Overdispersed counts
+## Overdispersed counts: Negative Binomial
 
 * For counts where the mean and variance are not equal
 * Typical in ecological count data (e.g., abundances)
@@ -466,7 +471,7 @@ $$
 
 
 
-## Proportions
+## Proportions: Beta
 
 * When we have true proportions (i.e., a number of trials is unavailable)
 * Also used for Binomial problems where the number of trials is missing/unrecorded
@@ -492,7 +497,7 @@ $$
 * $\beta$: expected number of failures
 
 
-## Continuous, strictly positive
+## Continuous, strictly positive: Gamma
 
 * Often used for costs, waiting times
    - ecosystem services modelling
