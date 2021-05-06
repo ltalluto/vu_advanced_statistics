@@ -1,6 +1,6 @@
 ---
 title: "GLM Exercises"
-date: "19.11.2020"
+date: "07.05.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}
@@ -26,7 +26,7 @@ Build one or more generalised linear models for bird richness. Your task should 
 2. Choose an appropriate liklihood distribution and link function (or, if unsure, try several and compare)
 3. Decide on appropriate predictors, then write out the model equations, and draw a graph of the model.
 4. Write a function in r for the log posterior
-5. Produce samples from the model, using either Laplace approximation or MCMC. If you want to use MCMC, you will need to implement a multivariate sampler, or use the sample one provided in `r/mh.r`.
+5. Produce samples from the model, using either Laplace approximation or MCMC. If you want to use MCMC, you will need to implement a multivariate sampler, or use the sample one provided in [r/mh.r](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/r/mh.r).
 6. Interpret the results using the tools we've covered so far. Some possibilities:
     a. Credible intervals for parameters
     b. Posterior predictive intervals

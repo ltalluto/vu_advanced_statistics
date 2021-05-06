@@ -483,5 +483,5 @@ mcmc_trace(samples)
 - HMC imagines the posterior density is a frictionless bowl; more probable locations are lower
 - Place a ball on this bowl, give it a shove in a random direction, record everywhere it goes
 - The ball curves around the surface, sample from the path
-- once the ball slows down past a certain threshold, shove it again
+- once the ball slows down past a certain threshold, drop in a new place and shove it again
 

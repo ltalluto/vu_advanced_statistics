@@ -362,7 +362,7 @@ summary {
 
 
 <h1 class="title toc-ignore">MCMC Exercises</h1>
-<h4 class="date">17.11.2020</h4>
+<h4 class="date">07.05.2021</h4>
 
 </div>
 
@@ -376,10 +376,10 @@ summary {
 <ol style="list-style-type: lower-alpha">
 <li>Write a log likelihood function that computes <span class="math inline">\(\log pr(s | N_{max})\)</span>. What distribution is appropriate? Assume that the observations in <span class="math inline">\(s\)</span> are independent and random; <span class="math inline">\(s\)</span> can be any number between 1 and <span class="math inline">\(N_{max}\)</span>, and the probability of any number in that range being observed is the same as for any other number.</li>
 <li>Write a log prior for <span class="math inline">\(N_{max}\)</span>, and combine it with the log likelihood into a log posterior function.</li>
-<li>This posterior distribution cannot be estimated using Laplace approximation. However you can still use optim to get a MAP estimate. Get the MAP estimate, then plot the log_posterior against many values of <span class="math inline">\(N_{max}\)</span>. Does your MAP estiamte make sense?</li>
+<li>This posterior distribution cannot be estimated using Laplace approximation. However you can still use optim to get a MAP estimate. Get the MAP estimate, then plot the log_posterior against many values of <span class="math inline">\(N_{max}\)</span>. Does your MAP estimate make sense?</li>
 </ol>
 <ol start="3" style="list-style-type: decimal">
-<li>Use a metropolis sampler to generate 20000 samples from the posterior distribution for the German tank problem. You can either use the sampler you wrote for question 1, or use one provided for you. It can be found in <code>r/metrop.r</code> in this repository.
+<li>Use a metropolis sampler to generate 20000 samples from the posterior distribution for the German tank problem. You can either use the sampler you wrote for question 1, or use one provided for you. It can be found in <a href="https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/r/metrop.r">r/metrop.r</a> in this repository.
 <ol style="list-style-type: lower-alpha">
 <li>Play with the scale parameter in the algorithm for short runs (2000 iterations is plenty). How does changing the scale influence the acceptance rate? Either use automatic adaptation, or play with the scale manually until you have an acceptance rate between 0.35 and 0.5.</li>
 <li>Evaluate your samples using <code>mcmc_trace()</code> and <code>mcmc_hist()</code> from the <code>bayesplot</code> package (or implement your own versions). Compare the histogram of samples to the posterior density plot you made in 2c.</li>

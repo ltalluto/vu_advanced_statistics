@@ -1,6 +1,6 @@
 ---
 title: "Linear Modelling Exercises"
-date: "05.11.2020"
+date: "03.05.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}
@@ -21,7 +21,7 @@ These data, collected by anthropologist Nancy Howell in the 1960s, provide the a
 2. Design a regression model with `height` as the **response** (i.e., outcome, y) variable. For your initial model, use only `weight` as a predictor.
     a. Write out the model, using the syntax from [slide 6](../4_lm_laplace.html#(6)) from the lm lecture. Be sure that all unknowns (including parameters) appear on the left side of either ~ or =.
     b. Draw a graph of the model as in [slide 7](../4_lm_laplace.html#(7))
-    c. Write likelihood, prior, and posterior functions, and choose prior hyperparemeters for all parameters
+    c. Write likelihood, prior, and posterior functions, and choose prior hyperparemeters for all parameters.
     d. Compute a MAP estimate using `optim`.
     e. Make a plot of the best-fit line; include the original data on the plot as well.
 3. Plotting this model will likely reveal it to be inadequate, because there is a substantial "curve" in the height-weight relationship. Repeat the exercise for #2, but update your model to better predict height. Possible approaches might include filtering the data (but I encourage you to use it all if possible), writing a curvilinear equation, or adding additional predictors. Compare the results of your attempts, and choose a single model that you think works "best." Repeat a-e above for this model. Note any changes in the relationship between height and weight caused by your changes to the model. Additionally:
