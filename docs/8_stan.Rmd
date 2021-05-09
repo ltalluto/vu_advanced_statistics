@@ -1,7 +1,7 @@
 ---
 title: "Intro to Stan"
 author: "Matthew Talluto"
-date: "24.11.2020"
+date: "10.05.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -24,16 +24,50 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 ```
 
 ## What is Stan? 
+<div class="left lt">
 
 * Stan is a modelling language for scientific computing
 * Stan is a *probabilistic programming language*
    - variables can be specified deterministically using `=`
    - Stochastic variables are specified using `~`
-* Estimates models using Hamiltonian Monte Carlo
-* Programs are written in a .stan file
-* The Stan interpreter (which can be called from R) translates Stan code to C++ code
-* This program is executed from within R, posterior samples returned to R
+* Samples from the posterior using Hamiltonian Monte Carlo
 
+```{stan output.var = "noeval", eval=FALSE}
+mu = a + b*x;
+y ~ normal(mu, s);
+a ~ normal(0, 20);
+b ~ normal(0, 5);
+s ~ exponential(0.2);
+```
+
+
+1. Write a Stan model in a `.stan` file
+2. Prepare all data in R
+3. Use the `rstan` package to invoke the Stan interpreter
+   - Translates your model into a C++ program w/ an HMC sampler, then compiles for your computer
+4. Run the program from R using `rstan`.
+5. Perform posterior inference using various R packages.
+
+</div>
+
+<div class="right rt">
+
+
+```{r, echo = FALSE}
+gr = graph_from_literal(a-+"mu", b-+"mu", s-+y, x-+"mu", "mu"-+y)
+V(gr)$type = c("random", "deterministic", "random", "random", "random", "deterministic")
+V(gr)$source = c("unknown", "unknown", "unknown", "unknown", "known", "known")
+layout = matrix(c(0.5,2,  0.5,1,  1,2,  1.5,2,  1.25,0, 0,2), byrow=TRUE, ncol=2)
+
+
+n = ggnetwork(gr, layout=layout)
+pl = ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1)
+pl
+```
+</div>
 
 ## Why Stan?
 
@@ -86,7 +120,13 @@ model {
 
 ```{r eval=FALSE}
 library(rstan)
-fit = stan(stancode, iter=5000, data = data)
+standata = list(
+	y = y,
+	X = as.matrix(X),
+	n = nrow(X),
+	k = ncol(X)
+)
+fit = stan(stancode, iter=5000, data = standata)
 samples = as.matrix(fit)
 ```
 
@@ -97,10 +137,9 @@ samples = as.matrix(fit)
 ## Variables in Stan
 
 <div class="left lt">
-* Stan variables are less flexible than in R
-* Stan is an example of a *stongly-typed* language
+* Stan variables are less flexible than in R (*strongly-typed*)
 * Variables must be declared, types are fixed
-* Container dimensions must be specified ahead of time
+* Vector/matrix/array dimensions must be specified ahead of time
 * Variables must be declared in particular places
 * Variables can have **constraints**
 
@@ -108,15 +147,16 @@ samples = as.matrix(fit)
 
 **Scalar types**
 
-* integers and reals
+* `int`
+* `real`
 
 <br/>
 
 **Containers**
 
-* vector: 1 dimension, real numbers only
-* matrix: 2 dimensions, real numbers only
-* array: any dimensions, any data type (including other containers!)
+* `vector`: 1 dimension, real numbers only
+* `matrix`: 2 dimensions, real numbers only
+* `array`: any dimensions, any data type (including other containers!)
 
 </div>
 
@@ -241,8 +281,9 @@ transformed data {
 ## Probability statements
 * In the `model` block, we write statements describing how to evaluate the log probability of the model.
 * This works using the `~` symbol
-* Here, the model computes $pr(y | \mu, \sigma)$ using the **normal PDF**
+* Here, the model evaluates $pr(y | \mu, \sigma)$ using the **normal PDF**
 * This quantity is then added to the total log probability of the model
+* This works if y is a vector or a single value
 
 ```{stan output.var="garbage", eval=FALSE}
 model {
@@ -360,7 +401,7 @@ ggplot(pldat, aes(x=x, y=y)) + geom_line() + xlab(expression(N_max)) + ylab("Pr(
 
 3. Use a metropolis sampler to generate 20000 samples from the posterior distribution for the German tank problem. You can either use the sampler you wrote for question 1, or use one provided for you. It can be found in `r/metrop.r` in this repository.
 
-```{r message=FALSE}
+```{r message=FALSE, cache = TRUE}
 fit = sampling(stan_tanks, data = standat, iter=20000, chains = 1, refresh = 0)
 ## fit = stan("path/to/code.stan", data = standat, iter=20000) ## use if running from a separate .stan file
 samples = as.matrix(fit)
@@ -400,10 +441,47 @@ rbind(hdpi = hpdi(samples[,1]),
 4. Perform posterior inference
 
 
+## 1. Joint posterior: likelihood
+
+* Liklihood is a **generative model** (the distribution from which the observations are generated)
+  - whenever possible use knowledge of the appropriate processes
+  - transform parameters and sample in transformed space to improve behaviour
+  - e.g. use log($/sigma$) instead of $/sigma$ to avoid impossible negative variance in sampler
+  - in Stan, this is done by adding variable **constraints** (`real <lower=0> sigma`)
+  
+## 1. Joint posterior: likelihood
+
+* Liklihood is a **generative model** (the distribution from which the observations are generated)
+  - whenever possible use knowledge of the appropriate processes
+  - transform parameters and sample in transformed space to improve behaviour
+  - e.g. use log($/sigma$) instead of $/sigma$ to avoid impossible negative variance in sampler
+  - in Stan, this is done by adding variable **constraints** (`real <lower=0> sigma`)
+* Models should be specified to be scale independent
+  - Easy: scaling your predictors to have mean=0, sd=1
+  - Hard: scaling outcomes (y); this can change the generative model!
+  - Prefer to transform outcomes with the **link function**
+  
+## 1. Joint posterior: priors
+* Any unknowns must have a **prior**
+   - (or possibly a hierarchical generative model and hyperpriors)
+* Prefer regularising priors to vague priors
+   - Normal(0, 5) instead of Normal(0,500)
+* Avoid improper priors: Uniform(-Inf, Inf)
+* Forget conjugacy unless you know what you are doing and why
+
+
+## 1. Joint posterior: priors
+* Avoid hard boundaries
+   - **No**: Uniform(0, 1000)
+   - **Yes**: Exponential(0.1)
+* With informative priors, specify reasonable initial values
+* Begin sampling with weaker priors, gradually strengthen once you know the model is working
+* Specify priors for everything—avoid defaults
+* Draw out your model as a digraph to make sure you don’t miss anything
 
 ## GLM in Stan
 
-For this exercise, you will use the `birddiv.csv` dataset, available under "Data" on OLAT. Bird diversity was measured in 1-km^2 plots in multiple countries of Europe, investigating the effects of habitat fragmentation and productivity on diversity. We will consider a subset of the data. Specificially, we will ask how various covariates are associated with the diversity of birds specializing on different habitat types. The data have the following potential predictors:
+For this exercise, you will use the [birddiv](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/birddiv.csv) (in `docs/exercises/data/birddiv.csv`) dataset; you can load it directly from github using `data.table::fread()`. Bird diversity was measured in 1-km^2 plots in multiple countries of Europe, investigating the effects of habitat fragmentation and productivity on diversity. We will consider a subset of the data. Specificially, we will ask how various covariates are associated with the diversity of birds specializing on different habitat types. The data have the following potential predictors:
 
 * **Grow.degd**: growing degree days, a proxy for how warm the climate is.
 * **For.cover**: Forest cover near the sampling location
@@ -513,6 +591,13 @@ generated quantities {
 
 
 </div>
+
+
+## 2. Sample from joint posterior
+
+* Start with a small run (10s-100s of iterations) to catch errors, make sure nothing surprising happens
+* Increase to a few thousand to view convergence
+* Select starting values and run until convergence (1.000s for Stan, 10.000s—100.000s or more for Metropolis)
 
 
 ## 2. Sample from the joint posterior
@@ -766,7 +851,7 @@ quantile(phi, c(0.5, 0.05, 0.95))
 
 
 
-## 4. Inference: Conditional Response Curves
+## 4. Inference: Partial Response Curves
 
 * How does richness respond to the individual variables, holding other variables constant?
 
