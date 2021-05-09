@@ -1,7 +1,7 @@
 ---
 title: "Generalised Linear Modelling"
 author: "Matthew Talluto"
-date: "19.11.2020"
+date: "10.05.2021"
 output:
   slidy_presentation:
     theme: cerulean

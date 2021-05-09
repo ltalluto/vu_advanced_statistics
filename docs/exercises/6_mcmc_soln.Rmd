@@ -1,6 +1,6 @@
 ---
 title: "MCMC Exercises"
-date: "17.11.2020"
+date: "07.05.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}

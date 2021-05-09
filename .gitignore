@@ -42,3 +42,4 @@ vignettes/*.pdf
 
 scratch/*
 r/*.rds
+docs/*_files
