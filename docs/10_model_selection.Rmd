@@ -1,7 +1,7 @@
 ---
 title: "Model Selection & Comparison"
 author: "Matthew Talluto"
-date: "03.12.2020"
+date: "12.05.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -62,7 +62,7 @@ rolls = c(1,2,1,4,1,1,5,3,1,6)
 table(rolls)/length(rolls)
 ```
 
-A fair die has high entropy; each face has a probability of $/frac{1}{6}, 
+A fair die has high entropy; each face has a probability of $\frac{1}{6}$, 
 this (or any) sequence cannot help us predict the next roll
 
 ```{r}
@@ -77,7 +77,8 @@ pr_unfair = c(0.5, rep(0.1, 5))
 -sum(pr_unfair * log(pr_unfair))
 ```
 
-### Principle of maximum entropy
+<br/><br/><br/>
+**Principle of maximum entropy**
 
 * The best model in a set is the one that maximizes the entropy of the residuals
 * After applying the model, the value of the residuals should tell us as little as possible about the next residual
@@ -152,12 +153,15 @@ $$
 <div class = "right rt">
 ```{r}
 log_liklihood = function(prob1, rolls)
-	sum(dmultinom(table(rolls), prob = c(prob1, rep((1-prob1)/5, 5)), log=TRUE))
+	sum(dmultinom(table(rolls), prob = c(prob1, rep((1-prob1)/5, 5)), 
+				  log=TRUE))
 log_posterior = function(prob1, rolls) {
-	log_liklihood(prob1, rolls) + dbeta(prob1, 1, 5, log=TRUE) # a priori we expect 1 one and 5 not-ones
+	# a priori we expect 1 one and 5 not-ones
+	log_liklihood(prob1, rolls) + dbeta(prob1, 1, 5, log=TRUE) 
 }
 
-map = optim(pr_fair[1], method="Brent", log_posterior, rolls=rolls, control=list(fnscale=-1), lower=0, upper=1)
+map = optim(pr_fair[1], method="Brent", log_posterior, rolls=rolls, 
+			control=list(fnscale=-1), lower=0, upper=1)
 prs_map = c(map$par, rep((1-map$par)/5, 5))
 round(prs_map, 2)
 ```
@@ -526,14 +530,14 @@ $$
 
 > - We can use the lppd to approximate LOO without the cost of fitting $n$ models
 > - Conceptually, AIC and DIC are attempts at *approximating* LOO
-> - WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+> - WAIC (Widely applicable information criterion) extends this, using lppd instead of deviance
 
 
 ## LOO
 
 * We can use the lppd to approximate LOO without the cost of fitting $n$ models
 * Conceptually, AIC and DIC are attempts at *approximating* LOO
-* WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+* WAIC (Widely applicable information criterion) extends this, using lppd instead of deviance
     - It is pointwise, so it approximates the cost to model fitting of leaving out each point
     - Averaged across the entire posterior
 
@@ -541,7 +545,7 @@ $$
 
 * We can use the lppd to approximate LOO without the cost of fitting $n$ models
 * Conceptually, AIC and DIC are attempts at *approximating* LOO
-* WAIC (Widely available information criterion) extends this, using lppd instead of deviance
+* WAIC (Widely applicable information criterion) extends this, using lppd instead of deviance
     - It is pointwise, so it approximates the cost to model fitting of leaving out each point
     - Averaged across the entire posterior
 * Another technique, *importance sampling*, can directly approximate LOO

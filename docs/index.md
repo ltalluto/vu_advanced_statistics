@@ -28,8 +28,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |05.05 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: MLE](3_mle)<br/>[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)<br/>[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
 |07.05 |Markov-chain Monte Carlo               |[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)|
 |10.05 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics<br/>Project work                              |[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)|[Exercises: GLM](exercises/7_glm_exercises.html)|
-|12.05 |Hierarchical Models<br/>Project work|||
-|14.05|Model selection & comparison<br/>Spatial Models<br/>Project work |||
+|12.05 |Hierarchical Models<br/>Project work|[Lecture: HM](9_hm)|[Exercises: HM](exercises/9_hm_exercises.html)|
+|14.05|Model selection & comparison<br/>Spatial Models<br/>Project work |[Lecture: Model Selection](10_model_selection)<br/>[Lecture: Spatial Models Part 1](11_spatial_gp)<br/>[Lecture: Spatial Models Part 2](12_gp_implementation)||
 |17.05<br/>(or TBD)|Wrap-up<br/>Presentations|
 
 

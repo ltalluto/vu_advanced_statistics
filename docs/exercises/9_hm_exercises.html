@@ -362,12 +362,14 @@ summary {
 
 
 <h1 class="title toc-ignore">Hierarchical Modelling &amp; Model Selection Exercises</h1>
-<h4 class="date">01.12.2020</h4>
+<h4 class="date">12.05.2021</h4>
 
 </div>
 
 
-<p>For this exercise, you will use the <code>exercises/data/treedata.csv</code> dataset. This is the same dataset that was used for the MLE Exercises (Nov 5), expanded to include multiple species and years.</p>
+<p>For this exercise, you will use the <code>exercises/data/treedata.csv</code> dataset. This is the same dataset that was used for the MLE Exercises, expanded to include multiple species and years. Load it using data.table:</p>
+<pre class="r"><code>library(data.table)
+treedat = fread(&quot;https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/treedata.csv&quot;)</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>We began exploring this dataset in the lecture. One thing that was apparent was that mortality was not predicted well, possibly because we estimated a pooled slope for all years. Expand the model used in the lecture to include a hierarchical term for the slope parameter (<span class="math inline">\(b\)</span>). Follow the 4-step workflow for analysis (Lecture 8, slide 15), using the tools developed so far. Use data for <em>Tsuga canadensis</em> only for this step.</p></li>
 <li>Expand your model to include the other species. Develop a small number of competing models testing different hypotheses. Possible structures to explore:
