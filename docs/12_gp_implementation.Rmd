@@ -1,7 +1,7 @@
 ---
 title: "Spatial Model Implementation"
 author: "Matthew Talluto"
-date: "17.12.2020"
+date: "14.05.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -29,12 +29,15 @@ library(loo)
 
 ```{r}
 tsuga = readRDS("exercises/data/tsuga_spatial.rds")
-pl1 = ggplot(tsuga, aes(x=X, y=Y, colour = died/n)) + geom_point() + coord_fixed() + 
-	theme_minimal() + scico::scale_color_scico(palette="imola") + labs(color="pr(death)") + 
-	ylab("Latitude (m)") + xlab("")
-pl2 = ggplot(tsuga, aes(x=X, y=Y, colour = annual_mean_temp)) + geom_point() + coord_fixed() + 
-	theme_minimal() + scico::scale_color_scico(palette="vik") + labs(color="temperature") + 
-	ylab("Latitude (m)") + xlab("Longitude (m)")
+pl1 = ggplot(tsuga, aes(x=X, y=Y, colour = died/n)) + geom_point() + 
+	coord_fixed() + theme_minimal() + labs(color="pr(death)") + 
+	scico::scale_color_scico(palette="imola") + 
+	ylab("Latitude (m)") + xlab("") + coord_fixed()
+pl2 = ggplot(tsuga, aes(x=X, y=Y, colour = annual_mean_temp)) + 
+	geom_point() + coord_fixed() + theme_minimal() + 
+	scico::scale_color_scico(palette="vik") + 
+	labs(color="temperature") + ylab("Latitude (m)") + 
+	xlab("Longitude (m)") + coord_fixed()
 
 ```
 
@@ -59,10 +62,14 @@ grid.arrange(pl1, pl2, nrow=2)
 
 ```{r cache=TRUE}
 models = readRDS("../scratch/gp_models.rds")
-p1 = mcmc_trace(as.matrix(models[[1]], pars=c("a","b"))) + theme_minimal() + ggtitle("T")
-p2 = mcmc_trace(as.matrix(models[[2]], pars=c("a","rho"))) + theme_minimal() + ggtitle("GP")
-p3 = mcmc_trace(as.matrix(models[[3]], pars=c("a","rho"))) + theme_minimal() + ggtitle("GP+T")
-p4 = mcmc_trace(as.matrix(models[[4]], pars=c("a","rho"))) + theme_minimal() + ggtitle("GP+T+P")
+p1 = mcmc_trace(as.matrix(models[[1]], pars=c("a","b"))) + 
+	theme_minimal() + ggtitle("T")
+p2 = mcmc_trace(as.matrix(models[[2]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP")
+p3 = mcmc_trace(as.matrix(models[[3]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP+T")
+p4 = mcmc_trace(as.matrix(models[[4]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP+T+P")
 
 ```
 

@@ -1,13 +1,19 @@
 ---
 title: "Hierarchical Modelling & Model Selection Exercises"
-date: "01.12.2020"
+date: "12.05.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-For this exercise, you will use the `exercises/data/treedata.csv` dataset. This is the same dataset that was used for the MLE Exercises (Nov 5), expanded to include multiple species and years.
+For this exercise, you will use the `exercises/data/treedata.csv` dataset. This is the same dataset that was used for the MLE Exercises, expanded to include multiple species and years. Load it using data.table:
+
+```{r, eval = FALSE}
+library(data.table)
+treedat = fread("https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/treedata.csv")
+```
+
 
 1. We began exploring this dataset in the lecture. One thing that was apparent was that mortality was not predicted well, possibly because we estimated a pooled slope for all years. Expand the model used in the lecture to include a hierarchical term for the slope parameter ($b$). Follow the 4-step workflow for analysis (Lecture 8, slide 15), using the tools developed so far. Use data for *Tsuga canadensis* only for this step.
 
