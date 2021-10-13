@@ -25,6 +25,57 @@ library(xtable)
 > - Introduce ourselves - name, research area, what you want from this course
 > - The [course web page](https://mtalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
 
+## Course Introduction
+
+<div class='left' style='float:left;width:48%'>
+
+### This course will give you:
+
+> - A deeper understanding of how inferential statistics works
+> - An appreciation of the similarities between Bayesian and frequentist methods
+> - The ability to think critically about model design
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+</div>
+
+## Course Introduction
+
+<div class='left' style='float:left;width:48%'>
+
+### This course will give you:
+
+* A deeper understanding of how inferential statistics works
+* An appreciation of the similarities between Bayesian and frequentist methods
+* The ability to think critically about model design
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+
+### And not so much:
+
+* A giant toolbox of ready-made models, with variations for every potential problem
+
+</div>
+
+
+## 
+
+<div class='left' style='float:left;width:48%'>
+
+### What (some) people think they need
+
+![](img/tools.jpg){width=80%}
+</div>
+
+<div class='right' style='float:right;width:48%'>
+
+### What we cover instead
+
+![](img/blacksmith.jpg){width=80%}
+</div>
 
 
 ## Why Bayes?
