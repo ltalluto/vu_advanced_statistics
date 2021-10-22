@@ -79,16 +79,17 @@ library(xtable)
 
 
 ## Why Bayes?
->- Why statistics? What is the goal of statistical analysis?
 
+Why statistics at all? What is the goal of statistical analysis?
 
-
-## Why Bayes?
 >- I want to describe some phenomenon (“model”)
 >- I have some general (“prior”) knowledge about the question
 >- I gather additional information (“data”)
 
 ## Why Bayes?
+
+Why statistics at all? What is the goal of statistical analysis?
+
 * I want to describe some phenomenon (“model”)
 * I have some general (“prior”) knowledge about the question
 * I gather additional information (“data”)
@@ -127,7 +128,6 @@ c2 = "#8da0cb77"
 rect(0.1, 0.5, 0.5, 0.9, col = c2)
 text(0.1, 0.8, "pr(A)", pos=4)
 text(0.55, 0.55, "1 - pr(A)", pos=4)
-
 ```
 </div>
 
@@ -137,7 +137,7 @@ text(0.55, 0.55, "1 - pr(A)", pos=4)
 ## Probabilistic partitions
 
 <div class='left' style='float:left;width:48%'>
-* An event A has some probability of occurring: *pr(A)*
+* An event A has some probability of occurring: *pr(A)* (**marginal probability**)
 * A second event, B, has multiple possible relationships to A.
   - If A and B never occur together, the events are **disjoint**
 
@@ -150,6 +150,7 @@ print(tab, type='html')
 </div>
 
 <div class='right' style='float:right;width:48%'>
+
 ```{r echo = FALSE}
 plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
 rect(0, 1, 1, 0, col = c1)
@@ -178,6 +179,7 @@ print(tab, type='html')
 </div>
 
 <div class='right' style='float:right;width:48%'>
+
 ```{r echo = FALSE}
 plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
 rect(0, 1, 1, 0, col = c1)
@@ -196,19 +198,48 @@ rect(0.4, 0.3, 0.7, 0.8, col = c3)
 * A second event, B, has multiple possible relationships to A:
   - If A and B never occur together, the events are **disjoint**
   - If the two overlap, we can say that they **intersect**
-* pr(A) + pr(B) = the chance of *at least one event*
 * pr(A,B) = the probability of both (**joint probability**)
   - Also written $A \cap B$ (the intersection of A and B)
-* pr(A) + pr(B) - pr(A,B) is the *union* ($A \cup B$)
 
 </div>
 
 <div class='right' style='float:right;width:48%'>
+
 ```{r echo = FALSE}
 plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
 rect(0, 1, 1, 0, col = c1)
-rect(0.1, 0.5, 0.5, 0.9, col = c2)
-rect(0.4, 0.3, 0.7, 0.8, col = c3)
+c2p = paste0(substr(c2, 1, 7), "11")
+c3p = paste0(substr(c3, 1, 7), "11")
+c4 = "#D59D9799"
+rect(0.1, 0.5, 0.5, 0.9, col = c2p)
+rect(0.4, 0.3, 0.7, 0.8, col = c3p)
+rect(0.4, 0.5, 0.5, 0.8, col = c4)
+```
+</div>
+
+
+## Probabilistic partitions
+
+<div class='left' style='float:left;width:48%'>
+* An event A has some probability of occurring: *pr(A)*
+* A second event, B, has multiple possible relationships to A:
+  - If A and B never occur together, the events are **disjoint**
+  - If the two overlap, we can say that they **intersect**
+* pr(A,B) = the probability of both (**joint probability**)
+  - Also written $A \cap B$ (the intersection of A and B)
+* pr(A) + pr(B) - pr(A,B) is the *union* ($A \cup B$)
+  - the chance of *at least one event*
+  - for **disjoint** events, pr(A,B) = 0, so $A \cup B = pr(A) + pr(B)$
+
+</div>
+
+<div class='right' style='float:right;width:48%'>
+
+```{r echo = FALSE}
+plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
+rect(0, 1, 1, 0, col = c1)
+polygon(x = c(0.1, 0.1, 0.4, 0.4, 0.7, 0.7, 0.5, 0.5), 
+  y = c(0.9, 0.5, 0.5, 0.3, 0.3, 0.8, 0.8, 0.9), col = c4)
 ```
 </div>
 
