@@ -1,6 +1,6 @@
 ---
 title: "Distribution Exercises"
-date: "03.05.2021"
+date: "03.11.2021"
 output: html_document
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "MLE Exercises"
-date: "03.05.2021"
+date: "04.11.2021"
 output: html_document
 ---
 
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
     a. Why should this matter?
     b. Is the answer different if you use `prod(dbinom(k, n, p, log=FALSE))` as the likelihood?
     c. Sometimes outliers can reveal flaws in our algorithms. Try using `optim` to find the MLE for the following dataset using the two methods (sum of the log likelihoods vs product of likelihoods). The answers will probably be very different. Which seems correct? What is going on here that these two (mathematically equivalent) equations yield such different results?
+
 ```{r}
 n_vec = c(25, 12, 134, 2000)
 k_vec = c(7, 4, 27, 0)
@@ -23,7 +24,11 @@ k_vec = c(7, 4, 27, 0)
 
 ```{r}
 library(data.table)
+## working directory should be: vu_advanced_statistics/docs/exercises
 tsuga = readRDS("data/tsuga.rds")
+
+## if you don't have the repository saved locally
+# tsuga = readRDS(url("https://github.com/mtalluto/vu_advanced_statistics/raw/main/docs/exercises/data/tsuga.rds"))
 ```
 
 This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
@@ -33,6 +38,7 @@ This dataset gives statistics about *Tsuga canadensis* observed over multiple ye
       ii. `n`: a *vector*, the number of trees in each plot
       iii. `k`: a *vetor*, the number of dead trees in each plot
       iv. The function should return the *log likelihood*: $\log pr(n,k|p)$
+
 ```{r}
 # n and k are vectors
 lfun = function(p, n, k) {

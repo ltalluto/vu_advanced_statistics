@@ -1,7 +1,7 @@
 ---
 title: "Course Intro & Probability"
 author: "Matthew Talluto"
-date: "03.05.2021"
+date: "28.10.2021"
 output:
   slidy_presentation:
     theme: cerulean

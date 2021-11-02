@@ -1,7 +1,7 @@
 ---
 title: "Maximum Likelihood & Optimisation"
 author: "Matthew Talluto"
-date: "03.05.2021"
+date: "04.11.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -250,7 +250,7 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 > - For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 > - $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
 > - $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-> - What about for continuous problems? There are infinitely many possible datasets if X is real-valued, and infinte possible models if $pr(\theta)$ is a continuous PDF.
+> - What about for continuous problems? There are an infinte number of possible models if $pr(\theta)$ is a continuous PDF.
 
 
 
@@ -279,7 +279,7 @@ $$
 * If all we want to do is estimate the maximum value, we can safely ignore it
 
 $$
-pr(\theta|X) \propto pr(X|\theta)pr{\theta}
+pr(\theta|X) \propto pr(X|\theta)pr(\theta)
 $$
 
 
@@ -291,7 +291,7 @@ $$
 * If all we want to do is estimate the maximum value, we can safely ignore it
 
 $$
-pr(\theta|X) \propto pr(X|\theta)pr{\theta}
+pr(\theta|X) \propto pr(X|\theta)pr(\theta)
 $$
 
 * This is know as the **maximum a posteriori** (MAP) estimate, Bayesian equivalent to the MLE
@@ -322,7 +322,8 @@ beta = 1
 
 <div class="left lt">
 ```{r}
-optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha, beta = beta, 
+optim(p_init, log_posterior, method = "Brent", n = n, 
+      k = k, alpha = alpha, beta = beta, 
       control = list(fnscale = -1), lower=0, upper=1)
 ```
 
@@ -345,23 +346,27 @@ mtext("p", side = 1, outer=TRUE, line=-2)
 
 ## Changing the prior
 <div class="left lt">
+
 ```{r}
 alpha = 2; beta = 2
-optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha, beta = beta, 
+optim(p_init, log_posterior, method = "Brent", n = n, 
+      k = k, alpha = alpha, beta = beta, 
       control = list(fnscale = -1), lower=0, upper=1)$par
 ```
 
 ```{r}
 alpha2 = 3; beta2 = 1.5
-optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha2, beta = beta2, 
+optim(p_init, log_posterior, method = "Brent", n = n, 
+      k = k, alpha = alpha2, beta = beta2, 
       control = list(fnscale = -1), lower=0, upper=1)$par
 ```
-This prior is informative, but relatively weak (our data has the weight equivalent to alpha=7, beta=18)
+This prior is informative, but relatively weak (our data has the weight equivalent to `alpha=7, beta=18`)
 
 </div>
 
 
 <div class="right rt">
+
 ```{r echo=FALSE, figure.width = 3, figure.height = 3}
 par(mar = c(5,5,0,1), bty='n', mfrow=c(2,2))
 plot(p, exp(log_lfun(p, n, k)), xlab = "", ylab = "Likelihood", col = 'red', type='l', lwd=3)
@@ -384,12 +389,14 @@ What if we had already conducted an identical prior sample, with 20 zombies and 
 
 ```{r}
 alpha3 = 20; beta3 = 5
-optim(p_init, log_posterior, method = "Brent", n = n, k = k, alpha = alpha3, beta = beta3, 
+optim(p_init, log_posterior, method = "Brent", n = n, 
+      k = k, alpha = alpha3, beta = beta3, 
       control = list(fnscale = -1), lower=0, upper=1)$par
 ```
 </div>
 
 <div class="right rt">
+
 ```{r echo=FALSE, figure.width = 3, figure.height = 3}
 par(mar = c(5,5,0,1), bty='n', mfrow=c(2,2))
 plot(p, exp(log_lfun(p, n, k)), xlab = "", ylab = "Likelihood", col = 'red', type='l', lwd=3)
@@ -446,7 +453,7 @@ $$
 * We often want to know the full posterior distribution
 * For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
 * In many cases, the shape of the log posterior is appoximately quadratic (the posterior is approximately normal)
-* Laplace (or Quadratic) approximation is a method for approximating the shape of this curve
+* **Laplace approximation** (or Quadratic approximation) is a method for approximating the shape of this curve
 
 ```{r, echo = FALSE}
 alpost = alpha3 + k
@@ -469,5 +476,5 @@ legend("bottomleft", legend = c("Normalized posterior", "Quadratic Estimate"), c
 * We often want to know the full posterior distribution
 * For some problems, we have analytical solutions to $\int pr(X|\theta)pr(\theta)d \theta$
 * In many cases, the shape of the log posterior is appoximately quadratic (the posterior is approximately normal)
-* Laplace (or Quadratic) approximation is a method for approximating the shape of this curve
+* **Laplace approximation** (or Quadratic approximation) is a method for approximating the shape of this curve
 * When the above are unavailable, we can use simulations (e.g., MCMC)

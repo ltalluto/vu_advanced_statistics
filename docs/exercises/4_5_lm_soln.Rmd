@@ -1,6 +1,6 @@
 ---
 title: "Linear Modelling Exercises"
-date: "03.05.2021"
+date: "09.11.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}

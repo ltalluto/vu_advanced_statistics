@@ -1,7 +1,7 @@
 ---
 title: "Markov Chain Monte Carlo"
 author: "Matthew Talluto"
-date: "05.11.2020"
+date: "11.11.2020"
 output:
   slidy_presentation:
     theme: cerulean
@@ -20,6 +20,8 @@ knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = 
 
 <div class="left lt">
 * Complex models (e.g., hierarchical models)
+   - Model height as a function of weight
+   - People from rich countries are taller on average
 </div>
 
 <div class="right rt">
@@ -34,6 +36,8 @@ $$
 ## Laplace approximation isn't always effective
 <div class="left lt">
 * Complex models (e.g., hierarchical models)
+   - Model height as a function of weight
+   - People from rich countries are taller on average
 * Poorly identified models
   - correlated predictors
   - very flat posterior distributions
@@ -55,6 +59,8 @@ $$
 ## Laplace approximation isn't always effective
 <div class="left lt">
 * Complex models (e.g., hierarchical models)
+   - Model height as a function of weight
+   - People from rich countries are taller on average
 * Poorly identified models
   - correlated predictors
   - very flat posterior distributions
@@ -103,7 +109,7 @@ text(pts, dunif(s, 1, pts), c("s", "2s", "4s", "10s"), pos=4)
 
 <div class="left lt">
 * There are general algorithms for sampling from unknown distributions
-* We have the **target distribution**, $pr(s|N)$
+* We have the **target distribution**, $t(N) = pr(s|N)$
 * Find an easy-to-sample **proposal distribution**, call it $f(N)$, 
     - Scale it so that it's always higher than our target
     - Uniform is an obvious choice here, with a very high maximum: e.g., `dunif(s, 1, 1e6)`
@@ -135,6 +141,7 @@ legend("right", legend=c("proposal", "target"), lwd=2, col=c('#F8766D', '#00BFC4
 * Accept the sample with probability $r$, reject with probability $1-r$
 </div>
 <div class="right rt">
+
 ```{r echo = FALSE}
 par(mgp=c(0.5,0,0), mar=c(2,2,2,0.2))
 plot(Npr, dunif(s, 1, Npr), type='l', bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
@@ -163,17 +170,24 @@ text(x+50, grconvertY(0.5, "npc", "user"), expression(r==frac(t(x),f(x))), pos=4
 s = 200
 target = function(x) dunif(s, 1, x)
 proposal = function(x) dunif(x, 1, 1e6)
-scale = target(s) / proposal(s) ## this scale will make sure f(x) >= t(x)
+
+## this scale will make sure f(x) >= t(x)
+scale = target(s) / proposal(s) 
 candidates = as.integer(runif(1e6, 1, 1e6))
 r = target(candidates)/(proposal(candidates) * scale)
-test = runif(length(r))  ## uniform numbers between 0 and 1
-accept = ifelse(r > test, TRUE, FALSE) ## TRUE if r > test; WHY?
+
+## uniform numbers between 0 and 1
+test = runif(length(r))  
+
+## TRUE if r > test; WHY?
+accept = ifelse(r > test, TRUE, FALSE) 
 samples = candidates[accept]
 
 ```
 
 </div>
 <div class="right rt">
+
 ```{r echo = FALSE}
 samples2 = samples[samples <= max(Npr)]
 par(mgp=c(0.5,0,0), mar=c(2,2,2,0.2))
