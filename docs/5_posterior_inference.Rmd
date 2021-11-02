@@ -1,7 +1,7 @@
 ---
 title: "Sampling for Posterior Inference"
 author: "Matthew Talluto"
-date: "05.11.2020"
+date: "09.11.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -70,21 +70,23 @@ sds = sqrt(diag(vcv))
 * We have a mean and standard deviation
 
 <div class="left lt">
+
 ```{r}
 bad_sample = data.frame(a = rnorm(1e4, fit$par[1], sds[1]), 
                         b = rnorm(1e4, fit$par[2], sds[2]))
-ggplot(bad_sample, aes(x=a, y=b)) + geom_point(size = 0.4) + theme_minimal()
+ggplot(bad_sample, aes(x=a, y=b)) + geom_point(size = 0.4) + 
+  theme_minimal()
 ```
 </div>
 
 
 <div class="right rt">
+
 ```{r fig.width = 7, fig.height=5}
 posterior_grid = expand.grid(a=seq(-3, 0, length.out=100), 
-                             b = seq(0.8, 1.3, length.out = 100), 
-                             log_s = fit$par[3])
+    b = seq(0.8, 1.3, length.out = 100), log_s = fit$par[3])
 posterior_grid$pr = dmvnorm(as.matrix(posterior_grid[,1:3]), 
-                            mean = fit$par, sigma=vcv, log=FALSE)
+    mean = fit$par, sigma=vcv, log=FALSE)
 pos_dens_pl = ggplot(posterior_grid, aes(x=a, y=b, fill=pr)) + 
   geom_tile(size=0.5) + theme_minimal() + 
   scico::scale_fill_scico(palette = "lajolla") + 
@@ -108,14 +110,18 @@ pos_dens_pl
 
 
 <div class="right rt">
+
 ```{r fig.width=3.5, fig.height=3.5, fig}
-good_sample = data.frame(rmvnorm(1e4, mean = fit$par, sigma = vcv))
-ggplot(good_sample, aes(x=a, y=b)) + geom_point(size = 0.4) + theme_minimal()
+good_sample = data.frame(rmvnorm(1e4, mean = fit$par, 
+  sigma = vcv))
+ggplot(good_sample, aes(x=a, y=b)) + geom_point(size = 0.4) + 
+  theme_minimal()
 ```
 
 ```{r fig.width=5.5, fig.height=3.5}
 good_sample_pl = reshape2::melt(good_sample, id.vars = NULL)
-ggplot(good_sample_pl, aes(x = value)) + geom_histogram(fill = "#00BFC4", bins=40) + 
+ggplot(good_sample_pl, aes(x = value)) + 
+  geom_histogram(fill = "#00BFC4", bins=40) + 
   facet_grid(~variable, scales="free") + theme_minimal()
 
 ```
@@ -171,8 +177,10 @@ Often we want to know something about some parameter $\theta$
 mn = colMeans(as.matrix(good_sample))
 med = apply(as.matrix(good_sample), 2, median)
 tab = matrix(c(mn, med, fit$par), ncol=3, byrow=TRUE, dimnames = list(c("mean", "median", "mode"), names(fit$par)))
-knitr::kable(tab, format='html')
+```
 
+```{r, results = 'asis', echo=FALSE}
+knitr::kable(tab, format='html')
 ```
 
 * MAP estimates the posterior mode. 
@@ -192,6 +200,7 @@ knitr::kable(tab, format='html')
 </div>
 
 <div class="right rt">
+
 ```{r}
 plot(data$x, data$y, type='n', xlab='Sepal Length', ylab = "Petal Length", bty='n')
 points(data$x, data$y, pch=16, cex=0.7, col='#80b1d3')
@@ -231,22 +240,31 @@ $$
 </div>
 
 <div class="right rt">
-```{r fig.width=4, fig.height=4}
-# here we compute a credible interval for y for each value in x_predict
-# why include the column of 1's?
-x_predict = cbind(intercept=1, x=seq(min(data$x)-1, max(data$x)+1, length.out=100))
 
-## shortcut using matrix multiplication; this is 1000s of times faster than other methods
-## look over this code carefully, what is %*% doing? what about t? what are the dims of mu_sample? what does this represent?
+```{r fig.width=4, fig.height=4}
+# here we compute a credible interval for y for each value in
+# x_predict. Why include the column of 1's?
+x_predict = cbind(intercept=1, x=seq(min(data$x)-1, 
+  max(data$x)+1, length.out=100))
+
+# shortcut using matrix multiplication; this is 1000s of times
+# faster than other methods
+# look over this code carefully, what is %*% doing? 
+# what about t? 
+# what are the dims of mu_sample? what does this represent?
 mu_samples = as.matrix(good_sample[,1:2]) %*% t(x_predict)
 mu_ci = apply(mu_samples, 2, quantile, probs=c(0.05, 0.90))
 
 # organize things into a dataframe for ggplot
-plDat = data.frame(x = x_predict[,2], lower = mu_ci[1,], upper=mu_ci[2,])
+plDat = data.frame(x = x_predict[,2], lower = mu_ci[1,], 
+  upper=mu_ci[2,])
 plDat$median = fit$par['a'] + plDat$x*fit$par['b']
-ggplot(plDat, aes(x=x, y = median)) + geom_line(colour="#c45d52") + 
-  geom_ribbon(aes(ymin=lower, ymax=upper), alpha = 0.4, fill = "#fb8072") + 
-  geom_point(data = data, aes(x=x, y=y), size=0.7, colour='#80b1d3') +
+ggplot(plDat, aes(x=x, y = median)) + 
+  geom_line(colour="#c45d52") + 
+  geom_ribbon(aes(ymin=lower, ymax=upper), alpha = 0.4, 
+    fill = "#fb8072") + 
+  geom_point(data = data, aes(x=x, y=y), size=0.7, 
+    colour='#80b1d3') +
   theme_minimal() + ylab("Petal Length") + xlab('Sepal Length')
 
 ```
@@ -271,6 +289,7 @@ ggplot(plDat, aes(x=x, y = median)) + geom_line(colour="#c45d52") +
 </div>
 
 <div class = "right rt">
+
 ```{r}
 # function that takes a single a, b, and s, and a vector of x
 # generates a new dataset of y's for each x
@@ -278,8 +297,8 @@ sim = function(a, b, s, xhat) {
   mu = a + b * xhat
   rnorm(length(xhat), mu, s)
 }
-prsims = mapply(sim, a=good_sample$a, b=good_sample$b, s=exp(good_sample$log_s), 
-                MoreArgs=list(x=x_predict[,'x']))
+prsims = mapply(sim, a=good_sample$a, b=good_sample$b, 
+  s=exp(good_sample$log_s), MoreArgs=list(x=x_predict[,'x']))
 po_pr_interval = apply(prsims, 1, quantile, c(0.05, 0.95))
 ```
 

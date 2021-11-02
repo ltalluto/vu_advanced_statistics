@@ -25,9 +25,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 | :--- |  :---                                                                 |   :---    | :--- |
 |28.10 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)||
 |03.11|Distributions exercises||[Exercises: Distributions](exercises/2_distributions_ex.html)<!---<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)-->
-|04.11 |Maximum likelihood<br/>Optimisation<br/>Linear Models|Lecture: MLE<br/>Lecture: LM<!---[Lecture: MLE](3_mle)<br/>[Lecture: LM](4_lm_laplace)-->|Exercises: MLE<!---[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)-->|
-|09.11|Laplace Approximation<br/>Posterior Inference, Sampling|Lecture: Inference<!---[Lecture: Inference](5_posterior_inference)-->|Exercises: LM<!---[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)-->|
-|11.11 |Markov-chain Monte Carlo|Lecture: MCMC<!--[Lecture: MCMC](6_mcmc)-->|Exercises: MCMC<!---[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)-->|
+|04.11 |Maximum likelihood<br/>Optimisation|[Lecture: MLE](3_mle)<br/>|[Exercises: MLE](exercises/3_mle_ex.html)<!---<br/>[Solutions: MLE](exercises/3_mle_soln.html)-->|
+|09.11|Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: LM](exercises/4_5_lm_exercises.html)<!---<br/>[Solutions: LM](exercises/4_5_lm_soln.html)-->|
+|11.11 |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<!---<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)-->|
 |16.11|Markov-chain Monte Carlo||
 |18.11 |Generalised linear models<br/>Stan Language|Lecture: GLM<br/>Lecture: Stan<!--[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)-->|Exercises: GLM<!--[Exercises: GLM](exercises/7_glm_exercises.html)-->|
 |23.11|Priors, Diagnostics<br/> Exercises/Project work  
