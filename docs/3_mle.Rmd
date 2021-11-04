@@ -13,7 +13,7 @@ output:
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="svg")
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
 library(ggplot2)
 library(xtable)
 ```
