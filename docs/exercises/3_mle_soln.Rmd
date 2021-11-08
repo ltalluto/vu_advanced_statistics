@@ -77,7 +77,8 @@ lfun = function(p, n, k) {
 ```{r}
 tsuga = tsuga[year == 2005 & n > 0]
 p_plot = seq(0,1,length.out=100)
-ll_plot = sapply(p_plot, lfun, n = tsuga$n, k = tsuga$died) ## sapply because p_plot is a vector, but lfun expects a single value
+## sapply because p_plot is a vector, but lfun expects a single value
+ll_plot = sapply(p_plot, lfun, n = tsuga$n, k = tsuga$died) 
 plot(p_plot, ll_plot, type='l', col='blue', lwd=2, xlab='p', ylab='log likelihood')
 ```
 

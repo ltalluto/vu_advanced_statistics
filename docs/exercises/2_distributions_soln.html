@@ -187,16 +187,21 @@ pois = dpois(11, 9.9))</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>What about observing <strong>11 or more</strong> births?</li>
 </ol>
+<p><strong>Lots of ways to arrive at the same answer</strong></p>
 <pre class="r"><code># the same logic here applies for binom
 
-1 - ppois(10, 9.9)</code></pre>
-<pre><code>## [1] 0.4045</code></pre>
-<pre class="r"><code>ppois(10, 9.9, lower.tail=FALSE)</code></pre>
-<pre><code>## [1] 0.4045</code></pre>
-<pre class="r"><code>1 - sum(dpois(0:10, 9.9))</code></pre>
-<pre><code>## [1] 0.4045</code></pre>
-<pre class="r"><code>sum(dpois(11:1e6, 9.9)) # technically we need to go to infinity, but the error is small</code></pre>
-<pre><code>## [1] 0.4045</code></pre>
+c(
+   ## ppois(10, ...) is the prob of 10 or less events
+   ## 1 - ppois(10, ...) gives the prob of more than 10
+   1 - ppois(10, 9.9),  
+   ## we can achieve the same thing with the lower.tail argument
+   ppois(10, 9.9, lower.tail=FALSE),
+   ## the poisson is discrete, so we can also sum the mass function
+   1 - sum(dpois(0:10, 9.9)),
+   ## technically we need to go to infinity, but the error is small
+   sum(dpois(11:1e6, 9.9))
+)</code></pre>
+<pre><code>## [1] 0.4045 0.4045 0.4045 0.4045</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Is a <strong>probability density</strong> the same as a <strong>probability</strong>?
 <ol style="list-style-type: lower-alpha">
@@ -204,20 +209,29 @@ pois = dpois(11, 9.9))</code></pre>
 </ol></li>
 </ol>
 <p><strong>The maximum density of the normal is at the mean, so <span class="math inline">\(x_{max}=164.7\)</span></strong></p>
+<pre class="r"><code>xmax = 164.7
+mean_ht = 164.7
+sd_ht = 7.1
+dnorm(xmax, mean = mean_ht, sd = sd_ht)</code></pre>
+<pre><code>## [1] 0.05619</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>What is the probability that a female in this time period has a height exactly equal to <span class="math inline">\(x_{max}\)</span></li>
 <li>If the maximum probability density and the <span class="math inline">\(pr(x_{max})\)</span> are not the same, why not? Do these answers make sense?</li>
 </ol>
-<p><strong>The probability is zero, because <span class="math inline">\(x\)</span> is continuous. For the density:</strong></p>
-<pre class="r"><code>dnorm(164.7, 164.7, 7.1)</code></pre>
-<pre><code>## [1] 0.05619</code></pre>
+<p><strong>The probability is zero, because <span class="math inline">\(x\)</span> is continuous. We computed the density in part a. We can compute the actual probability (probability mass) by integrating; clearly it will be zero, because the integral has a width of zero.</strong></p>
+<pre class="r"><code>integrate(dnorm, lower = xmax, upper = xmax, mean = mean_ht, sd = sd_ht)</code></pre>
+<pre><code>## 0 with absolute error &lt; 0</code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>What is the probability that a woman has a height in the range <span class="math inline">\(x_{max} \pm 3\)</span></li>
 </ol>
-<pre class="r"><code>pnorm(164.7+3, 164.7, 7.1) - pnorm(164.7-3, 164.7, 7.1)</code></pre>
-<pre><code>## [1] 0.3274</code></pre>
-<pre class="r"><code>integrate(dnorm, lower=164.7-3, upper=164.7+3, mean=164.7, sd=7.1)</code></pre>
-<pre><code>## 0.3274 with absolute error &lt; 3.6e-15</code></pre>
+<p><strong>There is nonzero mass between two different values. We can either integrate as before, or use pnorm</strong></p>
+<pre class="r"><code>c(pnorm = pnorm(xmax + 3, mean_ht, sd_ht) - pnorm(xmax - 3, mean_ht, sd_ht),
+integrate = integrate(dnorm, lower = xmax - 3, upper = xmax + 3, mean = mean_ht, sd = sd_ht)[&quot;value&quot;])</code></pre>
+<pre><code>## $pnorm
+## [1] 0.3274
+## 
+## $integrate.value
+## [1] 0.3274</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>For the same distribution, what is the 40th percentile for height? In other words, what is the value <span class="math inline">\(x\)</span> such that the probability of observing x or less is 0.4? — <span class="math inline">\(pr(X \le x) = 0.4\)</span></li>
 </ol>
