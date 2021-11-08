@@ -27,35 +27,53 @@ pois = dpois(11, 9.9))
    
    b. What about observing **11 or more** births?
 
+**Lots of ways to arrive at the same answer**
+
 ```{r}
 # the same logic here applies for binom
 
-1 - ppois(10, 9.9)
-ppois(10, 9.9, lower.tail=FALSE)
-1 - sum(dpois(0:10, 9.9))
-sum(dpois(11:1e6, 9.9)) # technically we need to go to infinity, but the error is small
+c(
+   ## ppois(10, ...) is the prob of 10 or less events
+   ## 1 - ppois(10, ...) gives the prob of more than 10
+   1 - ppois(10, 9.9),  
+   ## we can achieve the same thing with the lower.tail argument
+   ppois(10, 9.9, lower.tail=FALSE),
+   ## the poisson is discrete, so we can also sum the mass function
+   1 - sum(dpois(0:10, 9.9)),
+   ## technically we need to go to infinity, but the error is small
+   sum(dpois(11:1e6, 9.9))
+)
 ```
 
 
 3. Is a **probability density** the same as a **probability**?
    a. Human height is normally distributed within populations. From 1980-1994 within 20 wealthy countries, mean female height was 164.7 cm, with a standard deviation of 7.1 cm. What is the **maximum probability density** of this normal distribution, and what is the x-value $x_{max}$ at which maximum probability density occurs?
 
-**The maximum density of the normal is at the mean, so $x_{max}=164.7$**   
+**The maximum density of the normal is at the mean, so $x_{max}=164.7$** 
+
+```{r}
+xmax = 164.7
+mean_ht = 164.7
+sd_ht = 7.1
+dnorm(xmax, mean = mean_ht, sd = sd_ht)
+```
 
    b. What is the probability that a female in this time period has a height exactly equal to $x_{max}$
    c. If the maximum probability density and the $pr(x_{max})$ are not the same, why not? Do these answers make sense?
    
-**The probability is zero, because $x$ is continuous. For the density:**
+**The probability is zero, because $x$ is continuous. We computed the density in part a. We can compute the actual probability (probability mass) by integrating; clearly it will be zero, because the integral has a width of zero.**
 
 ```{r}
-dnorm(164.7, 164.7, 7.1)
+integrate(dnorm, lower = xmax, upper = xmax, mean = mean_ht, sd = sd_ht)
 ```
 
    d. What is the probability that a woman has a height in the range $x_{max} \pm 3$
+
+**There is nonzero mass between two different values. We can either integrate as before, or use pnorm**
    
 ```{r}
-pnorm(164.7+3, 164.7, 7.1) - pnorm(164.7-3, 164.7, 7.1)
-integrate(dnorm, lower=164.7-3, upper=164.7+3, mean=164.7, sd=7.1)
+c(pnorm = pnorm(xmax + 3, mean_ht, sd_ht) - pnorm(xmax - 3, mean_ht, sd_ht),
+integrate = integrate(dnorm, lower = xmax - 3, upper = xmax + 3, mean = mean_ht, sd = sd_ht)["value"])
 ```
    
 4. For the same distribution, what is the 40th percentile for height? In other words, what is the value $x$ such that the probability of observing x or less is 0.4? --- $pr(X \le x) = 0.4$
