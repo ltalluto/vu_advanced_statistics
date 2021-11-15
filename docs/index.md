@@ -26,16 +26,16 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |28.10 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)||
 |03.11|Distributions exercises||[Exercises: Distributions](exercises/2_distributions_ex.html)<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)
 |04.11 |Maximum likelihood<br/>Optimisation|[Lecture: MLE](3_mle)<br/>|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)|
-|09.11|Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: LM](exercises/4_5_lm_exercises.html)<!---<br/>[Solutions: LM](exercises/4_5_lm_soln.html)-->|
-|11.11 |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<!---<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)-->|
-|16.11|Markov-chain Monte Carlo||
-|18.11 |Generalised linear models<br/>Stan Language|Lecture: GLM<br/>Lecture: Stan<!--[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)-->|Exercises: GLM<!--[Exercises: GLM](exercises/7_glm_exercises.html)-->|
-|23.11|Priors, Diagnostics<br/> Exercises/Project work  
-|25.11 |Hierarchical Models|Lecture: HM<!--[Lecture: HM](9_hm)-->|Exercises: HM<!--Exercises: HM](exercises/9_hm_exercises.html)-->|
-|30.11|Exercises/Project work|
-|02.12|Model selection & comparison<br/>Project work|Lecture: Model Selection<!--[Lecture: Model Selection](10_model_selection)-->||
-|07.12|Spatial Models<br/>(or other special topic)<br/>Project work|<!--[Lecture: Spatial Models Part 1](11_spatial_gp)<br/>[Lecture: Spatial Models Part 2](12_gp_implementation)-->
-|14.12|Project work|
+|09.11 |Maximum likelihood discussion|||
+|11.11|Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
+|16.11 |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<!---<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)-->|
+|18.11|Markov-chain Monte Carlo||
+|23.11 |Generalised linear models<br/>Stan Language|Lecture: GLM<br/>Lecture: Stan<!--[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)-->|Exercises: GLM<!--[Exercises: GLM](exercises/7_glm_exercises.html)-->|
+|25.11|Priors, Diagnostics<br/> Exercises/Project work  
+|30.11 |Hierarchical Models|Lecture: HM<!--[Lecture: HM](9_hm)-->|Exercises: HM<!--Exercises: HM](exercises/9_hm_exercises.html)-->|
+|02.12|Exercises/Project work|
+|07.12|Model selection & comparison<br/>Project work|Lecture: Model Selection<!--[Lecture: Model Selection](10_model_selection)-->||
+|14.12|Spatial Models<br/>(or other special topic)<br/>Project work|<!--[Lecture: Spatial Models Part 1](11_spatial_gp)<br/>[Lecture: Spatial Models Part 2](12_gp_implementation)-->
 |16.12|Wrap-up<br/>Presentations|
 
 

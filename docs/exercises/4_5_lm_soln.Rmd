@@ -31,7 +31,8 @@ b & \sim \mathcal{N}(0, 5) \\
 \end{aligned}
 $$
 
-    b. Draw a graph of the model as in [slide 7](../4_lm_laplace.html#(7))
+
+b. Draw a graph of the model as in [slide 7](../4_lm_laplace.html#(7))
 c. Write likelihood, prior, and posterior functions, and choose prior hyperparemeters for all parameters.
 
 ```{r}
