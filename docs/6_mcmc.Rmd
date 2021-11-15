@@ -1,7 +1,7 @@
 ---
 title: "Markov Chain Monte Carlo"
 author: "Matthew Talluto"
-date: "11.11.2020"
+date: "16.11.2020"
 output:
   slidy_presentation:
     theme: cerulean
@@ -434,7 +434,7 @@ Define log unnormalized posterior (also called target) distribution target(x)
 Define proposal sampler: often rnorm(1, state[t-1], prscale)
 Define starting value = chain[1]
 for i in 2:n_samples
-   candidate = proposal(chain[t-1], prscale)
+   candidate = proposal(chain[i-1], prscale)
    r = exp( target(candidate) - target(chain[i-1])) ## acceptance probability
    if r > runif(1)  ## coin flip to see if we accept or not
       chain[i] = candidate
