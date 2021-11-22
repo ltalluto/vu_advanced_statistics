@@ -1,7 +1,7 @@
 ---
 title: "Generalised Linear Modelling"
 author: "Matthew Talluto"
-date: "10.05.2021"
+date: "23.11.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -21,6 +21,8 @@ library(ggplot2)
 library(igraph)
 library(ggplot2)
 library(ggnetwork)
+library(data.table)
+Howell1 = as.data.table(Howell1)
 
 cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 
@@ -29,8 +31,10 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 ## More linear models
 
 <div class="left lt">
+
 * Our linear model used a single x-variable: $\mathbb{E}(y) = a + bx$
 * It is trivial to add additional predictors to a model: $\mathbb{E}(y) = a + b_1x_1 + b_2x_2 + \dots + b_nx_n$
+
 </div>
 
 ## More linear models
@@ -65,16 +69,27 @@ ggplot(Howell1, aes(x = weight, y = height)) + geom_point() +
 
 <div class="left lt">
 * Perhaps we want to model a categorical variable based on age.
+
+
+```{r}
+Howell1[, age_c := factor(ifelse(age <= 12, "child", 
+          ifelse(age > 22, "adult", "young")))]
+Howell1
+```
+
 </div>
 
 <div class="right rt">
-```{r}
-Howell1$age_cat = factor(with(Howell1, ifelse(age <= 12, "child", 
-                       ifelse(age > 22, "adult", "young"))))
-pl = ggplot(Howell1, aes(x=weight, y = height, colour=age_cat)) + 
-  geom_point() + theme_minimal()
+
+```{r echo = FALSE}
+pl = ggplot(Howell1, aes(x=weight, y = height, colour=age_c)) + 
+          geom_point() + theme_minimal()
+pl
 ```
+
 </div>
+
+
 
 
 ## Categorical Variables
@@ -85,36 +100,42 @@ pl = ggplot(Howell1, aes(x=weight, y = height, colour=age_cat)) +
 * To reproduce what they do, for $k$ categories we need to use $k-1$ *dummy variables* with 0-1 coding
 * Add parameters to our linear model for each dummy variable
 
-```{r}
-Howell1$agecat_child = ifelse(Howell1$age_cat == "child", 1, 0)
-Howell1$agecat_young = ifelse(Howell1$age_cat == "young", 1, 0)
 
+```{r}
+Howell1[, ac_child := as.integer(age_c == "child")]
+Howell1[, ac_young := as.integer(age_c == "young")]
+Howell1
+
+```
+
+</div>
+
+
+
+
+
+<div class="right rt">
+
+```{r}
 ## equivalent of lm(height ~ age_cat + weight)
 log_liklihood1 = function(params, data) {
-  mu = params['a'] + params['b_child']*data[['agecat_child']] + 
-    params['b_young']*data[['agecat_young']] + 
+  mu = params['a'] + params['b_child']*data[['ac_child']] + 
+    params['b_young']*data[['ac_young']] + 
     params['b_weight']*data[['weight']]
   sum(dnorm(data[['height']], mu, params['s'], log=TRUE))
 }
 
 ## equivalent of lm(height ~ age_cat * weight)
 log_liklihood2 = function(params, data) {
-  mu = params['a'] + params['b_child']*data[['agecat_child']] + 
-    params['b_young']*data[['agecat_young']] + 
+  mu = params['a'] + params['b_child']*data[['ac_child']] + 
+    params['b_young']*data[['ac_young']] + 
     params['b_weight']*data[['weight']] + 
-    params['b_cw']*data[['agecat_child']]*data[['weight']] + 
-    params['b_yw']*data[['agecat_young']]*data[['weight']]
+    params['b_cw']*data[['ac_child']]*data[['weight']] + 
+    params['b_yw']*data[['ac_young']]*data[['weight']]
   sum(dnorm(data[['height']], mu, params['s'], log=TRUE))
 }
-
 ```
 
-</div>
-
-<div class="right rt">
-```{r echo = FALSE}
-pl
-```
 </div>
 
 
@@ -171,19 +192,11 @@ $$
 
 * We already modelled tree mortality using a binomial likelihood. It's easy to add a linear model
 
-$$
-\begin{aligned}
-\mathbb{E}(y) & = a + \mathbf{B}\mathbf{X} \\
-y & \sim \mathcal{D}(\mathbb{E}(y), ...)
-\end{aligned}
-$$
-
 <div class="left lt">
 
 ```{r}
-library(data.table)
 tsuga = readRDS("exercises/data/tsuga.rds")
-tsuga
+tsuga[, 4:8]
 
 ```
 </div>
@@ -205,8 +218,8 @@ pl
 <div class="left lt">
 $$
 \begin{aligned}
-\mathbb{E}(y) & = a + \mathbf{B}\mathbf{X} \\
-y & \sim \mathcal{D}(\mathbb{E}(y), ...)
+\mathbb{E}(died/n) &= p  = a + bT \\
+died & \sim \mathrm{Binomial}(p, n)
 \end{aligned}
 $$
 
@@ -259,8 +272,8 @@ grpl
 <div class="left lt">
 $$
 \begin{aligned}
-\mathbb{E}(y) & = a + \mathbf{B}\mathbf{X} \\
-y & \sim \mathcal{D}(\mathbb{E}(y), ...)
+\mathbb{E}(died/n) &= p  = a + bT \\
+died & \sim \mathrm{Binomial}(p, n)
 \end{aligned}
 $$
 
@@ -438,7 +451,7 @@ y & \sim \mathrm{Poisson}(\lambda)
 \end{aligned}
 $$
 
-**Constraint:** $\sigma^2_{y|\mathbf{X}} = \mu_{y|\mathbf{X}} = \lambda$
+**Constraint:** $\sigma^2_{y|\mathbf{X}} = \mathbb{E}(y|\mathbf{X}) = \lambda$
 
 * Sometimes, *exposure* varies by observation.
    - Different size plots
