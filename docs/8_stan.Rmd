@@ -1,7 +1,7 @@
 ---
 title: "Intro to Stan"
 author: "Matthew Talluto"
-date: "10.05.2021"
+date: "25.11.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -28,8 +28,8 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 
 * Stan is a modelling language for scientific computing
 * Stan is a *probabilistic programming language*
-   - variables can be specified deterministically using `=`
-   - Stochastic variables are specified using `~`
+   - deterministic variables: `mu = a + b * x`
+   - Stochastic variables: `y ~ normal(mu, sigma)`
 * Samples from the posterior using Hamiltonian Monte Carlo
 
 ```{stan output.var = "noeval", eval=FALSE}
@@ -162,6 +162,7 @@ samples = as.matrix(fit)
 
 
 <div class="right rt">
+
 ```{stan output.var="garbage", eval=FALSE}
 int my_int;
 real my_real;
@@ -192,28 +193,34 @@ vector <lower=0> [10] array_of_vectors [5]; // 5 vectors, each of length 10
 
 ```{stan output.var="garbage", eval=FALSE}
 functions {
-   // for user-defined functions; see the manual for how to format these
+   // for user-defined functions; 
+   // see the manual for how to format these
 }
 data {
    // declare all the data you will pass to Stan
 }
 transformed data {
-   // In this block, you can code any transformations to your data 
-   // that you want to do within Stan
+   // In this block, you can code any transformations to 
+   //     your data that you want to do within Stan
 }
 parameters {
-   // declare the names and dimensions of all parameters in your model
-   // a parameter is normally any stochastic-unknown on your model graph
+   // declare the names and dimensions of all parameters
+   //     in your model
+   // a parameter is normally any stochastic-unknown on
+   //     your model graph
 }
 transformed parameters {
    // transformations for your parameters go here
-   // in many cases, these will be for deterministic-unknowns
+   // in many cases, these will be for 
+   //    deterministic-unknowns
 }
 model {
-   // probability statements, including likelihood and priors
+   // probability statements, including 
+   //    likelihood and priors
 }
 generated quantities {
-   // optional, used e.g., for posterior predictive simulations
+   // optional, used e.g., for posterior 
+   //    predictive simulations
 }
 ```
 
@@ -327,7 +334,8 @@ parameters {
 }
 model {
    s ~ uniform(1, Nmax); // likelihood
-   Nmax ~ gamma(0.001, 0.001);  // this is a super vague prior!
+   // this is a super vague prior!
+   Nmax ~ gamma(0.001, 0.001);  
 }
 ```
 
@@ -364,13 +372,15 @@ log_posterior = function(params, data) {
 	Nmax = params[1]
 	s = data[['s']]
 
-	# the sampler sometimes selects impossible values for Nmax, need to rule them out
+	# the sampler sometimes selects impossible values for Nmax
+   # need to rule them out
 	if(Nmax < 1) {
 		return(-Inf)
 	}
 
 	log_liklihood = sum(dunif(s, 1, Nmax, log=TRUE))
-	log_prior = dgamma(Nmax, 0.001, 0.001, log = TRUE)  ## this is a super vague prior!
+   ## this is a super vague prior!
+	log_prior = dgamma(Nmax, 0.001, 0.001, log = TRUE)  
 	# log_prior = 0
 	return(log_liklihood + log_prior)
 }
@@ -379,6 +389,7 @@ log_posterior = function(params, data) {
 </div>
 
 <div class="right rt">
+
 ```{r message=FALSE, warning=FALSE}
 library(rstan)
 standat = list(n = length(s), s = s)
@@ -403,7 +414,9 @@ ggplot(pldat, aes(x=x, y=y)) + geom_line() + xlab(expression(N_max)) + ylab("Pr(
 
 ```{r message=FALSE, cache = TRUE}
 fit = sampling(stan_tanks, data = standat, iter=20000, chains = 1, refresh = 0)
-## fit = stan("path/to/code.stan", data = standat, iter=20000) ## use if running from a separate .stan file
+
+## use if running from a separate .stan file
+# fit = stan("path/to/code.stan", data = standat, iter=20000) 
 samples = as.matrix(fit)
 head(samples)
 ```
@@ -411,6 +424,7 @@ head(samples)
 </div>
 
 <div class="right rt">
+
 ```{r message = FALSE, fig.height=4.5, fig.width=7}
 source("../r/metrop.r")
 library(bayesplot)
@@ -446,7 +460,7 @@ rbind(hdpi = hpdi(samples[,1]),
 * Liklihood is a **generative model** (the distribution from which the observations are generated)
   - whenever possible use knowledge of the appropriate processes
   - transform parameters and sample in transformed space to improve behaviour
-  - e.g. use log($/sigma$) instead of $/sigma$ to avoid impossible negative variance in sampler
+  - e.g. use log($\sigma$) instead of $\sigma$ to avoid impossible negative variance in sampler
   - in Stan, this is done by adding variable **constraints** (`real <lower=0> sigma`)
   
 ## 1. Joint posterior: likelihood
@@ -611,7 +625,8 @@ birds = fread("exercises/data/birddiv.csv")
 # stan barfs if you give it NAs
 birds = birds[complete.cases(birds)]
 
-## the 0-100 scaling is not super helpful; here we pull out the x-variables
+## the 0-100 scaling is not super helpful
+## here we pull out the x-variables
 ## and rescale them to have mean = 0 and sd = 1
 X_scaled = as.matrix(birds[,c(2:7)])
 X_scaled = scale(X_scaled)
@@ -625,7 +640,8 @@ standat1 = list(
 	richness = birds$richness[for_i],
 	X = X_scaled[for_i, "NDVI", drop=FALSE])
 
-fit1 = sampling(stan_glm, data = standat1, iter=2000, chains = 4, refresh = 0)
+fit1 = sampling(stan_glm, data = standat1, iter=2000, 
+   chains = 4, refresh = 0)
 
 ```
 
@@ -634,7 +650,7 @@ fit1 = sampling(stan_glm, data = standat1, iter=2000, chains = 4, refresh = 0)
 <div class="right rt">
 
 ```{r, message=FALSE, cache = TRUE}
-## Second, looking at how two variables influence birds of different types
+# Second, looking at how two variables influence birds of different types
 
 # grab two variables
 X = X_scaled[, c("For.cover", "NDVI")]
@@ -644,15 +660,20 @@ X = cbind(X, open=ifelse(birds$hab_type == "open",1, 0))
 X = cbind(X, generalist=ifelse(birds$hab_type == "generalist",1, 0))
 
 # add interaction terms with the categories
-X = cbind(X, op_forCov=X[,1]*X[,3], op_NDVI=X[,1]*X[,4], ge_forCov=X[,2]*X[,3], ge_NDVI=X[,2]*X[,4])
+X = cbind(X, op_forCov=X[,1]*X[,3], op_NDVI=X[,1]*X[,4], 
+   ge_forCov=X[,2]*X[,3], ge_NDVI=X[,2]*X[,4])
+
+head(X)
 
 standat2 = with(birds, list(
 	n = length(richness), 
 	k = ncol(X),
 	richness = richness,
 	X = X))
-fit2 = sampling(stan_glm, data = standat2, iter=2000, chains = 4, refresh = 0)
+fit2 = sampling(stan_glm, data = standat2, iter=2000, 
+   chains = 4, refresh = 0)
 ```
+
 
 </div>
 
@@ -685,8 +706,10 @@ mcmc_combo(samp1_pars, c("hist", "trace"))
     - This gives you an indication of how much precision in the tails of the posterior you have
 * Rhat: convergence diagnostic, available with multiple chains
     - ideally, Rhat = 1
-    - Rhat > 1.1 for a real parameter (not, e.g., lambda) is a problem
+    - Worry about for "real" parameters (not hierarchical, not deterministic)
+    - Rhat > 1.1 for a real parameter is a problem
     - Rhat < 1.05 is probably ok
+
 ```{r, message=FALSE}
 print(fit1, pars = c('a', 'B'))
 ```
@@ -913,21 +936,21 @@ pts$richness = standat2$richness
 pts[, type := ifelse(open==1, "open", ifelse(generalist==0, "generalist", "forest"))]
 
 
-forpl = ggplot(pr_for, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill=FALSE) +
+forpl = ggplot(pr_for, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
 	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("NDVI") + labs(fill="Predicted richness") + ggtitle("Forest Birds") + 
 	geom_point(data=pts[type == "forest"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
-	guides(size=FALSE) + scale_size(limits=c(0, 20), range=c(0.1, 7))
-openpl = ggplot(pr_open, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill=FALSE) +
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 7))
+openpl = ggplot(pr_open, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
 	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Open Birds") + 
 	geom_point(data=pts[type == "open"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
-	guides(size=FALSE) + scale_size(limits=c(0, 20), range=c(0.1, 4))
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
 genpl = ggplot(pr_gen, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + 
 	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Generalist Birds") + 
 	geom_point(data=pts[type == "generalist"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
-	guides(size=FALSE) + scale_size(limits=c(0, 20), range=c(0.1, 4))
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
 
 grid.arrange(forpl, openpl, genpl, nrow=1, ncol=3, widths=c(1,1,1.3))
 ```

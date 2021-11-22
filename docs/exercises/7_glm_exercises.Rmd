@@ -1,13 +1,13 @@
 ---
 title: "GLM Exercises"
-date: "10.05.2021"
+date: "23.11.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-For this exercise, you will use the [birddiv](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/birddiv.csv) (in `docs/exercises/data/birddiv.csv`) dataset; you can load it directly from github using `data.table::fread()`. Bird diversity was measured in 1-km^2 plots in multiple countries of Europe, investigating the effects of habitat fragmentation and productivity on diversity. We will consider a subset of the data. Specificially, we will ask how various covariates are associated with the diversity of birds specializing on different habitat types. The data have the following potential predictors:
+For this exercise, you will use the [birddiv](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/birddiv.csv) (in `docs/exercises/data/birddiv.csv`) dataset; you can load it directly from github using `data.table::fread()`. Bird diversity was measured in 1-km$^2$ plots in multiple countries of Europe, investigating the effects of habitat fragmentation and productivity on diversity. We will consider a subset of the data. Specificially, we will ask how various covariates are associated with the diversity of birds specializing on different habitat types. The data have the following potential predictors:
 
 * **Grow.degd**: growing degree days, a proxy for how warm the climate is.
 * **For.cover**: Forest cover near the sampling location

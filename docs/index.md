@@ -28,10 +28,10 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |04.11 |Maximum likelihood<br/>Optimisation|[Lecture: MLE](3_mle)<br/>|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)|
 |09.11 |Maximum likelihood discussion|||
 |11.11|Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
-|16.11 |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<!---<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)-->|
+|16.11 |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)|
 |18.11|Markov-chain Monte Carlo||
-|23.11 |Generalised linear models<br/>Stan Language|Lecture: GLM<br/>Lecture: Stan<!--[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)-->|Exercises: GLM<!--[Exercises: GLM](exercises/7_glm_exercises.html)-->|
-|25.11|Priors, Diagnostics<br/> Exercises/Project work  
+|23.11 |Generalised linear models<br/>|[Lecture: GLM](7_glm)<br/>|[Exercises: GLM](exercises/7_glm_exercises.html)|
+|25.11|Stan Language<br/>Priors, Diagnostics<br/> Exercises/Project work|[Lecture: Stan](8_stan)|
 |30.11 |Hierarchical Models|Lecture: HM<!--[Lecture: HM](9_hm)-->|Exercises: HM<!--Exercises: HM](exercises/9_hm_exercises.html)-->|
 |02.12|Exercises/Project work|
 |07.12|Model selection & comparison<br/>Project work|Lecture: Model Selection<!--[Lecture: Model Selection](10_model_selection)-->||
