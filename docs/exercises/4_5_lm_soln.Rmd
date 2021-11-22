@@ -25,8 +25,8 @@ $$
 \begin{aligned}
 height & \sim \mathcal{N}(\mu, \sigma) \\
 \mu & = a + b \times weight \\
-a & \sim \mathcal{N}(0, 20) \\
-b & \sim \mathcal{N}(0, 5) \\
+a & \sim \mathcal{N}(0, 50) \\
+b & \sim \mathcal{N}(0, 10) \\
 \sigma & \sim exponential(0.2)
 \end{aligned}
 $$
@@ -162,7 +162,7 @@ for(i in 1:ncol(samples))
 g. What are the credible intervals for the parameters of your model?
 
 ```{r}
-round(t(apply(samples, 2, quantile, c(0.05, 0.9))),3)
+round(t(apply(samples, 2, quantile, c(0.05, 0.95))),3)
 ```
 
 
@@ -243,10 +243,152 @@ ggplot(ggdat, aes(x = dat, y = median)) +
 5. Buried in the bottom of a field notebook, you find two cases that were missing from the original dataset. The first is an individual with a weight of 43.72; no height, age, or sex data is recorded. The second is a 38-year-old female with a height of 135.
    a. Using the model from #3 above, can you predict a 90% credible interval for height of the first missing case? Is it easier if you use the model from #2?
    b. The second missing case is more interesting; we have the outcome of our model, but we are missing the weight. How could you estimate a 90% CI for weight, using the model from #3 (i.e., keeping height as the response variable)?
-6. Look at [slide 10](../5_posterior_inference.html#(10)) from the inference lecture. Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the `%*%` operator, and also the `apply` statement. Try the help file for both of them (use ?"%*%" to get help for the operator). Also run the code yourself and inspect the output. 
+
+> We can build simple hierarchical where weight is a *random* variable described by *hyperparameters*, even though we still maintain the dependence of height on weight:
+
+$$
+\begin{aligned}
+weight & \sim \mathcal{N}(\mu_w, \sigma_w) \\
+\mu_h & = a + b \times weight \\
+height & \sim \mathcal{N}(\mu_h, \sigma_h) \\
+a & \sim \mathcal{N}(0, 50) \\
+b & \sim \mathcal{N}(0, 5) \\
+\sigma_h & \sim exponential(0.2) \\
+\mu_w & \sim \mathcal{N}(0, 50) \\
+\sigma_w & \sim exponential(0.2)
+\end{aligned}
+$$
+
+
+Graphically:
+
+```{r, echo = FALSE, message = FALSE}
+library(igraph, quietly = TRUE)
+library(ggplot2, quietly = TRUE)
+library(ggnetwork, quietly = TRUE)
+gr = graph_from_literal(a-+"μh", b-+"μh", "σh"-+"ht", "wt"-+"μh", "μh"-+"ht", "μw"-+"wt", "σw"-+"wt")
+V(gr)$type = c("random", "deterministic", "random", "random", "random", "random", "random", "random")
+V(gr)$source = c("unknown", "unknown", "unknown", "unknown", "known", "partially known", "unknown", "unknown")
+layout = matrix(c(0.5,2,  0.5,1.5,  1,2,  1.5,2,  1.25,1, 0,2, -0.25,2.5, 0.25,2.5), byrow=TRUE, ncol=2)
+
+
+n = ggnetwork(gr, layout=layout)
+pl = ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.08)
+pl
+```
+
+> Practically, to implement this, we need to treat the missing case as a *parameter* in our model, and sample from its posterior the same way we sample other posteriors.
+
+```{r}
+log_posterior_5b = function(params, data) {
+    # unpack params and data
+    height = data[['height']] # one longer than weight, missing case is on the end
+    weight = data[['weight']] # last value is NA
+    a = params['a']
+    b = params['b']
+    s = exp(params['log_s']) ## we use log_s to help normalize the shape of the posterior
+    wt_missing = params['w']
+    mu_wt = params['mu_w']
+    s_wt = exp(params['log_s_w'])
+
+    # add the missing case to the end of the weight vector
+    weight[length(weight)] = wt_missing
+
+    # likelihood for height
+    mu = a + b*log(weight)
+    prob = sum(dnorm(height, mu, s, log=TRUE))
+
+    # likelihood for weight
+    prob = prob + sum(dnorm(weight, mu_wt, s_wt, log = TRUE))
+
+    # prior
+    prob + 
+        dnorm(a, 0, 50, log=TRUE) + 
+        dnorm(b, 0, 20, log=TRUE) + 
+        dexp(s, 0.2, log=TRUE)  + 
+        dnorm(mu_wt, 0, 50, log = TRUE) + 
+        dexp(s_wt, 0.2, log = TRUE)
+}
+
+# initial values for all unknowns
+inits = c(a = -20, b = 40, log_s = 1.5, w = 20, mu_w = mean(Howell1$weight, na.rm = TRUE), 
+    log_s_w = log(sd(Howell1$weight, na.rm = TRUE)))
+
+## add the new case
+Howell1 = rbind(Howell1, data.table(height = 135, weight = NA, age = 38, male = 0, adult = 1))
+fit5a = optim(inits, log_posterior_5b, method="Nelder-Mead", 
+             data =Howell1, control=list(fnscale=-1), hessian = TRUE)
+```
+
+The new fit is quite similar to our old fit (we've added a data point, so it is expected that it changes slightly), but now we have an estimate of the missing weight, which we named 'w' in the parameter vector. We can also see that it is quite far away from the *marginal* mean weight, so we're taking into account that this is a shorter than average individual.
+
+```{r}
+round(rbind(fit1 = c(fit1, w = NA, mu_w = NA, log_s_w = NA), fit5a = fit5a$par), 3)
+```
+
+We can learn more about this individual's weight, plot it, etc by sampling from the posterior as before.
+
+```{r}
+vcv = solve(-fit5a$hessian)
+samples = rmvnorm(5000, fit5a$par, vcv)
+
+hist(samples[,4], xlab="Weight of missing case, 38-year-old female with height = 135", main="")
+```
+
+The posterior is symmetric, so an easy credible interval is:
+```{r}
+round(quantile(samples[,4], c(0.05, 0.95)), 3)
+```
+
+> Finally, we can do posterior predictive simulations on this case, taking into account all of the error in both height and weight.
+
+
+```{r}
+## for each posterior estimate of w, we draw a new value for height
+sims = apply(samples, 1, function(sa) {
+	a = sa[1]
+	b = sa[2]
+	s = exp(sa[3])
+	wt = sa[4]
+	rnorm(1, a + b * log(wt), s)
+})
+
+simsdf = data.frame(height = sims, weight = samples[,4])
+## drop the missing row for plotting
+hw_plot = Howell1[complete.cases(Howell1)] 
+
+## separate data.frame for the missing case, adding posterior predictions
+m_case = Howell1[!complete.cases(Howell1)]
+m_case$weight = quantile(samples[,4], 0.5) ## posterior median for the prediction
+m_case$lower_w = quantile(samples[,4], 0.05)
+m_case$upper_w = quantile(samples[,4], 0.95)
+m_case$lower_h = quantile(sims, 0.05)
+m_case$upper_h = quantile(sims, 0.95)
+
+## x-y locations for the curve fit
+curve = data.frame(x = seq(min(hw_plot$weight), max(hw_plot$weight), 
+		length.out=500))
+curve$y = fit5a$par['a'] + fit5a$par['b']*log(curve$x)
+
+ggplot(hw_plot, aes(x=weight, y=height, colour=factor(adult))) + geom_point() + 
+	theme_minimal() + geom_line(data = curve, aes(x=x,y=y), colour="black") + 
+	geom_point(data = simsdf, aes(x = weight, y = height), colour = 'black', size = 0.02, alpha = 0.3) + 
+	geom_point(data = m_case, aes(x = weight, y = height), colour = '#b983ff', 
+			size = 2) + 
+	geom_errorbar(data = m_case, aes(y = height, xmin = lower_w, xmax = upper_w), 
+			colour = '#b983ff') + 
+	geom_errorbar(data = m_case, aes(x = weight, ymin = lower_h, ymax = upper_h), 
+			colour = '#b983ff')
+
+```
+
+
+
+6. Look at [slide 10](../5_posterior_inference.html#(10)) from the inference lecture. Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the `%*%` operator, and also the `apply` statement. Try the help file for both of them (use ?"%\*%" to get help for the operator). Also run the code yourself and inspect the output. 
     a. How many rows and columns are in `mu_samples`? 
     b. How does this compare to the number of rows/columns in the inputs (`as.matrix(good_sample[,1:2])` and `t(x_predict)`)? 
     c. What does each row in `mu_samples` represent? What about each column?
     d. What does `apply` do here?
-
-
