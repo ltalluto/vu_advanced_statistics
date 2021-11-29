@@ -1,7 +1,7 @@
 ---
 title: "Hierarchical Models"
 author: "Matthew Talluto"
-date: "12.05.2021"
+date: "02.12.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -184,10 +184,14 @@ grpl_nopool
 
 ```{stan output.var="tsuga_h1", cache = TRUE, echo = FALSE}
 data {
-	int <lower=0> n; // number of data points
-	int <lower=1> n_trees [n]; // number of trees in each plot
-	int <lower=0> died [n]; // number died
+  // number of data points
+	int <lower=0> n; 
+	
+	// number of trees in each plot
+	int <lower=1> n_trees [n]; 
 
+  // number died
+	int <lower=0> died [n]; 
 	vector [n] temperature;
 }
 parameters {
@@ -255,11 +259,14 @@ grid.arrange(prplot_h1, errpl_h1, intpl_h1, ncol=3)
 
 ```{stan output.var="tsuga_h2", cache = TRUE, echo = TRUE}
 data {
-	int <lower=0> n; // number of data points
+  // number of data points
+	int <lower=0> n;
 	
 	// response
-	int <lower=1> n_trees [n]; // number of trees in each plot
-	int <lower=0> died [n]; // number died
+	// number of trees in each plot
+	int <lower=1> n_trees [n]; 
+  // number died
+	int <lower=0> died [n]; 
 
 	// predictors
 	vector [n] temperature;
@@ -341,11 +348,15 @@ grid.arrange(prplot_h2, errpl_h2, intpl_h2, ncol=3)
 <div class="right rt">
 ```{stan output.var="tsuga_h2pp", cache = TRUE, echo = TRUE}
 data {
-	int <lower=0> n; // number of data points
+  // number of data points
+	int <lower=0> n; 
 	
 	// response
-	int <lower=1> n_trees [n]; // number of trees in each plot
-	int <lower=0> died [n]; // number died
+	// number of trees in each plot
+	int <lower=1> n_trees [n]; 
+	
+	// number died
+	int <lower=0> died [n]; 
 
 	// predictors
 	vector [n] temperature;
@@ -358,8 +369,10 @@ parameters {
 	vector [n_years] a;
 	real b;
 	
-	real a_mu; // average intercept by year
-	real <lower=0> a_sig; // sd of intercepts
+	// average intercept by year
+	real a_mu; 
+	// sd of intercepts
+	real <lower=0> a_sig; 
 }
 transformed parameters {
 	vector [n] p;
@@ -370,7 +383,8 @@ transformed parameters {
 model {
 	died ~ binomial(n_trees, p);
 	// priors
-	a ~ normal(a_mu, a_sig); // hierarchical prior for a
+	// hierarchical prior for a
+	a ~ normal(a_mu, a_sig); 
 	b ~ normal(0, 5);
 
 	a_mu ~ normal(0, 10);

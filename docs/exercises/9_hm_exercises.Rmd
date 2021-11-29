@@ -1,6 +1,6 @@
 ---
 title: "Hierarchical Modelling & Model Selection Exercises"
-date: "12.05.2021"
+date: "02.12.2021"
 output: html_document
 ---
 ```{r setup, include=FALSE}
