@@ -32,8 +32,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |18.11|Markov-chain Monte Carlo||
 |23.11 |Generalised linear models<br/>|[Lecture: GLM](7_glm)<br/>|[Exercises: GLM](exercises/7_glm_exercises.html)|
 |25.11|Stan Language<br/>Priors, Diagnostics<br/> Exercises/Project work|[Lecture: Stan](8_stan)|
-|30.11 |Hierarchical Models|Lecture: HM<!--[Lecture: HM](9_hm)-->|Exercises: HM<!--Exercises: HM](exercises/9_hm_exercises.html)-->|
-|02.12|Exercises/Project work|
+|30.11 |Exercises/Project work|
+|02.12|Hierarchical Models|[Lecture: HM](9_hm)|[Exercises: HM](exercises/9_hm_exercises.html)
 |07.12|Model selection & comparison<br/>Project work|Lecture: Model Selection<!--[Lecture: Model Selection](10_model_selection)-->||
 |14.12|Spatial Models<br/>(or other special topic)<br/>Project work|<!--[Lecture: Spatial Models Part 1](11_spatial_gp)<br/>[Lecture: Spatial Models Part 2](12_gp_implementation)-->
 |16.12|Wrap-up<br/>Presentations|
