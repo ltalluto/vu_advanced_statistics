@@ -1,7 +1,7 @@
 ---
 title: "Model Selection & Comparison"
 author: "Matthew Talluto"
-date: "12.05.2021"
+date: "07.12.2021"
 output:
   slidy_presentation:
     theme: cerulean
@@ -88,7 +88,7 @@ pr_unfair = c(0.5, rep(0.1, 5))
 ## Divergence
 
 <div class="left lt">
-* We can use entropy predict the cost (how wrong will be be) of using the wrong model $q$, compared with a correct true model $p$
+* We can use entropy predict the cost (how wrong will we be) of using the wrong model $q$, compared with a correct true model $p$
 * Formally, how much extra entropy do we introduce by using model $q$, if model $p$ is the right one?
 * This is known as the *Kullback-Leibler* (or K-L) divergence.
 
