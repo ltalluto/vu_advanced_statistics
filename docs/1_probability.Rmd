@@ -330,6 +330,39 @@ rect(0.4, 0.5, 0.5, 0.8, col=c2)
 
 
 
+## So now that we have learned how to manupulate probabilities....
+
+Can anyone *define* probability?
+
+(chances are good we get to probability as frequencies here)
+
+
+## The problem with frequencies
+
+and show where frequency definition breaks
+
+you took the test, the result is positive. we want to know:
+
+pr(zombie|test)
+
+We already know pr(test|zombie)
+
+So what's our null hypothesis
+
+*I am not a zombie*
+
+the probability of getting this test result under the null hypothesis is 0.01. p < 0.05, therefore we reject the null hypothesis
+
+**show xkcd comic - sun explosion machine**
+
+This result is (should be) unsatisfying. We know from probability rules that pr(z|t) ≠ pr(t|z)
+
+This method only works when frequencies have meaning! Here they don't! There is only one you to perform inference on. Repeating the test can get us pr(t1,t2|z), but still doesn't give us pr(z|t1,t2). Thinking of *z* in terms of frequency is meaningless: *you either are or are not a zombie*. The hypothesis is either true or not. But it still can have a probability. How?
+
+Do the example, then come back to probability as *belief*
+
+Finally show that this same faulty resoning underlies almost literally all of our science, and is the source of the replication crisis. We only evaluate the probability of data|hypothesis, without ever stopping to ask if the hypothesis is bullshit
+
 
 ## Manipulating conditional probabilities
 
