@@ -164,7 +164,7 @@ pre code {
 
 
 <h1 class="title toc-ignore">Linear Modelling Exercises</h1>
-<h4 class="date">09.11.2021</h4>
+<h4 class="date">03.05.2022</h4>
 
 </div>
 
@@ -204,7 +204,7 @@ Howell1 = fread(&quot;https://github.com/rmcelreath/rethinking/raw/master/data/H
 <li>Using the model from #3 above, can you predict a 90% credible interval for height of the first missing case? Is it easier if you use the model from #2?</li>
 <li>The second missing case is more interesting; we have the outcome of our model, but we are missing the weight. How could you estimate a 90% CI for weight, using the model from #3 (i.e., keeping height as the response variable)?</li>
 </ol></li>
-<li>Look at <a href="../5_posterior_inference.html#(10)">slide 10</a> from the inference lecture. Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the <code>%*%</code> operator, and also the <code>apply</code> statement. Try the help file for both of them (use ?&quot;%*%&quot; to get help for the operator). Also run the code yourself and inspect the output.
+<li>Look at <a href="../5_posterior_inference.html#(10)">slide 10</a> from the inference lecture. Many people have trouble understanding why we add a column of 1s to the prediction dataset, and the <code>%*%</code> operator, and also the <code>apply</code> statement. Try the help file for both of them (use ?“%*%” to get help for the operator). Also run the code yourself and inspect the output.
 <ol style="list-style-type: lower-alpha">
 <li>How many rows and columns are in <code>mu_samples</code>?</li>
 <li>How does this compare to the number of rows/columns in the inputs (<code>as.matrix(good_sample[,1:2])</code> and <code>t(x_predict)</code>)?</li>
