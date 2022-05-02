@@ -1,7 +1,7 @@
 ---
 title: "Probability & Distributions"
 author: "Matthew Talluto"
-date: "28.10.2021"
+date: "02.05.2022"
 output:
   slidy_presentation:
     theme: cerulean

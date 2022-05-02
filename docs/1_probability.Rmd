@@ -1,7 +1,7 @@
 ---
 title: "Course Intro & Probability"
 author: "Matthew Talluto"
-date: "28.10.2021"
+date: "02.05.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -61,20 +61,31 @@ library(xtable)
 </div>
 
 
-## 
+
+
+## Course Introduction
 
 <div class='left' style='float:left;width:48%'>
 
-### What (some) people think they need
+### This course will give you:
 
-![](img/tools.jpg){width=80%}
+* A deeper understanding of how inferential statistics works
+* An appreciation of the similarities between Bayesian and frequentist methods
+* The ability to think critically about model design
+
+![](img/blacksmith.jpg){width=80%}
+
+
 </div>
 
 <div class='right' style='float:right;width:48%'>
 
-### What we cover instead
+### And not so much:
 
-![](img/blacksmith.jpg){width=80%}
+* A giant toolbox of ready-made models, with variations for every potential problem
+
+![](img/tools.jpg){width=80%}
+
 </div>
 
 
@@ -334,34 +345,34 @@ rect(0.4, 0.5, 0.5, 0.8, col=c2)
 
 Can anyone *define* probability?
 
-(chances are good we get to probability as frequencies here)
+<!-- (chances are good we get to probability as frequencies here) -->
 
 
-## The problem with frequencies
+<!-- ## The problem with frequencies -->
 
-and show where frequency definition breaks
+<!-- and show where frequency definition breaks -->
 
-you took the test, the result is positive. we want to know:
+<!-- you took the test, the result is positive. we want to know: -->
 
-pr(zombie|test)
+<!-- pr(zombie|test) -->
 
-We already know pr(test|zombie)
+<!-- We already know pr(test|zombie) -->
 
-So what's our null hypothesis
+<!-- So what's our null hypothesis -->
 
-*I am not a zombie*
+<!-- *I am not a zombie* -->
 
-the probability of getting this test result under the null hypothesis is 0.01. p < 0.05, therefore we reject the null hypothesis
+<!-- the probability of getting this test result under the null hypothesis is 0.01. p < 0.05, therefore we reject the null hypothesis -->
 
-**show xkcd comic - sun explosion machine**
+<!-- **show xkcd comic - sun explosion machine** -->
 
-This result is (should be) unsatisfying. We know from probability rules that pr(z|t) ≠ pr(t|z)
+<!-- This result is (should be) unsatisfying. We know from probability rules that pr(z|t) ≠ pr(t|z) -->
 
-This method only works when frequencies have meaning! Here they don't! There is only one you to perform inference on. Repeating the test can get us pr(t1,t2|z), but still doesn't give us pr(z|t1,t2). Thinking of *z* in terms of frequency is meaningless: *you either are or are not a zombie*. The hypothesis is either true or not. But it still can have a probability. How?
+<!-- This method only works when frequencies have meaning! Here they don't! There is only one you to perform inference on. Repeating the test can get us pr(t1,t2|z), but still doesn't give us pr(z|t1,t2). Thinking of *z* in terms of frequency is meaningless: *you either are or are not a zombie*. The hypothesis is either true or not. But it still can have a probability. How? -->
 
-Do the example, then come back to probability as *belief*
+<!-- Do the example, then come back to probability as *belief* -->
 
-Finally show that this same faulty resoning underlies almost literally all of our science, and is the source of the replication crisis. We only evaluate the probability of data|hypothesis, without ever stopping to ask if the hypothesis is bullshit
+<!-- Finally show that this same faulty resoning underlies almost literally all of our science, and is the source of the replication crisis. We only evaluate the probability of data|hypothesis, without ever stopping to ask if the hypothesis is bullshit -->
 
 
 ## Manipulating conditional probabilities
