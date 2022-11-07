@@ -23,18 +23,23 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 |Date  |Topics                                                    |Lecture Notes |Exercises |
 | :--- |  :---                                                                 |   :---    | :--- |
-|02.05<br/>Morning |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)|[Exercises: Distributions](exercises/2_distributions_ex.html)<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)
-|02.05<br/>Afternoon |Maximum likelihood<br/>Optimisation|[Lecture: MLE](3_mle)<br/>|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)|
-|03.05<br/>Afternoon|Linear Models<br/>Laplace Approximation<br/>Posterior Inference, Sampling|[Lecture: LM](4_lm_laplace)<br/>[Lecture: Inference](5_posterior_inference)|[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
-|04.05<br/>Morning |Markov-chain Monte Carlo|[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)|
-|04.05<br/>Afternoon |Generalised linear models<br/>|[Lecture: GLM](7_glm)<br/>|[Exercises: GLM](exercises/7_glm_exercises.html)|
-|05.05<br/>Afternoon|Stan Language<br/>Priors, Diagnostics<br/> Exercises/Project work|[Lecture: Stan](8_stan)|
-|06.05<br/>Morning|Hierarchical Models<br/>Project work|[Lecture: HM](9_hm)|[Exercises: HM](exercises/9_hm_exercises.html)
-|06.05<br/>Afternoon|Model selection & comparison<br/>Project work<br/>Spatial Models <br/>(time permitting)|[Lecture: Model Selection](10_model_selection)<br/>[Spatial Models Part 1](11_spatial_gp)<br/>[Spatial Models Part 2](12_gp_implementation)||
-|11.05<br/>Afternoon|Wrap-up<br/>Presentations|
+|21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)|[Exercises: Distributions](exercises/2_distributions_ex.html)<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)
+|23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|Lecture: MLE<br/>Lecture: LM|Exercises: MLE<br/>Exercises: LM|
+|25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|Lecture: Inference<br/>Lecture: MCMC|Exercises: MCMC|
+|28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|Lecture: GLM<br/>Lecture: Stan|Exercises: GLM|
+|30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|Lecture: HM|Exercises: HM)
+|07.12<br/>13:00–16:45|Model selection & comparison<br/>Project work<br/>|Lecture: Model Selection|
+|13.12<br/>08:15–12:00|Spatial Models (time permitting)<br/>Wrap-up<br/>Presentations|Spatial Models Part 1<br/>Spatial Models Part 2|
 
+<!--
+|23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|[Lecture: MLE](3_mle)<br/>[Lecture: LM](4_lm_laplace)|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)<br/>[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
+|25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|[Lecture: Inference](5_posterior_inference)<br/>[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)|
+|28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)|[Exercises: GLM](exercises/7_glm_exercises.html)|
+|30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|[Lecture: HM](9_hm)|[Exercises: HM](exercises/9_hm_exercises.html)
+|07.12<br/>13:00–16:45|Model selection & comparison<br/>Project work<br/>|[Lecture: Model Selection](10_model_selection)|
+|13.12<br/>08:15–12:00|Spatial Models (time permitting)<br/>Wrap-up<br/>Presentations|[Spatial Models Part 1](11_spatial_gp)<br/>[Spatial Models Part 2](12_gp_implementation)|
 
-
+-->
 ## Exercises
 Most lectures will include exercises, which can be completed individually or in groups. I encourage you to work through them as much as you can. I will not grade the exercises, and it is not necessary to turn them in, but I'm happy to provide individual feedback/help as needed. During official meeting times, I will also walk through the exercises (as much as time allows) and explain the code to everyone at once.
 
