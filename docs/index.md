@@ -21,13 +21,16 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 ## Schedule
 
-|Date  |Topics                                                    |Lecture Notes |Exercises |
-| :--- |  :---                                                                 |   :---    | :--- |
-|21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Lecture: Probability](1_probability) <br/> [Lecture: Distributions](2_distributions)|[Exercises: Distributions](exercises/2_distributions_ex.html)<br/>[Solutions: Distributions](exercises/2_distributions_soln.html)
+<!--TODO: change names of the exercises to what they will be
+-->
+
+|Date  |Topics       |Lecture Notes |Exercises |
+| :--- |  :---   |   :---    | :--- |
+|21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](1_probability) |[Distributions in R](exercises/2_distributions_ex.html)
 |23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|Lecture: MLE<br/>Lecture: LM|Exercises: MLE<br/>Exercises: LM|
-|25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|Lecture: Inference<br/>Lecture: MCMC|Exercises: MCMC|
+|25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|Lecture: Inference<br/>Lecture: MCMC|German tank problem|
 |28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|Lecture: GLM<br/>Lecture: Stan|Exercises: GLM|
-|30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|Lecture: HM|Exercises: HM)
+|30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|Lecture: HM|Exercises: HM
 |07.12<br/>13:00–16:45|Model selection & comparison<br/>Project work<br/>|Lecture: Model Selection|
 |13.12<br/>08:15–12:00|Spatial Models (time permitting)<br/>Wrap-up<br/>Presentations|Spatial Models Part 1<br/>Spatial Models Part 2|
 

@@ -1,0 +1,23 @@
+---
+title: "Distributions in R"
+date: "21.11.2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. In addition to the `d` and `p` functions mentioned in class, R includes `q` and `r` functions. What do these do? Explore the help files.
+2. Austria had a birth rate of approximately 9.9 births per 1000 people in 2019. Assume this rate is constant over the year, and that all births are independent.
+   a. For a randomly selected cohort of 1000 people, what is the probability of observing exactly 11 births over a 1-year period?
+   b. What about observing **11 or more** births?
+3. Is a **probability density** the same as a **probability**?
+   a. Human height is normally distributed within populations. From 1980-1994 within 20 wealthy countries, mean female height was 164.7 cm, with a standard deviation of 7.1 cm. What is the **maximum probability density** of this normal distribution, and what is the x-value $x_{max}$ at which maximum probability density occurs?
+   b. What is the probability that a female in this time period has a height exactly equal to $x_{max}$
+   c. If the maximum probability density and the $pr(x_{max})$ are not the same, why not? Do these answers make sense?
+   d. What is the probability that a woman has a height in the range $x_{max} \pm 3$
+4. For the same distribution, what is the 40th percentile for height? In other words, what is the value $x$ such that the probability of observing x or less is 0.4? --- $pr(X \le x) = 0.4$
+   a. What is $x$ if $pr(X > x) = 0.4$?
+
+
