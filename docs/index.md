@@ -26,7 +26,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 |Date  |Topics       |Lecture Notes |Exercises |
 | :--- |  :---   |   :---    | :--- |
-|21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](1_probability) |[Distributions in R](exercises/2_distributions_ex.html)
+|21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](1_probability) |[Distributions in R](exercises/1_distributions_ex)
 |23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|Lecture: MLE<br/>Lecture: LM|Exercises: MLE<br/>Exercises: LM|
 |25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|Lecture: Inference<br/>Lecture: MCMC|German tank problem|
 |28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|Lecture: GLM<br/>Lecture: Stan|Exercises: GLM|
