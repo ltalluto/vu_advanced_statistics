@@ -1,0 +1,438 @@
+---
+title: "Sampling for Posterior Inference"
+author: "Matthew Talluto"
+date: "25.11.2022"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+  beamer_presentation: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+library(ggplot2)
+library(data.table)
+library(mvtnorm)
+library(gridExtra)
+options(digits=4)
+
+# code from the previous lecture
+log_liklihood = function(a, b, s, x, y) {
+  # compute mu, the expectation of y
+  mu = a + b*x
+  
+  # liklihood of y|x,a,b,s
+  sum(dnorm(y, mu, s, log=TRUE))
+}
+log_prior = function(a, b, s) {
+  ## here the prior hyperparameters are hard-coded
+  dnorm(a, 0, 10, log=TRUE) + dnorm(b, 0, 5, log=TRUE) + dexp(s, 0.2, log=TRUE)  
+}
+
+log_posterior_la = function(params, data) {
+  # unpack params and data
+  x = data[['x']]
+  y = data[['y']]
+  a = params['a']
+  b = params['b']
+  s = exp(params['log_s'])
+
+  log_liklihood(a, b, s, x, y) + log_prior(a, b, s)
+}
+
+
+data('iris')
+iris = iris[iris$Species != "setosa",]
+data = with(iris, data.frame(x = Sepal.Length, y = Petal.Length))
+param_init = c(a=0, b=0, log_s=0)
+fit = optim(param_init, log_posterior_la, data = data, method="Nelder-Mead", 
+            control=list(fnscale=-1), hessian = TRUE)
+vcv = solve(-fit$hessian)
+sds = sqrt(diag(vcv))
+```
+
+
+
+
+## Sampling the unknown
+
+* Why *can't* we just look at the conditional distributions?
+* We have a mean and standard deviation
+
+
+
+## Sampling the unknown
+
+* Why *can't* we just look at the conditional distributions?
+* We have a mean and standard deviation
+
+```{r}
+naive_sample = data.frame(a = rnorm(1e4, fit$par[1], sds[1]), 
+                        b = rnorm(1e4, fit$par[2], sds[2]))
+naive_plot = ggplot(naive_sample, aes(x=a, y=b)) + geom_point(size = 0.4) + 
+  theme_minimal() + ggtitle("'Naive' Samples")
+```
+
+
+
+```{r fig.width = 12, fig.height=5, echo = FALSE}
+posterior_grid = expand.grid(a=seq(-3, 0, length.out=100), 
+    b = seq(0.8, 1.3, length.out = 100), log_s = fit$par[3])
+posterior_grid$pr = dmvnorm(as.matrix(posterior_grid[,1:3]), 
+    mean = fit$par, sigma=vcv, log=FALSE)
+posterior_density_plot = ggplot(posterior_grid, aes(x=a, y=b, fill=pr)) + 
+  geom_tile() + theme_minimal() + 
+  scico::scale_fill_scico(palette = "lajolla") + 
+  labs(fill="Posterior density") + ggtitle("Unnormalised posterior Density")
+grid.arrange(naive_plot, posterior_density_plot, nrow = 1)
+```
+</div>
+
+
+
+
+
+## Sampling the unknown
+
+* This technique of sampling to learn about something is quite useful
+	- Here we have learned that we can't ignore covariance among our parameters!
+	- We must find a way to sample from a **joint** posterior distribution
+
+```{r fig.width = 12, fig.height=5, echo = FALSE}
+grid.arrange(naive_plot, posterior_density_plot, nrow = 1)
+```
+
+
+## Joint posterior from LA
+
+* We have a variance-covariance matrix
+* So we sample from a **mutivariate normal**
+
+<div class="left lt">
+
+```{r fig.width=8, fig.height=3.5, fig}
+multi_sample = data.frame(rmvnorm(1e4, mean = fit$par, 
+				sigma = vcv))
+multi_plot = ggplot(multi_sample, aes(x=a, y=b)) + 
+	geom_point(size = 0.4) + theme_minimal()
+grid.arrange(multi_plot, posterior_density_plot, nrow = 1)
+```
+</div>
+
+<div class="right rt">
+
+```{r fig.width=5.5, fig.height=3.5}
+multi_sample_tall = reshape2::melt(multi_sample, id.vars = NULL)
+multi_hist = ggplot(multi_sample_tall, aes(x = value)) + 
+  geom_histogram(fill = "#00BFC4", bins=40) + 
+  facet_grid(~variable, scales="free") + theme_minimal()
+multi_hist
+```
+</div>
+
+## Summarizing a posterior distribution
+
+Often we want to know something about some parameter $\theta$
+
+* What is the probability that $\theta$ is less than some value---e.g., $pr(a \ge 0)$
+
+```{r}
+with(multi_sample, sum(a >= 0)/length(b))
+
+
+with(multi_sample, sum(b <= 0)/length(b))
+# we have 1000 samples, so we can confidently say
+# pr(b <= 0) < 0.001
+
+```
+
+
+
+
+
+## Summarizing a posterior distribution
+
+Often we want to know something about some parameter $\theta$
+
+* What is the probability that $\theta$ is less than some value---e.g., $pr(a \ge 0)$
+* What is the probability that $\theta$ is between two particular values
+
+```{r}
+with(multi_sample, sum(b >= 1.0 & b <= 1.2)/length(b))
+```
+
+## Summarizing a posterior distribution
+
+Often we want to know something about some parameter $\theta$
+
+* What is the probability that $\theta$ is less than some value---e.g., $pr(b \le 0)$
+* What is the probability that $\theta$ is between two particular values
+* What interval encompasses 90% or 95% of the probability mass? **90% Credible Interval**
+
+```{r}
+t(apply(multi_sample, 2, quantile, c(0.05, 0.95)))
+```
+
+
+## Summarizing a posterior distribution
+
+Often we want to know something about some parameter $\theta$
+
+* What is the probability that $\theta$ is less than some value---e.g., $pr(b \le 0)$
+* What is the probability that $\theta$ is between two particular values
+* What interval encompasses 90% or 95% of the probability mass? **90% Credible Interval**
+* What is the most likely value or "best" guess of theta?
+
+```{r, results = 'asis'}
+mn = colMeans(as.matrix(multi_sample))
+med = apply(as.matrix(multi_sample), 2, median)
+tab = matrix(c(mn, med, fit$par), ncol=3, byrow=TRUE, dimnames = list(c("mean", "median", "mode"), names(fit$par)))
+```
+
+```{r, results = 'asis', echo=FALSE}
+knitr::kable(tab, format='html')
+```
+
+* MAP estimates the posterior mode. 
+* For normal distribution, mode, mean, median all the same.
+* In other cases, median performs best
+
+
+## Posterior prediction
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* We can use this to get a posterior distribution of **regression lines**
+
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE}
+(pl = ggplot(data = data, aes(x = x, y = y)) + 
+ 	geom_point(colour = '#80b1d3') + 
+	geom_abline(slope = fit$par['b'], intercept = fit$par['a'], col="#c45d52aa", linewidth = 1.5) + 
+	xlab("Sepal Length") + ylab("Petal Length") + 
+	theme_minimal())
+cat(paste0("MLE: a = ", round(fit$par['a'], 2), "; b = ", round(fit$par['b'], 2)))
+```
+</div>
+
+
+## Posterior prediction
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* We can use this to get a posterior distribution of **regression lines**
+
+</div>
+
+<div class="right rt">
+
+```{r}
+## choose one random row number
+i = sample(nrow(multi_sample), 1) 
+## extract that slope and intercept
+samp = multi_sample[i, ] 
+```
+
+```{r echo = FALSE}
+(pl = pl + geom_abline(slope = samp$b[1], intercept = samp$a[1], col="#444444", linewidth = 0.5))
+cat(paste0("Sample 1: a = ", round(samp$a[1], 2), "; b = ", round(samp$b[1], 2)))
+
+```
+</div>
+
+
+## Posterior prediction
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* We can use this to get a posterior distribution of **regression lines**
+
+</div>
+
+<div class="right rt">
+
+```{r}
+## choose one random row number
+i = sample(nrow(multi_sample), 1) 
+## extract that slope and intercept
+samp = multi_sample[i, ] 
+```
+
+```{r echo = FALSE}
+(pl = pl + geom_abline(slope = samp$b[1], intercept = samp$a[1], col="#444444", linewidth = 0.5))
+cat(paste0("Sample 2: a = ", round(samp$a[1], 2), "; b = ", round(samp$b[1], 2)))
+
+```
+</div>
+
+## Posterior prediction
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* We can use this to get a posterior distribution of **regression lines**
+
+</div>
+
+<div class="right rt">
+
+```{r}
+## choose one random row number
+i = sample(nrow(multi_sample), 1) 
+## extract that slope and intercept
+samp = multi_sample[i, ] 
+```
+
+```{r echo = FALSE}
+(pl = pl + geom_abline(slope = samp$b[1], intercept = samp$a[1], col="#444444", linewidth = 0.5))
+cat(paste0("Sample 3: a = ", round(samp$a[1], 2), "; b = ", round(samp$b[1], 2)))
+
+```
+</div>
+
+
+## Posterior prediction
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* We can use this to get a posterior distribution of **regression lines**
+
+</div>
+
+<div class="right rt">
+
+```{r}
+# take 100 samples
+i = sample(nrow(multi_sample), 100)
+samp = multi_sample[i, ]
+```
+
+```{r echo = FALSE}
+(pl = pl + geom_abline(slope = samp$b, intercept = samp$a, col="#444444", linewidth = 0.5) + 
+ 		geom_abline(slope = fit$par['b'], intercept = fit$par['a'], col="#c45d52aa", linewidth = 1.5))
+head(samp)
+
+```
+</div>
+
+
+
+## Regression credible interval
+
+<div class="left lt">
+
+* Posterior distributions are *transitive*
+
+> If $\hat{\theta}$ is a set of samples approximating the posterior distribution of $\theta$, and if some desired variable $Z = f(\theta)$, then $f(\hat{\theta})$ approximates the posterior distribution of $Z$
+
+* Each posterior sample represents a plausible line, describing the expected value of $y$
+
+* In our regression model, we compute $\mu$, which is the expected value of $y$ if we know the value of $x$
+
+$$
+\mu = a + bx
+$$
+
+* Because we have samples from the joint posterior $pr(a,b|x)$, we can compute the posterior for mu
+* Each sample predicts a line, all plausible, some more probable than others
+</div>
+
+<div class="right rt">
+
+```{r fig.width=4, fig.height=4}
+# here we compute a credible interval for y for each value in
+# x_predict. Why include the column of 1's?
+x_predict = cbind(intercept=1, x=seq(min(data$x)-1, 
+  max(data$x)+1, length.out=100))
+
+# shortcut using matrix multiplication; this is 1000s of times
+# faster than other methods
+# look over this code carefully, what is %*% doing? 
+# what about t? 
+# what are the dims of mu_sample? what does this represent?
+mu_samples = as.matrix(multi_sample[,1:2]) %*% t(x_predict)
+mu_ci = apply(mu_samples, 2, quantile, probs=c(0.05, 0.90))
+
+# organize things into a dataframe for ggplot
+plDat = data.frame(x = x_predict[,2], lower = mu_ci[1,], 
+  upper=mu_ci[2,])
+plDat$median = fit$par['a'] + plDat$x*fit$par['b']
+ggplot(plDat, aes(x=x, y = median)) + 
+  geom_line(colour="#c45d52") + 
+  geom_ribbon(aes(ymin=lower, ymax=upper), alpha = 0.4, 
+    fill = "#fb8072") + 
+  geom_point(data = data, aes(x=x, y=y), size=0.7, 
+    colour='#80b1d3') +
+  theme_minimal() + ylab("Petal Length") + xlab('Sepal Length')
+
+```
+</div>
+
+
+
+
+
+## Posterior predictive distribution
+
+<div class="left lt">
+* Our Bayesian model is **generative**
+* It postulates a *statistical* process (not mechanistic) by which the outcomes $y$ are created
+* Posterior predictive simulations tells you the distribution of new *outcomes*
+* For a given value of $x$, the interval tells you where 90% of the values of $y$ will fall
+* To do this:
+   - for each sample of $a$, $b$, and $s$
+   - comptue the expected value $\mu$ for a **prediction dataset** $\hat{x}$
+   - simulate a new dataset $\hat{y}$ from $\mu$ and $s$
+   - compute quantiles for $\hat{y} | \hat{x}$
+</div>
+
+<div class = "right rt">
+
+```{r}
+# function that takes a single a, b, and s, and a vector of x
+# generates a new dataset of y's for each x
+sim = function(a, b, s, xhat) {
+  mu = a + b * xhat
+  rnorm(length(xhat), mu, s)
+}
+prsims = mapply(sim, a=multi_sample$a, b=multi_sample$b, 
+  s=exp(multi_sample$log_s), MoreArgs=list(x=x_predict[,'x']))
+po_pr_interval = apply(prsims, 1, quantile, c(0.05, 0.95))
+```
+
+```{r echo = FALSE, fig.height=4, fig.width=4}
+plDat$ppi_lower = po_pr_interval[1,]
+plDat$ppi_upper = po_pr_interval[2,]
+ggplot(plDat, aes(x=x, y = median)) + geom_line(colour="#c45d52") + 
+  geom_ribbon(aes(ymin=ppi_lower, ymax=ppi_upper), alpha = 0.4, fill = "#96bad3") + 
+  geom_point(data = data, aes(x=x, y=y), size=0.7, colour='#555555') +
+  theme_minimal() + ylab("Petal Length") + xlab('Sepal Length')
+```
+
+</div>
