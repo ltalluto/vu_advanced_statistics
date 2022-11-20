@@ -27,7 +27,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |Date  |Topics       |Lecture Notes |Exercises |
 | :--- |  :---   |   :---    | :--- |
 |21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](1_probability) |[Distributions in R](exercises/1_distributions_ex)
-|23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|Lecture: MLE<br/>Lecture: LM|Exercises: MLE<br/>Exercises: LM|
+|23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|[Maximum Likelihood Estimation](2_mle)<br/>Lecture: LM|[Tree Mortality I](exercises/2_mle_ex.html)<br/>Exercises: LM|
 |25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|Lecture: Inference<br/>Lecture: MCMC|German tank problem|
 |28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|Lecture: GLM<br/>Lecture: Stan|Exercises: GLM|
 |30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|Lecture: HM|Exercises: HM
@@ -35,7 +35,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |13.12<br/>08:15–12:00|Spatial Models (time permitting)<br/>Wrap-up<br/>Presentations|Spatial Models Part 1<br/>Spatial Models Part 2|
 
 <!--
-|23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|[Lecture: MLE](3_mle)<br/>[Lecture: LM](4_lm_laplace)|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)<br/>[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
+[Lecture: LM](4_lm_laplace)|[Exercises: MLE](exercises/3_mle_ex.html)<br/>[Solutions: MLE](exercises/3_mle_soln.html)<br/>[Exercises: LM](exercises/4_5_lm_exercises.html)<br/>[Solutions: LM](exercises/4_5_lm_soln.html)|
+
+
 |25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|[Lecture: Inference](5_posterior_inference)<br/>[Lecture: MCMC](6_mcmc)|[Exercises: MCMC](exercises/6_mcmc_exercises.html)<br/>[Solutions: MCMC](exercises/6_mcmc_soln.html)|
 |28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|[Lecture: GLM](7_glm)<br/>[Lecture: Stan](8_stan)|[Exercises: GLM](exercises/7_glm_exercises.html)|
 |30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|[Lecture: HM](9_hm)|[Exercises: HM](exercises/9_hm_exercises.html)

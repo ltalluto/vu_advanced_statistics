@@ -1,7 +1,7 @@
 ---
 title: "Maximum Likelihood & Optimisation"
 author: "Matthew Talluto"
-date: "02.05.2022"
+date: "23.11.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -250,7 +250,7 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 > - For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 > - $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
 > - $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-> - What about for continuous problems? There are an infinte number of possible models if $pr(\theta)$ is a continuous PDF.
+> - What about for continuous problems?
 
 
 
@@ -259,7 +259,20 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 * For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 * $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
 * $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-* What about for continuous problems? There are infinitely many possible datasets if X is real-valued, and infinte possible models if $pr(\theta)$ is a continuous PDF.
+* What about for continuous problems? 
+    - There are an infinite number of possible models if $pr(\theta)$ is a continuous PDF.
+    - There are infinitely many possible datasets if X is real-valued
+
+
+
+## The normalizing constant
+
+* For the zombie example, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
+* $pr(T) = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+* $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
+* What about for continuous problems? 
+    - There are an infinite number of possible models if $pr(\theta)$ is a continuous PDF.
+    - There are infinitely many possible datasets if X is real-valued
 
 $$
 pr(X) = \int_a^b pr(X|\theta)pr(\theta)d \theta
