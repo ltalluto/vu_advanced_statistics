@@ -1,6 +1,6 @@
 ---
 title: "MCMC Exercises"
-date: "04.05.2022"
+date: "25.11.2022"
 output: html_document
 ---
 ```{r setup, include=FALSE}
@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-1. **Optional** (but recommended). Implement your own Metropolis algorithm for generating MCMC samples. See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. You can test the code using any of the log_posterior functions we've written so far (this gives you a chance to compare the results when you know the answer), or you can try it out using exercise number 2.
+1. **Optional**. Implement your own Metropolis algorithm for generating MCMC samples. See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. You can test the code using any of the log_posterior functions we've written so far (this gives you a chance to compare the results when you know the answer), or you can try it out using exercise number 2. Alternatively, there is an implementation provided on the [github repository](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/r/metrop.r).
 
 2. Recall the German tank problem presented in lecture. Use the following captured serial numbers:
 

@@ -1,7 +1,7 @@
 ---
 title: "Markov Chain Monte Carlo"
 author: "Matthew Talluto"
-date: "04.05.2022"
+date: "25.11.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -430,23 +430,24 @@ hist(samples, breaks = 300, freq=FALSE, axes=FALSE, xlim=range(xpr), main="",
 ## Metropolis algorithm summary
 
 ```
-Define log unnormalized posterior (also called target) distribution target(x)
-Define proposal sampler: often rnorm(1, state[t-1], prscale)
-Define starting value = chain[1]
-for i in 2:n_samples
-   candidate = proposal(chain[i-1], prscale)
-   r = exp( target(candidate) - target(chain[i-1])) ## acceptance probability
+Define t(x): log unnormalized posterior (i.e, "target") distribution
+Define p(x): the proposal distribution
+	common: rnorm(n = 1, mean = x, sd = proposal_scale)
+Choose state[0] (the starting value)
+for i in 1:n_samples
+   candidate = p(state[i-1], proposal_scale)
+   r = exp( t(candidate) - t(state[i-1])) ## acceptance probability
    if r > runif(1)  ## coin flip to see if we accept or not
-      chain[i] = candidate
+      state[i] = candidate
    else
-      chain[i] = chain[i-1]
+      state[i] = chain[i-1]
 ```
 
 ## Multivariate Metropolis-Hastings
 * Logic is the same
 * We cannot easily sample from the joint posterior $pr(\theta_1, \theta_2 | X)$
 * We can sample from conditional posteriors $pr(\theta_1, | \theta_2, X)$
-* Simply sample from parameters one at a time, in random order (see sample code)
+* Simply sample from parameters one at a time, in random order (see [sample code](https://github.com/mtalluto/vu_advanced_statistics/blob/main/r/mh.r))
 
 
 ## Tuning Metropolis-Hastings
