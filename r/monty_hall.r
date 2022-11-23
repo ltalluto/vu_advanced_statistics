@@ -6,7 +6,7 @@ lets_make_a_deal = function(x) {
 	initial_choice = sample(1:3, 1)
 	# choose a door with a goat to reveal, excluding our initial choice and the car
 	revealed_goat = (1:3)[-initial_choice]
-	revealed_goat = revealed_goat[revealed_goat != "car"]
+	revealed_goat = revealed_goat[prizes != "car"]
 	revealed_goat = sample(revealed_goat, 1)
 	
 	winning_strategy = ifelse(prizes[initial_choice] == "car", "stay", "switch")
