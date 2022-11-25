@@ -1,7 +1,7 @@
 ---
 title: "Generalised Linear Modelling"
 author: "Matthew Talluto"
-date: "05.05.2022"
+date: "28.11.2022"
 output:
   slidy_presentation:
     theme: cerulean
@@ -15,14 +15,13 @@ output:
 # knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
 
-library(rethinking)
-data(Howell1)
 library(ggplot2)
 library(igraph)
 library(ggplot2)
 library(ggnetwork)
 library(data.table)
-Howell1 = as.data.table(Howell1)
+Howell1 = fread("https://github.com/rmcelreath/rethinking/raw/master/data/Howell1.csv")
+
 
 cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 
@@ -60,7 +59,7 @@ fit = lm(height ~ weight + I(weight^2), data = Howell1)
 pldat = data.frame(weight = seq(min(Howell1$weight), max(Howell1$weight), length.out=200))
 pldat$height = predict(fit, newdata = pldat)
 ggplot(Howell1, aes(x = weight, y = height)) + geom_point() + 
-  geom_line(data = pldat, aes(x = weight, y = height), size=1.5, col='blue') + theme_minimal()
+  geom_line(data = pldat, aes(x = weight, y = height), linewidth=1.5, col='blue') + theme_minimal()
 ```
 </div>
 
