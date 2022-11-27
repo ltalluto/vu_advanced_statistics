@@ -29,7 +29,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 |21.11<br/>13:00–16:45 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](1_probability) |[Distributions in R](exercises/1_distributions_ex)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>• [Solutions](exercises/1_distributions_soln)</sup>
 |23.11<br/>13:00–16:45 |Maximum likelihood<br/>Optimisation<br/>Linear Models<br/>Laplace Approximation|[Maximum Likelihood Estimation](2_mle)<br/>[Linear Models](3_lm)|[Tree Mortality I](exercises/2_mle_ex.html)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>• [Solutions](exercises/2_mle_soln)</sup><br/>[!Kung height](exercises/3_lm_ex.html)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>• [Solutions](exercises/3_lm_soln)</sup>|
 |25.11<br/>13:15–17:00|Posterior Inference, Sampling<br/>Markov-chain Monte Carlo|[Sampling](4_sampling)<br/>[MCMC](5_mcmc)|[German tank problem](exercises/5_mcmc_ex)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>• [Solutions](exercises/5_mcmc_soln)</sup>|
-|28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|[GLMs & Stan](6_stan_glm)|[Bird Species Richness](exercises/6_glm_exercises)|
+|28.11<br/>13:15–17:00 |Generalised linear models<br/>Stan Language<br/>Priors, Diagnostics|[GLMs & Stan](6_stan_glm)|[Bird Species Richness](exercises/6_glm_ex)|
 |30.11<br/>13:15–17:00 |Hierarchical Models<br/>Exercises/Project work|Lecture: HM|Exercises: HM
 |07.12<br/>13:00–16:45|Model selection & comparison<br/>Project work<br/>|Lecture: Model Selection|
 |13.12<br/>08:15–12:00|Spatial Models (time permitting)<br/>Wrap-up<br/>Presentations|Spatial Models Part 1<br/>Spatial Models Part 2|
