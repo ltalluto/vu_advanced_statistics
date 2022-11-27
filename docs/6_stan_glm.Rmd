@@ -757,7 +757,7 @@ data {
    vector  <lower = 0, upper = 1> [n] is_young;
 }
 parameters {
-   real a; // default slope (for adults)
+   real a; // default intercept (for adults)
    real a_child; // additional effect of being a child
    real a_young; // additional effect of being young
    real b;
@@ -811,10 +811,10 @@ data {
    vector  <lower = 0, upper = 1> [n] is_young;
 }
 parameters {
-   real a; // default slope (for adults)
+   real a; // default intercept (for adults)
    real a_child; // additional effect of being a child
    real a_young; // additional effect of being young
-   real b;
+   real b; // default slope (for adults)
    real b_child; // additional slope effect of being a child
    real b_young; // additional slope effect of being young
    real <lower=0> s;
@@ -838,5 +838,1003 @@ model {
 
 </div>
 
-## Bayesian Analysis Workflow
+## Simplifying our notation for E(y)
+
+<div class="left lt">
+
+* Out models get ugly fast if we have many parameters
+* We can simplify the notation (and the computation) a lot using matrices
+* $\mathbf{X}$ is now a **matrix** with $n$ rows (one per data point) and $k$ columns (one per predictor)
+* This includes transformations; if we want $weight^2$ in our model, we add a column in $\mathbf{X}$ for it
+* $\mathbf{B}$ is a parameter vector of length $k$, one parameter to go with each x-variable
+
+$$
+\mathbb{E}(y) = a + \mathbf{B}\mathbf{X}
+$$
+</div>
+
+<div class="right rt">
+
+```{r}
+X = cbind("weight" = Howell1$weight, 
+		  "weight^2" = Howell1$weight^2, 
+		  "child" = Howell1$is_child, 
+		  "young" = Howell1$is_young, 
+			# we need separate variables for interactions
+		  "weight × child" = Howell1$weight * Howell1$is_child,
+		  "weight × young" = Howell1$weight * Howell1$is_young)
+head(X)
+```
+
+
+</div>
+
+
+## Simplifying our notation for E(y)
+<div class="left lt">
+
+* **Bonus**: we can now change the variables in our model just by changing X
+	- The likelihood doesn't change!
+
+$$
+\begin{aligned}
+\mathbb{E}(y) & = a + \mathbf{B}\mathbf{X} \\
+y & \sim \mathcal{N}(\mathbb{E}(y), s)
+\end{aligned}
+$$
+</div>
+
+<div class="right rt">
+```{r}
+log_liklihood = function(params, data) {
+	a = params[1]
+	s = params[2]
+	B = params[3:length(params)]
+	## %*% is matrix multiplication, returns a vector length n
+	mu = a + data$X %*% B  
+	sum(dnorm(data$height, mu, s, log=TRUE))
+}
+```
+
+
+```{stan output.var="howell_general", eval = FALSE}
+data {
+   int n; 
+   int k;
+   vector [n] height; 
+   matrix [n, k] X;
+}
+parameters {
+   real a;
+   vector [k] B;
+   real <lower=0> s;
+}
+transformed parameters {
+	vector [n] mu = a + X * B;
+}
+model {
+	y ~ normal(mu, s);
+	a ~ normal(0, 10);
+	B ~ normal(0, 5); // prior is the same for the whole vector
+	s ~ exponential(0.1);
+}
+```
+</div>
+
+## Changing the distribution of y
+
+* What if $y$ doesn't come from a normal distribution?
+* There is nothing saying this is fixed
+* For some generic distribution $\mathcal{D}$ which has parameters $\rho$:
+
+$$
+\begin{aligned}
+\mathbb{E}(y) & = a + \mathbf{B}\mathbf{X} \\
+\rho & = \mathcal{f}(\mathbb{E}(y), \ldots) \\
+y & \sim \mathcal{D}(\rho)
+\end{aligned}
+$$
+
+## Example: Tree mortality as a function of temperature
+
+* We already modelled tree mortality using a binomial likelihood. It's easy to add a linear model
+
+<div class="left lt">
+
+```{r}
+tsuga = readRDS("exercises/data/tsuga.rds")
+tsuga[, 4:8]
+
+```
+</div>
+
+<div class="right rt">
+
+```{r, warning=FALSE, echo=FALSE}
+pl = ggplot(tsuga, aes(x=annual_mean_temp, y=died/n)) + geom_point(aes(size=n)) + theme_minimal() +
+  scale_size_continuous(range = c(0,3)) + xlab("Annual Mean Temperature") + ylab("Proportion dying")
+pl
+```
+</div>
+
+
+
+## Tree mortality log posterior
+
+
+<div class="left lt">
+$$
+\begin{aligned}
+\mathbb{E}(n_{died}/n_{total}) &= p  = a + bT \\
+n_{died} & \sim \mathrm{Binomial}(n_{total}, p)
+\end{aligned}
+$$
+
+```{stan output.var="tree_binom_1", eval = FALSE}
+data {
+   int n; // number of plots
+   int n_died [n]; // number of dead trees in each plot
+   int n_total [n]; // number of trees in each plot 
+   vector [n] annual_mean_temp; // temperature
+}
+parameters {
+   real a;
+   real b;
+   // no s: there is no variance parameter
+   // for the binomial distribution!
+}
+transformed parameters {
+	vector [n] p = a + b * annual_mean_temp;
+}
+model {
+	n_died ~ binomial(n_total, p);
+	a ~ normal(0, 10);
+	b ~ normal(0, 5); 
+}
+```
+</div>
+
+<div class="right rt">
+
+```{r, warning=FALSE, echo=FALSE}
+gr = graph_from_literal(a-+p, b-+p, T-+p, p-+n_died, n_total-+n_died)
+V(gr)$type = c("random", "deterministic", "random", "deterministic", "random", "deterministic")
+V(gr)$source = c("unknown", "unknown", "unknown", "known", "known", "known")
+layout = matrix(c(0,2,  0.5,1, 0.5,2, 1,2, 1.25,0, 1.5,2), byrow=TRUE, ncol=2)
+nt = ggnetwork(gr, layout=layout)
+grpl = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1)
+grpl
+
+
+```
+</div>
+
+
+
+## Fitting the model
+<div class="left lt">
+
+* Running optim produces warnings, but seems to work.
+
+```{r}
+log_posterior = function(par, dat) {
+	# the probability of death changes with temperature
+	p = par['a'] + par['b'] * dat$annual_mean_temp
+	
+	# likelihood
+	logpr = sum(dbinom(dat$died, dat$n, p, log=TRUE))
+	
+	# priors
+	logpr + dnorm(par['a'], 0, 20, log=TRUE) + 
+		dnorm(par['b'], 0, 5, log=TRUE)
+}
+
+fit = optim(c(a=0.5, b=0), log_posterior, dat = tsuga[n > 0], 
+            method = "Nelder-Mead", control=list(fnscale=-1))
+
+```
+</div>
+
+<div class="right rt">
+
+```{r, warning=FALSE, echo=FALSE, fig.height=4, fig.width=4.5}
+pl = pl + geom_abline(intercept = fit$par['a'], slope=fit$par['b'], colour=cols[3], linewidth = 1.5) + 
+  xlim(0, 25)
+pl
+```
+
+</div>
+
+
+
+## Link functions
+
+<div class="left lt">
+
+* We need a way to map (or *link*) sensible values for $\mathbb{E}(y)$ to a linear equation $a + \mathbf{BX}$
+* The linear equation is defined for all real numbers: $(-\infty, \infty)$, while $\mathbb{E}(y)$ is in $[0,1]$
+* For probabilities, the *logit* function works well
+
+$$
+\begin{aligned}
+\log \frac{p}{1-p} & = a + \mathbf{BX} \\
+\mathrm{logit} (p) & = a + \mathbf{BX} \\
+p & = \mathrm{logit}^{-1} (a + \mathbf{BX}) \\
+p & = \frac{e^{a + \mathbf{BX}}}{1 + e^{a + \mathbf{BX}}}
+\end{aligned}
+$$
+
+* In R, we can use `p = plogis(a + X %*% B)`
+* In Stan, either `p = inv_logit(a + X * B)` or use the `binomial_logit` function
+
+</div>
+
+<div class="right rt">
+```{r echo=FALSE}
+
+xx = seq(-7, 7, length.out=200)
+pp = plogis(xx)
+par(mar=c(4.5, 5, 0.5, 0.5))
+plot(xx, pp, xlab = "X", ylab = expression(logit^{-1}~X), type='l', bty='n')
+```
+</div>
+
+
+
+## Binomial-logistic regression - Stan
+
+<div class="left lt">
+
+```{stan output.var="tree_binom_1", eval = FALSE}
+// saved in file stan/tree_binom.stan
+data {
+   int n; // number of plots
+   int n_died [n]; // number of dead trees in each plot
+   int n_total [n]; // number of trees in each plot 
+   vector [n] annual_mean_temp; // temperature
+}
+parameters {
+   real a;
+   real b;
+   // no s: there is no variance parameter
+   // for the binomial distribution!
+}
+transformed parameters {
+	vector [n] p = inv_logit(a + b * annual_mean_temp);
+}
+model {
+	n_died ~ binomial(n_total, p);
+
+	// priors are the same regardless
+	a ~ normal(0, 10);
+	b ~ normal(0, 5); 
+}
+```
+
+</div>
+
+<div class="right rt">
+
+```{r eval = FALSE}
+mod = stan_model("stan/tree_binom.stan")
+fit = sampling(stan_model, iter = 5000)
+```
+</div>
+
+
+## Binomial-logistic regression - R/optim
+
+<div class="left lt">
+
+```{r}
+log_posterior = function(par, dat) {
+	# the probability of death changes with temperature
+	p = plogis(par['a'] + par['b'] * dat$annual_mean_temp)
+	
+	# likelihood
+	logpr = sum(dbinom(dat$died, dat$n, p, log=TRUE))
+	
+	# priors
+	logpr + dnorm(par['a'], 0, 20, log=TRUE) + 
+		dnorm(par['b'], 0, 5, log=TRUE)
+}
+
+fit = optim(c(a=0.5, b=0), log_posterior, dat = tsuga[n > 0], 
+            method = "Nelder-Mead", control=list(fnscale=-1), 
+			hessian = TRUE)
+vcv = solve(-fit$hessian)
+fit$par
+
+```
+</div>
+
+<div class="right rt">
+
+```{r echo = FALSE, warning=FALSE}
+library(mvtnorm)
+samples = rmvnorm(5000, fit$par, vcv)
+
+
+predictions = data.frame(x = seq(0, 25, length.out=500))
+predictions$y = plogis(fit$par['a'] + fit$par['b'] * predictions$x)
+predictions$lower = apply(apply(samples, 1, function(p) plogis(p[1] + p[2] * predictions$x)), 1, quantile, 0.05)
+predictions$upper = apply(apply(samples, 1, function(p) plogis(p[1] + p[2] * predictions$x)), 1, quantile, 0.95)
+predictions$temperature = NA
+predictions$died = NA
+predictions$n = NA
+predictions = rbind(predictions, data.frame(x = NA, y = NA, lower = NA, upper = NA, 
+              temperature = tsuga$annual_mean_temp, died = tsuga$died, n = tsuga$n))
+
+pl = ggplot(predictions) + geom_ribbon(data=predictions, aes(x=x, ymin=lower, ymax=upper), fill=cols[1], alpha = 0.5)
+pl = pl + geom_line(aes(x=x, y=y), linewidth = 1.2, colour=cols[1])
+pl = pl + geom_point(aes(x=temperature, y=died/n, size=n)) + theme_minimal()
+pl = pl + scale_size_continuous(range = c(0,3)) + xlab("Annual Mean Temperature") + ylab("Proportion dying")
+
+pl
+```
+</div>
+
+
+
+
+
+
+
+
+## Link functions
+
+* More generally, we can say that our observations $y$ are drawn from some 
+distribution $\mathcal{D}$ that has parameters $\theta$
+* The distribution parameters $\theta$ are related to the expected value of $y$, $\mathbb{E}(y)$, and
+usually a precision/dispersion parameter $\phi$
+* There exists a **link function** $\mathrm{L}(y)$ that maps the expectation of $y$ onto the linear model
+
+$$
+\begin{aligned}
+\mathbb{E}(y) & = \mathrm{L}^{-1}\left (a + \mathbf{B}\mathbf{X} \right )\\
+\rho & = \mathcal{f}(\mathbb{E}(y), \ldots) \\
+y & \sim \mathcal{D}(\rho) 
+\end{aligned}
+$$
+
+* This is the **generalised linear model**, suitable for many applied problems
+* Linear regression is a special case of the GLM, where
+   - $\mathcal{D}$ is a normal distribution with mean $\mathbb{E}(y)$ and constant variance $\sigma^2$
+   - $\mathrm{L}(y)$ is the **identity function**: $\mathrm{L}(y) = y$
+
+
+
+## Canonical link functions
+
+Many distributions have so-called canonical link functions
+
+* **Normal**: identity---`mu = a + X %*% B`
+* **Binomial**: logit---`p = plogis(a + X %*% B)`
+* **Poisson**: log---`lambda = exp(a + X %*% B)`
+* **Exponential**: inverse---`lambda = 1/(a + X %*% B)`
+
+Other distributions have typical link functions, but need reparameterization
+
+* **Negative Binomial**: log---`mu = exp(a + X %*% B)`
+* **Beta**: logit, or probit---`mu = pnorm(a + X %*% B)`
+* **Gamma**: inverse---`mu = 1/(a + X %*% B)`
+
+
+
+
+
+## Count Data: Poisson
+
+* For counts where the number of trials is unkown or nonsensical
+
+$$
+\begin{aligned}
+\lambda & = \exp(a + \mathbf{BX}) \\
+y & \sim \mathrm{Poisson}(\lambda)
+\end{aligned}
+$$
+
+**Constraint:** $\sigma^2_{y|\mathbf{X}} = \mathbb{E}(y|\mathbf{X}) = \lambda$
+
+* Sometimes, *exposure* varies by observation.
+   - Different size plots
+   - Different observation times
+   - We add an exposure variable in this case, **u**
+   - In traditional modelling, $\log u$ is called the *offset*
+   
+$$
+y \sim \mathrm{Poisson}(u\lambda)
+$$
+
+
+## Overdispersed counts: Negative Binomial
+
+* For counts where the mean and variance are not equal
+* Typical in ecological count data (e.g., abundances)
+
+$$
+\begin{aligned}
+\mu & = \exp(a + \mathbf{BX}) \\
+y & \sim \mathrm{NB}(\mu, \phi)
+\end{aligned}
+$$
+
+$\phi$ is called the dispersion parameter, and is related to the variance:
+
+$$
+\sigma^2_{y|\mathbf{X}} = \mu + \frac{\mu^2}{\phi}
+$$
+
+
+
+## Proportions: Beta
+
+* When we have true proportions (i.e., a number of trials is unavailable)
+* Also used for Binomial problems where the number of trials is missing/unrecorded
+* If number of trials is available, **always** prefer Binomial GLM
+
+$$
+\begin{aligned}
+\mu & = \mathrm{logit}^{-1}(a_\rho + \mathbf{B_\rho X_\rho}) \\
+\phi & = \exp(a_\phi + \mathbf{B_\phi X_\phi}) & \mathrm{\small optionally} \\
+\alpha & = \mu\phi \\
+\beta & = (1 - \mu)\phi \\
+y & \sim \mathrm{Beta}(\alpha, \beta)
+\end{aligned}
+$$
+
+### Caveats & Hints
+
+* $\phi$ is the **precision**; $\sigma^2_{y|\mathbf{X}} = \frac{\mu(1-\mu)}{\phi + 1}$
+* Some software allows you to parameterise the beta directly, using $\mu$ and $\phi$
+* All *observations* of $y$ must be on (0, 1). Values of exactly 0 or 1 are not allowed
+* Finite mixtures can be used if the data contain 0s and 1s.
+* $\alpha$: expected number of successes when sampling $\alpha + \beta$ trials
+* $\beta$: expected number of failures
+
+
+## Continuous, strictly positive: Gamma
+
+* Often used for costs, waiting times
+   - ecosystem services modelling
+   - animal movement
+   - life expectancy
+* Generally assume the coefficient of variation is constant
+   - can relax this assumption by modelling $\phi$ as a function of covariates
+
+$$
+\begin{aligned}
+\mu & = \frac{1}{(a + \mathbf{B X})} & OR \\
+\mu & = \exp(a + \mathbf{B X}) \\
+\\
+\alpha & = \frac{\mu^2}{\phi} \\
+\beta & = \frac{\mu}{\phi} \\
+y & \sim \mathrm{Gamma}(\alpha, \beta)
+\end{aligned}
+$$
+
+
+## Bayesian analysis workflow
+1. Specify joint posterior graphically, mathematically, and in code
+
+## Bayesian analysis workflow
+1. Specify joint posterior graphically, mathematically, and in code
+2. Draw samples from the joint posterior distribution
+
+## Bayesian analysis workflow
+1. Specify joint posterior graphically, mathematically, and in code
+2. Draw samples from the joint posterior distribution
+3. Evaluate/diagnose the model's performance
+
+## Bayesian analysis workflow
+1. Specify joint posterior graphically, mathematically, and in code
+2. Draw samples from the joint posterior distribution
+3. Evaluate/diagnose the model's performance
+4. Perform posterior inference
+
+
+## 1. Joint posterior: likelihood
+
+* Liklihood is a **generative model** (the distribution from which the observations are generated)
+  - whenever possible use knowledge of the appropriate processes
+  - transform parameters and sample in transformed space to improve behaviour
+  - e.g. use log($\sigma$) instead of $\sigma$ to avoid impossible negative variance in sampler
+  - in Stan, this is done by adding variable **constraints** (`real <lower=0> sigma`)
+  
+## 1. Joint posterior: likelihood
+
+* Liklihood is a **generative model** (the distribution from which the observations are generated)
+  - whenever possible use knowledge of the appropriate processes
+  - transform parameters and sample in transformed space to improve behaviour
+  - e.g. use log($/sigma$) instead of $/sigma$ to avoid impossible negative variance in sampler
+  - in Stan, this is done by adding variable **constraints** (`real <lower=0> sigma`)
+* Models should be specified to be scale independent
+  - Easy: scaling your predictors to have mean=0, sd=1
+  - Hard: scaling outcomes (y); this can change the generative model!
+  - Prefer to transform outcomes with the **link function**
+  
+## 1. Joint posterior: priors
+* Any unknowns must have a **prior**
+   - (or possibly a hierarchical generative model and hyperpriors)
+* Prefer regularising priors to vague priors
+   - Normal(0, 5) instead of Normal(0,500)
+* Avoid improper priors: Uniform(-Inf, Inf)
+
+
+## 1. Joint posterior: priors
+* Avoid hard boundaries
+   - **No**: Uniform(0, 1000)
+   - **Yes**: Exponential(0.1)
+* With informative priors, specify reasonable initial values
+* Begin sampling with weaker priors, gradually strengthen once you know the model is working
+* Specify priors for everything—avoid defaults
+* Draw out your model as a digraph to make sure you don’t miss anything
+
+## GLM in Stan
+
+For this exercise, you will use the [birddiv](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/birddiv.csv) (in `docs/exercises/data/birddiv.csv`) dataset; you can load it directly from github using `data.table::fread()`. Bird diversity was measured in 1-km^2 plots in multiple countries of Europe, investigating the effects of habitat fragmentation and productivity on diversity. We will consider a subset of the data. Specificially, we will ask how various covariates are associated with the diversity of birds specializing on different habitat types. The data have the following potential predictors:
+
+* **Grow.degd**: growing degree days, a proxy for how warm the climate is.
+* **For.cover**: Forest cover near the sampling location
+* **NDVI**: normalized difference vegetation index, a proxy for productivity
+* **For.diver**: Forest diversity in the forested area nearby
+* **Agr.diver**: Diversity of agricultural landscapes
+* **For.fragm**: Index of forest fragmentation
+
+All of the above variables are standardized to a 0-100 scale. Consider this when choosing priors.
+
+Your response variable will be **richness**, the bird species richness in the plot. Additionally, you have an indicator variable **hab_type**. This is not telling you what habitat type was sampled (plots included multiple habitats). Rather, this is telling you what type of bird species were counted for the richness measurement: so `hab_type == "forest" & richness == 7` indicates that 7 forest specialists were observed in that plot.
+
+Build one or more generalised linear models for bird richness. Your task should be to describe two things: (1) how does richness vary with climate, productivity, fragmentation, or habitat diversity, and (2) do these relationships vary depending on what habitat bird species specialize on. 
+
+
+## 1. Specify joint posterior
+
+<div class="left lt">
+* We should specify a **generative model**
+* Best to graph the model, ensure graph and stan code match
+* Strive for independence of the scale of the x-variables
+* Carefully choose priors
+    - With no prior information, prefer **regularising priors**
+    - Avoid priors that give probability mass to impossible values (e.g., normal(0,1) for a standard deviation)
+    - Avoid flat priors or very long tails
+
+```{r, echo=FALSE, fig.height=5, fig.width=7}
+gr = graph_from_literal(richness+-"λ", "λ"+-a, "λ"+-B, "λ"+-X, a+-"μa=0", a+-"σa=10", B+-"μB=0", B+-"σB=5")
+V(gr)$type = c("random", "deterministic", "random", "random", rep("deterministic", 5))
+V(gr)$source = c("known", "unknown", "unknown", "unknown", rep("known", 5))
+layout = matrix(c(-0.5,3,   0,2,   -0.5,1,   0.5,1,   0.5,3,   -0.7,0,   -0.3,0,   0.3,0,   0.7,0), byrow=TRUE, ncol=2)
+nt = ggnetwork(gr, layout=layout)
+grpl = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1)
+grpl
+
+```
+
+</div>
+
+<div class="right rt">
+
+```{stan output.var="garbage", eval = FALSE}
+transformed parameters {
+	lambda = exp(a + X * B);
+}
+model {
+	richness ~ poisson(lambda);
+	a ~ normal(0, 10);
+	B ~ normal(0, 5);
+}
+```
+
+
+</div>
+
+
+## 1. Specify joint posterior
+
+<div class="left lt">
+* We should specify a **generative model**
+* Best to graph the model, ensure graph and stan code match
+* Strive for independence of the scale of the x-variables
+* Carefully choose priors
+    - With no prior information, prefer **regularising priors**
+    - Avoid priors that give probability mass to impossible values (e.g., normal(0,1) for a standard deviation)
+    - Avoid flat priors or very long tails
+
+```{r, echo=FALSE, fig.height=5, fig.width=7}
+grpl
+
+```
+
+</div>
+
+<div class="right rt">
+
+```{stan output.var="bird_glm", cache=TRUE}
+data {
+	int <lower=0> n; // number of data points
+	int <lower=0> k; // number of x-variables
+	int <lower=0> richness [n];
+	matrix [n,k] X;
+}
+parameters {
+	real a;
+	vector [k] B;
+}
+transformed parameters {
+	vector <lower=0> [n] lambda;
+	lambda = exp(a + X * B);
+}
+model {
+	richness ~ poisson(lambda);
+	a ~ normal(0, 10);
+	B ~ normal(0, 5);
+}
+generated quantities {
+	int r_predict [n];
+	for(i in 1:n)
+		r_predict[i] = poisson_rng(lambda[i]);
+	r_predict = poisson_rng(lambda);
+}
+```
+
+```{r eval = FALSE}
+bird_glm = stan_model("stan/bird_glm.stan")
+```
+
+
+</div>
+
+
+## 2. Sample from joint posterior
+
+* Start with a small run (10s-100s of iterations) to catch errors, make sure nothing surprising happens
+* Increase to a few thousand to view convergence
+* Select starting values and run until convergence (1.000s for Stan, 10.000s—100.000s or more for Metropolis)
+
+
+## 2. Sample from the joint posterior
+
+<div class="left lt">
+
+```{r, message=FALSE, cache = TRUE}
+library(data.table)
+birds = fread("exercises/data/birddiv.csv")
+
+# stan can't handle NAs
+birds = birds[complete.cases(birds)]
+
+# original variables scaled from 0-100; rescale to go from 0 to 1
+X_scaled = as.matrix(birds[,c(2:7)])/100
+
+# I will try two models
+# First, simple model, only forest birds in relation to forest cover
+for_i = which(birds$hab_type == "forest")
+standat1 = list(
+	n = length(for_i), 
+	k = 1,
+	richness = birds$richness[for_i],
+	X = X_scaled[for_i, "NDVI", drop=FALSE])
+
+fit1 = sampling(bird_glm, data = standat1, iter=2000, 
+   chains = 4, refresh = 0)
+
+```
+
+</div>
+
+<div class="right rt">
+
+```{r, message=FALSE, cache = TRUE}
+# Second, looking at how two variables influence birds of different types
+
+# grab two variables
+X = X_scaled[, c("For.cover", "NDVI")]
+
+# add a categorical variable for bird type
+X = cbind(X, open=ifelse(birds$hab_type == "open",1, 0))
+X = cbind(X, generalist=ifelse(birds$hab_type == "generalist",1, 0))
+
+# add interaction terms with the categories
+X = cbind(X, op_forCov=X[,1]*X[,3], op_NDVI=X[,1]*X[,4], 
+   ge_forCov=X[,2]*X[,3], ge_NDVI=X[,2]*X[,4])
+
+head(X)
+
+standat2 = with(birds, list(
+	n = length(richness), 
+	k = ncol(X),
+	richness = richness,
+	X = X))
+fit2 = sampling(bird_glm, data = standat2, iter=2000, 
+   chains = 4, refresh = 0)
+```
+
+
+</div>
+
+
+
+## 3. Evaluate the model fit
+
+<div class="left lt">
+* Traceplots can tell you about model convergence and efficiency
+* Histograms can alert you to problems with multi-modality
+* Run multiple chains to help with diagnostics
+
+```{r message = FALSE, fig.width=7}
+## Use as.array if you want to keep different mcmc chains separate
+## This is ideal for diagnostics
+## For inference, you usually want to lump all chains
+## In this case, you use as.matrix
+samp1_pars = as.array(fit1, pars=c('a', 'B'))
+mcmc_combo(samp1_pars, c("hist", "trace"))
+
+```
+
+</div>
+
+<div class="right rt">
+
+* Printing the model also gives useful metrics
+* Can filter by parameters of interest
+* n_eff: Effective sample size (after removing autocorrelation)
+    - This gives you an indication of how much precision in the tails of the posterior you have
+* Rhat: convergence diagnostic, available with multiple chains
+    - ideally, Rhat = 1
+    - Worry about for "real" parameters (not hierarchical, not deterministic)
+    - Rhat > 1.1 for a real parameter is a problem
+    - Rhat < 1.05 is probably ok
+
+```{r, message=FALSE}
+print(fit1, pars = c('a', 'B'))
+```
+
+</div>
+
+
+
+## 4. Inference: parameter estimates
+
+<div class="left lt">
+```{r message = FALSE, fig.width=5}
+mcmc_intervals(samp1_pars)
+```
+</div>
+
+<div class="right rt">
+```{r message = FALSE, fig.width=7}
+samp2_pars = as.array(fit2, pars=c('a', 'B'))
+mcmc_intervals(samp2_pars)
+```
+</div>
+
+
+
+## 4. Inference: Retrodiction
+
+<div class="left lt">
+* How close is the model to the original data?
+* How well does our generative model describe the data
+
+```{r message = FALSE, fig.width=9, echo=FALSE}
+library(gridExtra)
+# this gives us posterior samples for:
+#    -lambda (the expected value of richness)
+#    -r_predict (posterior predictive simulations)
+# for each original data point
+samp1_pr = as.matrix(fit1, pars=c('lambda', 'r_predict'))
+
+# now we compute the median and 90% quantiles for lambda (the expected value)
+# and for r (the posterior predictive sim for richness) for each data point
+samp1_intervals = apply(samp1_pr, 2, quantile, c(0.5, 0.05, 0.9))
+
+
+## now we reshape these a bit to get them into a data frame for visualisation
+## want everything alongside the original data
+pldat1 = data.table(standat1$X)
+pldat1 = cbind(pldat1, data.table(
+	richness = standat1$richness,
+	lambda = samp1_intervals[1, grep("lambda", colnames(samp1_intervals))],
+	lambda_l = samp1_intervals[2, grep("lambda", colnames(samp1_intervals))],
+	lambda_u = samp1_intervals[3, grep("lambda", colnames(samp1_intervals))],
+	rpr = samp1_intervals[1, grep("r_predict", colnames(samp1_intervals))],
+	rpr_l = samp1_intervals[2, grep("r_predict", colnames(samp1_intervals))],
+	rpr_u = samp1_intervals[3, grep("r_predict", colnames(samp1_intervals))]))
+pldat1 = pldat1[order(NDVI)]
+
+pl_left = ggplot(pldat1) + geom_ribbon(aes(x=NDVI, ymin=rpr_l, ymax=rpr_u), fill=cols[2], alpha=0.3) + 
+	geom_ribbon(aes(x=NDVI, ymin=lambda_l, ymax=lambda_u), fill=cols[3], alpha=0.5) + 
+	geom_line(aes(x=NDVI, y=lambda), col=cols[3]) + 
+	geom_point(aes(x = NDVI, y = richness)) + 
+	theme_minimal() + ylab("Forest bird richness")
+
+pl_right = ggplot(pldat1) + xlab("Observed Richness") + 
+	geom_errorbar(aes(x=richness, ymin=rpr_l, ymax=rpr_u), linewidth=1.5, col=cols[2], width=0, alpha=0.3) + 
+	geom_errorbar(aes(x=richness, ymin=lambda_l, ymax=lambda_u), col=cols[3], width=0, alpha=0.6) + 
+	geom_point(aes(x=richness, y=lambda)) +
+	geom_abline(intercept=0, slope=1, lty=2) + theme_minimal() + xlim(0, 23) + ylim(0, 23)
+
+grid.arrange(pl_left, pl_right, ncol=2, nrow=1)
+```
+</div>
+
+<div class="right rt">
+
+```{r message = FALSE, fig.width=7}
+# compute posterior distribution of the residual sum of squares
+samp1_lam = as.matrix(fit1, pars='lambda')
+sq_resid1 = apply(samp1_lam, 1, function(x) (standat1$richness - x)^2)
+
+# compute posterior distribution of dispersion parameter, which is just 
+# sum(squared residuals)/(n - k)
+# here k is 2, we have an intercept and one slope
+# if phi > 1, we have overdispersion and need a better model
+phi = apply(sq_resid1, 2, function(x) sum(x)/(length(x) - 2))
+quantile(phi, c(0.5, 0.05, 0.95))
+
+```
+</div>
+
+
+
+
+
+## 4. Inference: Improve the model
+
+<div class="left lt">
+
+```{r message = FALSE, fig.width=9, echo=FALSE}
+library(gridExtra)
+# this gives us posterior samples for:
+#    -lambda (the expected value of richness)
+#    -r_predict (posterior predictive simulations)
+# for each original data point
+samp2_pr = as.matrix(fit2, pars=c('lambda', 'r_predict'))
+
+# now we compute the median and 90% quantiles for lambda (the expected value)
+# and for r (the posterior predictive sim for richness) for each data point
+samp2_intervals = apply(samp2_pr, 2, quantile, c(0.5, 0.05, 0.9))
+
+
+## now we reshape these a bit to get them into a data frame for visualisation
+## want everything alongside the original data
+pldat2 = data.table(standat2$X)
+pldat2 = cbind(pldat2, data.table(
+	richness = standat2$richness,
+	lambda = samp2_intervals[1, grep("lambda", colnames(samp2_intervals))],
+	lambda_l = samp2_intervals[2, grep("lambda", colnames(samp2_intervals))],
+	lambda_u = samp2_intervals[3, grep("lambda", colnames(samp2_intervals))],
+	rpr = samp2_intervals[1, grep("r_predict", colnames(samp2_intervals))],
+	rpr_l = samp2_intervals[2, grep("r_predict", colnames(samp2_intervals))],
+	rpr_u = samp2_intervals[3, grep("r_predict", colnames(samp2_intervals))]))
+
+## add an indicator as to what kind of bird we are talking about
+pldat2[, bird := ifelse(open == 1, "open", ifelse(generalist == 1, "generalist", "forest"))]
+
+
+ggplot(pldat2) + xlab("Observed Richness") + 
+	geom_errorbar(aes(x=richness, ymin=rpr_l, ymax=rpr_u), size=1.5, col=cols[4], width=0, alpha=0.3) + 
+	geom_errorbar(aes(x=richness, ymin=lambda_l, ymax=lambda_u), width=0, alpha=0.6) + 
+	geom_point(aes(x=richness, y=lambda, colour = bird)) +
+	facet_grid(.~bird) + 
+	geom_abline(intercept=0, slope=1, lty=2) + theme_minimal() + xlim(0, 23) + ylim(0, 23) + 
+	labs(colour="Type of bird") 
+
+```
+</div>
+
+<div class="right rt">
+
+```{r message = FALSE, fig.width=7}
+# compute posterior distribution of the residual sum of squares
+samp2_lam = as.matrix(fit2, pars='lambda')
+sq_resid2 = apply(samp2_lam, 1, function(x) (standat2$richness - x)^2)
+
+# compute posterior distribution of dispersion parameter, which is just 
+# sum(squared residuals)/(n - k)
+# here k is 2, we have an intercept and one slope
+# if phi > 1, we have overdispersion and need a better model
+phi = apply(sq_resid2, 2, function(x) sum(x)/(length(x) - 2))
+quantile(phi, c(0.5, 0.05, 0.95))
+
+```
+
+* This model is still quite overdispersed
+   - Consider more variables
+   - Consider other likelihoods (e.g., Negative Binomial)
+
+</div>
+
+
+
+
+
+## 4. Inference: Partial Response Curves
+
+* How does richness respond to the individual variables, holding other variables constant?
+
+```{r, message=FALSE, echo = FALSE, fig.width=10}
+## generate a dataset to predict a line for all combinations
+xx = seq(-1.8,1.8, length.out = 200)
+predict_dat = rbind(data.table(forcover = xx, ndvi = 0, open=0, gen = 0, op_fc = 0, op_nd = 0, ge_fc = 0, ge_ndvi = 0), 
+			data.table(forcover = xx, ndvi = 0, open=1, gen = 0, op_fc = xx, op_nd = 0, ge_fc = 0, ge_ndvi = 0),
+			data.table(forcover = xx, ndvi = 0, open=0, gen = 1, op_fc = 0, op_nd = 0, ge_fc = xx, ge_ndvi = 0),
+			data.table(forcover = 0, ndvi = xx, open=0, gen = 0, op_fc = 0, op_nd = 0, ge_fc = 0, ge_ndvi = 0),
+			data.table(forcover = 0, ndvi = xx, open=1, gen = 0, op_fc = 0, op_nd = 1, ge_fc = 0, ge_ndvi = 0),
+			data.table(forcover = 0, ndvi = xx, open=0, gen = 1, op_fc = 0, op_nd = 0, ge_fc = 0, ge_ndvi = 1))
+predict_dat = cbind(intercept=1, predict_dat)
+
+## this computes a posterior distribution for E(y) | predict_dat
+## in other words, for the x-values we have chosen for visualisation, what
+## is the distribution of the average of y at those x-values
+y = exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(predict_dat)))
+
+## Compute median and 90% quantile interals for E(y) and add to the data frame for ggplot
+predict_dat$y_med = apply(y, 2, median)
+predict_dat$y_upper = apply(y, 2, quantile, 0.95)
+predict_dat$y_lower = apply(y, 2, quantile, 0.05)
+
+## Create some nice labels for ggplot
+predict_dat$bird = with(predict_dat, ifelse(open == 1, "open", ifelse(gen == 1, "generalist", "forest")))
+predict_dat$panel = "Forest Cover | NDVI=0"
+predict_dat$panel[601:1200] = "NDVI | Forest Cover=0"
+
+## Create a combined x-variable for ggplot; this works because forcover
+## and ndvi are transformed to mean = 0, and the predictions are conditional; 
+## if one variable is nonzero, the other must be zero
+predict_dat$x = predict_dat$forcover + predict_dat$ndvi
+
+ggplot(predict_dat, aes(x=x, y=y_med, col=bird)) + 
+	geom_ribbon(aes(x=x, ymin=y_lower, ymax=y_upper, fill=bird), alpha=0.5) + 
+	geom_line() + facet_grid(.~panel) + 
+	theme_minimal() + ylab("Species Richness") + xlab(expression(sigma)) + 
+	labs(fill="Type of bird", colour="Type of bird") + 
+	xlim(-1.8, 1.8)
+
+```
+
+
+## 4. Inference: Response Surfaces
+```{r, message=FALSE, echo = FALSE, fig.width=15}
+xy = data.table(expand.grid(forcover=seq(0,1, length.out = 50), ndvi=seq(0,1, length.out = 50)))
+pr_for = cbind(intercept=1, xy, open=0, gen = 0, op_fc = 0, op_nd = 0, ge_fc = 0, ge_ndvi = 0)
+pr_for$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_for))), 2, median)
+
+pr_open = cbind(intercept=1, xy, open=1, gen = 0, op_fc = xy$forcover, op_nd = xy$ndvi, ge_fc = 0, ge_ndvi = 0)
+pr_open$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_open))), 2, median)
+
+pr_gen = cbind(intercept=1, xy, open=0, gen = 1, op_fc = 0, op_nd = 0, ge_fc = xy$forcover, ge_ndvi = xy$ndvi)
+pr_gen$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_gen))), 2, median)
+
+pts = data.table(standat2$X)
+pts$richness = standat2$richness
+pts[, type := ifelse(open==1, "open", ifelse(generalist==0, "generalist", "forest"))]
+
+
+forpl = ggplot(pr_for, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
+	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	xlab("Forest Cover") + ylab("NDVI") + labs(fill="Predicted richness") + ggtitle("Forest Birds") + 
+	geom_point(data=pts[type == "forest"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 7))
+openpl = ggplot(pr_open, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
+	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Open Birds") + 
+	geom_point(data=pts[type == "open"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
+genpl = ggplot(pr_gen, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + 
+	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Generalist Birds") + 
+	geom_point(data=pts[type == "generalist"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
+	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
+
+grid.arrange(forpl, openpl, genpl, nrow=1, ncol=3, widths=c(1,1,1.3))
+```
+
+
 
