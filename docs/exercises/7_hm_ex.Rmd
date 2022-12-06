@@ -1,0 +1,34 @@
+---
+title: "Hierarchical Modelling & Model Selection Exercises"
+date: "07.12.2022"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For this exercise, you will use the `exercises/data/treedata.csv` dataset. This is the same dataset that was used for the MLE Exercises, expanded to include multiple species and years. Load it using data.table:
+
+```{r, eval = FALSE}
+library(data.table)
+treedat = fread("https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/docs/exercises/data/treedata.csv")
+```
+
+
+1. We began exploring this dataset in the lecture. One thing that was apparent was that mortality was not predicted well. For the first step, implement the model in the lecture, with partial pooling for both intercepts and slopes using data for *Tsuga canadensis*. Follow the 4-step workflow from lecture. Use the **generated quantities** block in Stan to generate a posterior predictive distribution for trees in 1989 and 2012.
+
+2. Expand your model to include other species. Develop a small number of competing models testing different hypotheses. Possible structures to explore:
+    - Inclusion/exclusion of precipitation
+    - Unpooled, fully pooled, or partially pooled (hierarchical) parameters grouped by species
+    - Species nested within years, or not
+    - Inclusion of prior information (reminder: prior_mu is the previously observed average mortality by species by year)
+    
+As before, use the 4-step workflow. **Be sure to scale temperature and precipitation**---these variables are on very different scales. Forgetting this will make comparison in the strengths of the effects impossible to compare, and will make sampling and setting priors very difficult. It will be useful when visualising results to plot variables on the original scale.
+
+3. You should have multiple competing models from number 2. Perform multi-model inference on this model set. Use whatever tools seem most appropriate to the problem. Is there a clear "best" model? Do you notice tradeoffs (e.g. predictive performance vs stability/variance of parameter estimates)?
+
+
+Data source:
+
+Talluto et al. (2017), Extinction debt and colonization credit delay range shifts of eastern North American trees. *Nature Ecology and Evolution*, https://doi.org/10.1038/s41559-017-0182
+
