@@ -1,5 +1,5 @@
 # Advanced (Bayesian) Statistics
-**Instructor**: Matthew Talluto
+**Instructor**: M. Talluto
 
 **Office**: Technikerstraße 25, Room 506
 
