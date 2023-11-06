@@ -1,7 +1,7 @@
 ---
 title: "Introduction, Probability, & Distributions"
 author: "Matt Talluto"
-date: "21.11.2022"
+date: "21.11.2023"
 output:
   slidy_presentation:
     theme: cerulean
@@ -65,28 +65,8 @@ library(xtable)
 
 ## Course Introduction
 
-<div class='left' style='float:left;width:48%'>
 
-### This course will give you:
-
-* A deeper understanding of how inferential statistics works
-* An appreciation of the similarities between Bayesian and frequentist methods
-* The ability to think critically about model design
-
-![](img/blacksmith.jpg){width=80%}
-
-
-</div>
-
-<div class='right' style='float:right;width:48%'>
-
-### And not so much:
-
-* A giant toolbox of ready-made models, with variations for every potential problem
-
-![](img/tools.jpg){width=80%}
-
-</div>
+![](img/lec1_stat_flowchart.png){width=50%}
 
 
 ## Why Bayes?
@@ -136,8 +116,9 @@ rect(0, 1, 1, 0, col = c1)
 plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab='', ylab='')
 rect(0, 1, 1, 0, col = c1)
 c2 = "#8da0cb77"
+c2_t = "#283657"
 rect(0.1, 0.5, 0.5, 0.9, col = c2)
-text(0.1, 0.8, "pr(A)", pos=4)
+text(0.1, 0.8, "pr(A)", pos=4, col = c2_t)
 text(0.55, 0.55, "1 - pr(A)", pos=4)
 ```
 </div>
@@ -167,7 +148,12 @@ plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab=''
 rect(0, 1, 1, 0, col = c1)
 rect(0.1, 0.5, 0.5, 0.9, col = c2)
 c3 = "#fc8d6277"
+c3_t = "#631e03"
 rect(0.6, 0.1, 0.9, 0.6, col = c3)
+text(0.1, 0.8, "pr(A)", pos=4, col = c2_t)
+text(0.6, 0.5, "pr(B)", pos=4, col = c3_t)
+text(0.1, 0.2, "1 - pr(A) - pr(B)", pos=4)
+
 ```
 </div>
 
@@ -196,6 +182,12 @@ plot(0,0, axes = FALSE, bty='n', xlim = c(0,1), ylim = c(0,1), type='n', xlab=''
 rect(0, 1, 1, 0, col = c1)
 rect(0.1, 0.5, 0.5, 0.9, col = c2)
 rect(0.4, 0.3, 0.7, 0.8, col = c3)
+c23_t = "#462A2D"
+text(0.1, 0.8, "pr(A)", pos=4, col = c2_t)
+text(0.55, 0.35, "pr(B)", pos=4, col = c3_t)
+text(0.38, 0.65, "pr(A,B)", pos=4, col = c23_t, cex = 0.7)
+text(0.1, 0.1, "1 - pr(A) - pr(B) + pr(A,B)", pos=4)
+
 ```
 </div>
 
@@ -1123,7 +1115,7 @@ pt(pl)
 
 <div class="left lt">
 * Generally, what is the probability of $k$ zombies when we sample $n$ people?
-  - The the probability that we will get any one result (i.e., order matters):
+  - The probability that we will get any one result (i.e., order matters):
 
 $$pr(Z_{a}, Z'_{a'}) = p^k(1 - p)^{(n - k)}$$
 
@@ -1219,7 +1211,9 @@ ggplot(data = data.frame(k = k, y = y), aes(x=k, y = y)) + geom_bar(stat='identi
 * Probability of observing $x$ events in a fixed time/space given a rate of $\lambda$
 * Limit of binomial as $n \rightarrow \infty$ and $p \rightarrow 0$
 * mean = variance = $\lambda$
-* Commonly used for "simple" counts
+* Commonly used for "simple" counts where $n$ is unknown
+
+*I invent a zombie detector, it counts up every time a zombie walks past. I put them out in busy parks. How many zombies do I get?*
 
 ```{r}
 lam = 5
@@ -1255,7 +1249,9 @@ pc
 * Probability of observing $x$ events in a fixed time/space given a rate of $\lambda$
 * Limit of binomial as $n \rightarrow \infty$ and $p \rightarrow 0$
 * mean = variance = $\lambda$
-* Commonly used for "simple" counts
+* Commonly used for "simple" counts where $n$ is unknown
+
+*I invent a zombie detector, it counts up every time a zombie walks past. I put them out in busy parks. How many zombies do I get?*
 
 ```{r}
 lam = c(0.5, 2, 5, 20)
@@ -1326,6 +1322,9 @@ pc
 * Complement to Poisson, models the time between events of a Poisson process with rate $\lambda$
 * $\mu = \frac{1}{\lambda}$
 * Continuous, defined on $(0, \infty)$
+
+*For a zombie detector in a park, how much time will pass between each zombie passing by the detector?*
+
 
 ```{r}
 lam = c(0.5, 2, 5, 20)
