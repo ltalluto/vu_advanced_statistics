@@ -6,7 +6,7 @@ Please see the [course web site](https://mtalluto.github.io/vu_advanced_statisti
 ## Software required
 To participate in the course, you will need to bring a laptop with the following software packages. Install them in the order listed below!
 
-* [R (version 4.1 or later)](https://cran.r-project.org)
+* [R (version 4.2 or later)](https://cran.r-project.org)
 * Developer tools for R (see below)
 * [Rstudio](https://posit.co/downloads/) (recommended)
 * [Stan](https://mc-stan.org) (installed via the `rstan` package, see below)
