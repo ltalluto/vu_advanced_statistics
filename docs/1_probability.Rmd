@@ -27,6 +27,19 @@ library(xtable)
 
 ## Course Introduction
 
+* Introduce ourselves - name, research area, what you want from this course
+* The [course web page](https://mtalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
+
+### Format
+
+> - Mixture of lecture and cooperative coding
+> - Early in course: practise with example models
+> - Later in course: example models + **group projects**
+> - Last day: status report presentations
+> - **Important**: Semi-blocked course over 3 weeks. Significant time required outside lecture periods.
+
+## Course Introduction
+
 <div class='left' style='float:left;width:48%'>
 
 ### This course will give you:
