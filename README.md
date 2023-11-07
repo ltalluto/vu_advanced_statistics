@@ -1,5 +1,5 @@
 # Advanced Statistics
-UIBK, Winter 2022
+UIBK, Winter 2023
 
 Please see the [course web site](https://mtalluto.github.io/vu_advanced_statistics) for more information on the course.
 
