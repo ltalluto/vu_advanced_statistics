@@ -1,0 +1,1974 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Matt Talluto" />
+  <title>Introduction, Probability, &amp; Distributions</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.scss" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Introduction, Probability, &amp; Distributions</h1>
+  <p class="author">
+Matt Talluto
+  </p>
+  <p class="date">21.11.2023</p>
+</div>
+<div id="course-introduction" class="slide section level2">
+<h1>Course Introduction</h1>
+<ul class="incremental">
+<li>Introduce ourselves - name, research area, what you want from this
+course</li>
+<li>The <a
+href="https://mtalluto.github.io/vu_advanced_statistics/">course web
+page</a> has links to all code and presentations</li>
+</ul>
+</div>
+<div id="course-introduction-1" class="slide section level2">
+<h1>Course Introduction</h1>
+<ul>
+<li>Introduce ourselves - name, research area, what you want from this
+course</li>
+<li>The <a
+href="https://mtalluto.github.io/vu_advanced_statistics/">course web
+page</a> has links to all code and presentations</li>
+</ul>
+<h3 id="format">Format</h3>
+<ul class="incremental">
+<li>Mixture of lecture and cooperative coding</li>
+<li>Early in course: practise with example models</li>
+<li>Later in course: example models + <strong>group
+projects</strong></li>
+<li>Last day: status report presentations</li>
+<li><strong>Important</strong>: Semi-blocked course over 3 weeks.
+Significant time required outside lecture periods.</li>
+</ul>
+</div>
+<div id="course-introduction-2" class="slide section level2">
+<h1>Course Introduction</h1>
+<div id="this-course-will-give-you" class="left"
+style="float:left;width:48%">
+<h3>This course will give you:</h3>
+<ul class="incremental">
+<li>A deeper understanding of how inferential statistics works</li>
+<li>An appreciation of the similarities between Bayesian and frequentist
+methods</li>
+<li>The ability to think critically about model design</li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+
+</div>
+</div>
+<div id="course-introduction-3" class="slide section level2">
+<h1>Course Introduction</h1>
+<div id="this-course-will-give-you-1" class="left"
+style="float:left;width:48%">
+<h3>This course will give you:</h3>
+<ul>
+<li>A deeper understanding of how inferential statistics works</li>
+<li>An appreciation of the similarities between Bayesian and frequentist
+methods</li>
+<li>The ability to think critically about model design</li>
+</ul>
+</div>
+<div id="and-not-so-much" class="right" style="float:right;width:48%">
+<h3>And not so much:</h3>
+<ul>
+<li>A giant toolbox of ready-made models, with variations for every
+potential problem</li>
+</ul>
+</div>
+</div>
+<div id="course-introduction-4" class="slide section level2">
+<h1>Course Introduction</h1>
+<p><img src="../assets/img/lec1_stat_flowchart.png"
+style="width:50.0%" /></p>
+</div>
+<div id="why-bayes" class="slide section level2">
+<h1>Why Bayes?</h1>
+<p>Why statistics at all? What is the goal of statistical analysis?</p>
+<ul class="incremental">
+<li>I want to describe some phenomenon (“model”)</li>
+<li>I have some general (“prior”) knowledge about the question</li>
+<li>I gather additional information (“data”)</li>
+</ul>
+</div>
+<div id="why-bayes-1" class="slide section level2">
+<h1>Why Bayes?</h1>
+<p>Why statistics at all? What is the goal of statistical analysis?</p>
+<ul>
+<li>I want to describe some phenomenon (“model”)</li>
+<li>I have some general (“prior”) knowledge about the question</li>
+<li>I gather additional information (“data”)</li>
+</ul>
+<p><br/> <br/> What is the probability that my model is correct given
+what I already know about it and what I’ve learned?</p>
+</div>
+<div id="probabilistic-partitions" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<p>Imagine a box with a total area of 1, representing all possible
+events</p>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-1-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probabilistic-partitions-1" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>An event A has some probability of occurring: <em>pr(A)</em>
+(<strong>marginal probability</strong>)</li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-2-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probabilistic-partitions-2" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>An event A has some probability of occurring: <em>pr(A)</em>
+(<strong>marginal probability</strong>)</li>
+<li>A second event, B, has multiple possible relationships to A.
+<ul>
+<li>If A and B never occur together, the events are
+<strong>disjoint</strong></li>
+</ul></li>
+</ul>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+!B
+</th>
+<th>
+B
+</th>
+</tr>
+<tr>
+<td align="right">
+!A
+</td>
+<td>
+1 - pr(A) - pr(B)
+</td>
+<td>
+pr(B)
+</td>
+</tr>
+<tr>
+<td align="right">
+A
+</td>
+<td>
+pr(A)
+</td>
+<td>
+0
+</td>
+</tr>
+</table>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-4-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probabilistic-partitions-3" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>An event A has some probability of occurring: <em>pr(A)</em></li>
+<li>A second event, B, has multiple possible relationships to A:
+<ul>
+<li>If A and B never occur together, the events are
+<strong>disjoint</strong></li>
+<li>If the two overlap, we can say that they
+<strong>intersect</strong></li>
+</ul></li>
+</ul>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+!B
+</th>
+<th>
+B
+</th>
+</tr>
+<tr>
+<td align="right">
+!A
+</td>
+<td>
+1 - pr(A) - pr(B) + pr(A,B)
+</td>
+<td>
+pr(B) - pr(A,B)
+</td>
+</tr>
+<tr>
+<td align="right">
+A
+</td>
+<td>
+pr(A) - pr(A,B)
+</td>
+<td>
+pr(A,B)
+</td>
+</tr>
+</table>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-6-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probabilistic-partitions-4" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>An event A has some probability of occurring: <em>pr(A)</em></li>
+<li>A second event, B, has multiple possible relationships to A:
+<ul>
+<li>If A and B never occur together, the events are
+<strong>disjoint</strong></li>
+<li>If the two overlap, we can say that they
+<strong>intersect</strong></li>
+</ul></li>
+<li>pr(A,B) = the probability of both (<strong>joint
+probability</strong>)
+<ul>
+<li>Also written <span class="math inline">\(A \cap B\)</span> (the
+intersection of A and B)</li>
+</ul></li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-7-1.png" width="528" /></p>
+</div>
+</div>
+<div id="probabilistic-partitions-5" class="slide section level2">
+<h1>Probabilistic partitions</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>An event A has some probability of occurring: <em>pr(A)</em></li>
+<li>A second event, B, has multiple possible relationships to A:
+<ul>
+<li>If A and B never occur together, the events are
+<strong>disjoint</strong></li>
+<li>If the two overlap, we can say that they
+<strong>intersect</strong></li>
+</ul></li>
+<li>pr(A,B) = the probability of both (<strong>joint
+probability</strong>)
+<ul>
+<li>Also written <span class="math inline">\(A \cap B\)</span> (the
+intersection of A and B)</li>
+</ul></li>
+<li>pr(A) + pr(B) - pr(A,B) is the <em>union</em> (<span
+class="math inline">\(A \cup B\)</span>)
+<ul>
+<li>the chance of <em>at least one event</em></li>
+<li>for <strong>disjoint</strong> events, pr(A,B) = 0, so <span
+class="math inline">\(A \cup B = pr(A) + pr(B)\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-8-1.png" width="528" /></p>
+</div>
+</div>
+<div id="independence" class="slide section level2">
+<h1>Independence</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li>A and B are independent if pr(A) is not influenced by whether B has
+occurred, and vice-versa</li>
+<li><span class="math inline">\(pr(A,B) = pr(A)pr(B)\)</span>
+(<strong>joint probability</strong>)</li>
+<li><span class="math inline">\(pr(A|B) = pr(A)\)</span></li>
+<li><span class="math inline">\(pr(B|A) = pr(B)\)</span></li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-9-1.png" width="528" /></p>
+</div>
+</div>
+<div id="conditional-probability" class="slide section level2">
+<h1>Conditional probability</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li><span class="math inline">\(pr(A|B)\)</span> is the probability that
+<span class="math inline">\(A\)</span> occurs, given that we already
+know <span class="math inline">\(B\)</span> has occurred</li>
+<li>We notate the opposite (pr that <span
+class="math inline">\(A\)</span> occurs given that <span
+class="math inline">\(B\)</span> has not): <span
+class="math inline">\(pr(A|&#39;B)\)</span></li>
+<li>We can define conditional probabilities in terms of
+<strong>joint</strong> and <strong>marginal</strong> probabilities</li>
+</ul>
+<p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-10-1.png" width="528" /></p>
+</div>
+</div>
+<div id="conditional-probability-1" class="slide section level2">
+<h1>Conditional probability</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li><span class="math inline">\(pr(A|B)\)</span> is the probability that
+<span class="math inline">\(A\)</span> occurs, given that we already
+know <span class="math inline">\(B\)</span> has occurred</li>
+<li>We notate the opposite (pr that <span
+class="math inline">\(A\)</span> occurs given that <span
+class="math inline">\(B\)</span> has not): <span
+class="math inline">\(pr(A|&#39;B)\)</span></li>
+<li>We can define conditional probabilities in terms of
+<strong>joint</strong> and <strong>marginal</strong> probabilities</li>
+</ul>
+<p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-11-1.png" width="528" /></p>
+</div>
+</div>
+<div id="conditional-probability-2" class="slide section level2">
+<h1>Conditional probability</h1>
+<div class="left" style="float:left;width:48%">
+<ul>
+<li><span class="math inline">\(pr(A|B)\)</span> is the probability that
+<span class="math inline">\(A\)</span> occurs, given that we already
+know <span class="math inline">\(B\)</span> has occurred</li>
+<li>We notate the opposite (pr that <span
+class="math inline">\(A\)</span> occurs given that <span
+class="math inline">\(B\)</span> has not): <span
+class="math inline">\(pr(A|&#39;B)\)</span></li>
+<li>We can define conditional probabilities in terms of
+<strong>joint</strong> and <strong>marginal</strong> probabilities</li>
+</ul>
+<p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-12-1.png" width="528" /></p>
+</div>
+</div>
+<div id="so-now-that-we-have-learned-how-to-manupulate-probabilities."
+class="slide section level2">
+<h1>So now that we have learned how to manupulate probabilities….</h1>
+<p>Can anyone <em>define</em> probability?</p>
+<!-- (chances are good we get to probability as frequencies here) -->
+<!-- ## The problem with frequencies -->
+<!-- and show where frequency definition breaks -->
+<!-- you took the test, the result is positive. we want to know: -->
+<!-- pr(zombie|test) -->
+<!-- We already know pr(test|zombie) -->
+<!-- So what's our null hypothesis -->
+<!-- *I am not a zombie* -->
+<!-- the probability of getting this test result under the null hypothesis is 0.01. p < 0.05, therefore we reject the null hypothesis -->
+<!-- **show xkcd comic - sun explosion machine** -->
+<!-- This result is (should be) unsatisfying. We know from probability rules that pr(z|t) ≠ pr(t|z) -->
+<!-- This method only works when frequencies have meaning! Here they don't! There is only one you to perform inference on. Repeating the test can get us pr(t1,t2|z), but still doesn't give us pr(z|t1,t2). Thinking of *z* in terms of frequency is meaningless: *you either are or are not a zombie*. The hypothesis is either true or not. But it still can have a probability. How? -->
+<!-- Do the example, then come back to probability as *belief* -->
+<!-- Finally show that this same faulty resoning underlies almost literally all of our science, and is the source of the replication crisis. We only evaluate the probability of data|hypothesis, without ever stopping to ask if the hypothesis is bullshit -->
+</div>
+<div id="manipulating-conditional-probabilities"
+class="slide section level2">
+<h1>Manipulating conditional probabilities</h1>
+<div class="left" style="float:left;width:48%">
+<p><strong>Are you a (latent) zombie?</strong></p>
+<p><strong>The problem</strong>:<br /> 0.1% of the population is
+infected with a parasite that will turn them into zombies. We have a
+test, but it is imperfect, with a <em>false negative rate</em> = 0.5%
+and a <em>false positive rate</em> = 1%.</p>
+<p>You take the test, and the result is positive. What is the
+probability that you are actually going to become a zombie?</p>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
+</div>
+</div>
+<div id="manipulating-conditional-probabilities-1"
+class="slide section level2">
+<h1>Manipulating conditional probabilities</h1>
+<div class="left" style="float:left;width:48%">
+<p><strong>Are you a (latent) zombie?</strong></p>
+<p><strong>The problem</strong>:<br /> 0.1% of the population is
+infected with a parasite that will turn them into zombies. We have a
+test, but it is imperfect, with a <em>false negative rate</em> = 0.5%
+and a <em>false positive rate</em> = 1%.</p>
+<p>You take the test, and the result is positive. What is the
+probability that you are actually going to become a zombie?</p>
+<p><strong>Hints</strong></p>
+<ul>
+<li>Define the partitions:
+<ul>
+<li>Zombie (<span class="math inline">\(Z\)</span>) or not a zombie
+(<span class="math inline">\(&#39;Z = 1 - Z\)</span>)</li>
+<li>Positive test (<span class="math inline">\(T\)</span>) or negative
+test (<span class="math inline">\(&#39;T = 1 - T\)</span>)</li>
+</ul></li>
+<li>Assign known numbers to statements of <strong>joint</strong>,
+<strong>marginal</strong>, or <strong>conditional</strong>
+probabilities</li>
+<li>Compute unknowns using the conditional probability rule: <span
+class="math inline">\(pr(A,B) = pr(A|B)pr(B)\)</span></li>
+<li>Assign concrete numbers: imagine testing 1,000,000 people. How many
+are zombies? How many test positive? How many test positive and are
+zombies?</li>
+</ul>
+</div>
+<div class="right" style="float:right;width:48%">
+<p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-13-1.png" width="528" /></p>
+</div>
+</div>
+<div id="detecting-zombies" class="slide section level2">
+<h1>Detecting Zombies</h1>
+<div class="col_l">
+<p><em>Intuitively</em>: the test is good, so the probability that a
+positive testing individual is a zombie should be high <br/> (many
+people answer 99%, given the false positive rate of 1%).</p>
+<p><em>Unintuitively</em>: zombies are very rare, so when testing many
+people randomly, many tests will be false positives.</p>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
+</div>
+</div>
+<div id="detecting-zombies-contingency-table"
+class="slide section level2">
+<h1>Detecting Zombies — Contingency Table</h1>
+<div class="col_l">
+<ul>
+<li>Consider a population of a million people, in a contingency
+table.</li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Test+
+</th>
+<th>
+Test-
+</th>
+<th>
+Sum
+</th>
+</tr>
+<tr>
+<td>
+Zombie
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+</tr>
+<tr>
+<td>
+Not Zombie
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+1,000,000
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="detecting-zombies-contingency-table-1"
+class="slide section level2">
+<h1>Detecting Zombies — Contingency Table</h1>
+<div class="col_l">
+<ul>
+<li>Consider a population of a million people, in a contingency
+table.</li>
+<li><strong>0.1% of the population is infected with a parasite that will
+turn them into zombies</strong> (1000 zombies)</li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Test+
+</th>
+<th>
+Test-
+</th>
+<th>
+Sum
+</th>
+</tr>
+<tr>
+<td>
+Zombie
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+1,000
+</td>
+</tr>
+<tr>
+<td>
+Not Zombie
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+999,000
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+1,000,000
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="detecting-zombies-contingency-table-2"
+class="slide section level2">
+<h1>Detecting Zombies — Contingency Table</h1>
+<div class="col_l">
+<ul>
+<li>Consider a population of a million people, in a contingency
+table.</li>
+<li><strong>0.1% of the population is infected with a parasite that will
+turn them into zombies</strong> (1000 zombies)</li>
+<li><strong>false negative rate = 0.5%</strong>
+<ul>
+<li>0.5% of zombies will falsely test negative: 5 negative zombies, 995
+positive ones</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Test+
+</th>
+<th>
+Test-
+</th>
+<th>
+Sum
+</th>
+</tr>
+<tr>
+<td>
+Zombie
+</td>
+<td align="center">
+995
+</td>
+<td align="center">
+5
+</td>
+<td align="center">
+1,000
+</td>
+</tr>
+<tr>
+<td>
+Not Zombie
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+999,000
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+–
+</td>
+<td align="center">
+1,000,000
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="detecting-zombies-contingency-table-3"
+class="slide section level2">
+<h1>Detecting Zombies — Contingency Table</h1>
+<div class="col_l">
+<ul>
+<li>Consider a population of a million people, in a contingency
+table.</li>
+<li><strong>0.1% of the population is infected with a parasite that will
+turn them into zombies</strong> (1000 zombies)</li>
+<li><strong>false negative rate = 0.5%</strong>
+<ul>
+<li>0.5% of zombies will falsely test negative: 5 negative zombies, 995
+positive ones</li>
+</ul></li>
+<li><strong>false positive rate = 1%</strong>
+<ul>
+<li>1% of non-zombies will falsely test positive: 9990 positive normals,
+989010 negative normals</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Test+
+</th>
+<th>
+Test-
+</th>
+<th>
+Sum
+</th>
+</tr>
+<tr>
+<td>
+Zombie
+</td>
+<td align="center">
+995
+</td>
+<td align="center">
+5
+</td>
+<td align="center">
+1,000
+</td>
+</tr>
+<tr>
+<td>
+Not Zombie
+</td>
+<td align="center">
+9,990
+</td>
+<td align="center">
+989,010
+</td>
+<td align="center">
+999,000
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td align="center">
+10,985
+</td>
+<td align="center">
+989,015
+</td>
+<td align="center">
+1,000,000
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="detecting-zombies-contingency-table-4"
+class="slide section level2">
+<h1>Detecting Zombies — Contingency Table</h1>
+<div class="col_l">
+<ul>
+<li>Consider a population of a million people, in a contingency
+table.</li>
+<li><strong>0.1% of the population is infected with a parasite that will
+turn them into zombies</strong> (1000 zombies)</li>
+<li><strong>false negative rate = 0.5%</strong>
+<ul>
+<li>0.5% of zombies will falsely test negative: 5 negative zombies, 995
+positive ones</li>
+</ul></li>
+<li><strong>false positive rate = 1%</strong>
+<ul>
+<li>1% of non-zombies will falsely test positive: 9990 positive normals,
+989010 negative normals</li>
+</ul></li>
+</ul>
+<p>The positive test is a given. <em>This shrinks our world of
+possibilities</em> * <span
+class="math inline">\(\frac{995}{10985}\)</span> are zombies, or
+9.06%</p>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Test+
+</th>
+<th>
+Test-
+</th>
+<th>
+Sum
+</th>
+</tr>
+<tr>
+<td>
+Zombie
+</td>
+<td align="center">
+995
+</td>
+<td align="center">
+</td>
+<td align="center">
+</td>
+</tr>
+<tr>
+<td>
+Not Zombie
+</td>
+<td align="center">
+9,990
+</td>
+<td align="center">
+</td>
+<td align="center">
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td align="center">
+10,985
+</td>
+<td align="center">
+</td>
+<td align="center">
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="detecting-zombies-conditional-probabilities"
+class="slide section level2">
+<h1>Detecting Zombies — Conditional Probabilities</h1>
+<div class="col_l">
+<ul>
+<li>First translate numbers to probabilities</li>
+</ul>
+<blockquote>
+<p>0.1% of the population is infected with a parasite that will turn
+them into zombies.</p>
+</blockquote>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+<li>This is the <strong>prevalence</strong> of zombies or the
+<strong>prior probability</strong> that a randomly selected person is a
+zombie</li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+</div>
+</div>
+<div id="detecting-zombies-conditional-probabilities-1"
+class="slide section level2">
+<h1>Detecting Zombies — Conditional Probabilities</h1>
+<div class="col_l">
+<ul>
+<li>First translate numbers to probabilities</li>
+</ul>
+<blockquote>
+<p><em>false negative rate</em> = 0.5% <br/> <em>false positive
+rate</em> = 1%</p>
+</blockquote>
+<ul>
+<li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
+<li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
+</ul>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<h3 id="given">Given</h3>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+</ul>
+</div>
+</div>
+<div id="detecting-zombies-conditional-probabilities-2"
+class="slide section level2">
+<h1>Detecting Zombies — Conditional Probabilities</h1>
+<div class="col_l">
+<ul>
+<li>Use probability rules to find other easy unknowns</li>
+<li>True positive rate:</li>
+</ul>
+<p><span class="math inline">\(pr(T | Z) = 1 - pr(T&#39; | Z) = 1 -
+0.005 = 0.995\)</span></p>
+<ul>
+<li>True negative rate:</li>
+</ul>
+<p><span class="math inline">\(pr(T&#39; | Z&#39;) = 1 - pr(T | Z&#39;)
+= 1 - 0.01 = 0.99\)</span></p>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<h3 id="given-1">Given</h3>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
+<li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
+</ul>
+</div>
+</div>
+<div id="detecting-zombies-conditional-probabilities-3"
+class="slide section level2">
+<h1>Detecting Zombies — Conditional Probabilities</h1>
+<div class="col_l">
+<ul>
+<li>Use the product rule to compute the <strong>joint
+probability</strong></li>
+</ul>
+<p><span class="math inline">\(pr(Z,T) = pr(T|Z)pr(Z) = 0.995 \times
+0.001 = 0.000995\)</span></p>
+<ul>
+<li>The product rule is reversible:</li>
+<li><span class="math inline">\(pr(Z,T) = pr(T|Z)pr(Z) =
+pr(Z|T)pr(T)\)</span></li>
+<li>Simple algebra can solve for the quantity we desire</li>
+</ul>
+<p><span class="math display">\[pr(Z|T) =
+\frac{pr(T|Z)pr(Z)}{pr(T)}\]</span></p>
+<blockquote>
+<p>(Bayes’ Theorem)</p>
+</blockquote>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<h3 id="given-2">Given</h3>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
+<li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
+</ul>
+<h3 id="known">Known</h3>
+<ul>
+<li><span class="math inline">\(pr(T | Z) = 0.995\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z&#39;) = 0.99\)</span></li>
+</ul>
+</div>
+</div>
+<div id="detecting-zombies-bayes-theorem" class="slide section level2">
+<h1>Detecting Zombies — Bayes’ Theorem</h1>
+<div class="col_l">
+<p><span class="math display">\[pr(Z|T) =
+\frac{pr(T|Z)pr(Z)}{pr(T)}\]</span></p>
+<ul>
+<li>We are missing a single value: <span
+class="math inline">\(pr(T)\)</span></li>
+<li>There are two ways to get a positive test:</li>
+<li>positive, and a zombie: <span
+class="math inline">\(pr(Z,T)\)</span></li>
+<li>positive, and not a zombie: <span
+class="math inline">\(pr(Z&#39;,T)\)</span></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+pr(T) &amp; = pr(T,Z) + pr(T,Z&#39;) \\
+      &amp; = pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;) \\
+      &amp; = 0.995 \times 0.001 + 0.01 \times 0.999 \\
+      &amp; = 0.000995 + 0.000999 \\
+      &amp; = 0.010985
+\end{aligned}
+\]</span></p>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<h3 id="given-3">Given</h3>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
+<li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
+</ul>
+<h3 id="known-1">Known</h3>
+<ul>
+<li><span class="math inline">\(pr(T | Z) = 0.995\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z&#39;) = 0.99\)</span></li>
+<li><span class="math inline">\(pr(Z,T) = 0.000995\)</span></li>
+</ul>
+</div>
+</div>
+<div id="detecting-zombies-bayes-theorem-1"
+class="slide section level2">
+<h1>Detecting Zombies — Bayes’ Theorem</h1>
+<div class="col_l">
+<p><span class="math display">\[
+\begin{aligned}
+pr(Z|T) &amp; = \frac{pr(T|Z)pr(Z)}{pr(T)} \\
+        &amp; = \frac{0.995 \times 0.001}{0.010985} \\
+        &amp; = 0.0906
+\end{aligned}
+\]</span></p>
+</div>
+<div class="col_r">
+<p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
+T)\)</span><br/> (if I test positive, what is the probability I am a
+zombie?)</p>
+<h3 id="given-4">Given</h3>
+<ul>
+<li><span class="math inline">\(pr(Z) = 0.001\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
+<li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
+</ul>
+<h3 id="known-2">Known</h3>
+<ul>
+<li><span class="math inline">\(pr(T | Z) = 0.995\)</span></li>
+<li><span class="math inline">\(pr(T&#39; | Z&#39;) = 0.99\)</span></li>
+<li><span class="math inline">\(pr(Z,T) = 0.000995\)</span></li>
+<li><span class="math inline">\(pr(T) = 0.010985\)</span></li>
+</ul>
+</div>
+</div>
+<div id="signal-detection-problems" class="slide section level2">
+<h1>Signal detection problems</h1>
+<p>The zombie example is cute, but it is a real biological problem.
+“True” state is often hidden, we have an imperfect signal.</p>
+</div>
+<div id="signal-detection-problems-1" class="slide section level2">
+<h1>Signal detection problems</h1>
+<div class="col_l">
+<ul>
+<li>Desired outcome: presence/absence of endangered species</li>
+<li>Imperfect indicator (expert observation)</li>
+<li>Desire to know <span class="math inline">\(pr(present |
+observed)\)</span></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Observed
+</th>
+<th>
+Not Observed
+</th>
+</tr>
+<tr>
+<td>
+Present
+</td>
+<td align="center">
+—
+</td>
+<td align="center">
+—
+</td>
+</tr>
+<tr>
+<td>
+Absent
+</td>
+<td align="center">
+—
+</td>
+<td align="center">
+—
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="signal-detection-problems-2" class="slide section level2">
+<h1>Signal detection problems</h1>
+<div class="col_l">
+<ul>
+<li><p>Desired outcome: presence/absence of endangered species</p></li>
+<li><p>Imperfect indicator (expert observation)</p></li>
+<li><p>Desire to know <span class="math inline">\(pr(present |
+observed)\)</span></p></li>
+<li><p>True positive: <span class="math inline">\(pr(P|O)\)</span>:</p>
+<ul>
+<li>It’s there and we saw it</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Observed
+</th>
+<th>
+Not Observed
+</th>
+</tr>
+<tr>
+<td>
+Present
+</td>
+<td align="center">
+<strong>True positive</strong>
+</td>
+<td align="center">
+—
+</td>
+</tr>
+<tr>
+<td>
+Absent
+</td>
+<td align="center">
+—
+</td>
+<td align="center">
+—
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="signal-detection-problems-3" class="slide section level2">
+<h1>Signal detection problems</h1>
+<div class="col_l">
+<ul>
+<li><p>Desired outcome: presence/absence of endangered species</p></li>
+<li><p>Imperfect indicator (expert observation)</p></li>
+<li><p>Desire to know <span class="math inline">\(pr(present |
+observed)\)</span></p></li>
+<li><p>True positive: <span class="math inline">\(pr(P|O)\)</span>:</p>
+<ul>
+<li>It’s there and we saw it</li>
+</ul></li>
+<li><p>False positive: <span
+class="math inline">\(pr(`P|O)\)</span>:</p>
+<ul>
+<li>We misidentified a non-target species, the target species is not
+present</li>
+<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+0\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Observed
+</th>
+<th>
+Not Observed
+</th>
+</tr>
+<tr>
+<td>
+Present
+</td>
+<td align="center">
+True positive
+</td>
+<td align="center">
+—
+</td>
+</tr>
+<tr>
+<td>
+Absent
+</td>
+<td align="center">
+<strong>False positive</strong>
+</td>
+<td align="center">
+—
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="signal-detection-problems-4" class="slide section level2">
+<h1>Signal detection problems</h1>
+<div class="col_l">
+<ul>
+<li><p>Desired outcome: presence/absence of endangered species</p></li>
+<li><p>Imperfect indicator (expert observation)</p></li>
+<li><p>Desire to know <span class="math inline">\(pr(present |
+observed)\)</span></p></li>
+<li><p>True positive: <span class="math inline">\(pr(P|O)\)</span>:</p>
+<ul>
+<li>It’s there and we saw it</li>
+</ul></li>
+<li><p>False positive: <span
+class="math inline">\(pr(`P|O)\)</span>:</p>
+<ul>
+<li>We misidentified a non-target species, the target species is not
+present</li>
+<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+0\)</span></li>
+</ul></li>
+<li><p>False negative: <span
+class="math inline">\(pr(P|`O)\)</span>:</p>
+<ul>
+<li>It’s there, but we failed to detect it</li>
+<li>Often referred to as the <strong>detection probability</strong></li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Observed
+</th>
+<th>
+Not Observed
+</th>
+</tr>
+<tr>
+<td>
+Present
+</td>
+<td align="center">
+True positive
+</td>
+<td align="center">
+<strong>False negative</strong>
+</td>
+</tr>
+<tr>
+<td>
+Absent
+</td>
+<td align="center">
+False positive
+</td>
+<td align="center">
+—
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="signal-detection-problems-5" class="slide section level2">
+<h1>Signal detection problems</h1>
+<div class="col_l">
+<ul>
+<li><p>Desired outcome: presence/absence of endangered species</p></li>
+<li><p>Imperfect indicator (expert observation)</p></li>
+<li><p>Desire to know <span class="math inline">\(pr(present |
+observed)\)</span></p></li>
+<li><p>True positive: <span class="math inline">\(pr(P|O)\)</span>:</p>
+<ul>
+<li>It’s there and we saw it</li>
+</ul></li>
+<li><p>False positive: <span
+class="math inline">\(pr(`P|O)\)</span>:</p>
+<ul>
+<li>We misidentified a non-target species, the target species is not
+present</li>
+<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+0\)</span></li>
+</ul></li>
+<li><p>False negative: <span
+class="math inline">\(pr(P|`O)\)</span>:</p>
+<ul>
+<li>It’s there, but we failed to detect it</li>
+<li>Often referred to as the <strong>detection probability</strong></li>
+</ul></li>
+<li><p>True negative: <span
+class="math inline">\(pr(`P|`O)\)</span>:</p>
+<ul>
+<li>It’s not there, and we did not record it there</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
+<!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
+<!-- Wed Nov  8 14:25:28 2023 -->
+<table border="1">
+<tr>
+<th>
+</th>
+<th>
+Observed
+</th>
+<th>
+Not Observed
+</th>
+</tr>
+<tr>
+<td>
+Present
+</td>
+<td align="center">
+True positive
+</td>
+<td align="center">
+False negative
+</td>
+</tr>
+<tr>
+<td>
+Absent
+</td>
+<td align="center">
+False positive
+</td>
+<td align="center">
+<strong>True negative</strong>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="probability-conceptsrules" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+</div>
+<div id="probability-conceptsrules-1" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+<h3 id="product-rule-chain-rule">Product rule =&gt; Chain rule</h3>
+<p><span class="math display">\[
+\begin{aligned}
+pr(A,B) &amp; = pr(A|B)pr(B) \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="probability-conceptsrules-2" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+<h3 id="product-rule-chain-rule-1">Product rule =&gt; Chain rule</h3>
+<p><span class="math display">\[
+\begin{aligned}
+pr(A,B) &amp; = pr(A|B)pr(B) \\
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+pr(A,B,C) &amp; = pr(A|B,C)pr(B,C) \\
+          &amp; = pr(A|B,C)pr(B|C)pr(C)
+\end{aligned}
+\]</span></p>
+</div>
+<div id="probability-conceptsrules-3" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+<h3 id="product-rule-chain-rule-2">Product rule =&gt; Chain rule</h3>
+<p><span class="math display">\[
+\begin{aligned}
+pr(A,B) &amp; = pr(A|B)pr(B) \\
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+pr(A,B,C) &amp; = pr(A|B,C)pr(B,C) \\
+          &amp; = pr(A|B,C)pr(B|C)pr(C)
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+pr(\bigcap_{k=1}^{n} A_k) &amp; = pr(A_n | \bigcap_{k=1}^{n-1} A_k
+)pr(\bigcap_{k=1}^{n-1} A_k) \\
+          &amp; =\prod_{k=1}^{n}pr(A_k | \bigcap_{j=1}^{k-1}A_j)
+\end{aligned}
+\]</span></p>
+</div>
+<div id="probability-conceptsrules-4" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+<ul>
+<li><strong>Marginal probability</strong>: <span
+class="math inline">\(pr(A)\)</span></li>
+<li><strong>Conditional probability</strong>: <span
+class="math inline">\(pr(A|B)\)</span></li>
+<li><strong>Joint probability</strong>: <span
+class="math inline">\(pr(A,B) = pr(A \cap B)\)</span></li>
+</ul>
+</div>
+<div id="probability-conceptsrules-5" class="slide section level2">
+<h1>Probability Concepts/Rules</h1>
+<ul>
+<li><strong>Marginal probability</strong>: <span
+class="math inline">\(pr(A)\)</span></li>
+<li><strong>Conditional probability</strong>: <span
+class="math inline">\(pr(A|B)\)</span></li>
+<li><strong>Joint probability</strong>: <span
+class="math inline">\(pr(A,B) = pr(A \cap B)\)</span></li>
+</ul>
+<hr/>
+<ul>
+<li><strong>Complementary rule</strong>: <span
+class="math inline">\(pr(A&#39;) = 1 - pr(A)\)</span></li>
+<li><strong>Addition rule</strong>: <span class="math inline">\(pr(A
+\cup B) = pr(A) + pr(B) - pr(A \cap B)\)</span>
+<ul>
+<li>For <em>disjoint</em> events: <span class="math inline">\(pr(A \cap
+B) = 0\)</span></li>
+</ul></li>
+<li><strong>Product rule</strong>: <span class="math inline">\(pr(A,B) =
+pr(A|B)pr(B)\)</span>
+<ul>
+<li>For <em>independent</em> events: <span class="math inline">\(pr(A|B)
+= pr(A)\)</span></li>
+</ul></li>
+<li><strong>Chain rule</strong>: <span
+class="math inline">\(pr(\bigcap_{k=1}^{n} A_k) =\prod_{k=1}^{n}pr(A_k |
+\bigcap_{j=1}^{k-1}A_j)\)</span></li>
+<li><strong>Bayes’ theorem</strong>: <span class="math inline">\(pr(B|A)
+= \frac{pr(A|B)pr(B)}{pr(A)}\)</span></li>
+</ul>
+</div>
+<div id="what-if-zombies-are-common" class="slide section level2">
+<h1>What if zombies are common?</h1>
+<ul class="incremental">
+<li>Our test gets more useful if <span class="math inline">\(pr(Z) =
+0.3\)</span></li>
+<li>Testing one person randomly taken from a (effectively) infinite
+population, 30% of the time the person is a zombie</li>
+<li>Trivially, doing this 10 times would result in 3 zombies, 7
+normals.</li>
+<li>But the sampling is random! Sometimes we will see 4 zombies,
+sometimes 2, etc. How often?</li>
+</ul>
+</div>
+<div id="the-zombie-distribution" class="slide section level2">
+<h1>The zombie distribution</h1>
+<div class="col_l">
+<ul>
+<li>Generally, what is the probability of <span
+class="math inline">\(k\)</span> zombies when we sample <span
+class="math inline">\(n\)</span> people?</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-zombie-distribution-1" class="slide section level2">
+<h1>The zombie distribution</h1>
+<div class="col_l">
+<ul>
+<li>Generally, what is the probability of <span
+class="math inline">\(k\)</span> zombies when we sample <span
+class="math inline">\(n\)</span> people?</li>
+<li>There is only one possible way to have 10 normal people:</li>
+</ul>
+<p><span class="math display">\[\begin{align}
+pr(k = 0 | n = 10, p = 0.3) &amp; = (0.7 \times \ldots 0.7) \\
+                              &amp; = 0.7^{10} \\
+                              &amp; \approx 0.028  \\
+
+\end{align}\]</span></p>
+<ul>
+<li>The same logic applies for 10 zombies:</li>
+</ul>
+<p><span class="math display">\[pr(k = 0 | n = 10, p = 0.3) = 0.3^{10}
+\approx 0.000 \]</span></p>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-25-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-zombie-distribution-2" class="slide section level2">
+<h1>The zombie distribution</h1>
+<div class="col_l">
+<ul>
+<li>Generally, what is the probability of <span
+class="math inline">\(k\)</span> zombies when we sample <span
+class="math inline">\(n\)</span> people?</li>
+<li>There are 10 ways to have exactly one zombie (<em>why?</em>).</li>
+<li>The probability of <em>one</em> of those ways:</li>
+</ul>
+<p><span class="math display">\[pr(Z_1,Z&#39;_{2..10}) = 0.3 \times0.7^9
+\approx 0.012 \]</span></p>
+<ul>
+<li>Using the <strong>addition rule</strong>:</li>
+</ul>
+<p><span class="math display">\[pr(k=1|n=10,p=0.3) = 10 \times 0.3
+\times0.7^9 \approx 0.121\]</span></p>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-26-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-zombie-binomial-distribution" class="slide section level2">
+<h1>The <del>zombie</del> binomial distribution</h1>
+<div class="col_l">
+<ul>
+<li>Generally, what is the probability of <span
+class="math inline">\(k\)</span> zombies when we sample <span
+class="math inline">\(n\)</span> people?
+<ul>
+<li>The probability that we will get any one result (i.e., order
+matters):</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[pr(Z_{a}, Z&#39;_{a&#39;}) = p^k(1 -
+p)^{(n - k)}\]</span></p>
+<ul>
+<li>The number of different ways to achieve a given result is the
+<strong>binomial function</strong> (“n choose k”)</li>
+<li>It follows:</li>
+</ul>
+<p><span class="math display">\[pr(k|n,p) = {n \choose k}
+p^k(1-p)^{(n-k)}\]</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">choose</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">k =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##  [1]   1  10  45 120 210 252 210 120  45  10   1</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">0.3</span>), <span class="dv">3</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##  [1] 0.028 0.121 0.233 0.267 0.200 0.103 0.037 0.009 0.001 0.000 0.000</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-28-1.png" width="528" /></p>
+</div>
+</div>
+<div id="binomial-distribution" class="slide section level2">
+<h1>Binomial distribution</h1>
+<div class="col_l">
+<ul>
+<li><p>This is the <strong>probability mass function (PMF)</strong> of
+the <strong>binomial distribution</strong> (<code>dbinom</code> in R)
+<span class="math display">\[pr(k|n,p) = {n \choose k}
+p^k(1-p)^{(n-k)}\]</span></p></li>
+<li><p>What is the probability of observing <span
+class="math inline">\(k\)</span> events out of <span
+class="math inline">\(n\)</span> independent trials, when <span
+class="math inline">\(pr(k) = p\)</span>?</p></li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
+</div>
+</div>
+<div id="binomial-distribution-1" class="slide section level2">
+<h1>Binomial distribution</h1>
+<div class="col_l">
+<ul>
+<li><p>This is the <strong>probability mass function (PMF)</strong> of
+the <strong>binomial distribution</strong> (<code>dbinom</code> in R)
+<span class="math display">\[pr(k|n,p) = {n \choose k}
+p^k(1-p)^{(n-k)}\]</span></p></li>
+<li><p>What is the probability of observing <span
+class="math inline">\(k\)</span> events out of <span
+class="math inline">\(n\)</span> independent trials, when <span
+class="math inline">\(pr(k) = p\)</span>?</p></li>
+<li><p>What is the probability of observing <span
+class="math inline">\(\le k\)</span> events? <strong>Cumulative
+distribution function (CDF)</strong></p></li>
+</ul>
+<p><span class="math display">\[
+pr(X \le k|n,p) = \sum_{i=0}^{k} {n \choose i}p^i(1-p)^{(n-i)}
+\]</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">pbinom</span>(k, <span class="dv">10</span>, <span class="fl">0.3</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">round</span>(y, <span class="dv">3</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">##  [1] 0.028 0.149 0.383 0.650 0.850 0.953 0.989 0.998 1.000 1.000 1.000</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">10</span>,<span class="fl">0.3</span>)), <span class="dv">3</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="do">## [1] 0.383</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
+</div>
+</div>
+<div id="poisson-distribution" class="slide section level2">
+<h1>Poisson distribution</h1>
+<div class="col_l">
+<ul>
+<li>Probability of observing <span class="math inline">\(x\)</span>
+events in a fixed time/space given a rate of <span
+class="math inline">\(\lambda\)</span></li>
+<li>Limit of binomial as <span class="math inline">\(n \rightarrow
+\infty\)</span> and <span class="math inline">\(p \rightarrow
+0\)</span></li>
+<li>mean = variance = <span class="math inline">\(\lambda\)</span></li>
+<li>Commonly used for “simple” counts where <span
+class="math inline">\(n\)</span> is unknown</li>
+</ul>
+<p><em>I invent a zombie detector, it counts up every time a zombie
+walks past. I put them out in busy parks. How many zombies do I
+get?</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>lam <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>pois_dat <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>pois_dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">dpois</span>(pois_dat<span class="sc">$</span>x, lam)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>pois_dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">ppois</span>(pois_dat<span class="sc">$</span>x, lam)</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-33-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-34-1.png" width="528" /></p>
+</div>
+</div>
+<div id="poisson-distribution-1" class="slide section level2">
+<h1>Poisson distribution</h1>
+<div class="col_l">
+<ul>
+<li>Probability of observing <span class="math inline">\(x\)</span>
+events in a fixed time/space given a rate of <span
+class="math inline">\(\lambda\)</span></li>
+<li>Limit of binomial as <span class="math inline">\(n \rightarrow
+\infty\)</span> and <span class="math inline">\(p \rightarrow
+0\)</span></li>
+<li>mean = variance = <span class="math inline">\(\lambda\)</span></li>
+<li>Commonly used for “simple” counts where <span
+class="math inline">\(n\)</span> is unknown</li>
+</ul>
+<p><em>I invent a zombie detector, it counts up every time a zombie
+walks past. I put them out in busy parks. How many zombies do I
+get?</em></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>lam <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">20</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>pois_dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">lam=</span>lam)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>pois_dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">dpois</span>(pois_dat<span class="sc">$</span>x, pois_dat<span class="sc">$</span>lam)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>pois_dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">ppois</span>(pois_dat<span class="sc">$</span>x, pois_dat<span class="sc">$</span>lam)</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-36-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
+</div>
+</div>
+<div id="negative-binomial-distribution" class="slide section level2">
+<h1>Negative binomial distribution</h1>
+<div class="col_l">
+<ul>
+<li>Choose one person from the population where <span
+class="math inline">\(p = pr(Z) = 0.3\)</span>. Is she/he a zombie?
+Repeat…</li>
+<li>How many non-zombies will I observe before I find <span
+class="math inline">\(r\)</span> zombies?</li>
+<li>In biology, often parameterized by mean (<span
+class="math inline">\(\mu\)</span>) and dispersion (<span
+class="math inline">\(r\)</span>) instead of size (<span
+class="math inline">\(r\)</span>) and probability (<span
+class="math inline">\(p\)</span>), used for “overdispersed” counts</li>
+</ul>
+<p><span class="math display">\[\mu = \frac{pr}{1-p}\]</span> <span
+class="math display">\[
+s^2 = \mu + \frac{\mu^2}{r}
+\]</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">60</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>), <span class="at">size =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">2</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dnbinom</span>(x, <span class="at">mu=</span>mu, <span class="at">size=</span>size))</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pnbinom</span>(x, <span class="at">mu=</span>mu, <span class="at">size=</span>size))</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-39-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
+</div>
+</div>
+<div id="exponential-distribution" class="slide section level2">
+<h1>Exponential distribution</h1>
+<div class="col_l">
+<ul>
+<li>Complement to Poisson, models the time between events of a Poisson
+process with rate <span class="math inline">\(\lambda\)</span></li>
+<li><span class="math inline">\(\mu = \frac{1}{\lambda}\)</span></li>
+<li>Continuous, defined on <span class="math inline">\((0,
+\infty)\)</span></li>
+</ul>
+<p><em>For a zombie detector in a park, how much time will pass between
+each zombie passing by the detector?</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>lam <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">20</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">15</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">lam=</span>lam)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">dexp</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>lam)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">pexp</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>lam)</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /></p>
+</div>
+</div>
+<div id="gamma-distribution" class="slide section level2">
+<h1>Gamma distribution</h1>
+<div class="col_l">
+<ul>
+<li>Expenential is a special case of Gamma where shape = 1</li>
+<li>Continuous, defined on <span class="math inline">\((0,
+\infty)\)</span></li>
+<li>Highly generalised distribution, used in many cases for strictly
+positive variables</li>
+</ul>
+<p><br/><br/></p>
+<ul>
+<li>Imagine observing a variable <span class="math inline">\(X\)</span>,
+such that:</li>
+<li><span class="math inline">\(X_i \sim
+\mathrm{Poisson}(\lambda_i)\)</span> (i.e., a mixture of Poisson
+distribtutions)</li>
+<li><span class="math inline">\(\lambda \sim
+\mathrm{Gamma}\)</span></li>
+<li>It follows that <span class="math inline">\(X \sim \mathrm{Negative
+Binomial}\)</span></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">15</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">shape=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">4</span>), <span class="at">rate =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="dv">2</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dgamma</span>(x, <span class="at">shape=</span>shape, <span class="at">rate =</span> rate))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pgamma</span>(x, <span class="at">shape=</span>shape, <span class="at">rate =</span> rate))</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-45-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-46-1.png" width="528" /></p>
+</div>
+</div>
+<div id="normal-distribution" class="slide section level2">
+<h1>Normal distribution</h1>
+<div class="col_l">
+<ul>
+<li>Produced by additive processes (log-normal produced by
+multiplicative processes)</li>
+<li>Continuous, defined on <span class="math inline">\((-\infty,
+\infty)\)</span></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>,<span class="dv">6</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">mu=</span><span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dnorm</span>(x, mu, sd))</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pnorm</span>(x, mu, sd))</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-48-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-49-1.png" width="528" /></p>
+</div>
+</div>
+<div id="beta-distribution" class="slide section level2">
+<h1>Beta distribution</h1>
+<div class="col_l">
+<ul>
+<li>Closely related to Binomial; often models the <span
+class="math inline">\(p\)</span> parameter for non-stationary
+Binomials</li>
+<li>Also used to model proportions</li>
+<li>Continuous, defined on <span class="math inline">\((0,
+1)\)</span></li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">alpha=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dbeta</span>(x, alpha, beta))</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pbeta</span>(x, alpha, beta))</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-51-1.png" width="528" /></p>
+<p><img src="1_probability_files/figure-slidy/unnamed-chunk-52-1.png" width="528" /></p>
+</div>
+</div>
+<div id="distribution-functions" class="slide section level2">
+<h1>Distribution functions</h1>
+<ul>
+<li>A <strong>probability density function</strong> (PDF) is a function
+f(x) that:
+<ul>
+<li>is defined on an interval [a,b] (may be infinite)</li>
+<li>is positive</li>
+<li>is regular—one value of f(x) for every value of (x), and <span
+class="math inline">\(\frac{df(x)}{dx}\)</span> is finite</li>
+<li><span class="math inline">\(\int_a^b f(x)dx = 1\)</span></li>
+<li><code>d</code> functions in R (probability <strong>d</strong>ensity)
+– <code>dnorm</code>, <code>dgamma</code>, etc</li>
+<li>For discrete distributions, called a <strong>probability mass
+function</strong> (PMF)</li>
+</ul></li>
+<li>Every PDF/PMF has a CDF
+<ul>
+<li><span class="math inline">\(F(x) = \int_a^x f(x)dx\)</span></li>
+<li>The probability of a value between <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(x\)</span></li>
+<li><code>p</code> functions in R (cumulative
+<strong>p</strong>robability) – <code>pnorm</code>, <code>pgamma</code>,
+etc</li>
+</ul></li>
+</ul>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
