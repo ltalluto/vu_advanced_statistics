@@ -164,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <script src="lib/slidy-2/scripts/slidy.js"></script>
   <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
   <link rel="stylesheet" type="text/css" media="screen, projection, print"
-   href="rmd_style.scss" />
+   href="rmd_style.css" />
 </head>
 <body>
 <div class="slide titlepage">
@@ -176,7 +176,8 @@ Matthew Talluto
 </div>
 <div id="what-is-a-likelihood" class="slide section level2">
 <h1>What is a likelihood?</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>In the Zombie example, we knew the probability of being a zombie:
 <span class="math inline">\(p_z = 0.3\)</span></li>
@@ -188,14 +189,15 @@ class="math inline">\(k\)</span> and <span
 class="math inline">\(n\)</span> via <em>sampling</em>, and want to
 estimate <span class="math inline">\(p_z\)</span>.</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-1-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="sampling-a-population" class="slide section level2">
 <h1>Sampling a population</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We sampled a large population to determine the rate of zombism.</li>
 <li>Assume samples were random, <em>iid</em></li>
@@ -204,14 +206,15 @@ observed <span class="math inline">\(k=7\)</span> zombies.</li>
 <li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
 the population that is a zombie.</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 
+</div>
 </div>
 </div>
 <div id="sampling-a-population-1" class="slide section level2">
 <h1>Sampling a population</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We sampled a large population to determine the rate of zombism.</li>
 <li>Assume samples were random, <em>iid</em></li>
@@ -222,14 +225,15 @@ the population that is a zombie.</li>
 <li><strong>Use intuition:</strong> We know the best estimate is <span
 class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-2-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="sampling-a-population-2" class="slide section level2">
 <h1>Sampling a population</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We sampled a large population to determine the rate of zombism.</li>
 <li>Assume samples were random, <em>iid</em></li>
@@ -242,14 +246,15 @@ class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
 <li>Many other values of <span class="math inline">\(p_z\)</span> are
 also possible.</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-3-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="parameter-estimation" class="slide section level2">
 <h1>Parameter estimation</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We need a general method for <strong>parameter
 estimation</strong></li>
@@ -258,9 +263,9 @@ class="math inline">\(p_z\)</span></li>
 <li>Understanding the <strong>uncertainty</strong> in our estimate would
 also be nice</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-4-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-likelihood-model" class="slide section level2">
@@ -286,7 +291,8 @@ pr(\mathrm{Data} | \theta)
 </div>
 <div id="the-likelihood-model-2" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul class="incremental">
 <li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
 <li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
@@ -294,14 +300,15 @@ pr(\mathrm{Data} | \theta)
 class="math inline">\(k = 7, n = 25\)</span>) if this model is
 true?</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 
+</div>
 </div>
 </div>
 <div id="the-likelihood-model-3" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
 <li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
@@ -313,14 +320,15 @@ true?</li>
     pr(k=7,n=25 | p_z = 0.4) = ?
 \]</span></p>
 <p>Any guesses how?</p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-5-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-likelihood-model-4" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul class="incremental">
 <li>We already described this system with a <strong>binomial
 process</strong></li>
@@ -329,14 +337,15 @@ statistical process (a binomial process with p = 0.4) that produces the
 observed data.</li>
 <li>We can evaluate it with built-in functions in R</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-6-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-likelihood-model-5" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We already described this system with a <strong>binomial
 process</strong></li>
@@ -350,14 +359,15 @@ observed data.</li>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.4</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## [1] 0.07998648</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-8-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-likelihood-model-6" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># x is observation, in this case, k = 7</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># size is n, the number of trials</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
@@ -366,14 +376,15 @@ observed data.</li>
 <p>We can try another model to see if it’s better:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.2</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## [1] 0.1108419</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-11-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-likelihood-model-7" class="slide section level2">
 <h1>The likelihood model</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># x is observation, in this case, k = 7</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># size is n, the number of trials</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
@@ -388,14 +399,15 @@ observed data.</li>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>probs <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> models)</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>binom_models <span class="ot">=</span> <span class="fu">data.frame</span>(models, probs)</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>binom_plot <span class="ot">=</span> <span class="fu">ggplot</span>(binom_models, <span class="fu">aes</span>(<span class="at">x =</span> models, <span class="at">y =</span> probs)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-15-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="likelihood-functions" class="slide section level2">
 <h1>Likelihood functions</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>The <strong>likelihood function</strong> is a function <em>f</em> of
 the data <span class="math inline">\(X\)</span> and model/parameters
@@ -409,21 +421,22 @@ class="math inline">\(\theta\)</span>: <span
 class="math inline">\(pr(X|\theta)\)</span></li>
 <li>Here, the <em>binomial PMF</em> is a useful likelihood function</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-16-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="likelihood-functions-1" class="slide section level2">
 <h1>Likelihood functions</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Intuition is fine, but how do we estimate or (in some cases) solve
 for the maximum likelihood? Guessing might take a long time!</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-17-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="solving-for-the-mle" class="slide section level2">
@@ -466,7 +479,8 @@ impractical.</li>
 impractical.</li>
 <li>We turn to various algorithms for numerical optimisation</li>
 </ul>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
@@ -478,8 +492,7 @@ impractical.</li>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
@@ -500,6 +513,7 @@ impractical.</li>
 <span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="do">## $message</span></span>
 <span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <div id="parameter-estimation-in-stan" class="slide section level2">
@@ -527,7 +541,8 @@ package.</li>
 </div>
 <div id="parameter-estimation-in-stan-1" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>All Stan programs need a <code>data</code> block where you define
 any input data for your model
@@ -538,8 +553,7 @@ any input data for your model
 be positive, and n &gt;= k</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
 <div class="sourceCode" id="cb9"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">data</span> {</span>
@@ -548,9 +562,11 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="parameter-estimation-in-stan-2" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>In the <code>parameters</code> block, we define
 <strong>unknowns</strong> that we want to estimate
@@ -558,8 +574,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="
 <li><code>p</code> is a real number between 0 and 1</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
 <div class="sourceCode" id="cb10"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
@@ -571,9 +586,11 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href=
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="parameter-estimation-in-stan-3" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>In the <code>model</code> block we specify our likelihood function
 <ul>
@@ -581,8 +598,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href=
 <code>p</code> and <code>n</code> observations</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
 <div class="sourceCode" id="cb11"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
@@ -597,9 +613,11 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 <span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="parameter-estimation-in-stan-4" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>In R, we load the <code>rstan</code> package</li>
 <li>Next we <strong>compile</strong> the model using
@@ -609,23 +627,23 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 .stan file changes!</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="parameter-estimation-in-stan-5" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>We next create a data list that we will pass on to Stan</li>
 <li>Finally, we can use <code>optimizing</code>, which works similar to
 <code>optim</code> but for Stan models</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
 <span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># already did this, don&#39;t do it twice</span></span>
@@ -652,10 +670,12 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 <span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="do">## [1,] 0.2800003</span></span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="generalising-to-multiple-observations"
 class="slide section level2">
 <h1>Generalising to multiple observations</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Remember the product rule: for two independent events, <span
 class="math inline">\(pr(A,B) = pr(A)pr(B)\)</span></li>
@@ -671,12 +691,14 @@ is independent. Thus:</li>
 \mathcal{L}(X_i|\theta)
 \end{array}
 \]</span></p>
+</div>
 </div>
 </div>
 <div id="generalising-to-multiple-observations-1"
 class="slide section level2">
 <h1>Generalising to multiple observations</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Remember the product rule: for two independent events, <span
 class="math inline">\(pr(A,B) = pr(A)pr(B)\)</span></li>
@@ -692,8 +714,7 @@ is independent. Thus:</li>
 \mathcal{L}(X_i|\theta)
 \end{array}
 \]</span></p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># define our data set and initial guess</span></span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>n_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>k_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>)</span>
@@ -710,9 +731,11 @@ is independent. Thus:</li>
 <span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## [1] 0.2222222</span></span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="multiple-observations-in-stan" class="slide section level2">
 <h1>Multiple observations in Stan</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><code>k</code> and <code>n</code> are <strong>arrays</strong> of
 <code>int</code>s, each with a length of <code>n_obs</code></li>
@@ -720,8 +743,7 @@ is independent. Thus:</li>
 <li>The <code>binomial</code> function is vectorised, can operate on
 multiple observations with no changes.</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <div class="sourceCode" id="cb15"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs; <span class="co">// number of data points</span></span>
@@ -737,6 +759,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb15-1"><a href=
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>zomb_p2 <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p2.stan&quot;</span>) </span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="multiple-observations-in-stan-1" class="slide section level2">
 <h1>Multiple observations in Stan</h1>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># prepare data</span></span>
@@ -747,7 +770,6 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb15-1"><a href=
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="do">##         p </span></span>
 <span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="do">## 0.2222222</span></span></code></pre></div>
-</div>
 </div>
 <div id="why-bayes" class="slide section level2">
 <h1>Why Bayes?</h1>
@@ -889,7 +911,8 @@ class="math inline">\(pr(\theta)\)</span>?</p>
 </div>
 <div id="what-do-we-know-about-p" class="slide section level2">
 <h1>What do we know about p?</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Must be between 0 and 1.</li>
 <li>We could assign equal probabilities using a uniform
@@ -898,14 +921,15 @@ distribution:</li>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>pr_theta <span class="ot">=</span> <span class="fu">dunif</span>(theta, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">plot</span>(theta, pr_theta, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-30-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="what-do-we-know-about-p-1" class="slide section level2">
 <h1>What do we know about p?</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Must be between 0 and 1.</li>
 <li>We could assign equal probabilities using a uniform
@@ -916,9 +940,9 @@ likely?</li>
 </ul>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pr_theta_1 <span class="ot">=</span> <span class="fu">dbeta</span>(theta, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="maximum-a-posteriori-estimation" class="slide section level2">
@@ -932,7 +956,8 @@ estimate, Bayesian equivalent to the MLE</li>
 <li>We ignore the normalising constant and incorporate a prior into the
 methods we used before</li>
 </ul>
-<div class="col_l">
+<div class="columns">
+<div class="column" style="width:47%;">
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>log_liklihood <span class="ot">=</span> <span class="cf">function</span>(p, n, k)</span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a></span>
@@ -941,8 +966,9 @@ methods we used before</li>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
 <span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>log_posterior <span class="ot">=</span> <span class="cf">function</span>(p, n, k, a, b)</span>
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">log_liklihood</span>(p, n, k) <span class="sc">+</span> <span class="fu">log_prior</span>(p, a, b)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column" style="width:6%;">
+
+</div><div class="column" style="width:47%;">
 <div class="sourceCode" id="cb21"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">// Saved in vu_advstats_students/stan/zomb_p_bayes.stan</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="kw">data</span> {</span>
@@ -961,11 +987,13 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb21-1"><a href=
 <span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
+</div>
 <div id="maximum-a-posteriori-estimation-1"
 class="slide section level2">
 <h1>Maximum A Posteriori Estimation</h1>
 <p>Now we can fit the model, either in R or in Stan</p>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>zomb_p_bayes <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p_bayes.stan&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="at">n_obs =</span> <span class="dv">1</span>,</span>
@@ -986,15 +1014,16 @@ class="slide section level2">
 <span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="do">##    p </span></span>
 <span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
+</div><div class="column">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
 <p>This prior has no influence on the posterior</p>
 </div>
-<div class="col_r">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
 </div>
 </div>
 <div id="changing-the-prior" class="slide section level2">
 <h1>Changing the prior</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="do">##         p </span></span>
@@ -1005,23 +1034,24 @@ class="slide section level2">
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.3272731</span></span></code></pre></div>
 <p>These priors are informative, but relatively weak (our data has
 weight equivalent to <code>alpha=7, beta=18</code>)</p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="changing-the-prior-1" class="slide section level2">
 <h1>Changing the prior</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <p>What if we had already conducted an identical prior sample, with 20
 zombies and 5 normals?</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
 <span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.5416647</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="geting-a-normalized-posterior" class="slide section level2">
