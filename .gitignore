@@ -44,4 +44,4 @@ scratch/*
 r/*.rds
 stan/*.rds
 docs/misc/*.rds
-docs/*_files
+*_cache

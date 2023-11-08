@@ -164,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <script src="lib/slidy-2/scripts/slidy.js"></script>
   <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
   <link rel="stylesheet" type="text/css" media="screen, projection, print"
-   href="rmd_style.scss" />
+   href="rmd_style.css" />
 </head>
 <body>
 <div class="slide titlepage">
@@ -206,38 +206,38 @@ Significant time required outside lecture periods.</li>
 </div>
 <div id="course-introduction-2" class="slide section level2">
 <h1>Course Introduction</h1>
-<div id="this-course-will-give-you" class="left"
-style="float:left;width:48%">
-<h3>This course will give you:</h3>
+<div class="columns">
+<div class="column">
+<h3 id="this-course-will-give-you">This course will give you:</h3>
 <ul class="incremental">
 <li>A deeper understanding of how inferential statistics works</li>
 <li>An appreciation of the similarities between Bayesian and frequentist
 methods</li>
 <li>The ability to think critically about model design</li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 
+</div>
 </div>
 </div>
 <div id="course-introduction-3" class="slide section level2">
 <h1>Course Introduction</h1>
-<div id="this-course-will-give-you-1" class="left"
-style="float:left;width:48%">
-<h3>This course will give you:</h3>
+<div class="columns">
+<div class="column">
+<h3 id="this-course-will-give-you-1">This course will give you:</h3>
 <ul>
 <li>A deeper understanding of how inferential statistics works</li>
 <li>An appreciation of the similarities between Bayesian and frequentist
 methods</li>
 <li>The ability to think critically about model design</li>
 </ul>
-</div>
-<div id="and-not-so-much" class="right" style="float:right;width:48%">
-<h3>And not so much:</h3>
+</div><div class="column">
+<h3 id="and-not-so-much">And not so much:</h3>
 <ul>
 <li>A giant toolbox of ready-made models, with variations for every
 potential problem</li>
 </ul>
+</div>
 </div>
 </div>
 <div id="course-introduction-4" class="slide section level2">
@@ -267,29 +267,32 @@ what I already know about it and what I’ve learned?</p>
 </div>
 <div id="probabilistic-partitions" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <p>Imagine a box with a total area of 1, representing all possible
 events</p>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-1-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="probabilistic-partitions-1" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>An event A has some probability of occurring: <em>pr(A)</em>
 (<strong>marginal probability</strong>)</li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-2-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="probabilistic-partitions-2" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>An event A has some probability of occurring: <em>pr(A)</em>
 (<strong>marginal probability</strong>)</li>
@@ -300,7 +303,7 @@ events</p>
 </ul></li>
 </ul>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -335,14 +338,15 @@ pr(A)
 </td>
 </tr>
 </table>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-4-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="probabilistic-partitions-3" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>An event A has some probability of occurring: <em>pr(A)</em></li>
 <li>A second event, B, has multiple possible relationships to A:
@@ -354,7 +358,7 @@ pr(A)
 </ul></li>
 </ul>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -389,14 +393,15 @@ pr(A,B)
 </td>
 </tr>
 </table>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-6-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="probabilistic-partitions-4" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>An event A has some probability of occurring: <em>pr(A)</em></li>
 <li>A second event, B, has multiple possible relationships to A:
@@ -413,14 +418,15 @@ probability</strong>)
 intersection of A and B)</li>
 </ul></li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-7-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="probabilistic-partitions-5" class="slide section level2">
 <h1>Probabilistic partitions</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>An event A has some probability of occurring: <em>pr(A)</em></li>
 <li>A second event, B, has multiple possible relationships to A:
@@ -444,14 +450,15 @@ class="math inline">\(A \cup B\)</span>)
 class="math inline">\(A \cup B = pr(A) + pr(B)\)</span></li>
 </ul></li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-8-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="independence" class="slide section level2">
 <h1>Independence</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li>A and B are independent if pr(A) is not influenced by whether B has
 occurred, and vice-versa</li>
@@ -460,14 +467,15 @@ occurred, and vice-versa</li>
 <li><span class="math inline">\(pr(A|B) = pr(A)\)</span></li>
 <li><span class="math inline">\(pr(B|A) = pr(B)\)</span></li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-9-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="conditional-probability" class="slide section level2">
 <h1>Conditional probability</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li><span class="math inline">\(pr(A|B)\)</span> is the probability that
 <span class="math inline">\(A\)</span> occurs, given that we already
@@ -480,14 +488,15 @@ class="math inline">\(pr(A|&#39;B)\)</span></li>
 <strong>joint</strong> and <strong>marginal</strong> probabilities</li>
 </ul>
 <p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-10-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="conditional-probability-1" class="slide section level2">
 <h1>Conditional probability</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li><span class="math inline">\(pr(A|B)\)</span> is the probability that
 <span class="math inline">\(A\)</span> occurs, given that we already
@@ -500,14 +509,15 @@ class="math inline">\(pr(A|&#39;B)\)</span></li>
 <strong>joint</strong> and <strong>marginal</strong> probabilities</li>
 </ul>
 <p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-11-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="conditional-probability-2" class="slide section level2">
 <h1>Conditional probability</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <ul>
 <li><span class="math inline">\(pr(A|B)\)</span> is the probability that
 <span class="math inline">\(A\)</span> occurs, given that we already
@@ -520,58 +530,175 @@ class="math inline">\(pr(A|&#39;B)\)</span></li>
 <strong>joint</strong> and <strong>marginal</strong> probabilities</li>
 </ul>
 <p><span class="math display">\[pr(A,B) = pr(A|B)pr(B)\]</span></p>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-12-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="so-now-that-we-have-learned-how-to-manupulate-probabilities."
 class="slide section level2">
 <h1>So now that we have learned how to manupulate probabilities….</h1>
 <p>Can anyone <em>define</em> probability?</p>
-<!-- (chances are good we get to probability as frequencies here) -->
-<!-- ## The problem with frequencies -->
-<!-- and show where frequency definition breaks -->
-<!-- you took the test, the result is positive. we want to know: -->
-<!-- pr(zombie|test) -->
-<!-- We already know pr(test|zombie) -->
-<!-- So what's our null hypothesis -->
-<!-- *I am not a zombie* -->
-<!-- the probability of getting this test result under the null hypothesis is 0.01. p < 0.05, therefore we reject the null hypothesis -->
-<!-- **show xkcd comic - sun explosion machine** -->
-<!-- This result is (should be) unsatisfying. We know from probability rules that pr(z|t) ≠ pr(t|z) -->
-<!-- This method only works when frequencies have meaning! Here they don't! There is only one you to perform inference on. Repeating the test can get us pr(t1,t2|z), but still doesn't give us pr(z|t1,t2). Thinking of *z* in terms of frequency is meaningless: *you either are or are not a zombie*. The hypothesis is either true or not. But it still can have a probability. How? -->
-<!-- Do the example, then come back to probability as *belief* -->
-<!-- Finally show that this same faulty resoning underlies almost literally all of our science, and is the source of the replication crisis. We only evaluate the probability of data|hypothesis, without ever stopping to ask if the hypothesis is bullshit -->
 </div>
 <div id="manipulating-conditional-probabilities"
 class="slide section level2">
 <h1>Manipulating conditional probabilities</h1>
-<div class="left" style="float:left;width:48%">
+<div class="columns">
+<div class="column">
 <p><strong>Are you a (latent) zombie?</strong></p>
-<p><strong>The problem</strong>:<br /> 0.1% of the population is
-infected with a parasite that will turn them into zombies. We have a
-test, but it is imperfect, with a <em>false negative rate</em> = 0.5%
-and a <em>false positive rate</em> = 1%.</p>
+<p><strong>The problem</strong>:</p>
+<p>People are turning into zombies! We have a test, but it is imperfect,
+with a <em>false positive rate</em> = 1% and a <em>false negative
+rate</em> = 0.5%.</p>
 <p>You take the test, and the result is positive. What is the
 probability that you are actually going to become a zombie?</p>
-</div>
-<div class="right" style="float:right;width:48%">
+</div><div class="column">
 <p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
 </div>
 </div>
-<div id="manipulating-conditional-probabilities-1"
+</div>
+<div id="is-probability-the-same-as-frequency"
 class="slide section level2">
-<h1>Manipulating conditional probabilities</h1>
-<div class="left" style="float:left;width:48%">
+<h1>Is probability the same as frequency?</h1>
+<ul>
+<li>You took the zombie test, the result is positive (<span
+class="math inline">\(T\)</span>). we want to know <span
+class="math inline">\(pr(Z|T)\)</span></li>
+<li>We already know <span class="math inline">\(pr(T|Z) = 0.99\)</span>:
+this is the <em>true positive rate</em></li>
+<li>We could use this along with <strong>statistical decision
+theory</strong> to make a decision about our status</li>
+<li>So what’s our null hypothesis?</li>
+</ul>
+</div>
+<div id="is-probability-the-same-as-frequency-1"
+class="slide section level2">
+<h1>Is probability the same as frequency?</h1>
+<ul>
+<li>You took the zombie test, the result is positive (<span
+class="math inline">\(T\)</span>). we want to know <span
+class="math inline">\(pr(Z|T)\)</span></li>
+<li>We already know <span class="math inline">\(pr(T|Z) = 0.99\)</span>:
+this is the <em>true positive rate</em></li>
+<li>We could use this along with <strong>statistical decision
+theory</strong> to make a decision about our status</li>
+<li>So what’s our null hypothesis?
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I am not a zombie! (<span
+class="math inline">\(Z&#39;\)</span>)</li>
+<li><span class="math inline">\(H_A\)</span>: I am a zombie! (<span
+class="math inline">\(Z\)</span>)</li>
+</ul></li>
+</ul>
+</div>
+<div id="is-probability-the-same-as-frequency-2"
+class="slide section level2">
+<h1>Is probability the same as frequency?</h1>
+<ul>
+<li>You took the zombie test, the result is positive (<span
+class="math inline">\(T\)</span>). we want to know <span
+class="math inline">\(pr(Z|T)\)</span></li>
+<li>We already know <span class="math inline">\(pr(T|Z) = 0.99\)</span>:
+this is the <em>true positive rate</em></li>
+<li>We could use this along with <strong>statistical decision
+theory</strong> to make a decision about our status</li>
+<li>So what’s our null hypothesis?
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I am not a zombie! (<span
+class="math inline">\(Z&#39;\)</span>)</li>
+<li><span class="math inline">\(H_A\)</span>: I am a zombie! (<span
+class="math inline">\(Z\)</span>)</li>
+</ul></li>
+<li>According to the <em>false positive rate</em>
+<ul>
+<li><span class="math inline">\(pr(T|Z&#39;) = 1 - pr(T|Z) =
+0.01\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="is-probability-the-same-as-frequency-3"
+class="slide section level2">
+<h1>Is probability the same as frequency?</h1>
+<ul>
+<li>You took the zombie test, the result is positive (<span
+class="math inline">\(T\)</span>). we want to know <span
+class="math inline">\(pr(Z|T)\)</span></li>
+<li>We already know <span class="math inline">\(pr(T|Z) = 0.99\)</span>:
+this is the <em>true positive rate</em></li>
+<li>We could use this along with <strong>statistical decision
+theory</strong> to make a decision about our status</li>
+<li>So what’s our null hypothesis?
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I am not a zombie! (<span
+class="math inline">\(Z&#39;\)</span>)</li>
+<li><span class="math inline">\(H_A\)</span>: I am a zombie! (<span
+class="math inline">\(Z\)</span>)</li>
+</ul></li>
+<li>According to the <em>false positive rate</em>
+<ul>
+<li><span class="math inline">\(pr(T|Z&#39;) = 1 - pr(T|Z) =
+0.01\)</span></li>
+<li><span class="math inline">\(p &lt; 0.05\)</span></li>
+<li>Conclusion: Reject <span class="math inline">\(H_0\)</span>, I must
+be a zombie</li>
+</ul></li>
+</ul>
+<h3 id="the-doctor-makes-a-decision">The doctor makes a decision:</h3>
+<p>She grabs a shotgun…</p>
+<p>Hopefully (for the sake of your health), this is unsatisfying… but
+why?</p>
+</div>
+<div id="another-try-manipulating-conditional-probabilities"
+class="slide section level2">
+<h1>Another try: manipulating conditional probabilities</h1>
+<div class="columns">
+<div class="column">
 <p><strong>Are you a (latent) zombie?</strong></p>
-<p><strong>The problem</strong>:<br /> 0.1% of the population is
-infected with a parasite that will turn them into zombies. We have a
-test, but it is imperfect, with a <em>false negative rate</em> = 0.5%
-and a <em>false positive rate</em> = 1%.</p>
+<p><strong>The problem</strong>:</p>
+<p>People are turning into zombies! We have a test, but it is imperfect,
+with a <em>false positive rate</em> = 1% and a <em>false negative
+rate</em> = 0.5%.</p>
 <p>You take the test, and the result is positive. What is the
 probability that you are actually going to become a zombie?</p>
-<p><strong>Hints</strong></p>
+<p>Let’s add some information: We also learn that 0.1% of the population
+is infected.</p>
+<ul class="incremental">
+<li>False positive rate = <span class="math inline">\(pr(T|Z&#39;) =
+0.01\)</span></li>
+<li>False negative rate = <span class="math inline">\(pr(T&#39;|Z) =
+0.005\)</span></li>
+<li>Prevalence = <span class="math inline">\(pr(Z) = 0.001\)</span></li>
+</ul>
+</div><div class="column">
+<p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
+</div>
+</div>
+</div>
+<div id="another-try-manipulating-conditional-probabilities-1"
+class="slide section level2">
+<h1>Another try: manipulating conditional probabilities</h1>
+<div class="columns">
+<div class="column">
+<p><strong>Are you a (latent) zombie?</strong></p>
+<p><strong>The problem</strong>:</p>
+<p>People are turning into zombies! We have a test, but it is imperfect,
+with a <em>false positive rate</em> = 1% and a <em>false negative
+rate</em> = 0.5%.</p>
+<p>You take the test, and the result is positive. What is the
+probability that you are actually going to become a zombie?</p>
+<p>Let’s add some information: We also learn that 0.1% of the population
+is infected.</p>
+<ul>
+<li>False positive rate = <span class="math inline">\(pr(T|Z&#39;) =
+0.01\)</span></li>
+<li>False negative rate = <span class="math inline">\(pr(T&#39;|Z) =
+0.005\)</span></li>
+<li>Prevalence = <span class="math inline">\(pr(Z) = 0.001\)</span></li>
+</ul>
+<p><strong>Exercise</strong>: Use the probability laws we know to
+compute the probability that you are a zombie.</p>
+</div><div class="column">
+<h3 id="hints">Hints</h3>
 <ul>
 <li>Define the partitions:
 <ul>
@@ -589,43 +716,42 @@ class="math inline">\(pr(A,B) = pr(A|B)pr(B)\)</span></li>
 are zombies? How many test positive? How many test positive and are
 zombies?</li>
 </ul>
-</div>
-<div class="right" style="float:right;width:48%">
-<p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-13-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="detecting-zombies" class="slide section level2">
 <h1>Detecting Zombies</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <p><em>Intuitively</em>: the test is good, so the probability that a
 positive testing individual is a zombie should be high <br/> (many
 people answer 99%, given the false positive rate of 1%).</p>
 <p><em>Unintuitively</em>: zombies are very rare, so when testing many
 people randomly, many tests will be false positives.</p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <p><img src="../assets/img/zomb.png" style="width:15.0%" /></p>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-contingency-table"
 class="slide section level2">
 <h1>Detecting Zombies — Contingency Table</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Consider a population of a million people, in a contingency
 table.</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -685,23 +811,24 @@ Sum
 </table>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-contingency-table-1"
 class="slide section level2">
 <h1>Detecting Zombies — Contingency Table</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Consider a population of a million people, in a contingency
 table.</li>
 <li><strong>0.1% of the population is infected with a parasite that will
 turn them into zombies</strong> (1000 zombies)</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -761,10 +888,12 @@ Sum
 </table>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-contingency-table-2"
 class="slide section level2">
 <h1>Detecting Zombies — Contingency Table</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Consider a population of a million people, in a contingency
 table.</li>
@@ -776,13 +905,12 @@ turn them into zombies</strong> (1000 zombies)</li>
 positive ones</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -842,10 +970,12 @@ Sum
 </table>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-contingency-table-3"
 class="slide section level2">
 <h1>Detecting Zombies — Contingency Table</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Consider a population of a million people, in a contingency
 table.</li>
@@ -862,13 +992,12 @@ positive ones</li>
 989010 negative normals</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -928,10 +1057,12 @@ Sum
 </table>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-contingency-table-4"
 class="slide section level2">
 <h1>Detecting Zombies — Contingency Table</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Consider a population of a million people, in a contingency
 table.</li>
@@ -949,16 +1080,17 @@ positive ones</li>
 </ul></li>
 </ul>
 <p>The positive test is a given. <em>This shrinks our world of
-possibilities</em> * <span
-class="math inline">\(\frac{995}{10985}\)</span> are zombies, or
-9.06%</p>
-</div>
-<div class="col_r">
+possibilities</em></p>
+<ul>
+<li><span class="math inline">\(\frac{995}{10985}\)</span> are zombies,
+or 9.06%</li>
+</ul>
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1012,10 +1144,12 @@ Sum
 </table>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-conditional-probabilities"
 class="slide section level2">
 <h1>Detecting Zombies — Conditional Probabilities</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>First translate numbers to probabilities</li>
 </ul>
@@ -1029,17 +1163,18 @@ them into zombies.</p>
 <strong>prior probability</strong> that a randomly selected person is a
 zombie</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-conditional-probabilities-1"
 class="slide section level2">
 <h1>Detecting Zombies — Conditional Probabilities</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>First translate numbers to probabilities</li>
 </ul>
@@ -1051,8 +1186,7 @@ rate</em> = 1%</p>
 <li><span class="math inline">\(pr(T&#39; | Z) = 0.005\)</span></li>
 <li><span class="math inline">\(pr(T | Z&#39;) = 0.01\)</span></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
@@ -1062,10 +1196,12 @@ zombie?)</p>
 </ul>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-conditional-probabilities-2"
 class="slide section level2">
 <h1>Detecting Zombies — Conditional Probabilities</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Use probability rules to find other easy unknowns</li>
 <li>True positive rate:</li>
@@ -1077,8 +1213,7 @@ class="slide section level2">
 </ul>
 <p><span class="math inline">\(pr(T&#39; | Z&#39;) = 1 - pr(T | Z&#39;)
 = 1 - 0.01 = 0.99\)</span></p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
@@ -1090,10 +1225,12 @@ zombie?)</p>
 </ul>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-conditional-probabilities-3"
 class="slide section level2">
 <h1>Detecting Zombies — Conditional Probabilities</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Use the product rule to compute the <strong>joint
 probability</strong></li>
@@ -1106,13 +1243,10 @@ probability</strong></li>
 pr(Z|T)pr(T)\)</span></li>
 <li>Simple algebra can solve for the quantity we desire</li>
 </ul>
-<p><span class="math display">\[pr(Z|T) =
-\frac{pr(T|Z)pr(Z)}{pr(T)}\]</span></p>
-<blockquote>
-<p>(Bayes’ Theorem)</p>
-</blockquote>
-</div>
-<div class="col_r">
+<h3 id="bayes-theorem">Bayes’ Theorem</h3>
+<p><span class="math inline">\(pr(Z|T) =
+\frac{pr(T|Z)pr(Z)}{pr(T)}\)</span></p>
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
@@ -1129,9 +1263,11 @@ zombie?)</p>
 </ul>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-bayes-theorem" class="slide section level2">
 <h1>Detecting Zombies — Bayes’ Theorem</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <p><span class="math display">\[pr(Z|T) =
 \frac{pr(T|Z)pr(Z)}{pr(T)}\]</span></p>
 <ul>
@@ -1152,8 +1288,7 @@ pr(T) &amp; = pr(T,Z) + pr(T,Z&#39;) \\
       &amp; = 0.010985
 \end{aligned}
 \]</span></p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
@@ -1171,10 +1306,12 @@ zombie?)</p>
 </ul>
 </div>
 </div>
+</div>
 <div id="detecting-zombies-bayes-theorem-1"
 class="slide section level2">
 <h1>Detecting Zombies — Bayes’ Theorem</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <p><span class="math display">\[
 \begin{aligned}
 pr(Z|T) &amp; = \frac{pr(T|Z)pr(Z)}{pr(T)} \\
@@ -1182,8 +1319,13 @@ pr(Z|T) &amp; = \frac{pr(T|Z)pr(Z)}{pr(T)} \\
         &amp; = 0.0906
 \end{aligned}
 \]</span></p>
-</div>
-<div class="col_r">
+<ul>
+<li>Our decision theory before led us astray. Here (using decision
+theory) we must <strong>reject</strong> the hypothesis that I am a
+zombie (p &gt; 0.05)!</li>
+<li>How could this happen?!</li>
+</ul>
+</div><div class="column">
 <p><strong>Desired outcome</strong>: <span class="math inline">\(pr(Z |
 T)\)</span><br/> (if I test positive, what is the probability I am a
 zombie?)</p>
@@ -1202,6 +1344,81 @@ zombie?)</p>
 </ul>
 </div>
 </div>
+</div>
+<div id="is-probability-the-same-as-frequency-4"
+class="slide section level2">
+<h1>Is probability the same as frequency?</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>You took the zombie test, the result is positive (<span
+class="math inline">\(T\)</span>). we want to know <span
+class="math inline">\(pr(Z|T)\)</span></li>
+<li>We already know <span class="math inline">\(pr(T|Z) = 0.99\)</span>:
+this is the <em>true positive rate</em></li>
+<li>We could use this along with <strong>statistical decision
+theory</strong> to make a decision about our status</li>
+<li>So what’s our null hypothesis?
+<ul>
+<li><span class="math inline">\(H_0\)</span>: I am not a zombie! (<span
+class="math inline">\(Z&#39;\)</span>)</li>
+<li><span class="math inline">\(H_A\)</span>: I am a zombie! (<span
+class="math inline">\(Z\)</span>)</li>
+</ul></li>
+<li>According to the <em>false positive rate</em>
+<ul>
+<li><span class="math inline">\(pr(T|Z&#39;) = 1 - pr(T|Z) =
+0.01\)</span></li>
+<li><span class="math inline">\(p &lt; 0.05\)</span></li>
+<li>Conclusion: Reject <span class="math inline">\(H_0\)</span>, I must
+be a zombie</li>
+</ul></li>
+</ul>
+<h3 id="the-doctor-makes-a-decision-1">The doctor makes a decision:</h3>
+<p>She grabs a shotgun…</p>
+<p>Hopefully (for the sake of your health), this is unsatisfying… but
+why?</p>
+</div><div class="column">
+<ul class="incremental">
+<li>This approach relies on the interpretation of probailities as
+frequencies.</li>
+<li>Repeating the test across many copies of me, we would make the right
+decision 95% of the time</li>
+<li>But I am unique! It doesn’t make sense to talk about the
+<em>frequency</em> of zombisim in me. I either am or am not a
+zombie!</li>
+<li>Mathematically, we want to know <span
+class="math inline">\(pr(Z|T)\)</span> but we test a hypothesis about
+<span class="math inline">\(pr(T|Z)\)</span>. These are not equal!</li>
+<li>In logic, this is known as the <strong>base rate</strong> fallacy:
+we forgot about <span class="math inline">\(pr(Z)\)</span></li>
+<li>In science, this is known as <strong>the replication
+crisis</strong></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="so-now-that-we-have-learned-how-to-manupulate-probabilities.-1"
+class="slide section level2">
+<h1>So now that we have learned how to manupulate probabilities….</h1>
+<div class="columns">
+<div class="column">
+<p>Can anyone <em>define</em> probability?</p>
+<ul>
+<li><strong>Our degree of belief integrating all of our
+knowledge</strong></li>
+</ul>
+<ul class="incremental">
+<li><strong>Our problem</strong>: We only evaluate the data given a
+hypothesis. We rarely ask if the hypothesis is 🐂💩</li>
+</ul>
+</div><div class="column">
+<div class="center">
+<p><img src="../assets/img/xkcd_fr_ba.png" /></p>
+</div>
+</div>
+</div>
+</div>
 <div id="signal-detection-problems" class="slide section level2">
 <h1>Signal detection problems</h1>
 <p>The zombie example is cute, but it is a real biological problem.
@@ -1209,18 +1426,18 @@ zombie?)</p>
 </div>
 <div id="signal-detection-problems-1" class="slide section level2">
 <h1>Signal detection problems</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Desired outcome: presence/absence of endangered species</li>
 <li>Imperfect indicator (expert observation)</li>
 <li>Desire to know <span class="math inline">\(pr(present |
 observed)\)</span></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1257,9 +1474,11 @@ Absent
 </table>
 </div>
 </div>
+</div>
 <div id="signal-detection-problems-2" class="slide section level2">
 <h1>Signal detection problems</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>Desired outcome: presence/absence of endangered species</p></li>
 <li><p>Imperfect indicator (expert observation)</p></li>
@@ -1270,11 +1489,10 @@ observed)\)</span></p></li>
 <li>It’s there and we saw it</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1311,9 +1529,11 @@ Absent
 </table>
 </div>
 </div>
+</div>
 <div id="signal-detection-problems-3" class="slide section level2">
 <h1>Signal detection problems</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>Desired outcome: presence/absence of endangered species</p></li>
 <li><p>Imperfect indicator (expert observation)</p></li>
@@ -1324,19 +1544,18 @@ observed)\)</span></p></li>
 <li>It’s there and we saw it</li>
 </ul></li>
 <li><p>False positive: <span
-class="math inline">\(pr(`P|O)\)</span>:</p>
+class="math inline">\(pr(P&#39;|O)\)</span>:</p>
 <ul>
 <li>We misidentified a non-target species, the target species is not
 present</li>
-<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+<li>Many studies assume <span class="math inline">\(pr(P&#39;|O) =
 0\)</span></li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1373,9 +1592,11 @@ Absent
 </table>
 </div>
 </div>
+</div>
 <div id="signal-detection-problems-4" class="slide section level2">
 <h1>Signal detection problems</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>Desired outcome: presence/absence of endangered species</p></li>
 <li><p>Imperfect indicator (expert observation)</p></li>
@@ -1386,25 +1607,24 @@ observed)\)</span></p></li>
 <li>It’s there and we saw it</li>
 </ul></li>
 <li><p>False positive: <span
-class="math inline">\(pr(`P|O)\)</span>:</p>
+class="math inline">\(pr(P&#39;|O)\)</span>:</p>
 <ul>
 <li>We misidentified a non-target species, the target species is not
 present</li>
-<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+<li>Many studies assume <span class="math inline">\(pr(P&#39;|O) =
 0\)</span></li>
 </ul></li>
 <li><p>False negative: <span
-class="math inline">\(pr(P|`O)\)</span>:</p>
+class="math inline">\(pr(P|O&#39;)\)</span>:</p>
 <ul>
 <li>It’s there, but we failed to detect it</li>
 <li>Often referred to as the <strong>detection probability</strong></li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1441,9 +1661,11 @@ False positive
 </table>
 </div>
 </div>
+</div>
 <div id="signal-detection-problems-5" class="slide section level2">
 <h1>Signal detection problems</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>Desired outcome: presence/absence of endangered species</p></li>
 <li><p>Imperfect indicator (expert observation)</p></li>
@@ -1454,30 +1676,29 @@ observed)\)</span></p></li>
 <li>It’s there and we saw it</li>
 </ul></li>
 <li><p>False positive: <span
-class="math inline">\(pr(`P|O)\)</span>:</p>
+class="math inline">\(pr(P&#39;|O)\)</span>:</p>
 <ul>
 <li>We misidentified a non-target species, the target species is not
 present</li>
-<li>Many studies assume <span class="math inline">\(pr(`P|O) =
+<li>Many studies assume <span class="math inline">\(pr(P&#39;|O) =
 0\)</span></li>
 </ul></li>
 <li><p>False negative: <span
-class="math inline">\(pr(P|`O)\)</span>:</p>
+class="math inline">\(pr(P|O&#39;)\)</span>:</p>
 <ul>
 <li>It’s there, but we failed to detect it</li>
 <li>Often referred to as the <strong>detection probability</strong></li>
 </ul></li>
 <li><p>True negative: <span
-class="math inline">\(pr(`P|`O)\)</span>:</p>
+class="math inline">\(pr(P&#39;|O&#39;)\)</span>:</p>
 <ul>
 <li>It’s not there, and we did not record it there</li>
 </ul></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="../assets/img/empid.jpg" style="width:60.0%" /></p>
 <!-- html table generated in R 4.3.1 by xtable 1.8-4 package -->
-<!-- Wed Nov  8 14:25:28 2023 -->
+<!-- Wed Nov  8 19:50:27 2023 -->
 <table border="1">
 <tr>
 <th>
@@ -1512,6 +1733,7 @@ False positive
 </td>
 </tr>
 </table>
+</div>
 </div>
 </div>
 <div id="probability-conceptsrules" class="slide section level2">
@@ -1622,20 +1844,22 @@ sometimes 2, etc. How often?</li>
 </div>
 <div id="the-zombie-distribution" class="slide section level2">
 <h1>The zombie distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Generally, what is the probability of <span
 class="math inline">\(k\)</span> zombies when we sample <span
 class="math inline">\(n\)</span> people?</li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-zombie-distribution-1" class="slide section level2">
 <h1>The zombie distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Generally, what is the probability of <span
 class="math inline">\(k\)</span> zombies when we sample <span
@@ -1653,14 +1877,15 @@ pr(k = 0 | n = 10, p = 0.3) &amp; = (0.7 \times \ldots 0.7) \\
 </ul>
 <p><span class="math display">\[pr(k = 0 | n = 10, p = 0.3) = 0.3^{10}
 \approx 0.000 \]</span></p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-25-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-zombie-distribution-2" class="slide section level2">
 <h1>The zombie distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Generally, what is the probability of <span
 class="math inline">\(k\)</span> zombies when we sample <span
@@ -1675,14 +1900,15 @@ class="math inline">\(n\)</span> people?</li>
 </ul>
 <p><span class="math display">\[pr(k=1|n=10,p=0.3) = 10 \times 0.3
 \times0.7^9 \approx 0.121\]</span></p>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-26-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="the-zombie-binomial-distribution" class="slide section level2">
 <h1>The <del>zombie</del> binomial distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Generally, what is the probability of <span
 class="math inline">\(k\)</span> zombies when we sample <span
@@ -1705,14 +1931,15 @@ p^k(1-p)^{(n-k)}\]</span></p>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="do">##  [1]   1  10  45 120 210 252 210 120  45  10   1</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">0.3</span>), <span class="dv">3</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##  [1] 0.028 0.121 0.233 0.267 0.200 0.103 0.037 0.009 0.001 0.000 0.000</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-28-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="binomial-distribution" class="slide section level2">
 <h1>Binomial distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>This is the <strong>probability mass function (PMF)</strong> of
 the <strong>binomial distribution</strong> (<code>dbinom</code> in R)
@@ -1723,14 +1950,15 @@ class="math inline">\(k\)</span> events out of <span
 class="math inline">\(n\)</span> independent trials, when <span
 class="math inline">\(pr(k) = p\)</span>?</p></li>
 </ul>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="binomial-distribution-1" class="slide section level2">
 <h1>Binomial distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li><p>This is the <strong>probability mass function (PMF)</strong> of
 the <strong>binomial distribution</strong> (<code>dbinom</code> in R)
@@ -1753,14 +1981,15 @@ pr(X \le k|n,p) = \sum_{i=0}^{k} {n \choose i}p^i(1-p)^{(n-i)}
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">##  [1] 0.028 0.149 0.383 0.650 0.850 0.953 0.989 0.998 1.000 1.000 1.000</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">10</span>,<span class="fl">0.3</span>)), <span class="dv">3</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="do">## [1] 0.383</span></span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="poisson-distribution" class="slide section level2">
 <h1>Poisson distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Probability of observing <span class="math inline">\(x\)</span>
 events in a fixed time/space given a rate of <span
@@ -1779,15 +2008,16 @@ get?</em></p>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>pois_dat <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>pois_dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">dpois</span>(pois_dat<span class="sc">$</span>x, lam)</span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>pois_dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">ppois</span>(pois_dat<span class="sc">$</span>x, lam)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-33-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-34-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="poisson-distribution-1" class="slide section level2">
 <h1>Poisson distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Probability of observing <span class="math inline">\(x\)</span>
 events in a fixed time/space given a rate of <span
@@ -1806,15 +2036,16 @@ get?</em></p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>pois_dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="dv">0</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">lam=</span>lam)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>pois_dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">dpois</span>(pois_dat<span class="sc">$</span>x, pois_dat<span class="sc">$</span>lam)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>pois_dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">ppois</span>(pois_dat<span class="sc">$</span>x, pois_dat<span class="sc">$</span>lam)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-36-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="negative-binomial-distribution" class="slide section level2">
 <h1>Negative binomial distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Choose one person from the population where <span
 class="math inline">\(p = pr(Z) = 0.3\)</span>. Is she/he a zombie?
@@ -1834,15 +2065,16 @@ s^2 = \mu + \frac{\mu^2}{r}
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">60</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>), <span class="at">size =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">2</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dat<span class="sc">$</span>pmf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dnbinom</span>(x, <span class="at">mu=</span>mu, <span class="at">size=</span>size))</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pnbinom</span>(x, <span class="at">mu=</span>mu, <span class="at">size=</span>size))</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-39-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="exponential-distribution" class="slide section level2">
 <h1>Exponential distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Complement to Poisson, models the time between events of a Poisson
 process with rate <span class="math inline">\(\lambda\)</span></li>
@@ -1856,15 +2088,16 @@ each zombie passing by the detector?</em></p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">15</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">lam=</span>lam)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">dexp</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>lam)</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">pexp</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>lam)</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="gamma-distribution" class="slide section level2">
 <h1>Gamma distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Expenential is a special case of Gamma where shape = 1</li>
 <li>Continuous, defined on <span class="math inline">\((0,
@@ -1887,15 +2120,16 @@ Binomial}\)</span></li>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">15</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">shape=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">4</span>), <span class="at">rate =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="dv">2</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dgamma</span>(x, <span class="at">shape=</span>shape, <span class="at">rate =</span> rate))</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pgamma</span>(x, <span class="at">shape=</span>shape, <span class="at">rate =</span> rate))</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-45-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-46-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="normal-distribution" class="slide section level2">
 <h1>Normal distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Produced by additive processes (log-normal produced by
 multiplicative processes)</li>
@@ -1905,15 +2139,16 @@ multiplicative processes)</li>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>,<span class="dv">6</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">mu=</span><span class="dv">0</span>, <span class="at">sd =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dnorm</span>(x, mu, sd))</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pnorm</span>(x, mu, sd))</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-48-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-49-1.png" width="528" /></p>
 </div>
 </div>
+</div>
 <div id="beta-distribution" class="slide section level2">
 <h1>Beta distribution</h1>
-<div class="col_l">
+<div class="columns">
+<div class="column">
 <ul>
 <li>Closely related to Binomial; often models the <span
 class="math inline">\(p\)</span> parameter for non-stationary
@@ -1925,10 +2160,10 @@ Binomials</li>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>, <span class="at">length.out=</span><span class="dv">100</span>), <span class="at">alpha=</span><span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>dat<span class="sc">$</span>pdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">dbeta</span>(x, alpha, beta))</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>dat<span class="sc">$</span>cdf <span class="ot">=</span> <span class="fu">with</span>(dat, <span class="fu">pbeta</span>(x, alpha, beta))</span></code></pre></div>
-</div>
-<div class="col_r">
+</div><div class="column">
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-51-1.png" width="528" /></p>
 <p><img src="1_probability_files/figure-slidy/unnamed-chunk-52-1.png" width="528" /></p>
+</div>
 </div>
 </div>
 <div id="distribution-functions" class="slide section level2">
