@@ -34,10 +34,10 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 ## What is Stan? 
 <div class="left lt">
 
-* Stan is a modelling language for scientific computing
-* Stan is a *probabilistic programming language*
-   - deterministic variables: `mu = a + b * x`
-   - Stochastic variables: `y ~ normal(mu, sigma)`
+<!-- * Stan is a modelling language for scientific computing -->
+<!-- * Stan is a *probabilistic programming language* -->
+<!--    - deterministic variables: `mu = a + b * x` -->
+<!--    - Stochastic variables: `y ~ normal(mu, sigma)` -->
 * Samples from the posterior using Hamiltonian Monte Carlo
 
 </div>
@@ -49,26 +49,26 @@ cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
 
 ## What is Stan? 
 
-<div class="left lt">
+<!-- <div class="left lt"> -->
 
-* Stan is a modelling language for scientific computing
-* Stan is a *probabilistic programming language*
-   - deterministic variables: `mu = a + b * x`
-   - Stochastic variables: `y ~ normal(mu, sigma)`
-* Samples from the posterior using Hamiltonian Monte Carlo
+<!-- * Stan is a modelling language for scientific computing -->
+<!-- * Stan is a *probabilistic programming language* -->
+<!--    - deterministic variables: `mu = a + b * x` -->
+<!--    - Stochastic variables: `y ~ normal(mu, sigma)` -->
+<!-- * Samples from the posterior using Hamiltonian Monte Carlo -->
 
-</div>
+<!-- </div> -->
 
-<div class="right rt">
+<!-- <div class="right rt"> -->
 
-1. Write a Stan model in a `.stan` file
-2. Prepare all data in R
-3. Use the `rstan` package to invoke the Stan interpreter
-   - Translates your model into a C++ program w/ an HMC sampler, then compiles for your computer
-4. Run the program from R using `rstan`.
-5. Perform posterior inference using various R packages.
+<!-- 1. Write a Stan model in a `.stan` file -->
+<!-- 2. Prepare all data in R -->
+<!-- 3. Use the `rstan` package to invoke the Stan interpreter -->
+<!--    - Translates your model into a C++ program w/ an HMC sampler, then compiles for your computer -->
+<!-- 4. Run the program from R using `rstan`. -->
+<!-- 5. Perform posterior inference using various R packages. -->
 
-</div>
+<!-- </div> -->
 
 
 

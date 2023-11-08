@@ -1,0 +1,1122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Matthew Talluto" />
+  <title>Maximum Likelihood &amp; Optimisation</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.scss" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Maximum Likelihood &amp; Optimisation</h1>
+  <p class="author">
+Matthew Talluto
+  </p>
+  <p class="date">24.11.2023</p>
+</div>
+<div id="what-is-a-likelihood" class="slide section level2">
+<h1>What is a likelihood?</h1>
+<div class="col_l">
+<ul>
+<li>In the Zombie example, we knew the probability of being a zombie:
+<span class="math inline">\(p_z = 0.3\)</span></li>
+<li>We wanted to know the probability of observing some number of
+zombies <span class="math inline">\(k\)</span> in a sample of <span
+class="math inline">\(n=10\)</span></li>
+<li>More typically, we would observe <span
+class="math inline">\(k\)</span> and <span
+class="math inline">\(n\)</span> via <em>sampling</em>, and want to
+estimate <span class="math inline">\(p_z\)</span>.</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-1-1.png" width="528" /></p>
+</div>
+</div>
+<div id="sampling-a-population" class="slide section level2">
+<h1>Sampling a population</h1>
+<div class="col_l">
+<ul>
+<li>We sampled a large population to determine the rate of zombism.</li>
+<li>Assume samples were random, <em>iid</em></li>
+<li>Given a sample of <span class="math inline">\(n=25\)</span>, we
+observed <span class="math inline">\(k=7\)</span> zombies.</li>
+<li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
+the population that is a zombie.</li>
+</ul>
+</div>
+<div class="col_r">
+
+</div>
+</div>
+<div id="sampling-a-population-1" class="slide section level2">
+<h1>Sampling a population</h1>
+<div class="col_l">
+<ul>
+<li>We sampled a large population to determine the rate of zombism.</li>
+<li>Assume samples were random, <em>iid</em></li>
+<li>Given a sample of <span class="math inline">\(n=25\)</span>, we
+observed <span class="math inline">\(k=7\)</span> zombies.</li>
+<li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
+the population that is a zombie.</li>
+<li><strong>Use intuition:</strong> We know the best estimate is <span
+class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-2-1.png" width="528" /></p>
+</div>
+</div>
+<div id="sampling-a-population-2" class="slide section level2">
+<h1>Sampling a population</h1>
+<div class="col_l">
+<ul>
+<li>We sampled a large population to determine the rate of zombism.</li>
+<li>Assume samples were random, <em>iid</em></li>
+<li>Given a sample of <span class="math inline">\(n=25\)</span>, we
+observed <span class="math inline">\(k=7\)</span> zombies.</li>
+<li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
+the population that is a zombie.</li>
+<li><strong>Use intuition:</strong> We know the best estimate is <span
+class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
+<li>Many other values of <span class="math inline">\(p_z\)</span> are
+also possible.</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-3-1.png" width="528" /></p>
+</div>
+</div>
+<div id="parameter-estimation" class="slide section level2">
+<h1>Parameter estimation</h1>
+<div class="col_l">
+<ul>
+<li>We need a general method for <strong>parameter
+estimation</strong></li>
+<li>In this case, want to estimate <span
+class="math inline">\(p_z\)</span></li>
+<li>Understanding the <strong>uncertainty</strong> in our estimate would
+also be nice</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-4-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-likelihood-model" class="slide section level2">
+<h1>The likelihood model</h1>
+<ul class="incremental">
+<li>If I <em>assume</em> a model <span
+class="math inline">\(\theta\)</span>…</li>
+<li>Can I compute the probability that the data came from this
+model?</li>
+</ul>
+</div>
+<div id="the-likelihood-model-1" class="slide section level2">
+<h1>The likelihood model</h1>
+<ul>
+<li>If I <em>assume</em> a model <span
+class="math inline">\(\theta\)</span>…</li>
+<li>Can I compute the probability that the data came from this
+model?</li>
+</ul>
+<p><span class="math display">\[
+pr(\mathrm{Data} | \theta)
+\]</span></p>
+</div>
+<div id="the-likelihood-model-2" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<ul class="incremental">
+<li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
+<li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
+<li>What is the probability of observing the data (<span
+class="math inline">\(k = 7, n = 25\)</span>) if this model is
+true?</li>
+</ul>
+</div>
+<div class="col_r">
+
+</div>
+</div>
+<div id="the-likelihood-model-3" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<ul>
+<li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
+<li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
+<li>What is the probability of observing the data (<span
+class="math inline">\(k = 7, n = 25\)</span>) if this model is
+true?</li>
+</ul>
+<p><span class="math display">\[
+    pr(k=7,n=25 | p_z = 0.4) = ?
+\]</span></p>
+<p>Any guesses how?</p>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-5-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-likelihood-model-4" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<ul class="incremental">
+<li>We already described this system with a <strong>binomial
+process</strong></li>
+<li>This is a <strong>generative model</strong>: we describe the
+statistical process (a binomial process with p = 0.4) that produces the
+observed data.</li>
+<li>We can evaluate it with built-in functions in R</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-6-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-likelihood-model-5" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<ul>
+<li>We already described this system with a <strong>binomial
+process</strong></li>
+<li>This is a <strong>generative model</strong>: we describe the
+statistical process (a binomial process with p = 0.4) that produces the
+observed data.</li>
+<li>We can evaluate it with built-in functions in R</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># x is observation, in this case, k = 7</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># size is n, the number of trials</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.4</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">## [1] 0.07998648</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-8-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-likelihood-model-6" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># x is observation, in this case, k = 7</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># size is n, the number of trials</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.4</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">## [1] 0.07998648</span></span></code></pre></div>
+<p>We can try another model to see if it’s better:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## [1] 0.1108419</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-11-1.png" width="528" /></p>
+</div>
+</div>
+<div id="the-likelihood-model-7" class="slide section level2">
+<h1>The likelihood model</h1>
+<div class="col_l">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># x is observation, in this case, k = 7</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># size is n, the number of trials</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># prob is the model parameter</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.4</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## [1] 0.07998648</span></span></code></pre></div>
+<p>We can try another model to see if it’s better:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> <span class="fl">0.2</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="do">## [1] 0.1108419</span></span></code></pre></div>
+<p>And we can plot it against many different potential models</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># different potential values for p, which must be between 0 and 1</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>models <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.005</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>probs <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="at">x =</span> <span class="dv">7</span>, <span class="at">size =</span> <span class="dv">25</span>, <span class="at">prob =</span> models)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>binom_models <span class="ot">=</span> <span class="fu">data.frame</span>(models, probs)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>binom_plot <span class="ot">=</span> <span class="fu">ggplot</span>(binom_models, <span class="fu">aes</span>(<span class="at">x =</span> models, <span class="at">y =</span> probs)) <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-15-1.png" width="528" /></p>
+</div>
+</div>
+<div id="likelihood-functions" class="slide section level2">
+<h1>Likelihood functions</h1>
+<div class="col_l">
+<ul>
+<li>The <strong>likelihood function</strong> is a function <em>f</em> of
+the data <span class="math inline">\(X\)</span> and model/parameters
+<span class="math inline">\(\theta\)</span></li>
+<li>Here <span class="math inline">\(X = \{k,n\}\)</span> and <span
+class="math inline">\(\theta = \{p_z\}\)</span></li>
+<li><span class="math inline">\(f(X,\theta)\)</span> returns the
+<em>probability of observing</em> <span
+class="math inline">\(X\)</span>, given a particular model <span
+class="math inline">\(\theta\)</span>: <span
+class="math inline">\(pr(X|\theta)\)</span></li>
+<li>Here, the <em>binomial PMF</em> is a useful likelihood function</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-16-1.png" width="528" /></p>
+</div>
+</div>
+<div id="likelihood-functions-1" class="slide section level2">
+<h1>Likelihood functions</h1>
+<div class="col_l">
+<ul>
+<li>Intuition is fine, but how do we estimate or (in some cases) solve
+for the maximum likelihood? Guessing might take a long time!</li>
+</ul>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-17-1.png" width="528" /></p>
+</div>
+</div>
+<div id="solving-for-the-mle" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{L}(k,n|p) &amp; = {n \choose k} p^k(1-p)^{(n-k)} \\
+\frac{d \mathcal{L}(k,n|p)}{dp} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+&amp; = 0
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-1" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} \\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) &amp; = k(1-p) \\
+pn -pk &amp; = k-pk \\
+pn &amp; = k \\
+p &amp; = \frac{k}{n} \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="optimisation" class="slide section level2">
+<h1>Optimisation</h1>
+<ul class="incremental">
+<li>In many (most) cases, analytical solutions are unavailable or
+impractical.</li>
+<li>We turn to various algorithms for numerical optimisation</li>
+</ul>
+</div>
+<div id="optimisation-1" class="slide section level2">
+<h1>Optimisation</h1>
+<ul>
+<li>In many (most) cases, analytical solutions are unavailable or
+impractical.</li>
+<li>We turn to various algorithms for numerical optimisation</li>
+</ul>
+<div class="col_l">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># write a custom function that returns the log likelihood</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>) <span class="do">## why log??</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># the terms n = ... and k = ... must be named the way they are in llfun</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n, <span class="at">k =</span> k, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">## $par</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">## $value</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="do">## [1] -1.740834</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="do">## $counts</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="do">## function gradient </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="do">##       NA       NA </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="do">## $convergence</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="do">## [1] 0</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="do">## $message</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+</div>
+</div>
+<div id="parameter-estimation-in-stan" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<ul>
+<li>Stan is a modelling language for scientific computing</li>
+<li>We use <em>probabilistic programming</em>
+<ul>
+<li>deterministic variables: <code>a = b * c</code></li>
+<li>Stochastic variables: <code>y ~ normal(mu, sigma)</code></li>
+</ul></li>
+</ul>
+<h3 id="workflow">Workflow</h3>
+<ol style="list-style-type: decimal">
+<li>Write a Stan model in a <code>.stan</code> file</li>
+<li>Prepare all data in R</li>
+<li>Use the <code>rstan</code> package to invoke the Stan interpreter
+<ul>
+<li>Translates your model into a C++ program then compiles for your
+computer</li>
+</ul></li>
+<li>Run the program from R using functions in the <code>rstan</code>
+package.</li>
+</ol>
+</div>
+<div id="parameter-estimation-in-stan-1" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<div class="col_l">
+<ul>
+<li>All Stan programs need a <code>data</code> block where you define
+any input data for your model
+<ul>
+<li>Variables must have a <strong>type</strong></li>
+<li>Here, <code>int</code> indicates a variable that is an integer</li>
+<li><strong>Constraints</strong> give rules about variables; here k must
+be positive, and n &gt;= k</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="parameter-estimation-in-stan-2" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<div class="col_l">
+<ul>
+<li>In the <code>parameters</code> block, we define
+<strong>unknowns</strong> that we want to estimate
+<ul>
+<li><code>p</code> is a real number between 0 and 1</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="parameter-estimation-in-stan-3" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<div class="col_l">
+<ul>
+<li>In the <code>model</code> block we specify our likelihood function
+<ul>
+<li><code>k</code> comes from a binomial distribution with probability
+<code>p</code> and <code>n</code> observations</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="parameter-estimation-in-stan-4" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<div class="col_l">
+<ul>
+<li>In R, we load the <code>rstan</code> package</li>
+<li>Next we <strong>compile</strong> the model using
+<code>stan_model</code>
+<ul>
+<li>Compiled models don’t need to be re-compiled unless the code in the
+.stan file changes!</li>
+</ul></li>
+</ul>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="parameter-estimation-in-stan-5" class="slide section level2">
+<h1>Parameter estimation in Stan</h1>
+<div class="col_l">
+<ul>
+<li>We next create a data list that we will pass on to Stan</li>
+<li>Finally, we can use <code>optimizing</code>, which works similar to
+<code>optim</code> but for Stan models</li>
+</ul>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># already did this, don&#39;t do it twice</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># zomb_p = stan_model(&quot;stan/zomb_p.stan&quot;) </span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># prepare data</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">## $par</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">## 0.2800003 </span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="do">## $value</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="do">## [1] -14.82383</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="do">## $return_code</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="do">## [1] 0</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="do">## $theta_tilde</span></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="do">##              p</span></span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="do">## [1,] 0.2800003</span></span></code></pre></div>
+</div>
+</div>
+<div id="generalising-to-multiple-observations"
+class="slide section level2">
+<h1>Generalising to multiple observations</h1>
+<div class="col_l">
+<ul>
+<li>Remember the product rule: for two independent events, <span
+class="math inline">\(pr(A,B) = pr(A)pr(B)\)</span></li>
+<li>Likelihoods are probabilities, and we like to assume each data point
+is independent. Thus:</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}
+\mathcal{L}(X_{1..n}|\theta) &amp; = \prod_{i=1}^{n}
+\mathcal{L}(X_i|\theta) \\
+&amp; \mathrm{or} \\
+\log \mathcal{L}(X_{1..n}|\theta) &amp;= \sum_{i=1}^{n} \log
+\mathcal{L}(X_i|\theta)
+\end{array}
+\]</span></p>
+</div>
+</div>
+<div id="generalising-to-multiple-observations-1"
+class="slide section level2">
+<h1>Generalising to multiple observations</h1>
+<div class="col_l">
+<ul>
+<li>Remember the product rule: for two independent events, <span
+class="math inline">\(pr(A,B) = pr(A)pr(B)\)</span></li>
+<li>Likelihoods are probabilities, and we like to assume each data point
+is independent. Thus:</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}
+\mathcal{L}(X_{1..n}|\theta) &amp; = \prod_{i=1}^{n}
+\mathcal{L}(X_i|\theta) \\
+&amp; \mathrm{or} \\
+\log \mathcal{L}(X_{1..n}|\theta) &amp;= \sum_{i=1}^{n} \log
+\mathcal{L}(X_i|\theta)
+\end{array}
+\]</span></p>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># define our data set and initial guess</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>n_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>k_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># we take the sum of all the individual log liklihoods</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co"># take only the part we want out of this, $par, the parameter estimate</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n_vec, <span class="at">k =</span> k_vec, </span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>      <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## [1] 0.2222222</span></span></code></pre></div>
+</div>
+</div>
+<div id="multiple-observations-in-stan" class="slide section level2">
+<h1>Multiple observations in Stan</h1>
+<div class="col_l">
+<ul>
+<li><code>k</code> and <code>n</code> are <strong>arrays</strong> of
+<code>int</code>s, each with a length of <code>n_obs</code></li>
+<li>Comments indicated with <code>//</code></li>
+<li>The <code>binomial</code> function is vectorised, can operate on
+multiple observations with no changes.</li>
+</ul>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs; <span class="co">// number of data points</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs]; <span class="co">// number of trials for each data point</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>zomb_p2 <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p2.stan&quot;</span>) </span></code></pre></div>
+</div>
+</div>
+<div id="multiple-observations-in-stan-1" class="slide section level2">
+<h1>Multiple observations in Stan</h1>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># prepare data</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>), <span class="at">k =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>), <span class="at">n_obs =</span> <span class="dv">3</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="do">## 0.2222222</span></span></code></pre></div>
+</div>
+</div>
+<div id="why-bayes" class="slide section level2">
+<h1>Why Bayes?</h1>
+<ul>
+<li>I want to describe some phenomenon (“model”; <span
+class="math inline">\(\theta\)</span>)</li>
+<li>I have some general (“prior”) knowledge about the question: <span
+class="math inline">\(pr(\theta)\)</span></li>
+<li>I gather additional information (“data”; <span
+class="math inline">\(X\)</span>)</li>
+</ul>
+<p>What is the probability that my model is correct given what I already
+know about it and what I’ve learned?</p>
+<p><span class="math display">\[ pr(\theta | X) \]</span></p>
+</div>
+<div id="applying-bayes-theorem" class="slide section level2">
+<h1>Applying Bayes’ Theorem</h1>
+<ul>
+<li>We already know an expression for this:</li>
+</ul>
+<p><span class="math display">\[
+pr(\theta | X) = \frac{pr(X|\theta)pr(\theta)}{pr(X)}
+\]</span></p>
+</div>
+<div id="applying-bayes-theorem-1" class="slide section level2">
+<h1>Applying Bayes’ Theorem</h1>
+<ul>
+<li>We already know an expression for this:</li>
+</ul>
+<p><span class="math display">\[
+pr(\theta | X) = \frac{pr(X|\theta)pr(\theta)}{pr(X)}
+\]</span></p>
+<ul>
+<li>The goal, <span class="math inline">\(pr(\theta | X)\)</span>, is
+called the <strong>posterior probability of <span
+class="math inline">\(\theta\)</span></strong></li>
+<li>We have already seen <span
+class="math inline">\(pr(X|\theta)\)</span>; this is the
+<strong>likelihood</strong> of the data</li>
+<li><span class="math inline">\(pr(\theta)\)</span> is often called the
+<strong>prior probability of <span
+class="math inline">\(\theta\)</span></strong>. Could also be called
+“other information about <span
+class="math inline">\(\theta\)</span>”</li>
+<li>What about <span class="math inline">\(pr(X)\)</span>? This is the
+<strong>normalizing constant</strong></li>
+</ul>
+<p>When we do Bayesian inference, each of these terms is a full
+<strong>probability distribution</strong></p>
+</div>
+<div id="the-normalizing-constant" class="slide section level2">
+<h1>The normalizing constant</h1>
+<ul class="incremental">
+<li>For the first zombie problem, we had a single observation (“I tested
+positive”), we were able to add up all of the ways one could test
+positive.</li>
+<li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
+pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+<li><span class="math inline">\(pr(X) = \sum_i^n
+pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
+set <span class="math inline">\(n\)</span></li>
+<li>What about for continuous problems?</li>
+</ul>
+</div>
+<div id="the-normalizing-constant-1" class="slide section level2">
+<h1>The normalizing constant</h1>
+<ul>
+<li>For the first zombie problem, we had a single observation (“I tested
+positive”), we were able to add up all of the ways one could test
+positive.</li>
+<li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
+pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+<li><span class="math inline">\(pr(X) = \sum_i^n
+pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
+set <span class="math inline">\(n\)</span></li>
+<li>What about for continuous problems?
+<ul>
+<li>There are an infinite number of possible models if <span
+class="math inline">\(pr(\theta)\)</span> is a continuous PDF.</li>
+<li>There are infinitely many possible datasets if X is real-valued</li>
+</ul></li>
+</ul>
+</div>
+<div id="the-normalizing-constant-2" class="slide section level2">
+<h1>The normalizing constant</h1>
+<ul>
+<li>For the first zombie problem, we had a single observation (“I tested
+positive”), we were able to add up all of the ways one could test
+positive.</li>
+<li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
+pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+<li><span class="math inline">\(pr(X) = \sum_i^n
+pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
+set <span class="math inline">\(n\)</span></li>
+<li>What about for continuous problems?
+<ul>
+<li>There are an infinite number of possible models if <span
+class="math inline">\(pr(\theta)\)</span> is a continuous PDF.</li>
+<li>There are infinitely many possible datasets if X is real-valued</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+pr(X) = \int_a^b pr(X|\theta)pr(\theta)d \theta
+\]</span></p>
+<ul>
+<li>This integral can be challenging to compute</li>
+</ul>
+</div>
+<div id="proportional-bayes-theorem" class="slide section level2">
+<h1>Proportional Bayes’ Theorem</h1>
+<ul class="incremental">
+<li><span class="math inline">\(pr(X)\)</span> is a <em>constant</em>;
+it adjusts the height of the distribution so that the posterior
+integrates to 1</li>
+<li>If all we want to do is estimate the maximum value, we can safely
+ignore it</li>
+</ul>
+</div>
+<div id="proportional-bayes-theorem-1" class="slide section level2">
+<h1>Proportional Bayes’ Theorem</h1>
+<ul>
+<li><span class="math inline">\(pr(X)\)</span> is a <em>constant</em>;
+it adjusts the height of the distribution so that the posterior
+integrates to 1</li>
+<li>If all we want to do is estimate the maximum value, we can safely
+ignore it</li>
+</ul>
+<p><span class="math display">\[
+pr(\theta|X) \propto pr(X|\theta)pr(\theta)
+\]</span></p>
+<ul>
+<li>For our example, we used the binomial PMF for the likelihood:</li>
+</ul>
+<p><span class="math display">\[
+pr(X|\theta) = pr(k,n|p) = {n \choose k} p^k(1-p)^{(n-k)}
+\]</span></p>
+<p>How to choose the prior, <span
+class="math inline">\(pr(\theta)\)</span>?</p>
+</div>
+<div id="what-do-we-know-about-p" class="slide section level2">
+<h1>What do we know about p?</h1>
+<div class="col_l">
+<ul>
+<li>Must be between 0 and 1.</li>
+<li>We could assign equal probabilities using a uniform
+distribution:</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>pr_theta <span class="ot">=</span> <span class="fu">dunif</span>(theta, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">plot</span>(theta, pr_theta, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-30-1.png" width="528" /></p>
+</div>
+</div>
+<div id="what-do-we-know-about-p-1" class="slide section level2">
+<h1>What do we know about p?</h1>
+<div class="col_l">
+<ul>
+<li>Must be between 0 and 1.</li>
+<li>We could assign equal probabilities using a uniform
+distribution.</li>
+<li>Not very flexible. Maybe we think central values are slightly more
+likely?</li>
+<li>A <strong>beta</strong> distribution makes many shapes possible</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pr_theta_1 <span class="ot">=</span> <span class="fu">dbeta</span>(theta, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
+</div>
+</div>
+<div id="maximum-a-posteriori-estimation" class="slide section level2">
+<h1>Maximum A Posteriori Estimation</h1>
+<ul>
+<li>If we just want a Bayesian point estimate for <span
+class="math inline">\(\theta\)</span>, we can use the same algorithms
+for MLE</li>
+<li>This is know as the <strong>maximum a posteriori</strong> (MAP)
+estimate, Bayesian equivalent to the MLE</li>
+<li>We ignore the normalising constant and incorporate a prior into the
+methods we used before</li>
+</ul>
+<div class="col_l">
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>log_liklihood <span class="ot">=</span> <span class="cf">function</span>(p, n, k)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>log_prior <span class="ot">=</span> <span class="cf">function</span>(p, a, b)</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">dbeta</span>(p, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>log_posterior <span class="ot">=</span> <span class="cf">function</span>(p, n, k, a, b)</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">log_liklihood</span>(p, n, k) <span class="sc">+</span> <span class="fu">log_prior</span>(p, a, b)</span></code></pre></div>
+</div>
+<div class="col_r">
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">// Saved in vu_advstats_students/stan/zomb_p_bayes.stan</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs;</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs];</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a;</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b;</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>}</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>}</span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>    p ~ beta(a, b);</span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="maximum-a-posteriori-estimation-1"
+class="slide section level2">
+<h1>Maximum A Posteriori Estimation</h1>
+<p>Now we can fit the model, either in R or in Stan</p>
+<div class="col_l">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>zomb_p_bayes <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p_bayes.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="at">n_obs =</span> <span class="dv">1</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">as.array</span>(<span class="dv">25</span>), <span class="co"># force a single-value array, avoids an error</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">as.array</span>(<span class="dv">7</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>    <span class="at">a =</span> <span class="dv">1</span>, <span class="co"># totally flat prior to start</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>    <span class="at">b =</span> <span class="dv">1</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>)</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="do">## starting value for the optimisation</span></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, log_posterior, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> zomb_data<span class="sc">$</span>n, </span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    <span class="at">k =</span> zomb_data<span class="sc">$</span>k, <span class="at">a =</span> zomb_data<span class="sc">$</span>a, <span class="at">b =</span> zomb_data<span class="sc">$</span>b, </span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="do">##    p </span></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
+<p>This prior has no influence on the posterior</p>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
+</div>
+</div>
+<div id="changing-the-prior" class="slide section level2">
+<h1>Changing the prior</h1>
+<div class="col_l">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="do">## 0.2963089</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">3</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="fl">1.5</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.3272731</span></span></code></pre></div>
+<p>These priors are informative, but relatively weak (our data has
+weight equivalent to <code>alpha=7, beta=18</code>)</p>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
+</div>
+</div>
+<div id="changing-the-prior-1" class="slide section level2">
+<h1>Changing the prior</h1>
+<div class="col_l">
+<p>What if we had already conducted an identical prior sample, with 20
+zombies and 5 normals?</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.5416647</span></span></code></pre></div>
+</div>
+<div class="col_r">
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
+</div>
+</div>
+<div id="geting-a-normalized-posterior" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul class="incremental">
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+</ul>
+</div>
+<div id="geting-a-normalized-posterior-1" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul>
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+<li>For the beta-binomial, if:</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\overset{\small \color{blue}{prior}}{pr(p)} &amp; = \mathrm{Beta}(a, b)
+\\ \\
+\overset{\small \color{blue}{likelihood}}{pr(k,n | p)} &amp; =
+\mathrm{Binomial}(k, n, p)
+\end{aligned}
+\]</span></p>
+</div>
+<div id="geting-a-normalized-posterior-2" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul>
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+<li>For the beta-binomial, if:</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\overset{\small \color{blue}{prior}}{pr(p)} &amp; = \mathrm{Beta}(a, b)
+\\ \\
+\overset{\small \color{blue}{likelihood}}{pr(k,n | p)} &amp; =
+\mathrm{Binomial}(k, n, p) \\ \\
+\overset{\small \color{blue}{posterior}}{pr(p | k,n,a,b)} &amp;=
+\mathrm{Beta}(a + k, b + n - k)
+\end{aligned}
+\]</span></p>
+</div>
+<div id="geting-a-normalized-posterior-3" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul>
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+<li>In many cases, the shape of the log posterior is appoximately
+quadratic (the posterior is approximately normal)</li>
+<li><strong>Laplace approximation</strong> (or Quadratic approximation)
+is a method for approximating the shape of this curve</li>
+</ul>
+</div>
+<div id="geting-a-normalized-posterior-4" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul>
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+<li>In many cases, the shape of the log posterior is appoximately
+quadratic (the posterior is approximately normal)</li>
+<li><strong>Laplace approximation</strong> (or Quadratic approximation)
+is a method for approximating the shape of this curve</li>
+</ul>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /></p>
+</div>
+<div id="geting-a-normalized-posterior-5" class="slide section level2">
+<h1>Geting a normalized posterior</h1>
+<ul>
+<li>We often want to know the full posterior distribution</li>
+<li>For some problems, we have analytical solutions to <span
+class="math inline">\(\int pr(X|\theta)pr(\theta)d \theta\)</span></li>
+<li>In many cases, the shape of the log posterior is appoximately
+quadratic (the posterior is approximately normal)</li>
+<li><strong>Laplace approximation</strong> (or Quadratic approximation)
+is a method for approximating the shape of this curve</li>
+<li>When the above are unavailable, we can use simulations (e.g.,
+MCMC)</li>
+</ul>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
