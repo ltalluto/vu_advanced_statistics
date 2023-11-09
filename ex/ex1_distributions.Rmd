@@ -1,7 +1,11 @@
 ---
 title: "Distributions in R"
-date: "21.11.2022"
-output: html_document
+author: Matthew Talluto
+date: "21.11.2023"
+output: 
+  html_document:
+    self_contained: false
+    lib_dir: lib
 ---
 
 ```{r setup, include=FALSE}

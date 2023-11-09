@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Maximum likelihood: Tsuga mortality</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Maximum likelihood: <em>Tsuga</em>
+mortality</h1>
+<h4 class="date">24.11.2023</h4>
+
+</div>
+
+
+<ol style="list-style-type: decimal">
+<li>Load the tsuga dataset from this repository.</li>
+</ol>
+<pre class="r"><code>library(data.table)
+## working directory should be: vu_advstats_students
+tsuga = readRDS(&quot;data/tsuga.rds&quot;)
+
+## if you don&#39;t have the repository saved locally
+# tsuga = readRDS(url(&quot;https://github.com/mtalluto/vu_advstats_students/raw/main/data/tsuga.rds&quot;))</code></pre>
+<p>This dataset gives statistics about <em>Tsuga canadensis</em>
+observed over multiple years in forest plots in eastern Canada. Included
+are the number of trees <code>born</code>, the number observed to have
+<code>died</code> that year, the total number of trees (including dead
+ones) <code>n</code>, and the climate. Filter the dataset so that it
+contains only observations from the year 2005 with at least 1 individual
+(<code>n &gt; 0</code>)</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write a function taking three parameters:
+<ol style="list-style-type: lower-roman">
+<li><code>p</code>: a <em>single value</em>, the probability that a
+randomly chosen individual is dead</li>
+<li><code>n</code>: a <em>vector</em>, the number of trees in each
+plot</li>
+<li><code>k</code>: a <em>vetor</em>, the number of dead trees in each
+plot</li>
+<li>The function should return the <em>log likelihood</em>: <span
+class="math inline">\(\log pr(n,k|p)\)</span></li>
+</ol></li>
+</ol>
+<pre class="r"><code># n and k are vectors
+lfun = function(p, n, k) {
+   ## function body
+   return() ## a single value!
+}</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Plot the log likelihood across various values of <code>p</code>
+<ul>
+<li><strong>Hint</strong>: you will need to run <code>lfun</code> once
+for each value of <code>p</code>. This is most efficiently accomplished
+using <code>sapply</code>, but a <code>for</code> loop will also
+work.</li>
+</ul></li>
+<li>Use <code>optim</code> to find the MLE for <code>p</code></li>
+<li>Is the answer different from <code>mean(dat$died/dat$n)</code>? If
+so, why?</li>
+<li>Write two more functions, one to estimate a prior for <em>p</em>,
+and one to compute the log posterior. You may choose the prior
+distribution and hyperparameters as you like, but they should respect
+the constraint that <em>p</em> must be between zero and one.</li>
+<li>Plot the prior and unnormalized posterior. Compare plots with
+different prior hyperparameters</li>
+<li>Compute the maximum a posteriori estimate for <em>p</em> using
+<code>optim</code>.</li>
+<li>Write a stan model to compute the maximum a posteriori estimate for
+p, and then fit it using <code>optimizing</code>.</li>
+</ol>
+<div id="bonus" class="section level3">
+<h3>Bonus</h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Write a Stan program to estimate the mean <strong>number of trees
+per plot.</strong>
+<ol style="list-style-type: lower-alpha">
+<li>What kind of <strong>statistical process</strong> could generate
+these data?</li>
+<li>What is an appropriate likelihood function? prior?</li>
+<li>Compute the MAP estimate.</li>
+<li>How does the MAP compare to <code>mean(dat$n)</code>?</li>
+</ol></li>
+<li>Use the MAP estimate from 3b and the <code>r****()</code> function
+corresponding to the likelihood function to simulate a new dataset, with
+as many observations as in the original data.
+<ol style="list-style-type: lower-alpha">
+<li>Compare a histogram and summary statistics of your simulated data
+with the real data. Note any similarities and differences.</li>
+<li>Consider how you could improve this <strong>generative
+model</strong> to better describe the dataset. Do you need a new
+likelihood function?</li>
+</ol></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

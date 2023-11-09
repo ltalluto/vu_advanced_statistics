@@ -1,4 +1,5 @@
 <style>
+.ex {margin: 0px;}
 .soln {margin: 0px 20px; font-size: x-small}
 </style>
 
@@ -27,8 +28,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 
 |Date  |Topics       |Lecture Notes |Exercises |
 | :--- |  :---   |   :---    | :--- |
-|**Tuesday** 21.11<br/>14:15–18:00 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](lec/1_probability)|Distributions in R<!--[Distributions in R](exercises/1_distributions_ex)<br/><p class = "soln">[Solutions](exercises/1_distributions_soln)</p>-->
-|**Friday** 24.11<br/>14:15–18:00 |Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling|[Maximum Likelihood Estimation](lec/2_mle)<br/>MCMC & Sampling<!--[MCMC](3_mcmc)-->|Tree Mortality<!--[Tree Mortality I](exercises/2_mle_ex.html)<br/><p class="soln">• [Solutions](exercises/2_mle_soln)</p>--><br/>German tank problem<!--[German tank problem](exercises/5_mcmc_ex)<br/><p class="soln">• [Solutions](exercises/5_mcmc_soln)</p>-->|
+|**Tuesday** 21.11<br/>14:15–18:00 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](lec/1_probability)|<p class="ex">[Distributions in R](ex/ex1_distributions)</p><!--<p class = "soln">[Solutions](ex/soln1_distributions.html)</p>-->
+|**Friday** 24.11<br/>14:15–18:00 |Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling|[Maximum Likelihood Estimation](lec/2_mle)<br/>MCMC & Sampling<!--[MCMC](3_mcmc)-->|<p class="ex">[Tree Mortality](ex/ex2_tree.html)</p><!--<p class="soln">• [Solutions](ex/soln2_tree.html)</p>-->German tank problem<!--[German tank problem](exercises/5_mcmc_ex)<br/><p class="soln">• [Solutions](exercises/5_mcmc_soln)</p>-->|
 |**Monday** 27.11<br/>8:15–12:00|Inference II: Hypothesis testing<br/>Linear Models<br/>Generalised linear models|Hypothesis tests <br/>Linear Models<!--[Linear Models](3_lm)<br/>-->|!Kung height<!--[!Kung height](exercises/3_lm_ex.html)<p class="soln">• [Solutions](exercises/3_lm_soln)</p>--><br/>Bird Species Richness<!--[Bird Species Richness](exercises/6_glm_ex)-->|
 |**Wednesday** 28.11<br/>8:15–12:00 |Priors & Diagnostics<br/>Bayesian workflow<br/>Inference III: Model selection <br/>Multimodel inference<br/>|Model Selection<!--[Model Selection](8_model_selection)-->|??|
 |**Friday** 01.12<br/>8:15–12:00 | Hierarchical Models | Hierarchical Models <!--[Hierarchical Models](7_hm)--> | Climate/Tree Mortality<!---->|
