@@ -1,39 +1,32 @@
 ---
-title: "MLE Exercises"
-date: "23.11.2022"
-output: html_document
+title: "Maximum likelihood: *Tsuga* mortality"
+date: "24.11.2023"
+output: 
+  html_document:
+    self_contained: false
+    lib_dir: lib
+    css: ex.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-1. On slide 12 ("Generalising to multiple observations") we use the sum of the log-likelihoods of each data point, instead of the product of the likelihoods. 
-    a. Why should this matter?
-    b. Is the answer different if you use `prod(dbinom(k, n, p, log=FALSE))` as the likelihood?
-    c. Sometimes outliers can reveal flaws in our algorithms. Try using `optim` to find the MLE for the following dataset using the two methods (sum of the log likelihoods vs product of likelihoods). The answers will probably be very different. Which seems correct? What is going on here that these two (mathematically equivalent) equations yield such different results?
 
-```{r}
-n_vec = c(25, 12, 134, 2000)
-k_vec = c(7, 4, 27, 0)
-```
-
-
-
-2. Load the tsuga dataset from this repository.
+1. Load the tsuga dataset from this repository.
 
 ```{r}
 library(data.table)
-## working directory should be: vu_advanced_statistics/docs/exercises
+## working directory should be: vu_advstats_students
 tsuga = readRDS("data/tsuga.rds")
 
 ## if you don't have the repository saved locally
-# tsuga = readRDS(url("https://github.com/mtalluto/vu_advanced_statistics/raw/main/docs/exercises/data/tsuga.rds"))
+# tsuga = readRDS(url("https://github.com/mtalluto/vu_advstats_students/raw/main/data/tsuga.rds"))
 ```
 
 This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)
 
-   a. Write a function taking three parametrs:
+   a. Write a function taking three parameters:
       i. `p`: a *single value*, the probability that a randomly chosen individual is dead
       ii. `n`: a *vector*, the number of trees in each plot
       iii. `k`: a *vetor*, the number of dead trees in each plot
@@ -49,20 +42,23 @@ lfun = function(p, n, k) {
 
    
    b. Plot the log likelihood across various values of `p`
+		* **Hint**: you will need to run `lfun` once for each value of `p`. This is most efficiently accomplished using `sapply`, but a `for` loop will also work.
    c. Use `optim` to find the MLE for `p`
    d. Is the answer different from `mean(dat$died/dat$n)`? If so, why?
    e. Write two more functions, one to estimate a prior for *p*, and one to compute the log posterior. You may choose the prior distribution and hyperparameters as you like, but they should respect the constraint that *p* must be between zero and one.
    f. Plot the prior and unnormalized posterior. Compare plots with different prior hyperparameters
    g. Compute the maximum a posteriori estimate for *p* using `optim`.
+   h. Write a stan model to compute the maximum a posteriori estimate for p, and then fit it using `optimizing`.
 
 ### Bonus
 
-3. Repeat 2e-2g, but this time estimate the mean **number of trees per plot.**
-    a. What is an appropriate likelihood function? prior?
-    b. Compute the MLE and MAP estimates.
-    c. How do the MLE/MAP compare to `mean(dat$n)`?
+2. Write a Stan program to estimate the mean **number of trees per plot.**
+    a. What kind of **statistical process** could generate these data?
+    b. What is an appropriate likelihood function? prior?
+    c. Compute the MAP estimate.
+    d. How does the MAP compare to `mean(dat$n)`?
 
-4. Use the MAP estimate from 3b and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
-   a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences?
+3. Use the MAP estimate from 3b and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+   a. Compare a histogram and summary statistics of your simulated data with the real data. Note any similarities and differences.
    b. Consider how you could improve this **generative model** to better describe the dataset. Do you need a new likelihood function?
 
