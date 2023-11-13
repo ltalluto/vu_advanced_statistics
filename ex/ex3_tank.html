@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>The German Tank Problem (MCMC Edition)</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">The German Tank Problem (MCMC Edition)</h1>
+<h4 class="date">24.11.2023</h4>
+
+</div>
+
+
+<div id="optional.-implement-your-own-metropolis-algorithm"
+class="section level3">
+<h3>1. <strong>Optional</strong>. Implement your own Metropolis
+algorithm</h3>
+<p>See the bottom of this page for some scaffolding code to get you
+started. Fill in the appropriate places with the code for making the
+algorithm work. Alternatively, there is an implementation provided on
+the <a
+href="https://raw.githubusercontent.com/mtalluto/vu_advstats_statudents/main/r/metrop.r">github
+repository</a>.</p>
+</div>
+<div id="german-tank-problem" class="section level3">
+<h3>2. German Tank Problem</h3>
+<p>Recall the German tank problem presented in lecture. Use the
+following captured serial numbers:</p>
+<pre class="r"><code>s = c(147, 126, 183, 88, 9, 203, 16, 10, 112, 205)</code></pre>
+<p>Your goal is to estimate a single parameter, <span
+class="math inline">\(N\)</span>, the highest possible serial number
+(indicating the number of tanks actually produced).</p>
+<ol style="list-style-type: lower-alpha">
+<li>What likelihood function is appropriate? Can you write this as an
+equation? The likelihood function should be <span
+class="math inline">\(pr(s|N)\)</span>.</li>
+<li>Translate this likelihood function into R code, and plot the
+function for varying values of <span
+class="math inline">\(N\)</span>.</li>
+<li>Translate <code>a</code> and <code>b</code> above into a Stan
+statement for the <code>model</code> block. It will look something like
+<code>s ~ ...</code></li>
+<li>Add a prior for <span class="math inline">\(N\)</span> to your Stan
+program. What prior is reasonable? <strong>Bonus</strong>: Write a prior
+and posterior function in R, and plot them as in part
+<code>a</code>.</li>
+<li>Finish the Stan program, then use it to get the MAP estimate for N
+using the <code>optimizing</code> function. What’s the MAP
+estimate?</li>
+</ol>
+</div>
+<div id="sampling-the-posterior" class="section level3">
+<h3>3. Sampling the posterior</h3>
+<p>Use <code>sampling()</code> to get 5000 samples from the posterior
+distribution. Alternatively, if you finished part 1 above, try this with
+your own sampler.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Evaluate your samples using <code>mcmc_trace()</code> and
+<code>mcmc_hist()</code> from the <code>bayesplot</code> package (or
+implement your own versions). You might need to use
+<code>as.array</code> to convert the samples from stan to something that
+bayesplot can use. Compare the histogram of samples to the posterior
+density plot you made in 2d.</li>
+<li>What summary statistics can we get from the samples? How do your
+estimates of central tendency (mean, median, etc) compare with the MAP?
+What metrics of dispersion might be useful? Can you imagine how you
+might calculate a <strong>credible interval</strong> (== Bayesian
+confidence interval)?</li>
+</ol>
+</div>
+<div id="scaffolding-for-implementing-the-metropolis-algorithm"
+class="section level2">
+<h2>Scaffolding for implementing the Metropolis algorithm</h2>
+<pre class="r"><code>#&#39; Simple single-parameter metropolis algorithm
+#&#39; @param target Target function (returning log unnormalised posterior density);
+#&#39;  this function should take the parameter as its first argument and a data list as its second
+#&#39; @param initial Initial value of the parameter
+#&#39; @param data Data to pass to the target
+#&#39; @param iter Number of iterations
+#&#39; @param scale Scale for the proposal distribution; defaults to 1
+#&#39; 
+#&#39; @return A list, with three components: &#39;chain&#39; is the markov chain, &#39;scale&#39; 
+#&#39;      is the scale parameter used, and &#39;accept&#39; is the acceptance rate
+metropolis = function(target, initial, data, iter = 5000, scale = 1) {
+
+
+    ##### OPTIONAL
+    ## here, you can run an adaptation phase to set the scale. 
+    ## The steps should be a repeat of everything below
+    ## The only addition: if you accept the proposal: scale = scale * 1.1 (or some other constant)
+    ## if you reject: scale = scale / 1.1
+    ## At the end of adaptation, discard the chain, you can&#39;t use those samples
+
+    # set up the markov chain
+    # here we preallocate a vector to hold the state of the chain
+    chain = numeric(iter)
+
+    # it is important to keep track of how many times we accept the proposals
+    # the acceptance rate is an important diagnostic
+    accept = 0
+
+
+    # the first step in the chain gets initial values
+    chain[1] = initial
+
+    for(i in 2:iter) {
+
+        ## STEPS FOR THE ALGORITHM
+        ## 1. generate a proposal for chain[i]
+        ##     this proposal should be draw from a proposal distribution centred around
+        ##     chain[i-1] and using the scale to determine how wide the distribution is
+        ##
+        ## 2. Compute the acceptance probability of the proposal
+        ##     remember that this is the ratio of the probabilities from the target distribution
+        ##     target(proposal, data)/target(chain[i-1], data)
+        ##     If your target returns a log probability (it should), then you need to convert
+        ##     from log-scale to probability scale
+        ##     
+        ## 3. Do a bernoulli trial - on a success, accept the proposal, on a failure, reject it
+        ## 
+        ## 4. Save the result; if you accepted, chain[i] gets the proposal. 
+        ##    If not, chain[i] will be the same as chain[i-1]. Don&#39;t forget to track acceptances. 
+
+    }
+
+
+    return(list(chain = chain, accept = accept/iter, scale = scale))
+}
+
+
+
+log_posterior = function(params, data) {
+    ## fill in a log posterior for the problem you are working here
+}
+
+# fill in initial values, data, and the guess at the scale
+## fit = metropolis(log_posterior, initial = , data = , scale = )</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
