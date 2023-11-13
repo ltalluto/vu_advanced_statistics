@@ -18,6 +18,7 @@ output:
 knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png", error = TRUE)
 library(ggplot2)
 library(data.table)
+library(cowplot)
 ```
 
 ## The German Tank Problem
@@ -29,14 +30,69 @@ library(data.table)
 * Known: factories stamped serial numbers on the tanks in order, starting with 1
 * I have captured a single tank, with (for example), the serial number $s = 200$. 
 * How many tanks have been produced? $(N)$
-* We know:
-	- $N >= 200$
-	- $pr(N < 200) = 0$
 
 :::: 
 :::: {.column}
 
-```{r echo = FALSE, warning = FALSE}
+:::: 
+:::
+
+
+## The German Tank Problem
+
+::: {.columns}
+:::: {.column}
+
+### Knowns:
+
+* Captured serial number $s = 200$
+* Number of tanks $N >= s$
+* Assume tanks are captured completely at random, so all tanks have the same probability of capture
+* This sounds like a uniform distribution!
+* Minimum of the distribution is 1, the maximum will be N.
+
+:::: 
+:::: {.column}
+
+::::
+:::
+
+
+
+## The German Tank Problem
+
+::: {.columns}
+:::: {.column}
+
+### Knowns:
+
+* Captured serial number $s = 200$
+* Number of tanks $N >= s$
+* Assume tanks are captured completely at random, so all tanks have the same probability of capture
+* This sounds like a uniform distribution!
+* Minimum of the distribution is 1, the maximum will be N.
+* **Hypothesis**: *We got the biggest tank; $s = N$*
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 6}
+cols = scales::hue_pal()(4)
+vals = c(200, 400, 800, 2000)
+s_giv_n = data.table(
+	N = rep(vals, times = 2400),
+	s = rep(1:2400, length(vals))
+)
+s_giv_n[, pr := dunif(s, 1, N)]
+labs = paste("N =", vals)
+
+pl_top = ggplot() + theme_minimal() + xlab("s") + ylab("pr(N | s)") + 
+	xlim(0, 2400) + ylim(0, max(s_giv_n$pr, na.rm = TRUE)*1.2)
+p1 = pl_top + geom_line(data = s_giv_n[N==200], aes(x = s, y = pr, colour = factor(N)), size = 0.9) +
+	scale_color_hue(labels = labs[1], name = element_blank())
+leg = get_legend(p1)
+p1 = p1 + guides(colour = "none")
+
 s = 200
 tankdat = data.table(
 	N = 1:2400
@@ -47,36 +103,15 @@ tankpts$labs = paste("N =", tankpts$N)
 
 pl = ggplot() + theme_minimal() + xlab("N") + ylab("pr(s | N)") + 
 	xlim(0, max(tankdat$N)) + ylim(0, max(tankdat$pr, na.rm = TRUE)*1.2)
-p2 = pl + geom_line(data = tankdat[N < 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5)
-p2
+p2 = pl + geom_line(data = tankdat[N < 200], aes(x = N, y = pr), col = cols[1], size = 1.5)
+
+plot_grid(p1, ggdraw(leg), pl, ncol = 2, nrow = 2, rel_widths = c(3, 1))
 ```
 
 :::: 
 :::
 
-## The German Tank Problem
 
-::: {.columns}
-:::: {.column}
-
-### Knowns:
-
-* Captured serial number $s = 200$
-* Number of tanks $N >= s$
-
-> - Assume for a minute that, just by chance, we caught the tank with the highest serial number.
-> - Assume tanks are captured completely at random, so all tanks have the same probability of capture
-> - This sounds like a uniform distribution!
-
-:::: 
-:::: {.column}
-
-```{r echo = FALSE, warning = FALSE}
-p2
-```
-
-:::: 
-:::
 
 
 ## The German Tank Problem
@@ -88,23 +123,28 @@ p2
 
 * Captured serial number $s = 200$
 * Number of tanks $N >= s$
-
-* Assume for a minute that, just by chance, we caught the tank with the highest serial number, so $N = 200$.
 * Assume tanks are captured completely at random, so all tanks have the same probability of capture
 * This sounds like a uniform distribution!
-* $pr(s | N) = Uniform(s, 1, 200)$
+* Minimum of the distribution is 1, the maximum will be N.
+* **Hypothesis**: *We got the biggest tank; $s = N$*
 
 :::: 
 :::: {.column}
 
-```{r echo = FALSE, warning = FALSE}
-pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) + 
-	geom_point(data = tankpts[N <= 200], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
-	geom_text(data = tankpts[N <= 200], aes(x = N + 150, y = pr + .0001, label = labs), size = 3)
+```{r echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 6}
+yadj = 0.0002
+p200 = pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = cols[1], size = 1.5) +
+	geom_point(data = tankpts[N <= 200], aes(x = N, y = pr), pch = 21, bg = cols[2], size = 1.5) + 
+	geom_text(data = tankpts[N <= 200], aes(x = N + 150, y = pr + yadj, label = labs), size = 3)
+
+# grid.arrange(p1, pl, nrow = 2, widths = c(1, 0.8))
+plot_grid(p1, ggdraw(leg), p200, ncol = 2, nrow = 2, rel_widths = c(3, 1))
 ```
 
 :::: 
 :::
+
+
 
 
 
@@ -114,7 +154,7 @@ pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", si
 ::: {.columns}
 :::: {.column}
 
-* We can imagine another scenario where $N = 400$
+### Hypothesis 2: $N = 400$
 * The data $s$ have not changed, just the model
 * All numbers are still equally likely to be captured
 	- But now there are twice as many possibilities
@@ -123,15 +163,23 @@ pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", si
 :::: 
 :::: {.column}
 
-```{r echo = FALSE, warning = FALSE}
-tankpts$labs = paste("N =", tankpts$N)
-pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) +
-	geom_point(data = tankpts[N <= 400], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
-	geom_text(data = tankpts[N <= 400], aes(x = N + 150, y = pr + .0001, label = labs), size = 3)
+```{r echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 6}
+p400 = pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = cols[1], size = 1.5) +
+	geom_point(data = tankpts[N <= 400], aes(x = N, y = pr), pch = 21, bg = cols[2], size = 1.5) + 
+	geom_text(data = tankpts[N <= 400], aes(x = N + 150, y = pr + yadj, label = labs), size = 3)
+
+p1_400 = pl_top + geom_line(data = s_giv_n[N <= 400], aes(x = s, y = pr, colour = factor(N)), size = 0.9) +
+	scale_color_hue(labels = labs[1:2], name = element_blank())
+leg = get_legend(p1_400)
+p1_400 = p1_400 + guides(colour = "none")
+
+plot_grid(p1_400, ggdraw(leg), p400, ncol = 2, nrow = 2, rel_widths = c(3, 1))
 ```
 
 :::: 
 :::
+
+
 
 
 
@@ -140,24 +188,36 @@ pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", si
 ::: {.columns}
 :::: {.column}
 
-* We can imagine another scenario where $N = 400$
+### Hypothesis 2: $N = 400$
 * The data $s$ have not changed, just the model
 * All numbers are still equally likely to be captured
 	- But now there are twice as many possibilities
 	- Each individual tank is half as likely to be captured
-* The same logic applies if $N = 800$
+	
+### Hypothesis 3: $N = 800$
+
+* The same logic applies!
 
 :::: 
 :::: {.column}
 
-```{r echo = FALSE, warning = FALSE}
-pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) + 
-	geom_point(data = tankpts[N <= 800], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
-	geom_text(data = tankpts[N <= 800], aes(x = N + 150, y = pr + .0001, label = labs), size = 3) 
+```{r echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 6}
+p800 = pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = cols[1], size = 1.5) +
+	geom_point(data = tankpts[N <= 800], aes(x = N, y = pr), pch = 21, bg = cols[2], size = 1.5) + 
+	geom_text(data = tankpts[N <= 800], aes(x = N + 150, y = pr + yadj, label = labs), size = 3)
+
+p1_800 = pl_top + geom_line(data = s_giv_n[N <= 800], aes(x = s, y = pr, colour = factor(N)), size = 0.9) +
+	scale_color_hue(labels = labs[1:3], name = element_blank())
+leg = get_legend(p1_400)
+p1_800 = p1_800 + guides(colour = "none")
+
+plot_grid(p1_800, ggdraw(leg), p800, ncol = 2, nrow = 2, rel_widths = c(3, 1))
 ```
 
 :::: 
 :::
+
+
 
 
 
@@ -166,28 +226,40 @@ pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", si
 ::: {.columns}
 :::: {.column}
 
-* We can imagine another scenario where $N = 400$
+### Hypothesis 2: $N = 400$
 * The data $s$ have not changed, just the model
 * All numbers are still equally likely to be captured
 	- But now there are twice as many possibilities
 	- Each individual tank is half as likely to be captured
-* The same logic applies if $N = 800$
-* And so on...
-	- $s ~ Uniform(min = 1, max = N)$
-* What is the MLE? Is there a logical problem with that?
+	
+### Hypothesis 3: $N = 800$
 
+* The same logic applies!
+
+... and so on.
+
+**What is the MLE?** Is there a logical problem with that?
+
+$$ s \sim  Uniform(min = 1, max = N)$$
 :::: 
 :::: {.column}
 
-```{r echo = FALSE, warning = FALSE}
-tankpts$labs = paste("N =", tankpts$N)
-pl + geom_line(data = tankdat, aes(x = N, y = pr), col = "#00BFC4", size = 1.5) +
-	geom_point(data = tankpts, aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
-	geom_text(data = tankpts, aes(x = N + 150, y = pr + .0001, label = labs), size = 3) 
+```{r echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 6}
+pall = pl + geom_line(data = tankdat, aes(x = N, y = pr), col = cols[1], size = 1.5) +
+	geom_point(data = tankpts, aes(x = N, y = pr), pch = 21, bg = cols[2], size = 1.5) + 
+	geom_text(data = tankpts, aes(x = N + 150, y = pr + yadj, label = labs), size = 3)
+
+p1_all = pl_top + geom_line(data = s_giv_n, aes(x = s, y = pr, colour = factor(N)), size = 0.9) +
+	scale_color_hue(labels = labs, name = element_blank())
+leg = get_legend(p1_400)
+p1_all = p1_all + guides(colour = "none")
+
+plot_grid(p1_all, ggdraw(leg), pall, ncol = 2, nrow = 2, rel_widths = c(3, 1))
 ```
 
 :::: 
 :::
+
 
 
 
@@ -233,7 +305,7 @@ dpx = function(x) scale * dunif(x, s, px_max)
 
 tankdat$px = dpx(s)
 tankdat$tx = dtx(s, tankdat$N)
-pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) +
+p_rej = pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) +
 	geom_line(data = tankdat, aes(x = N, y = px), col = "#F8766D", size = 1.5) + 
 	annotate(geom = "text", x = 800, y = dtx(s, 550), label = "Target t(x)", col = "#00BFC4") + 
 	annotate(geom = "text", x = 1000, y = dpx(1000)*1.03, label = "Proposal p(x)", col = "#F8766D") 
@@ -266,11 +338,7 @@ pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) 
 :::: {.column}
 
 ```{r echo = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
-pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) +
-	geom_line(data = tankdat, aes(x = N, y = px), col = "#F8766D", size = 1.5) + 
-	annotate(geom = "text", x = 800, y = dtx(s, 550), label = "Target t(x)", col = "#00BFC4") + 
-	annotate(geom = "text", x = 1000, y = dpx(1000)*1.03, label = "Proposal p(x)", col = "#F8766D") 
-
+p_rej
 ```
 
 :::: 
@@ -339,6 +407,9 @@ legend("right", legend=c("proposal", "target",
 
 ## Markov Chains
 
+::: {.columns}
+:::: {.column}
+
 * Markov chains are defined by a **state vector** $S$
    - In this case, the value of $S$ represents some parameter
    - For a model with $k$ parameters, $S$ is a matrix with $k$ columns
@@ -347,13 +418,60 @@ legend("right", legend=c("proposal", "target",
    - Chain must be **recurrent**: it must be possible to (eventually) reach any possible value from any other possible value
 * Markov models are commonly used to model stochastic processes happening in discrete time steps (e.g., population growth)
 
+$$ S_t = S_{t-1} + fecundity \times S_{t-1} - mortality \times S_{t-1} $$
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE}
+set.seed(123)
+psim = function(tmax, stmin = 500, stmax = 1000, stdev = 0.04) {
+	state = numeric(tmax)
+	state[1] = runif(1, stmin, stmax)
+	for(t in 2:tmax) {
+		state[t] = state[t-1] + state[t-1] * abs(rnorm(1, 1, stdev)) - 
+			state[t-1] * abs(rnorm(1, 1, stdev))
+	}
+	state
+}
+state = lapply(1:3, \(i) {
+	data.table(
+	time = 1:1000,
+	pop_size = psim(1000),
+	pop_id = i)
+})
+state = rbindlist(state)
+
+ggplot(state) + geom_line(aes(x = time, y = pop_size, col = factor(pop_id))) + 
+	ylab("Population Size") + xlab("Time") + scale_color_hue(guide = "none") + 
+	theme_minimal()
+
+```
+
+:::: 
+:::
 
 ## Markov Chain Monte Carlo
+::: {.columns}
+:::: {.column}
 
-* MCMC lets us sample from a posterior distribution
-* Individual samples are *not* independent (because proposals are centred around the previous value)
+* MCMC applies Markov chains to increase the acceptance rate of rejection sampling
+	- With rejection sampling we jump randomly, anywhere in the state space
+	- With MCMC, we take very small steps in space, centered around the most recently accepted value
+	- Target acceptance rates of 20-50 %
+* Individual samples are *not* independent
 * Run for long enough, we can approximate the shape of the posterior
 
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+p_rej + annotate(geom = "text", x = 1500, y = 0.003, 
+				 label = paste0("Acceptance rate = ", round(length(samples)/length(candidates), 3)))
+```
+
+:::: 
+:::
 
 ## Metropolis-Hastings
 
@@ -436,7 +554,6 @@ $$
     - Frequently, $S_{cand} \sim \mathcal{N}(S_t, \sigma_p)$
     - $\sigma_p$ is the **proposal scale** (more on this later)
 3. Compute an acceptance probability $r = \frac{t(S_{cand})}{t(S_0)}$
-    - in practice: $r = e^{\log t(S_{cand}) - \log t(S_0)}$
     - accept or reject as in rejection sampling
     - If the candidate is better, $r > 1$, always accept
 
@@ -479,10 +596,9 @@ $$
     - Frequently, $S_{cand} \sim \mathcal{N}(S_t, \sigma_p)$
     - $\sigma_p$ is the **proposal scale** (more on this later)
 3. Compute an acceptance probability $r = \frac{t(S_{cand})}{t(S_0)}$
-    - in practice: $r = e^{\log t(S_{cand}) - \log t(S_0)}$
     - accept or reject as in rejection sampling
     - If the candidate is better, $r > 1$, always accept
-4. Continue; asymptotically, the state of the chain converges on the target distribution
+4. Continue until the state of the chain converges on the target distribution
 
 :::: 
 :::: {.column}
@@ -527,10 +643,9 @@ $$
     - Frequently, $S_{cand} \sim \mathcal{N}(S_t, \sigma_p)$
     - $\sigma_p$ is the **proposal scale** (more on this later)
 3. Compute an acceptance probability $r = \frac{t(S_{cand})}{t(S_0)}$
-    - in practice: $r = e^{\log t(S_{cand}) - \log t(S_0)}$
     - accept or reject as in rejection sampling
     - If the candidate is better, $r > 1$, always accept
-4. Continue; asymptotically, the state of the chain converges on the target distribution
+4. Continue until the state of the chain converges on the target distribution
 
 :::: 
 :::: {.column}
@@ -571,6 +686,9 @@ hist(samples, breaks = 300, freq=FALSE, axes=FALSE, xlim=range(xpr), main="",
 
 ## Metropolis algorithm summary
 
+::: {.algo}
+**Algorithm**
+
 ```
 Define t(x): log unnormalized posterior (i.e, "target") distribution
 Define p(x): the proposal distribution
@@ -584,12 +702,13 @@ for i in 1:n_samples
    else
       state[i] = chain[i-1]
 ```
+:::
 
 ## Multivariate Metropolis-Hastings
 * Logic is the same
 * We cannot easily sample from the joint posterior $pr(\theta_1, \theta_2 | X)$
 * We can sample from conditional posteriors $pr(\theta_1, | \theta_2, X)$
-* Simply sample from parameters one at a time, in random order (see [sample code](https://github.com/mtalluto/vu_advanced_statistics/blob/main/r/mh.r))
+* Simply sample from parameters one at a time, in random order (see [sample code](https://github.com/mtalluto/vu_advstats_students/blob/main/r/mh.r))
 
 
 ## Tuning Metropolis-Hastings
@@ -634,11 +753,11 @@ mcmc_trace(samples)
 
 ```
 
-## Hamiltonian monte carlo
-- Only gets a mention here, we won't implement this
-- We will use this when we start using Stan
-- HMC imagines the posterior density is a frictionless bowl; more probable locations are lower
-- Place a ball on this bowl, give it a shove in a random direction, record everywhere it goes
-- The ball curves around the surface, sample from the path
-- once the ball slows down past a certain threshold, drop in a new place and shove it again
+## MCMC in Stan
+> - Stan uses an even more efficient algorithm called Hamiltonian Monte Carlo (HMC) 
+> - HMC imagines the posterior density is a frictionless bowl; more probable locations are lower
+> - Place a ball on this bowl, give it a shove in a random direction, record everywhere it goes
+> - When the ball slows down past a certain threshold, stop, sample, accept/reject, and shove it again
+> - Easiest is to view an [animation](https://arogozhnikov.github.io/2016/12/19/markov_chain_monte_carlo.html)
+> - Implementation is simple! Just use `sampling` instead of `optimization`.
 

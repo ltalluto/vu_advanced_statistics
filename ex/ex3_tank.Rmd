@@ -1,32 +1,45 @@
 ---
-title: "MCMC Exercises"
-date: "25.11.2022"
-output: html_document
+title: "The German Tank Problem (MCMC Edition)"
+date: "24.11.2023"
+output: 
+  html_document:
+    self_contained: false
+    lib_dir: lib
+    css: ex.css
 ---
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+### 1. **Optional**. Implement your own Metropolis algorithm
 
-1. **Optional**. Implement your own Metropolis algorithm for generating MCMC samples. See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. You can test the code using any of the log_posterior functions we've written so far (this gives you a chance to compare the results when you know the answer), or you can try it out using exercise number 2. Alternatively, there is an implementation provided on the [github repository](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/r/metrop.r).
+See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. Alternatively, there is an implementation provided on the [github repository](https://raw.githubusercontent.com/mtalluto/vu_advstats_statudents/main/r/metrop.r).
 
-2. Recall the German tank problem presented in lecture. Use the following captured serial numbers:
+### 2. German Tank Problem
+
+Recall the German tank problem presented in lecture. Use the following captured serial numbers:
 
 ```{r}
 s = c(147, 126, 183, 88, 9, 203, 16, 10, 112, 205)
 ```
 
-Your goal is to estimate a single parameter, $N_{max}$, the highest possible serial number (indicating the number of tanks actually produced).
+Your goal is to estimate a single parameter, $N$, the highest possible serial number (indicating the number of tanks actually produced).
 
-a. Write a log likelihood function that computes $\log pr(s | N_{max})$. What distribution is appropriate? Assume that the observations in $s$ are independent and random; $s$ can be any number between 1 and $N_{max}$, and the probability of any number in that range being observed is the same as for any other number.
-b. Write a log prior for $N_{max}$, and combine it with the log likelihood into a log posterior function.
-c. This posterior distribution cannot be estimated using Laplace approximation. However you can still use optim to get a MAP estimate. Get the MAP estimate, then plot the log_posterior against many values of $N_{max}$. Does your MAP estimate make sense?
+a. What likelihood function is appropriate? Can you write this as an equation? The likelihood function should be $pr(s|N)$.
+b. Translate this likelihood function into R code, and plot the function for varying values of $N$.
+c. Translate `a` and `b` above into a Stan statement for the `model` block. It will look something like ` s ~ ...`
+d. Add a prior for $N$ to your Stan program. What prior is reasonable? **Bonus**: Write a prior and posterior function in R, and plot them as in part `a`.
+e. Finish the Stan program, then use it to get the MAP estimate for N using the `optimizing` function. What's the MAP estimate?
 
+### 3. Sampling the posterior
 
-3. Use a metropolis sampler to generate 20000 samples from the posterior distribution for the German tank problem. You can either use the sampler you wrote for question 1, or use one provided for you. It can be found in [r/metrop.r](https://raw.githubusercontent.com/mtalluto/vu_advanced_statistics/main/r/metrop.r) in this repository.
-   a. Play with the scale parameter in the algorithm for short runs (2000 iterations is plenty). How does changing the scale influence the acceptance rate? Either use automatic adaptation, or play with the scale manually until you have an acceptance rate between 0.35 and 0.5.
-   b. Evaluate your samples using `mcmc_trace()` and `mcmc_hist()` from the `bayesplot` package (or implement your own versions). Compare the histogram of samples to the posterior density plot you made in 2c.
-   c. Generate a 90% highest posterior density interval (hpdi). A function for this is in `r/metrop.r`. Compare these credible intervals with the usual quantile intervals we have computed thus far. If they are meaningfully different, why?
+Use `sampling()` to get 5000 samples from the posterior distribution. Alternatively, if you finished part 1 above, try this with your own sampler.
+
+a. Evaluate your samples using `mcmc_trace()` and `mcmc_hist()` from the `bayesplot` package (or implement your own versions). You might need to use `as.array` to convert the samples from stan to something that bayesplot can use. Compare the histogram of samples to the posterior density plot you made in 2d.
+b. What summary statistics can we get from the samples? How do your estimates of central tendency (mean, median, etc) compare with the MAP? What metrics of dispersion might be useful? Can you imagine how you might calculate a **credible interval** (== Bayesian confidence interval)?
 
 
 ## Scaffolding for implementing the Metropolis algorithm
