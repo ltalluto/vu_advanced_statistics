@@ -35,4 +35,14 @@ th {
     font-weight: normal;
 }
 
+.algo {
+	background-color: #cce5ff;
+	border: 0.5px solid #0000cc;
+	font-size: smaller;
+	padding: 10px;
+	padding-bottom: 0px;
+	margin: 20px;
+	color: #000066;
+	font-weight: 500;
+}
 
