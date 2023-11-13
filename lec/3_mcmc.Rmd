@@ -1,131 +1,246 @@
 ---
 title: "Markov Chain Monte Carlo"
 author: "Matthew Talluto"
-date: "25.11.2022"
+date: "23.11.2023"
 output:
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
     css: rmd_style.css
+    self_contained: false
+    lib_dir: lib
   beamer_presentation: default
 ---
 
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png", error = TRUE)
+library(ggplot2)
+library(data.table)
 ```
 
-## Laplace approximation isn't always effective
+## The German Tank Problem
 
-<div class="left lt">
-* Complex models (e.g., hierarchical models)
-   - Model height as a function of weight
-   - People from rich countries are taller on average
-</div>
+::: {.columns}
+:::: {.column}
 
-<div class="right rt">
-$$
-\begin{aligned}
-\bar{h}_{country} & \sim \mathcal{N}(A + B \times income_{country}, \Sigma) \\
-h & \sim \mathcal{N}(\bar{h}_{country} + b \times weight, \sigma)
-\end{aligned}
-$$
-</div>
+* During WW2, the Allies wanted to know the rate of tank production in German factories
+* Known: factories stamped serial numbers on the tanks in order, starting with 1
+* I have captured a single tank, with (for example), the serial number $s = 200$. 
+* How many tanks have been produced? $(N)$
+* We know:
+	- $N >= 200$
+	- $pr(N < 200) = 0$
 
-## Laplace approximation isn't always effective
-<div class="left lt">
-* Complex models (e.g., hierarchical models)
-   - Model height as a function of weight
-   - People from rich countries are taller on average
-* Poorly identified models
-  - correlated predictors
-  - very flat posterior distributions
-  - small sample sizes
-  - very weak priors
-</div>
+:::: 
+:::: {.column}
 
-<div class="right rt">
-$$
-\begin{aligned}
-\bar{h}_{country} & \sim \mathcal{N}(A + B \times income_{country}, \Sigma) \\
-h & \sim \mathcal{N}(\bar{h}_{country} + b \times weight, \sigma)
-\end{aligned}
-$$
-</div>
+```{r echo = FALSE, warning = FALSE}
+s = 200
+tankdat = data.table(
+	N = 1:2400
+)
+tankdat$pr = dunif(s, 1, tankdat$N)
+tankpts = tankdat[N %in% c(s, 2*s, 4*s, 10*s)]
+tankpts$labs = paste("N =", tankpts$N)
+
+pl = ggplot() + theme_minimal() + xlab("N") + ylab("pr(s | N)") + 
+	xlim(0, max(tankdat$N)) + ylim(0, max(tankdat$pr, na.rm = TRUE)*1.2)
+p2 = pl + geom_line(data = tankdat[N < 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5)
+p2
+```
+
+:::: 
+:::
+
+## The German Tank Problem
+
+::: {.columns}
+:::: {.column}
+
+### Knowns:
+
+* Captured serial number $s = 200$
+* Number of tanks $N >= s$
+
+> - Assume for a minute that, just by chance, we caught the tank with the highest serial number.
+> - Assume tanks are captured completely at random, so all tanks have the same probability of capture
+> - This sounds like a uniform distribution!
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+p2
+```
+
+:::: 
+:::
 
 
+## The German Tank Problem
 
-## Laplace approximation isn't always effective
-<div class="left lt">
-* Complex models (e.g., hierarchical models)
-   - Model height as a function of weight
-   - People from rich countries are taller on average
-* Poorly identified models
-  - correlated predictors
-  - very flat posterior distributions
-  - small sample sizes
-  - very weak priors
-* Highly skewed distributions
-</div>
+::: {.columns}
+:::: {.column}
 
-<div class="right rt">
-$$
-\begin{aligned}
-\bar{h}_{country} & \sim \mathcal{N}(A + B \times income_{country}, \Sigma) \\
-h & \sim \mathcal{N}(\bar{h}_{country} + b \times weight, \sigma)
-\end{aligned}
-$$
-</div>
+### Knowns:
+
+* Captured serial number $s = 200$
+* Number of tanks $N >= s$
+
+* Assume for a minute that, just by chance, we caught the tank with the highest serial number, so $N = 200$.
+* Assume tanks are captured completely at random, so all tanks have the same probability of capture
+* This sounds like a uniform distribution!
+* $pr(s | N) = Uniform(s, 1, 200)$
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) + 
+	geom_point(data = tankpts[N <= 200], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
+	geom_text(data = tankpts[N <= 200], aes(x = N + 150, y = pr + .0001, label = labs), size = 3)
+```
+
+:::: 
+:::
 
 
 
 
 ## The German Tank Problem
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 
-* During WW2, the Allies wanted to know the rate of tank production in German factories
-* Known: factories stamped serial numbers on the tanks in order, starting with 1
-* The problem: given a set of captured serial numbers $s$, estimate $N$, the maximum serial number
-</div>
+* We can imagine another scenario where $N = 400$
+* The data $s$ have not changed, just the model
+* All numbers are still equally likely to be captured
+	- But now there are twice as many possibilities
+	- Each individual tank is half as likely to be captured
 
-<div class="right rt">
+:::: 
+:::: {.column}
 
-```{r echo = FALSE}
-s = 200
-Npr = 2:2400
-par(mgp=c(0.5,0,0), mar=c(2,2,0.2,0.2))
-plot(Npr, dunif(s, 1, Npr), type='l', bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
-pts = c(s, 2*s, 4*s, 10*s)
-points(pts, dunif(s, 1, pts), pch=21, cex=1.8, bg='#F8766D')
-text(pts, dunif(s, 1, pts), c("s", "2s", "4s", "10s"), pos=4)
+```{r echo = FALSE, warning = FALSE}
+tankpts$labs = paste("N =", tankpts$N)
+pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) +
+	geom_point(data = tankpts[N <= 400], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
+	geom_text(data = tankpts[N <= 400], aes(x = N + 150, y = pr + .0001, label = labs), size = 3)
 ```
-</div>
+
+:::: 
+:::
+
+
+
+## The German Tank Problem
+
+::: {.columns}
+:::: {.column}
+
+* We can imagine another scenario where $N = 400$
+* The data $s$ have not changed, just the model
+* All numbers are still equally likely to be captured
+	- But now there are twice as many possibilities
+	- Each individual tank is half as likely to be captured
+* The same logic applies if $N = 800$
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+pl + geom_line(data = tankdat[N <= 200], aes(x = N, y = pr), col = "#00BFC4", size = 1.5) + 
+	geom_point(data = tankpts[N <= 800], aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
+	geom_text(data = tankpts[N <= 800], aes(x = N + 150, y = pr + .0001, label = labs), size = 3) 
+```
+
+:::: 
+:::
+
+
+
+## The German Tank Problem
+
+::: {.columns}
+:::: {.column}
+
+* We can imagine another scenario where $N = 400$
+* The data $s$ have not changed, just the model
+* All numbers are still equally likely to be captured
+	- But now there are twice as many possibilities
+	- Each individual tank is half as likely to be captured
+* The same logic applies if $N = 800$
+* And so on...
+	- $s ~ Uniform(min = 1, max = N)$
+* What is the MLE? Is there a logical problem with that?
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+tankpts$labs = paste("N =", tankpts$N)
+pl + geom_line(data = tankdat, aes(x = N, y = pr), col = "#00BFC4", size = 1.5) +
+	geom_point(data = tankpts, aes(x = N, y = pr), pch = 21, bg = "#F8766D", size = 1.5) + 
+	geom_text(data = tankpts, aes(x = N + 150, y = pr + .0001, label = labs), size = 3) 
+```
+
+:::: 
+:::
+
+
+
 
 
 
 ## Rejection sampling
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
+
 * There are general algorithms for sampling from unknown distributions
-* We have the **target distribution**, $t(N) = pr(s|N)$
-* Find an easy-to-sample **proposal distribution**, call it $f(N)$, 
-    - Scale it so that it's always higher than our target
-    - Uniform is an obvious choice here, with a very high maximum: e.g., `dunif(s, 1, 1e6)`
-    - This is a kind of prior - we are saying that it's impossible they made more than a million tanks
-</div>
-<div class="right rt">
-```{r echo = FALSE}
-ymax = dunif(s, 1, s)
-scale = ymax/dunif(s, 1, 1e6)
-par(mgp=c(0.5,0,0), mar=c(2,2,2,0.2))
-plot(Npr, dunif(s, 1, Npr), type='l', bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
-prop = dunif(Npr, 1, 1e6) * scale
-lines(Npr, prop, lwd=2, col='#F8766D')
-legend("right", legend=c("proposal", "target"), lwd=2, col=c('#F8766D', '#00BFC4'), bty='n')
+	- Here, the **target distribution**, $t(x)$, is difficult to sample from
+
+$$
+t(x) = pr(s|N) \sim Uniform(s,N)
+$$
+
+* However, a uniform distribution with a fixed minimum and maximum is easy to sample from
+	- We will call this the **proposal distribution** $p(x)$
+	- We will rescale it so that it is always taller than $t(x)$
+
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE}
+px_max = 4000 # the maximum of our uniform sample distribution
+
+# write two small functions to get the density of and to sample from p(x)
+dpx = function(x) dunif(x, s, px_max)
+rpx = function(n) runif(n, s, px_max)
+
+# also write a density function for the target distribution
+# and convert it into a log likelihood function while we are at it
+dtx = function(x, N, log = FALSE) dunif(x, 1, N, log = log)
+llfun = function(N, s) sum(dtx(s, N, log = TRUE))
+
+# this is the highest point of t(x)
+ymax = dtx(s, s)
+# use it to scale p(x) at the highest point
+scale = ymax/dpx(s)
+dpx = function(x) scale * dunif(x, s, px_max)
+
+tankdat$px = dpx(s)
+tankdat$tx = dtx(s, tankdat$N)
+pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) +
+	geom_line(data = tankdat, aes(x = N, y = px), col = "#F8766D", size = 1.5) + 
+	annotate(geom = "text", x = 800, y = dtx(s, 550), label = "Target t(x)", col = "#00BFC4") + 
+	annotate(geom = "text", x = 1000, y = dpx(1000)*1.03, label = "Proposal p(x)", col = "#F8766D") 
 ```
-</div>
+
+:::: 
+:::
 
 
 
@@ -133,45 +248,61 @@ legend("right", legend=c("proposal", "target"), lwd=2, col=c('#F8766D', '#00BFC4
 
 ## Rejection sampling
 
-<div class="left lt">
-* There are general algorithms for sampling from unknown distributions
-* We have the **target distribution**, $t(N) = pr(s|N)$
-* Find an easy-to-sample **proposal distribution**, call it $f(N)$
-* Draw a sample $x$ from the proposal distribution, and compute an **acceptance probability**, $r = \frac{t(x)}{f(x)}$
-* Accept the sample with probability $r$, reject with probability $1-r$
-</div>
-<div class="right rt">
+::: {.columns}
+:::: {.column}
+::::: {.algo}
 
-```{r echo = FALSE}
-par(mgp=c(0.5,0,0), mar=c(2,2,2,0.2))
-plot(Npr, dunif(s, 1, Npr), type='l', bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
-lines(Npr, prop, lwd=2, col='#F8766D')
-legend("right", legend=c("proposal", "target"), lwd=2, col=c('#F8766D', '#00BFC4'), bty='n')
-x = 596; y = dunif(s, 1, x) * 0.2
-segments(x, 0, x, scale*dunif(x, 1, 1e6), col="#F8766D", lty=2, lwd=1.5)
-segments(x, 0, x, dunif(s, 1, x), col="#00BFC4", lty=3, lwd=1.5)
-points(x, y, pch=21, bg="#C77CFF", cex=2)
-text(x, y, "x", pos=4)
-text(x+50, grconvertY(0.5, "npc", "user"), expression(r==frac(t(x),f(x))), pos=4)
+**Algorithm**
+
+1. Define target distribution t(x)
+2. Define proposal distribution p(x)
+3. Draw a random sample $y$ from p(x)
+4. Compute **acceptance probability** $r = \frac{t(y)}{p(y)}$
+5. Accept the sample with probability $r$, reject with probability $1-r$
+6. Repeat until desired number of samples obtained
+
+:::::
+:::: 
+:::: {.column}
+
+```{r echo = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
+pl + geom_line(data = tankdat, aes(x = N, y = tx), col = "#00BFC4", size = 1.5) +
+	geom_line(data = tankdat, aes(x = N, y = px), col = "#F8766D", size = 1.5) + 
+	annotate(geom = "text", x = 800, y = dtx(s, 550), label = "Target t(x)", col = "#00BFC4") + 
+	annotate(geom = "text", x = 1000, y = dpx(1000)*1.03, label = "Proposal p(x)", col = "#F8766D") 
+
 ```
-</div>
+
+:::: 
+:::
 
 
 ## Rejection sampling
 
-<div class="left lt">
-* We have the **target distribution**, $t(N) = pr(s|N)$
-* Find an easy-to-sample **proposal distribution**, call it $f(N)$
-* Draw a sample $x$ from the proposal distribution, and compute an **acceptance probability**, $r = \frac{t(x)}{f(x)}$
-* Accept the sample with probability $r$, reject with probability $1-r$
-* This is a VERY inefficient way to explore a distribution
+::: {.columns}
+:::: {.column}
+::::: {.algo}
+
+**Algorithm**
+
+1. Define target distribution t(x)
+2. Define proposal distribution p(x)
+3. Draw a random sample $y$ from p(x)
+4. Compute **acceptance probability** $r = \frac{t(y)}{p(y)}$
+5. Accept the sample with probability $r$, reject with probability $1-r$
+6. Repeat until desired number of samples obtained
+
+:::::
+
+This is **incredibly inefficient**
+
 
 ```{r}
 s = 200
 target = function(x) dunif(s, 1, x)
 proposal = function(x) dunif(x, 1, 1e6)
 
-## this scale will make sure f(x) >= t(x)
+## this scale will make sure p(x) >= t(x)
 scale = target(s) / proposal(s) 
 candidates = as.integer(runif(1e6, 1, 1e6))
 r = target(candidates)/(proposal(candidates) * scale)
@@ -185,23 +316,24 @@ samples = candidates[accept]
 
 ```
 
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
-```{r echo = FALSE}
-samples2 = samples[samples <= max(Npr)]
+```{r echo = FALSE, warning=FALSE}
+samples2 = samples[samples <= max(tankdat$N)]
 par(mgp=c(0.5,0,0), mar=c(2,2,2,0.2))
-yy = dunif(s, 1, Npr)
-plot(Npr, dunif(s, 1, Npr), type='l', bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
-lines(Npr, prop, lwd=2, col='#F8766D')
+yy = dunif(s, 1, tankdat$N)
+plot(tankdat$N, dunif(s, 1, tankdat$N), type='l', ylim = c(0, 0.0055), bty='l', lwd=2, col='#00BFC4', xaxt='n', xlab="N", yaxt='n', ylab="pr(s | N)")
+lines(tankdat$N, tankdat$px, lwd=2, col='#F8766D')
 par(new=TRUE)
-hist(samples2, breaks = 20, freq=FALSE, axes=FALSE, xlim=c(0, max(Npr)),
+hist(samples2, breaks = 20, freq=FALSE, axes=FALSE, xlim=c(0, max(tankdat$N)),
      col="#C77CFF66", border = "#C77CFF", bty='l', xlab="N", ylab="pr(s | N)", main="")
 legend("right", legend=c("proposal", "target", 
        paste("acceptance rate =", round(length(samples)/length(candidates), 3))), lwd=c(2, 2, 0), 
        col=c('#F8766D', '#00BFC4'), bty='n')
 ```
-</div>
+:::: 
+:::
 
 
 
@@ -227,15 +359,16 @@ legend("right", legend=c("proposal", "target",
 
 * The most general MCMC algorithm
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 * For an unknown (unnormalized) **target distribution** $t(x)$ where we can compute the (proporitonal) height
   - For example, a posterior distribution
 
 $$
 pr(\theta | X) \propto pr(X | \theta)pr(\theta)
 $$
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
 ```{r, echo = FALSE, fig.height=9}
 sd = 1.5
@@ -252,13 +385,15 @@ par(bty='l', mgp=c(0.5,0,0), mar=c(2,2,2,0.2), mfrow=c(2, 1))
 plot(xpr, weird(xpr), type='l', xaxt='n', yaxt='n', bty='l', 
      lwd = 2, col="#F8766D", main="The Weird Distribution", xlab = "x", ylab = "weird(x)")
 ```
-</div>
+:::: 
+:::
 
 
 
 ## Metropolis-Hastings: starting value
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 * For an unknown (unnormalized) **target distribution** $t(x)$ where we can compute the (proporitonal) height
   - For example, a posterior distribution
 
@@ -268,8 +403,8 @@ $$
 
 1. Choose a starting value
 
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
 ```{r, echo = FALSE, fig.height=7}
 par(bty='l', mgp=c(0.5,0,0), mar=c(2,2,2,0.2), mfrow=c(2, 1))
@@ -279,14 +414,16 @@ cex.pt = 1.3
 start = -18.7
 points(start, weird(start), pch=21, cex=cex.pt, bg="#00BFC4")
 ```
-</div>
+:::: 
+:::
 
 
 
 
 ## Metropolis-Hastings: proposal step
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 * For an unknown (unnormalized) **target distribution** $t(x)$ where we can compute the (proporitonal) height
   - For example, a posterior distribution
 
@@ -304,8 +441,8 @@ $$
     - If the candidate is better, $r > 1$, always accept
 
 
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
 ```{r, echo = FALSE, fig.height=7}
 par(bty='l', mgp=c(0.5,0,0), mar=c(2,2,2,0.2), mfrow=c(2, 1))
@@ -319,7 +456,8 @@ plot(c(start, cand), c(0, -1), ylab = "Time", xlab = "x",
      xaxt='n', yaxt='n', type='b', pch=21, cex=cex.pt/2, 
      bg="#00BFC4", ylim=c(-50, 0), xlim=range(xpr))
 ```
-</div>
+:::: 
+:::
 
 
 
@@ -327,7 +465,8 @@ plot(c(start, cand), c(0, -1), ylab = "Time", xlab = "x",
 
 ## Metropolis-Hastings: running the chain
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 * For an unknown (unnormalized) **target distribution** $t(x)$ where we can compute the (proporitonal) height
   - For example, a posterior distribution
 
@@ -345,8 +484,8 @@ $$
     - If the candidate is better, $r > 1$, always accept
 4. Continue; asymptotically, the state of the chain converges on the target distribution
 
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
 ```{r, echo = FALSE, fig.height=7}
 cex.pt = cex.pt/2
@@ -366,14 +505,16 @@ plot(samples, 0:(-50), ylab = "Time", xlab = "x",
      xaxt='n', yaxt='n', type='b', pch=21, cex=cex.pt, 
      bg="#00BFC4", ylim=c(-50, 0), xlim=range(xpr))
 ```
-</div>
+:::: 
+:::
 
 
 
 
 ## Metropolis-Hastings: results
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 * For an unknown (unnormalized) **target distribution** $t(x)$ where we can compute the (proporitonal) height
   - For example, a posterior distribution
 
@@ -391,8 +532,8 @@ $$
     - If the candidate is better, $r > 1$, always accept
 4. Continue; asymptotically, the state of the chain converges on the target distribution
 
-</div>
-<div class="right rt">
+:::: 
+:::: {.column}
 
 ```{r, echo = FALSE, fig.height=7}
 
@@ -415,7 +556,7 @@ $$
 # }
 # saveRDS(samples, "misc/metrop_ex_samples.rds")
 
-samples = readRDS("misc/metrop_ex_samples.rds")
+samples = readRDS("../assets/misc/metrop_ex_samples.rds")
 par(bty='l', mgp=c(0.5,0,0), mar=c(2,2,2,0.2), mfrow=c(2, 1))
 plot(samples[1:500], type='l', xaxt='n', xlab='time', yaxt='n', ylab='x', xlim=c(1, 500))
 plot(xpr, weird(xpr), type='l', xaxt='n', yaxt='n', bty='l', xlim=range(xpr),
@@ -424,7 +565,8 @@ par(new=TRUE)
 hist(samples, breaks = 300, freq=FALSE, axes=FALSE, xlim=range(xpr), main="",
      col="#C77CFF66", border = "#C77CFF", xlab="", ylab="")
 ```
-</div>
+:::: 
+:::
 
 
 ## Metropolis algorithm summary
@@ -487,7 +629,7 @@ for i in 1:n_samples
 
 ```{r, echo=TRUE, message=FALSE, fig.width=10}
 library(bayesplot)
-samples = readRDS("misc/traceplt_ex.rds")
+samples = readRDS("../assets/misc/traceplt_ex.rds")
 mcmc_trace(samples)
 
 ```
