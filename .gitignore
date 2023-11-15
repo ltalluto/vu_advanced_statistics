@@ -45,3 +45,7 @@ r/*.rds
 stan/*.rds
 docs/misc/*.rds
 *_cache
+
+# Jekyll local preview
+Gemfile*
+_site/*
