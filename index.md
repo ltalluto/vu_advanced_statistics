@@ -9,7 +9,7 @@ table {font-size: small;}
 
 **Office**: Technikerstraße 25, Room 506
 
-**Meeting location**:  Seminarraum Biologie
+**Meeting location**:  Seminarraum Biologie (except for 11.12)
 
 
 ## Course Description
@@ -38,58 +38,54 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><p class = "ex"><a href = "ex/ex1_distributions">Distributions in R</a></p>
 			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>--></td>
 	</tr>
-
 	<tr>
 		<td><b>Friday</b> 24.11<br/>14:15–18:00</td>
 		<td>Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling</td>
-		<!-- <td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td> -->
-		<!-- <td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p> -->
-			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
-			<!-- <p class = "ex"><a href = "ex/ex3_tank">German tank problem</p></a> -->
-			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>-->
-		<!-- </td> -->
+		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td>
+		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p>
+			<!-- <p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p> -->
+			<p class = "ex"><a href = "ex/ex3_tank">German tank problem</a></p>
+			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
+		</td>
 	</tr>
-
 	<tr>
 		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
-		<td></td>
-		<td><a href=""></a></td>
+		<td>Generalised linear models<br />Inference II: Hypothesis tests</td>
+		<td>Regression &amp; GLM<br />Inference II</td>
+		<!-- <td><a href="">Regression &amp; GLM</a><br /><a href="">Inference II</a></td> -->
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 	<tr>
 		<td><b>Wednesday</b> 28.11<br/>8:15–12:00</td>
-		<td></td>
-		<td><a href=""></a></td>
+		<td><b>Inference III:</b><br />Priors & Diagnostics<br/>Bayesian workflow<br/>Model selection <br/>Multimodel inference<br/></td>
+		<!-- <td><a href="">Inference III</a></td> -->
+		<td>Inference III</td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 	<tr>
 		<td><b>Friday</b> 01.12<br/>8:15–12:00</td>
-		<td></td>
-		<td><a href=""></a></td>
+		<td>Hierarchical &amp; Multilevel Models</td>
+		<!-- <td><a href="">Hierarchical Models</a></td> -->
+		<td>Hierarchical Models</td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 	<tr>
 		<td><b>Monday</b> 04.12<br/>13:15–17:00</td>
-		<td></td>
+		<td>Special Topics<p class = "soln">(Time permitting)</p>Exercise catch-up<br />Project catch-up</td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 	<tr>
-		<td><b>Monday</b> 11.12<br/>13:15–17:00</td>
-		<td></td>
+		<td><b>Monday</b> 11.12<br/>13:15–17:00<p class = "soln">Meet in RR19</p></td>
+		<td>Wrap-up<br />Presentations</td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 </table>
 
 ## Exercises
