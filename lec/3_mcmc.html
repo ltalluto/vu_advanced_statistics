@@ -16,7 +16,7 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
             pre > code.sourceCode { white-space: pre; position: relative; }
-            pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+            pre > code.sourceCode > span { line-height: 1.25; }
             pre > code.sourceCode > span:empty { height: 1.2em; }
             .sourceCode { overflow: visible; }
             code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,7 +81,7 @@
           </style>
   <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -725,6 +725,612 @@ href="https://arogozhnikov.github.io/2016/12/19/markov_chain_monte_carlo.html">a
 <li>Implementation is simple! Just use <code>sampling</code> instead of
 <code>optimization</code>.</li>
 </ul>
+</div>
+<div id="posterior-inference-i-sampling" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+
+</div><div class="column">
+
+</div>
+</div>
+<ul class="incremental">
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+</div>
+<div id="posterior-inference-i-sampling-1" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+<p>Dataset: Palmer penguins</p>
+<p><img src="../assets/img/palmerpenguins.png" width="150" /> <img
+src="../assets/img/culmen_depth.png" width="250" /></p>
+<div class="small">
+<blockquote>
+<p>Dataset: Dr. Kristen Gorman, University of Alaska (<a
+href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
+2014)</a></p>
+<p>R package <code>palmerpenguins</code></p>
+<p>Artwork by <span class="citation">@allison_horst</span></p>
+</blockquote>
+</div>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-19-1.png" width="624" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-2" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+<p>Dataset: Palmer penguins</p>
+<p><img src="../assets/img/palmerpenguins.png" width="150" /> <img
+src="../assets/img/culmen_depth.png" width="250" /></p>
+<div class="small">
+<blockquote>
+<p>Dataset: Dr. Kristen Gorman, University of Alaska (<a
+href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
+2014)</a></p>
+<p>R package <code>palmerpenguins</code></p>
+<p>Artwork by <span class="citation">@allison_horst</span></p>
+</blockquote>
+</div>
+</div><div class="column">
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n;</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="dt">vector</span> [n] x;</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="dt">vector</span> [n] y;</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>}</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="dt">real</span> intercept;</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="dt">real</span> slope;</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; s;</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    y ~ normal(intercept + slope * x, s);</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>penguin_lm <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/basic_lm.stan&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">data</span>(penguins, <span class="at">package =</span> <span class="st">&quot;palmerpenguins&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>penguins <span class="ot">=</span> <span class="fu">as.data.frame</span>(penguins[<span class="fu">complete.cases</span>(penguins),])</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>penguins <span class="ot">=</span> <span class="fu">subset</span>(penguins, species <span class="sc">==</span> <span class="st">&quot;Gentoo&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>peng_dat <span class="ot">=</span> <span class="fu">with</span>(penguins, <span class="fu">list</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="at">x =</span> bill_length_mm,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="at">y =</span> bill_depth_mm,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(bill_length_mm)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>))</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>peng_fit <span class="ot">=</span> <span class="fu">sampling</span>(penguin_lm, <span class="at">data =</span> peng_dat, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-3" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-23-1.png" width="384" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># samples are a bit easier to deal with in a matrix</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>peng_samps <span class="ot">=</span> <span class="fu">as.matrix</span>(peng_fit)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">head</span>(peng_samps)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">##           parameters</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">## iterations intercept     slope         s      lp__</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="do">##       [1,]  3.548550 0.2398139 0.7500717 -25.63111</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="do">##       [2,]  5.053155 0.2090023 0.7605168 -24.45003</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="do">##       [3,]  5.125631 0.2062183 0.7480150 -24.81033</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="do">##       [4,]  5.405012 0.2003530 0.7545575 -24.86389</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="do">##       [5,]  5.038352 0.2096524 0.7480333 -24.43136</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="do">##       [6,]  4.850949 0.2141400 0.7414262 -24.63011</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">sum</span>(peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span>) <span class="sc">/</span> <span class="fu">nrow</span>(peng_samps)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="do">## [1] 0.99525</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-4" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, say $ 0.15 &lt; slope
+&lt; 0.2$</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-25-1.png" width="384" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">sum</span>(peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span> <span class="sc">&amp;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>        peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&lt;</span> <span class="fl">0.25</span>) <span class="sc">/</span> </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="fu">nrow</span>(peng_samps)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">## [1] 0.9605</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-5" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, say $ 0.15 &lt; slope
+&lt; 0.2$</li>
+<li>What interval encompasses 90% of the probability mass (<strong>90%
+Credible Interval</strong>)?</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-27-1.png" width="384" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">apply</span>(samps, <span class="dv">2</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="do">##            </span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## parameters           5%         95%</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">##   intercept   3.2975308   6.8620439</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">##   slope       0.1711119   0.2455597</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="do">##   s           0.6817993   0.8465178</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="do">##   lp__      -28.4826597 -24.5796425</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-6" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, say $ 0.15 &lt; slope
+&lt; 0.2$</li>
+<li>What interval encompasses 90% of the probability mass (<strong>90%
+Credible Interval</strong>)?</li>
+</ul></li>
+<li>We could emulate the output of <code>summary(lm(...))</code></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, median),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="at">ste =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, sd),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="at">pr =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, \(x) <span class="fu">sum</span>(x <span class="sc">&lt;=</span> <span class="dv">0</span>) <span class="sc">/</span> <span class="fu">length</span>(x))</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">2</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Estimate&quot;</span>, <span class="st">&quot;Std. Error&quot;</span>, <span class="st">&quot;pr(E &lt;= 0)&quot;</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">pr(E &lt;= 0)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="right">5.09</td>
+<td align="right">1.08</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">slope</td>
+<td align="right">0.21</td>
+<td align="right">0.02</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-7" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>What about central tendency? What’s the most likely or “best guess”
+for each parameter?</li>
+<li>For normally distributed posterior, all three are equal</li>
+<li>Otherwise, median performs best, but <strong>always</strong> prefer
+an interval to a point estimate</li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">colMeans</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="dv">2</span>, median),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="do">## need optimizing to get the posterior mode</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>    <span class="at">mode =</span> <span class="fu">optimizing</span>(penguin_lm, <span class="at">data =</span> peng_dat)<span class="sc">$</span>par)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">mean</th>
+<th align="right">median</th>
+<th align="right">mode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">intercept</td>
+<td align="right">5.09055</td>
+<td align="right">5.08527</td>
+<td align="right">5.12095</td>
+</tr>
+<tr class="even">
+<td align="left">slope</td>
+<td align="right">0.20825</td>
+<td align="right">0.20835</td>
+<td align="right">0.20761</td>
+</tr>
+<tr class="odd">
+<td align="left">s</td>
+<td align="right">0.75813</td>
+<td align="right">0.75605</td>
+<td align="right">0.74274</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="posterior-prediction" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+</ul>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">intercept</th>
+<th align="right">slope</th>
+<th align="right">s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="right">5.09</td>
+<td align="right">0.21</td>
+<td align="right">0.76</td>
+</tr>
+</tbody>
+</table>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-1" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+<ul>
+<li>We can use this to get a posterior distribution of
+<strong>regression lines</strong></li>
+</ul>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">intercept</th>
+<th align="right">slope</th>
+<th align="right">s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="right">5.09</td>
+<td align="right">0.21</td>
+<td align="right">0.76</td>
+</tr>
+</tbody>
+</table>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-2" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+<ul>
+<li>We can use this to get a posterior distribution of
+<strong>regression lines</strong>
+<ul>
+<li>Each posterior sample is one potential regression line</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">intercept</th>
+<th align="right">slope</th>
+<th align="right">s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="right">5.09</td>
+<td align="right">0.21</td>
+<td align="right">0.76</td>
+</tr>
+</tbody>
+</table>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-33-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-3" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+<ul>
+<li>We can use this to get a posterior distribution of
+<strong>regression lines</strong>
+<ul>
+<li>Each posterior sample is one potential regression line</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">intercept</th>
+<th align="right">slope</th>
+<th align="right">s</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="right">5.09</td>
+<td align="right">0.21</td>
+<td align="right">0.76</td>
+</tr>
+</tbody>
+</table>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-34-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-4" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?
+<ul>
+<li>There is a 90% chance the conditional expectation is in the
+range(?!)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># predict from one x, one sample</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fl">55.6</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># just apply prediction to every row of samples</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># then get the quantiles</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">quantile</span>(test_y, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="do">## 16.34892 16.99035</span></span></code></pre></div>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-36-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-5" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?</li>
+<li>We can do the same across many x-values to produce a
+<strong>confidence ribbon</strong>.
+<ul>
+<li>This is very similar to regression confidence intervals produced by
+<code>lm</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># predict from many x, one sample</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># same as before, but now test_x is a vector, so result is a matrix</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># each row in this matrix is the prediction for a single x, each column a single sample</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>test_y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="do">##       iterations</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="do">##            [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7]</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">##   [1,] 13.14111 13.41325 13.37436 13.41913 13.42445 13.41655 13.54323</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##   [2,] 13.16521 13.43425 13.39509 13.43927 13.44552 13.43807 13.56181</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">##   [3,] 13.18931 13.45526 13.41581 13.45940 13.46659 13.45959 13.58039</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="do">##      </span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="do">##           [,1]     [,2]     [,3]     [,4]     [,5]</span></span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="do">##   5%  13.11697 13.14181 13.16670 13.19165 13.21614</span></span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="do">##   95% 13.72653 13.74386 13.76265 13.78045 13.79788</span></span></code></pre></div>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-38-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-6" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our model is <strong>generative</strong></li>
+<li>It postulates a <em>statistical</em> process (not mechanistic) by
+which the outcomes <span class="math inline">\(y\)</span> are
+created</li>
+<li>We can use posterior predictive simulations to learn the
+distribution of <strong>outcomes</strong></li>
+<li>For a given value of <span class="math inline">\(x\)</span>, the
+interval tells you where 90% of the values of <span
+class="math inline">\(y\)</span> will fall (not <span
+class="math inline">\(\mathbb{E}[y]\)</span>)</li>
+<li>To do this:
+<ul>
+<li>for each sample of <span class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, and <span
+class="math inline">\(s\)</span></li>
+<li>for each value of a <strong>prediction dataset</strong> <span
+class="math inline">\(\hat{x}\)</span></li>
+<li>compute <span class="math inline">\(\eta = \mathbb{E}(y)\)</span>
+using the regression equation</li>
+<li>simulate a new dataset <span class="math inline">\(\hat{y}\)</span>
+from <span class="math inline">\(\eta\)</span> and <span
+class="math inline">\(s\)</span></li>
+<li>compute quantiles for <span class="math inline">\(\hat{y} |
+\hat{x}\)</span></li>
+</ul></li>
+<li>Similar to typical regression <strong>prediction
+intervals</strong></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>}</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-7" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our model is <strong>generative</strong></li>
+<li>It postulates a <em>statistical</em> process (not mechanistic) by
+which the outcomes <span class="math inline">\(y\)</span> are
+created</li>
+<li>We can use posterior predictive simulations to learn the
+distribution of <strong>outcomes</strong></li>
+<li>For a given value of <span class="math inline">\(x\)</span>, the
+interval tells you where 90% of the values of <span
+class="math inline">\(y\)</span> will fall (not <span
+class="math inline">\(\mathbb{E}[y]\)</span>)</li>
+<li>To do this:
+<ul>
+<li>for each sample of <span class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, and <span
+class="math inline">\(s\)</span></li>
+<li>for each value of a <strong>prediction dataset</strong> <span
+class="math inline">\(\hat{x}\)</span></li>
+<li>compute <span class="math inline">\(\eta = \mathbb{E}(y)\)</span>
+using the regression equation</li>
+<li>simulate a new dataset <span class="math inline">\(\hat{y}\)</span>
+from <span class="math inline">\(\eta\)</span> and <span
+class="math inline">\(s\)</span></li>
+<li>compute quantiles for <span class="math inline">\(\hat{y} |
+\hat{x}\)</span></li>
+</ul></li>
+<li>Similar to typical regression <strong>prediction
+intervals</strong></li>
+</ul>
+</div><div class="column">
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
+</div>
+</div>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->
