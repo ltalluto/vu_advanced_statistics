@@ -42,11 +42,13 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	<tr>
 		<td><b>Friday</b> 24.11<br/>14:15–18:00</td>
 		<td>Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling</td>
-		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td>
-		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p>
+		<!-- <td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td> -->
+		<!-- <td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p> -->
 			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
-			<p class = "ex"><a href = "ex/ex3_tank">German tank problem</p></a>
-			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>--></td></tr>
+			<!-- <p class = "ex"><a href = "ex/ex3_tank">German tank problem</p></a> -->
+			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>-->
+		<!-- </td> -->
+	</tr>
 
 	<tr>
 		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
@@ -87,8 +89,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-</table>
 
+</table>
 
 ## Exercises
 Most lectures will include exercises, which can be completed individually or in groups. I encourage you to work through them as much as you can. I will not grade the exercises, and it is not necessary to turn them in, but I'm happy to provide individual feedback/help as needed. During official meeting times, I will also walk through the exercises (as much as time allows) and explain the code to everyone at once.
