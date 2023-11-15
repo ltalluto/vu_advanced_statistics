@@ -1,6 +1,6 @@
 ---
 title: "Markov Chain Monte Carlo"
-author: "Matthew Talluto"
+author: "M. Talluto"
 date: "23.11.2023"
 output:
   slidy_presentation:

@@ -201,12 +201,13 @@ program. What prior is reasonable? <strong>Bonus</strong>: Write a prior
 and posterior function in R, and plot them as in part
 <code>a</code>.</li>
 <li>Finish the Stan program, then use it to get the MAP estimate for N
-using the <code>optimizing</code> function. What’s the MAP
-estimate?</li>
+using the <code>optimizing</code> function. What’s the MAP estimate?
+<ul>
+<li>Hint: You will need to use the <code>vector</code> datatype, which
+we haven’t seen yet. Look it up in the Stan manual to see if you can
+understand how and where to use it. ### 3. Sampling the posterior</li>
+</ul></li>
 </ol>
-</div>
-<div id="sampling-the-posterior" class="section level3">
-<h3>3. Sampling the posterior</h3>
 <p>Use <code>sampling()</code> to get 5000 samples from the posterior
 distribution. Alternatively, if you finished part 1 above, try this with
 your own sampler.</p>
@@ -214,15 +215,25 @@ your own sampler.</p>
 <li>Evaluate your samples using <code>mcmc_trace()</code> and
 <code>mcmc_hist()</code> from the <code>bayesplot</code> package (or
 implement your own versions). You might need to use
-<code>as.array</code> to convert the samples from stan to something that
-bayesplot can use. Compare the histogram of samples to the posterior
-density plot you made in 2d.</li>
+<code>as.array</code> or <code>as.matrix</code> to convert the samples
+from stan to something that bayesplot can use. Compare the histogram of
+samples to the posterior density plot you made in 2d.</li>
 <li>What summary statistics can we get from the samples? How do your
 estimates of central tendency (mean, median, etc) compare with the MAP?
 What metrics of dispersion might be useful? Can you imagine how you
 might calculate a <strong>credible interval</strong> (== Bayesian
 confidence interval)?</li>
 </ol>
+</div>
+<div id="bonus-discrete-uniform-parameters" class="section level3">
+<h3>Bonus: discrete uniform parameters</h3>
+<p>You probably have produced a model in 2 that treats N as a continuous
+varible, resulting of course in estimates that say something like
+“1457.3 tanks were produced.” This is of course impossible, <span
+class="math inline">\(N\)</span> and <span
+class="math inline">\(s\)</span> are both discrete parameters. Can you
+design a model that respects this constraint? How do the results
+differ?</p>
 </div>
 <div id="scaffolding-for-implementing-the-metropolis-algorithm"
 class="section level2">
