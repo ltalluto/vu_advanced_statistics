@@ -46,9 +46,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p>
 			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex3_tank">German tank problem</p></a>
-			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
-		</td>
-	</tr>
+			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>--></td></tr>
 
 	<tr>
 		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
@@ -89,7 +87,6 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
-
 </table>
 
 
