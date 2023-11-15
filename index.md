@@ -36,7 +36,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>Intro, Probability review<br/>Distributions</td>
 		<td><a href="lect/1_probability">Probability & Distributions</a></td>
 		<td><p class = "ex"><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>--></td>
 	</tr>
 
 	<tr>
@@ -44,7 +44,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling</td>
 		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td>
 		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p>
-			<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>
+			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex3_tank">German tank problem</p></a>
 			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
 		</td>
@@ -55,7 +55,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td></td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
-			<p class = "soln"><a href = "ex/soln">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 
 	<tr>
@@ -63,7 +63,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td></td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
-			<p class = "soln"><a href = "ex/soln">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 
 	<tr>
@@ -71,7 +71,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td></td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
-			<p class = "soln"><a href = "ex/soln">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 
 	<tr>
@@ -79,7 +79,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td></td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
-			<p class = "soln"><a href = "ex/soln">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 
 	<tr>
@@ -87,24 +87,10 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td></td>
 		<td><a href=""></a></td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
-			<p class = "soln"><a href = "ex/soln">Solutions</a></p></td>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 
 </table>
-
-
-
-
-
-|Date  |Topics       |Lecture Notes |Exercises |
-| :--- |  :---   |   :---    | :--- |
-|**Tuesday** 21.11<br/>14:15–18:00 |Intro, Probability review<br/>Distributions                          |[Probability & Distributions](lec/1_probability)|<p class="ex">[Distributions in R](ex/ex1_distributions)</p><!--<p class = "soln">[Solutions](ex/soln1_distributions.html)</p>-->
-|**Friday** 24.11<br/>14:15–18:00 |Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling|[Maximum Likelihood Estimation](lec/2_mle)<br/>[MCMC & Sampling](ex/3_mcmc)|<p class="ex">[Tree Mortality](ex/ex2_tree.html)</p><!--<p class="soln">• [Solutions](ex/soln2_tree.html)</p>--><p class="ex">[German tank problem](ex/ex3_tank)</p><!--<p class="soln">• [Solutions](exercises/5_mcmc_soln)</p>-->|
-|**Monday** 27.11<br/>8:15–12:00|Inference II: Hypothesis testing<br/>Linear Models<br/>Generalised linear models|Hypothesis tests <br/>Linear Models<!--[Linear Models](3_lm)<br/>-->|!Kung height<!--[!Kung height](exercises/3_lm_ex.html)<p class="soln">• [Solutions](exercises/3_lm_soln)</p>--><br/>Bird Species Richness<!--[Bird Species Richness](exercises/6_glm_ex)-->|
-|**Wednesday** 28.11<br/>8:15–12:00 |Priors & Diagnostics<br/>Bayesian workflow<br/>Inference III: Model selection <br/>Multimodel inference<br/>|Model Selection<!--[Model Selection](8_model_selection)-->|??|
-|**Friday** 01.12<br/>8:15–12:00 | Hierarchical Models | Hierarchical Models <!--[Hierarchical Models](7_hm)--> | Climate/Tree Mortality<!---->|
-|**Monday** 04.12<br/>13:15–17:00|Special topics<br/>Exercises/Project work||
-|**Monday** 11.12<br/>13:15–17:00|Wrap-up<br/>**Presentations**||
 
 
 ## Exercises
