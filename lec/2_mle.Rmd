@@ -1,6 +1,6 @@
 ---
 title: "Maximum Likelihood & Optimisation"
-author: "Matthew Talluto"
+author: "M. Talluto"
 date: "24.11.2023"
 output:
   slidy_presentation:

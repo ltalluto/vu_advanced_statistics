@@ -1,6 +1,6 @@
 ---
 title: "Introduction, Probability, & Distributions"
-author: "Matt Talluto"
+author: "M. Talluto"
 date: "21.11.2023"
 output:
   slidy_presentation:

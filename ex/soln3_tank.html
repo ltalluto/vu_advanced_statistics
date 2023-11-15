@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>The German Tank Problem (MCMC Edition)</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">The German Tank Problem (MCMC Edition)</h1>
+<h4 class="date">24.11.2023</h4>
+
+</div>
+
+
+<div id="optional.-implement-your-own-metropolis-algorithm"
+class="section level3">
+<h3>1. <strong>Optional</strong>. Implement your own Metropolis
+algorithm</h3>
+<p>See the bottom of this page for some scaffolding code to get you
+started. Fill in the appropriate places with the code for making the
+algorithm work. Alternatively, there is an implementation provided on
+the <a
+href="https://raw.githubusercontent.com/mtalluto/vu_advstats_statudents/main/r/metrop.r">github
+repository</a>.</p>
+</div>
+<div id="german-tank-problem" class="section level3">
+<h3>2. German Tank Problem</h3>
+<p>Recall the German tank problem presented in lecture. Use the
+following captured serial numbers:</p>
+<pre class="r"><code>s = c(147, 126, 183, 88, 9, 203, 16, 10, 112, 205)</code></pre>
+<p>Your goal is to estimate a single parameter, <span
+class="math inline">\(N\)</span>, the highest possible serial number
+(indicating the number of tanks actually produced).</p>
+<ol style="list-style-type: lower-alpha">
+<li>What likelihood function is appropriate? Can you write this as an
+equation? The likelihood function should be <span
+class="math inline">\(pr(s|N)\)</span>.</li>
+</ol>
+<div class="soln">
+<p>We should use a uniform likelihood, with a minimum of 1 and <span
+class="math inline">\(N\)</span> as the maximum.</p>
+<p><span class="math display">\[
+pr(s|N) =
+    \frac{1}{N - 1} \quad\text{for all } 1 \le s \le N
+\]</span></p>
+</div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Translate this likelihood function into R code, and plot the
+function for varying values of <span
+class="math inline">\(N\)</span>.</li>
+</ol>
+<div class="soln">
+<pre class="r"><code># we do the log liklihood, better for computational reasons
+#&#39; Log liklihood function for german tank problem
+#&#39; @param N Parameter, maximum serial number possible
+#&#39; @param x Data, vector of observed serial numbers
+#&#39; @return Log liklihood of x|N
+ll = function(N, x) sum(dunif(x, 1, N, log = TRUE))
+
+# now plot it, back-transforming to see the liklihood instead of ll
+N_plot = seq(1, 500, 1)
+lN = exp(sapply(N_plot, ll, x = s)) # sapply because ll wants to work on ONE value of N at a time</code></pre>
+<pre><code>## Warning in dunif(x, 1, N, log = TRUE): NaNs produced</code></pre>
+<pre class="r"><code>plot(N_plot, lN, type = &#39;l&#39;, bty = &#39;n&#39;, xlab = &quot;N&quot;, ylab= &quot;pr(s|N)&quot;)</code></pre>
+<p><img src="soln3_tank_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Translate <code>a</code> and <code>b</code> above into a Stan
+statement for the <code>model</code> block. It will look something like
+<code>s ~ ...</code></li>
+</ol>
+<div class="soln">
+<pre class="stan"><code>model {
+    s ~ uniform(1, N);
+}</code></pre>
+</div>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Add a prior for <span class="math inline">\(N\)</span> to your Stan
+program. What prior is reasonable? <strong>Bonus</strong>: Write a prior
+and posterior function in R, and plot them as in part
+<code>a</code>.</li>
+</ol>
+<div class="soln">
+<p>We cannot consider <span class="math inline">\(s\)</span> when
+building our prior. All that’s left is to think what is reasonable. Some
+knowns:</p>
+<ul>
+<li><span class="math inline">\(N\)</span> must be a positive number.
+This suggests a Gamma or Exponential prior, or a half normal. I will go
+with the exponential, since it is less informative than the normal and
+similar to the gamma, but with only one parameter instead of two for
+simplicity.</li>
+<li>In my opinion, it’s unlikely that a million tanks were produced, a
+billion is essentially impossible, but 10,000 is somewhat
+plausible.</li>
+</ul>
+<p>From these two, some trial and error led me to a prior that
+apportions probability mass in a way that follows my beliefs.</p>
+<pre class="stan"><code>model {
+    s ~ uniform(1, N);
+    N ~ exponential(0.01);
+}</code></pre>
+<p>What does this prior tell us about different values of N?</p>
+<pre class="r"><code>lp = function(N, lam) dexp(N, lam, log = TRUE)
+
+# first try prior with rate of 0.01, as in the stan code
+lp(N = 100, lam = 0.01) - lp(N = 1e6, lam = 0.01)</code></pre>
+<pre><code>## [1] 9999</code></pre>
+<p>Production of 100 tanks is about 10.000 times more likely than the
+production of a million tanks</p>
+<pre class="r"><code># Make the prior 10x less informative by adding a zero to the rate
+lp(N = 100, lam = 0.001) - lp(N = 1e6, lam = 0.001)</code></pre>
+<pre><code>## [1] 999.9</code></pre>
+<pre class="r"><code>#&#39; Log posterior function for german tank problem
+#&#39; @param N Parameter, maximum serial number possible
+#&#39; @param x Data, vector of observed serial numbers
+#&#39; @param lam Prior rate parameter for N
+#&#39; @return Log unnormalised posterior, proportional to the probability of N|x
+lpost = function(N, x, lam) ll(N, x) + lp(N, lam)
+
+cols = scales::hue_pal()(3)
+post_N = exp(sapply(N_plot, lpost, x = s, lam = 0.01))</code></pre>
+<pre><code>## Warning in dunif(x, 1, N, log = TRUE): NaNs produced</code></pre>
+<pre class="r"><code>prior_N = exp(lp(N_plot, lam = 0.01))
+par(mfrow=c(2,3))
+plot(N_plot, lN, type = &#39;l&#39;, bty = &#39;n&#39;, col = cols[1], xlab = &quot;N&quot;, ylab = &quot;pr(s|N)&quot;)
+plot(N_plot, post_N, col = cols[2], lty=2, xlab = &quot;N&quot;, type = &#39;l&#39;, ylab = &quot;Unnormalised posterior&quot;)
+plot(N_plot, prior_N, col = cols[3], xlab = &quot;N&quot;, ylab = &quot;pr(N)&quot;, type = &#39;l&#39;)
+
+# The probs are not as useful sometimes as viewing them on the log scale
+plot(N_plot, log(lN), type = &#39;l&#39;, bty = &#39;n&#39;, col = cols[1], xlab = &quot;N&quot;, ylab = &quot;pr(s|N)&quot;)
+plot(N_plot, log(post_N), col = cols[2], lty=2, xlab = &quot;N&quot;, type = &#39;l&#39;, ylab = &quot;Unnormalised posterior&quot;)
+plot(N_plot, log(prior_N), col = cols[3], xlab = &quot;N&quot;, ylab = &quot;pr(N)&quot;, type = &#39;l&#39;)</code></pre>
+<p><img src="soln3_tank_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Finish the Stan program, then use it to get the MAP estimate for N
+using the <code>optimizing</code> function. What’s the MAP estimate?
+<ul>
+<li>Hint: You will need to use the <code>vector</code> datatype, which
+we haven’t seen yet. Look it up in the Stan manual to see if you can
+understand how and where to use it.</li>
+</ul></li>
+</ol>
+<div class="soln">
+<pre class="stan"><code>data {
+    int nobs; // number of observations
+    vector &lt;lower = 1&gt; [nobs] s;
+    real &lt;lower = 0&gt; lam; // prior hyperparameter for N
+}
+parameters {
+    real &lt;lower = max(s)&gt; N; // important! N must be greater than the largest value in s
+}
+model {
+    s ~ uniform(1, N);
+    N ~ exponential(lam);
+}</code></pre>
+<pre class="r"><code>tank_mod = rstan::stan_model(&quot;my_stan/tank_model.stan&quot;)</code></pre>
+<p>The above assumes you have created the stan program and saved it in a
+file named <code>"my_stan/tank_model.stan"</code>. Adjust as
+appropriate.</p>
+<pre class="r"><code>tank_data = list(
+    nobs = length(s),
+    s = s,
+    lam = 0.01
+)
+(tank_map = rstan::optimizing(tank_mod, data = tank_data)$par)</code></pre>
+<pre><code>##   N 
+## 205</code></pre>
+</div>
+</div>
+<div id="sampling-the-posterior" class="section level3">
+<h3>3. Sampling the posterior</h3>
+<p>Use <code>sampling()</code> to get 5000 samples from the posterior
+distribution. Alternatively, if you finished part 1 above, try this with
+your own sampler.</p>
+<div class="soln">
+<pre class="r"><code>library(rstan)
+tank_fit = sampling(tank_mod, data = tank_data, iter = 5000, chains = 1, refresh = 0)
+tank_fit</code></pre>
+<pre><code>## Inference for Stan model: anon_model.
+## 1 chains, each with iter=5000; warmup=2500; thin=1; 
+## post-warmup draws per chain=2500, total post-warmup draws=2500.
+## 
+##        mean se_mean    sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+## N    223.95    0.70 20.71 205.36 210.24 217.81 230.02 278.81   886 1.00
+## lp__ -53.95    0.04  0.84 -56.61 -54.11 -53.62 -53.42 -53.37   467 1.01
+## 
+## Samples were drawn using NUTS(diag_e) at Wed Nov 15 18:35:21 2023.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+</div>
+<ol style="list-style-type: lower-alpha">
+<li>Evaluate your samples using <code>mcmc_trace()</code> and
+<code>mcmc_hist()</code> from the <code>bayesplot</code> package (or
+implement your own versions). You might need to use
+<code>as.array</code> or <code>as.matrix</code> to convert the samples
+from stan to something that bayesplot can use. Compare the histogram of
+samples to the posterior density plot you made in 2d.</li>
+</ol>
+<div class="soln">
+<pre class="r"><code>library(bayesplot)
+tank_samps = as.matrix(tank_fit)
+# mcmc_combo puts multiple plots on the same figure
+# What is lp__??
+mcmc_combo(tank_samps, combo = c(&quot;trace&quot;, &quot;hist&quot;))</code></pre>
+<p><img src="soln3_tank_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What summary statistics can we get from the samples? How do your
+estimates of central tendency (mean, median, etc) compare with the MAP?
+What metrics of dispersion might be useful? Can you imagine how you
+might calculate a <strong>credible interval</strong> (== Bayesian
+confidence interval)?</li>
+</ol>
+<div class="soln">
+<p>I suggest median for this dataset, since the distribution is highly
+skewed.</p>
+<pre class="r"><code>c(mean = mean(tank_samps[,&#39;N&#39;]), median = median(tank_samps[,&#39;N&#39;]), mode = tank_map)</code></pre>
+<pre><code>##     mean   median   mode.N 
+## 223.9510 217.8061 205.0000</code></pre>
+<p>Credible intervals are tricky. We can of course construct a quantile
+interval:</p>
+<pre class="r"><code>(quant_interval = quantile(tank_samps[,&#39;N&#39;], c(0.05, 0.95)))</code></pre>
+<pre><code>##       5%      95% 
+## 205.8410 262.2624</code></pre>
+<p>But this has the strange property that the mode is not included.
+Depending on how skewed the posterior is, it is even possible that the
+median is not included!</p>
+<p>A better approach is to include the <strong>tallest</strong> 90%,
+which is also the narrowest interval. Such an interval is called the
+<strong>highest density interval</strong> (HDI). A simple approach to
+this is to compute many potential intervals, and choose the
+narrowest.</p>
+<pre class="r"><code># Operate on sorted samples
+# this makes it easy to take a 90% intervals from any start point: it&#39;s just the next 90% of observations
+samps_sorted = sort(tank_samps[,&#39;N&#39;])
+
+# how many values in a 90% interval?
+int_width = ceiling(0.9 * length(samps_sorted))
+
+interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
+
+# our maximum possible start is the 10th quantile
+possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
+for(i in possible_intervals) {
+    width = interval[2] - interval[1]
+    new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
+    new_width = new_interval[2] - new_interval[1]
+    if(new_width &lt; width) 
+        interval = new_interval
+}
+
+# compare with the quantile interval
+rbind(quantile = quant_interval, hdi = interval)</code></pre>
+<pre><code>##                5%      95%
+## quantile 205.8410 262.2624
+## hdi      205.0124 248.4253</code></pre>
+<p>The HDI is quite a bit narrower than the quantile interval. There is
+a more complete function for doing this in the git repository in:
+<code>vu_advstats_students/r/mh.r</code></p>
+</div>
+</div>
+<div id="bonus-discrete-uniform-parameters" class="section level3">
+<h3>Bonus: discrete uniform parameters</h3>
+<p>You probably have produced a model in 2 that treats N as a continuous
+varible, resulting of course in estimates that say something like
+“1457.3 tanks were produced.” This is of course impossible, <span
+class="math inline">\(N\)</span> and <span
+class="math inline">\(s\)</span> are both discrete parameters. Can you
+design a model that respects this constraint? How do the results
+differ?</p>
+<div class="soln">
+<p>Discrete parameters are tricky in Stan, and sampling in discrete
+space doesn’t always work. We can manage it with this relatively simple
+problem, in part becaues the log liklihood is quite a simple
+exression.</p>
+<pre class="stan"><code>data {
+    int nobs; // number of observations
+    vector &lt;lower = 1&gt; [nobs] s;
+    real &lt;lower = 0&gt; lam; // prior hyperparameter for N
+}
+parameters {
+    real &lt;lower = max(s)&gt; N_latent;
+}
+model {
+//  s ~ uniform(1, floor(n_latent));
+    for(i in 1:nobs) {
+        if(floor(N_latent) &lt; s[i]) {
+            target += log(0);
+        } else {
+            target += -log(floor(N_latent)); // discrete uniform distribution with a min of 1 and max of N_latent
+        }
+    }
+    N_latent ~ exponential(lam);
+}
+generated quantities {
+    real N = floor(N_latent);
+}</code></pre>
+<pre class="r"><code>tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0)
+tank_samps_d = as.matrix(tank_fit_d)
+mcmc_combo(tank_samps_d, combo = c(&quot;trace&quot;, &quot;hist&quot;))</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="soln3_tank_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>(quant_interval = quantile(tank_samps_d[,&#39;N&#39;], c(0.05, 0.95)))</code></pre>
+<pre><code>##  5% 95% 
+## 206 265</code></pre>
+<pre class="r"><code>samps_sorted = sort(tank_samps_d[,&#39;N&#39;])
+
+# how many values in a 90% interval?
+int_width = ceiling(0.9 * length(samps_sorted))
+
+interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
+
+# our maximum possible start is the 10th quantile
+possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
+for(i in possible_intervals) {
+    width = interval[2] - interval[1]
+    new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
+    new_width = new_interval[2] - new_interval[1]
+    if(new_width &lt; width) 
+        interval = new_interval
+}
+
+# compare with the quantile interval
+rbind(quantile = quant_interval, hdi = interval)</code></pre>
+<pre><code>##           5% 95%
+## quantile 206 265
+## hdi      205 250</code></pre>
+<p>The results very similar, but now the mode is correctly and exactly
+included!</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
