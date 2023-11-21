@@ -34,7 +34,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	<tr>
 		<td><b>Tuesday</b> 21.11<br/>14:15–18:00</td>
 		<td>Intro, Probability review<br/>Distributions</td>
-		<td><a href="lect/1_probability">Probability & Distributions</a></td>
+		<td><a href="lec/1_probability">Probability & Distributions</a></td>
 		<td><p class = "ex"><a href = "ex/ex1_distributions">Distributions in R</a></p>
 			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>--></td>
 	</tr>
@@ -51,9 +51,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	<tr>
 		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
 		<td>Generalised linear models<br />Inference II: Hypothesis tests</td>
-		<td>Regression &amp; GLM<br />Inference II</td>
-		<!-- <td><a href="">Regression &amp; GLM</a><br /><a href="">Inference II</a></td> -->
-		<td><p class = "ex"><a href = "ex/"></a></p>
+		<td><a href="lec/4_regression">Regression &amp; GLM</a><br />Inference II</td>
+		<!-- <td><br /><a href="">Inference II</a></td> -->
+		<td><p class = "ex"><a href = "ex/ex4_kung.html">!Kung Height</a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 	<tr>

@@ -499,6 +499,7 @@ zomb_p = stan_model("stan/zomb_p.stan")
 :::: {.column}
 * We next create a data list that we will pass on to Stan
 * Finally, we can use `optimizing`, which works similar to `optim` but for Stan models
+
 ::::
 :::: {.column}
 
@@ -526,7 +527,10 @@ optimizing(zomb_p, data = zomb_data)
 ::: {.columns}
 :::: {.column}
 
-* Remember the product rule: for two independent events, $pr(A,B) = pr(A)pr(B)$
+* Remember the product rule: for two independent events, 
+
+$$pr(A,B) = pr(A)pr(B)$$
+	
 * Likelihoods are probabilities, and we like to assume each data point is independent. Thus:
 
 $$
@@ -536,15 +540,24 @@ $$
 \log \mathcal{L}(X_{1..n}|\theta) &= \sum_{i=1}^{n} \log \mathcal{L}(X_i|\theta)
 \end{array}
 $$
+
+
+::::
+:::: {.column}
+
 
 ::::
 :::
 
 ## Generalising to multiple observations
+
 ::: {.columns}
 :::: {.column}
 
-* Remember the product rule: for two independent events, $pr(A,B) = pr(A)pr(B)$
+* Remember the product rule: for two independent events, 
+
+$$pr(A,B) = pr(A)pr(B)$$
+	
 * Likelihoods are probabilities, and we like to assume each data point is independent. Thus:
 
 $$
@@ -554,6 +567,7 @@ $$
 \log \mathcal{L}(X_{1..n}|\theta) &= \sum_{i=1}^{n} \log \mathcal{L}(X_i|\theta)
 \end{array}
 $$
+
 
 ::::
 :::: {.column}
