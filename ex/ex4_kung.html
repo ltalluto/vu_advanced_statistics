@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>!Kung people height and weight model</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">!Kung people height and weight model</h1>
+<h4 class="date">27.11.2023</h4>
+
+</div>
+
+
+<p>For these exercises, you will need the <code>Howell1</code> dataset
+from the <code>rethinking</code> package. We don’t need the rest of the
+package, so we will just download the data directly from the package’s
+github repository</p>
+<pre class="r"><code>library(data.table)
+Howell1 = fread(&quot;https://github.com/rmcelreath/rethinking/raw/master/data/Howell1.csv&quot;)</code></pre>
+<p>These data, collected by anthropologist Nancy Howell in the 1960s,
+provide the age, height, weight, and sex sampled from a population of
+!Kung in Dobe (Namibia &amp; Botswana). Note that the <code>male</code>
+variable is categorical, and is equal to 1 if the subject is male, and 0
+if female.</p>
+<ol style="list-style-type: decimal">
+<li>Do some graphical data exploration. The data are multivariate, so
+multiple plots may be necessary.</li>
+<li>Design a regression model with <code>height</code> as the
+<strong>response</strong> (i.e., outcome, y) variable. For your initial
+model, use only <code>weight</code> as a predictor.
+<ol style="list-style-type: lower-alpha">
+<li>Build a graphical model as shown in lecture.</li>
+<li>Translate the graphical model into equations. Be sure that all
+unknowns (including parameters) appear on the left side of either ~ or
+=.</li>
+<li>Fill in a Stan model block with the likelihood and priors for all
+stocahstic nodes</li>
+<li>Compute a MAP estimate using <code>optimizing</code>.</li>
+<li>Make a plot of the best-fit line; include the original data on the
+plot as well.</li>
+</ol></li>
+<li>Plotting this model will likely reveal it to be inadequate, because
+there is a substantial “curve” in the height-weight relationship. Repeat
+the exercise for #2, but update your model to better predict height.
+Possible approaches might include filtering the data (but I encourage
+you to use it all if possible), writing a curvilinear equation, or
+adding additional predictors. Compare the results of your attempts, and
+choose a single model that you think works “best.” Repeat a-e above for
+this model. Note any changes in the relationship between height and
+weight caused by your changes to the model. Additionally:
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Estimate the entire posterior <code>sampling</code></li>
+<li>What are the credible intervals for the parameters of your
+model?</li>
+<li>What is the probability that the height of a 24-year-old female with
+a weight of 41 kg is between 120 and 125 cm? What about for a male?</li>
+<li>Compute a posterior prediction interval for each case in the
+original dataset. You should have a median or MAP estimate and an
+interval for height along side the actual measured values for height
+from the original data. Plot the original height observations on the
+x-axis, and the predicted MAP/median on the y-axis. Experiment with the
+<code>segments</code> function to see if you can draw the predictions as
+vertical lines on the plot. What does this plot tell you about your
+model fit? What is the expected relationship for a “good” model?</li>
+</ol></li>
+</ol>
+<div id="bonus" class="section level2">
+<h2>Bonus</h2>
+<ol start="4" style="list-style-type: decimal">
+<li>Return to one of the plots you made showing height against weight.
+It appears that the variance in height is not constant with respect to
+weight. This is one of the key assumptions in linear regression, and you
+probably made this implicitly in your model (the s parameter, the
+standard deviation, is constant). However, Bayesian models need not be
+so rigid.
+<ol style="list-style-type: lower-alpha">
+<li>Can you design a model that allows the variance to increase as
+weight increases? Use whatever predictors for height that you think are
+best.</li>
+<li>Fit the model and compare the fit to your original model.</li>
+</ol></li>
+<li>Buried in the bottom of a field notebook, you find two cases that
+were missing from the original dataset. The first is an individual with
+a weight of 43.72; no height, age, or sex data is recorded. The second
+is a 38-year-old female with a height of 135.
+<ol style="list-style-type: lower-alpha">
+<li>Using the model from #3 above, can you predict a 90% credible
+interval for height of the first missing case? Is it easier if you use
+the model from #2?</li>
+<li>The second missing case is more interesting; we have the outcome of
+our model, but we are missing the weight. How could you estimate a 90%
+CI for weight, using the model from #3 (i.e., keeping height as the
+response variable)?</li>
+</ol></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
