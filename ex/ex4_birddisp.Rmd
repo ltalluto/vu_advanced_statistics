@@ -1,0 +1,58 @@
+---
+title: "Natal vs. Breeding Dispersal in Birds"
+date: "27.11.2023"
+output: 
+  html_document:
+    self_contained: false
+    lib_dir: lib
+    css: ex.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We will use a dataset (from [Fandos et al. 2022](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838)) of dispersal distances of European birds. One important question is whether birds overall have greater dispersal requirements when first leaving the nest where they hatched (**natal dispersal**) or when dispersing as adults among different breeding sites (**breeding dispersal**).
+
+The code below will download the data, and reshape it into a form that is useful for us.
+
+```{r message = FALSE, cache = TRUE, eval = FALSE}
+library(data.table)
+
+
+url = "https://zenodo.org/records/7191344/files/Table_S14_%20species_dispersal_distances_v1_0_2.csv?download=1"
+disp = fread(url)
+
+# get rid of columns we won't use, and subset to only breeding/natal dispersal
+disp = disp[type %in% c("breeding", "natal"), 
+			.(species, median, n, function_id, function_comparison, type, sex_code)]
+
+# they fit four dispersal functions per species/type/sex
+# the column function_comparison tells you how good each fit was relative to the others
+# we will use it to compute the weighted mean dispersal distance across the different models
+disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - TRUE), 
+				n = sum(n, na.rm = TRUE)), by = .(species, type, sex_code)]
+
+# we will further aggregate by sex (since the paper found little difference among sexes)
+# this time with sample size as the weights
+disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
+
+# use dcast to put the dispersal types next to each other
+disp = dcast(disp, species ~ type, value.var = "disp_dist")
+
+# and drop all cases where we don't have both types
+disp = disp[complete.cases(disp)]
+```
+
+The original paper details many important factors that might influence dispersal distance, but we will focus on a relatively simple hypothesis: **Across all species, natal dispersal exceeds breeding dispersal**.
+
+Some guidance to get you thinking about the exercise:
+
+1. Make some plots exploring the hypothesis.
+2. You probably have an idea of a basic frequentist test for this hypothesis. Go ahead and do it. What's the result? Do the data fit the assumptions of the test?
+3. Can you design a **Bayesian model** in Stan that is both appropriate for the data (including making reasonable distributional assumptions) and models the hypothesis you want to test? Try it out, using the tools you know:
+	a. Think in terms of the statistical process generating the data (if your hypothesis is true).
+	b. Think of **parameters** that can stand in for your hypothesis.
+	c. Graph the model, and write equations.
+	d. Translate the graph into Stan code and try to fit the model.
+
