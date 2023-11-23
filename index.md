@@ -36,13 +36,13 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>Intro, Probability review<br/>Distributions</td>
 		<td><a href="lec/1_probability">Probability & Distributions</a></td>
 		<td><p class = "ex"><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>--></td>
+			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p></td>
 	</tr>
 	<tr>
 		<td><b>Friday</b> 24.11<br/>14:15–18:00</td>
 		<td>Maximum likelihood<br/>Optimisation<br/>Markov-chain Monte Carlo<br/>Inference I: Sampling</td>
 		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a><br /><a href="lec/3_mcmc">MCMC & Sampling</a></td>
-		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree Mortality</a></p>
+		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree mrtality</a></p>
 			<!-- <p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p> -->
 			<p class = "ex"><a href = "ex/ex3_tank">German tank problem</a></p>
 			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
@@ -50,10 +50,10 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
-		<td>Generalised linear models<br />Inference II: Hypothesis tests</td>
-		<td><a href="lec/4_regression">Regression &amp; GLM</a><br />Inference II</td>
-		<!-- <td><br /><a href="">Inference II</a></td> -->
-		<td><p class = "ex"><a href = "ex/ex4_kung.html">!Kung Height</a></p>
+		<td>Inference II: Hypothesis tests<br />Generalised linear models</td>
+		<td><a href="lec/4_regression">Regression &amp; GLM</a><br /></td>
+		<td><p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
+		<td><p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 	<tr>

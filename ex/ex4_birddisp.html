@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Natal vs. Breeding Dispersal in Birds</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Natal vs. Breeding Dispersal in Birds</h1>
+<h4 class="date">27.11.2023</h4>
+
+</div>
+
+
+<p>We will use a dataset (from <a
+href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838">Fandos
+et al. 2022</a>) of dispersal distances of European birds. One important
+question is whether birds overall have greater dispersal requirements
+when first leaving the nest where they hatched (<strong>natal
+dispersal</strong>) or when dispersing as adults among different
+breeding sites (<strong>breeding dispersal</strong>).</p>
+<p>The code below will download the data, and reshape it into a form
+that is useful for us.</p>
+<pre class="r"><code>library(data.table)
+
+
+url = &quot;https://zenodo.org/records/7191344/files/Table_S14_%20species_dispersal_distances_v1_0_2.csv?download=1&quot;
+disp = fread(url)
+
+# get rid of columns we won&#39;t use, and subset to only breeding/natal dispersal
+disp = disp[type %in% c(&quot;breeding&quot;, &quot;natal&quot;), 
+            .(species, median, n, function_id, function_comparison, type, sex_code)]
+
+# they fit four dispersal functions per species/type/sex
+# the column function_comparison tells you how good each fit was relative to the others
+# we will use it to compute the weighted mean dispersal distance across the different models
+disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - TRUE), 
+                n = sum(n, na.rm = TRUE)), by = .(species, type, sex_code)]
+
+# we will further aggregate by sex (since the paper found little difference among sexes)
+# this time with sample size as the weights
+disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
+
+# use dcast to put the dispersal types next to each other
+disp = dcast(disp, species ~ type, value.var = &quot;disp_dist&quot;)
+
+# and drop all cases where we don&#39;t have both types
+disp = disp[complete.cases(disp)]</code></pre>
+<p>The original paper details many important factors that might
+influence dispersal distance, but we will focus on a relatively simple
+hypothesis: <strong>Across all species, natal dispersal exceeds breeding
+dispersal</strong>.</p>
+<p>Some guidance to get you thinking about the exercise:</p>
+<ol style="list-style-type: decimal">
+<li>Make some plots exploring the hypothesis.</li>
+<li>You probably have an idea of a basic frequentist test for this
+hypothesis. Go ahead and do it. What’s the result? Do the data fit the
+assumptions of the test?</li>
+<li>Can you design a <strong>Bayesian model</strong> in Stan that is
+both appropriate for the data (including making reasonable
+distributional assumptions) and models the hypothesis you want to test?
+Try it out, using the tools you know:
+<ol style="list-style-type: lower-alpha">
+<li>Think in terms of the statistical process generating the data (if
+your hypothesis is true).</li>
+<li>Think of <strong>parameters</strong> that can stand in for your
+hypothesis.</li>
+<li>Graph the model, and write equations.</li>
+<li>Translate the graph into Stan code and try to fit the model.</li>
+</ol></li>
+</ol>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
