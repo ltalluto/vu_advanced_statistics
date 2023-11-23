@@ -16,7 +16,7 @@ We will use a dataset (from [Fandos et al. 2022](https://besjournals.onlinelibra
 
 The code below will download the data, and reshape it into a form that is useful for us.
 
-```{r message = FALSE, cache = TRUE, eval = FALSE}
+```{r message = FALSE, eval = FALSE}
 library(data.table)
 
 
@@ -55,4 +55,5 @@ Some guidance to get you thinking about the exercise:
 	b. Think of **parameters** that can stand in for your hypothesis.
 	c. Graph the model, and write equations.
 	d. Translate the graph into Stan code and try to fit the model.
+	e. What is the probability that your hypothesis is true? What are plausible limits for the difference between the means?
 
