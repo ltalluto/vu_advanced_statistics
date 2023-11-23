@@ -3,13 +3,14 @@ title: "Introduction, Probability, & Distributions"
 author: "M. Talluto"
 date: "21.11.2023"
 output:
+  beamer_presentation: 
+    latex_engine: xelatex
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
     css: rmd_style.css
     self_contained: false
     lib_dir: lib
-  beamer_presentation: default
 ---
 
 
