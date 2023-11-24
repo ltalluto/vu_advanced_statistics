@@ -175,7 +175,9 @@ when first leaving the nest where they hatched (<strong>natal
 dispersal</strong>) or when dispersing as adults among different
 breeding sites (<strong>breeding dispersal</strong>).</p>
 <p>The code below will download the data, and reshape it into a form
-that is useful for us.</p>
+that is useful for us. Note that, because we don’t have breeding and
+natal values for all species, we will have slightly different sample
+sizes for each.</p>
 <pre class="r"><code>library(data.table)
 
 
@@ -196,15 +198,13 @@ disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - T
 # this time with sample size as the weights
 disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
 
-# use dcast to put the dispersal types next to each other
-disp = dcast(disp, species ~ type, value.var = &quot;disp_dist&quot;)
-
-# and drop all cases where we don&#39;t have both types
-disp = disp[complete.cases(disp)]</code></pre>
+# split into two datasets
+breeding = disp$disp_dist[disp$type == &#39;breeding&#39;]
+natal = disp$disp_dist[disp$type == &#39;natal&#39;]</code></pre>
 <p>The original paper details many important factors that might
 influence dispersal distance, but we will focus on a relatively simple
-hypothesis: <strong>Across all species, natal dispersal exceeds breeding
-dispersal</strong>.</p>
+hypothesis: <strong>Averaging across all species, natal dispersal
+exceeds breeding dispersal</strong>.</p>
 <p>Some guidance to get you thinking about the exercise:</p>
 <ol style="list-style-type: decimal">
 <li>Make some plots exploring the hypothesis.</li>
@@ -222,6 +222,8 @@ your hypothesis is true).</li>
 hypothesis.</li>
 <li>Graph the model, and write equations.</li>
 <li>Translate the graph into Stan code and try to fit the model.</li>
+<li>What is the probability that your hypothesis is true? What are
+plausible limits for the difference between the means?</li>
 </ol></li>
 </ol>
 

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 We will use a dataset (from [Fandos et al. 2022](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838)) of dispersal distances of European birds. One important question is whether birds overall have greater dispersal requirements when first leaving the nest where they hatched (**natal dispersal**) or when dispersing as adults among different breeding sites (**breeding dispersal**).
 
-The code below will download the data, and reshape it into a form that is useful for us.
+The code below will download the data, and reshape it into a form that is useful for us. Note that, because we don't have breeding and natal values for all species, we will have slightly different sample sizes for each.
 
 ```{r message = FALSE, eval = FALSE}
 library(data.table)
@@ -37,14 +37,12 @@ disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - T
 # this time with sample size as the weights
 disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
 
-# use dcast to put the dispersal types next to each other
-disp = dcast(disp, species ~ type, value.var = "disp_dist")
-
-# and drop all cases where we don't have both types
-disp = disp[complete.cases(disp)]
+# split into two datasets
+breeding = disp$disp_dist[disp$type == 'breeding']
+natal = disp$disp_dist[disp$type == 'natal']
 ```
 
-The original paper details many important factors that might influence dispersal distance, but we will focus on a relatively simple hypothesis: **Across all species, natal dispersal exceeds breeding dispersal**.
+The original paper details many important factors that might influence dispersal distance, but we will focus on a relatively simple hypothesis: **Averaging across all species, natal dispersal exceeds breeding dispersal**.
 
 Some guidance to get you thinking about the exercise:
 
