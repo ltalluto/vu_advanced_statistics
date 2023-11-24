@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Natal vs. Breeding Dispersal in Birds</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Natal vs. Breeding Dispersal in Birds</h1>
+<h4 class="date">27.11.2023</h4>
+
+</div>
+
+
+<p>We will use a dataset (from <a
+href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838">Fandos
+et al. 2022</a>) of dispersal distances of European birds. One important
+question is whether birds overall have greater dispersal requirements
+when first leaving the nest where they hatched (<strong>natal
+dispersal</strong>) or when dispersing as adults among different
+breeding sites (<strong>breeding dispersal</strong>).</p>
+<p>The code below will download the data, and reshape it into a form
+that is useful for us. Note that, because we don’t have breeding and
+natal values for all species, we will have slightly different sample
+sizes for each.</p>
+<pre class="r"><code>library(data.table)
+
+
+url = &quot;https://zenodo.org/records/7191344/files/Table_S14_%20species_dispersal_distances_v1_0_2.csv?download=1&quot;
+disp = fread(url)
+
+# get rid of columns we won&#39;t use, and subset to only breeding/natal dispersal
+disp = disp[type %in% c(&quot;breeding&quot;, &quot;natal&quot;), 
+            .(species, median, n, function_id, function_comparison, type, sex_code)]
+
+# they fit four dispersal functions per species/type/sex
+# the column function_comparison tells you how good each fit was relative to the others
+# we will use it to compute the weighted mean dispersal distance across the different models
+disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - TRUE), 
+                n = sum(n, na.rm = TRUE)), by = .(species, type, sex_code)]
+
+# we will further aggregate by sex (since the paper found little difference among sexes)
+# this time with sample size as the weights
+disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
+
+# split into two datasets
+breeding = disp$disp_dist[disp$type == &#39;breeding&#39;]
+natal = disp$disp_dist[disp$type == &#39;natal&#39;]</code></pre>
+<p>The original paper details many important factors that might
+influence dispersal distance, but we will focus on a relatively simple
+hypothesis: <strong>Averaging across all species, natal dispersal
+exceeds breeding dispersal</strong>.</p>
+<p>Some guidance to get you thinking about the exercise:</p>
+<ol style="list-style-type: decimal">
+<li>Make some plots exploring the hypothesis.</li>
+</ol>
+<div class="soln">
+<pre class="r"><code># do a bit of manipulation to make ggplot play nicely
+library(ggplot2)
+ggplot(disp) + theme_minimal() + 
+    geom_histogram(aes(x = disp_dist, fill = type), position=&quot;identity&quot;, alpha = 0.5, bins = 30)</code></pre>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(disp) + geom_boxplot(aes(y = disp_dist, fill = type)) + theme_minimal() + ylab(&quot;Dispersal Distance (km)&quot;)</code></pre>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p>It seems there is an effect. For sure the data are highly skewed!</p>
+</div>
+<ol start="2" style="list-style-type: decimal">
+<li>You probably have an idea of a basic frequentist test for this
+hypothesis. Go ahead and do it. What’s the result? Do the data fit the
+assumptions of the test?</li>
+</ol>
+<div class="soln">
+<p>Let’s try a paired t-test. For sure the assumptions are not met, but
+we will try it anyway.</p>
+<pre class="r"><code>t.test(natal, breeding, hypothesis = &quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  natal and breeding
+## t = 4.7204, df = 209.65, p-value = 4.301e-06
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  2.703761 6.581507
+## sample estimates:
+## mean of x mean of y 
+##  7.271117  2.628483</code></pre>
+<pre class="r"><code>wilcox.test(natal, breeding, hypothesis = &quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  natal and breeding
+## W = 10594, p-value = 1.187e-12
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>The non parametric test is also significant, but much less
+informative (we don’t get, for example, any confidence interval on the
+difference in means).</p>
+</div>
+<ol start="3" style="list-style-type: decimal">
+<li>Can you design a <strong>Bayesian model</strong> in Stan that is
+both appropriate for the data (including making reasonable
+distributional assumptions) and models the hypothesis you want to test?
+Try it out, using the tools you know:
+<ol style="list-style-type: lower-alpha">
+<li>Think in terms of the statistical process generating the data (if
+your hypothesis is true).</li>
+<li>Think of <strong>parameters</strong> that can stand in for your
+hypothesis.</li>
+</ol></li>
+</ol>
+<div class="soln">
+<p>We could try this a few different ways. One possibility would be to
+build two models, one encoding a null hypothesis, that both datasets
+come from the same distribution with the same mean and variance, and a
+second where the two models have different means. Then we could use
+model comparison tools to decide which is better. But we don’t know how
+to do that yet, so we will try something even simpler!</p>
+<p>Let’s define the mean breeding dispersal distance as <span
+class="math inline">\(\mu_b\)</span>. We can define the mean natal
+distribution in terms of a simple offset from the mean breeding
+distance:</p>
+<p><span class="math inline">\(\mu_n = \mu_b + o\)</span></p>
+<p>Our hypothesis is then simply that <span class="math inline">\(o &gt;
+0\)</span>.</p>
+<p>In terms of the <strong>generative model</strong>, our data are
+positive and highly skewed, so it makes sense to model this with two
+gamma distributions, one for each variable. Their means will be <span
+class="math inline">\(\mu_b\)</span> and <span
+class="math inline">\(\mu_n\)</span>. We will assume a single variance,
+<span class="math inline">\(\phi\)</span>, shared between the two
+distributions.</p>
+</div>
+<div class="line-block">   c. Graph the model, and write
+equations.</div>
+<div class="soln">
+<p>We need some reparameterisation, because the Gamma distribution has
+parameters <span class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span>, which we can relate somehow to the
+mean and precision of each distribution. We can find the mean and
+variance of the easily on <a
+href="https://en.wikipedia.org/wiki/Gamma_distribution">Wikipedia</a>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu &amp; = \frac{\alpha}{\beta} \\
+\phi &amp; = \frac{\alpha}{\beta^2} \\
+\end{aligned}
+\]</span></p>
+<p>We can rearrange these to solve for <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span> in terms of the parameters we want
+to estimate:</p>
+$$
+<span class="math display">\[\begin{aligned}
+\alpha_b &amp; = \frac{\mu_b^2}{\phi} \\
+\beta_b &amp; = \frac{\mu_b}{\phi} \\
+\alpha_n &amp; = \frac{(\mu_b+o)^2}{\phi} \\
+\beta_n &amp; = \frac{\mu_b+o}{\phi} \\
+
+\end{aligned}\]</span>
+<p>$$</p>
+<p>Finally we define the likelihood distribution:</p>
+<p><span class="math display">\[
+\begin{aligned}
+breeding &amp; \sim \mathrm{Gamma}(\alpha_b, \beta_b) \\
+natal &amp; \sim \mathrm{Gamma}(\alpha_n, \beta_n) \\
+\end{aligned}
+\]</span></p>
+<pre class="r"><code>library(&quot;igraph&quot;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>library(&quot;ggnetwork&quot;)
+gr = graph_from_literal(μ_b-+α_b, μ_b-+β_b, Φ-+α_b, Φ-+β_b, o-+α_n, o-+β_n, α_b-+breeding, 
+                        β_b-+breeding, α_n-+natal, β_n-+natal, μ_b-+α_n, μ_b-+β_n,
+                        Φ-+α_n, Φ-+β_n)
+V(gr)$type = c(&quot;stochastic&quot;, rep(&quot;deterministic&quot;, 2), rep(&quot;stochastic&quot;, 2), rep(&quot;deterministic&quot;, 2),
+               rep(&quot;stochastic&quot;, 2))
+V(gr)$source = c(rep(&quot;unknown&quot;, 7), rep(&quot;known&quot;, 2))
+
+
+layout = rbind(mu = c(-1, -1), alphab = c(-1.2,0), betab = c(-0.8,0), phi = c(0,-1), o = c(1,-1),
+      alpha_n = c(0.8,0), beta_n = c(1.2,0), breeding = c(-0.4,1), natal = c(0.4,1))
+
+
+# layout = matrix(c(-1,-1,  -0.5,0, 0.5,0, 1,-1, 0,1, -0.8,2, 0.8,2), 
+#               byrow=TRUE, ncol=2)
+
+
+n = ggnetwork(gr, layout=layout)
+ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour=&quot;gray50&quot;, arrow=arrow(length = unit(6, &quot;pt&quot;), 
+                                type = &quot;closed&quot;)) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = &quot;bold&quot;, nudge_x=-0.1)</code></pre>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div class="line-block">   d. Translate the graph into Stan code and try
+to fit the model.</div>
+<div class="soln">
+<pre class="stan"><code>data {
+    int &lt;lower = 1&gt; n_b;
+    int &lt;lower = 1&gt; n_n;
+    vector [n_b] breeding;
+    vector [n_n] natal;
+}
+parameters {
+    real &lt;lower = 0&gt; mu_b;
+    real &lt;lower = 0&gt; phi;
+    real &lt;lower = -mu_b&gt; o;
+}
+transformed parameters {
+    real &lt;lower = 0&gt; alpha_b = mu_b^2 / phi;
+    real &lt;lower = 0&gt; beta_b = mu_b / phi;
+    real &lt;lower = 0&gt; alpha_n = (mu_b+o)^2 / phi;
+    real &lt;lower = 0&gt; beta_n = (mu_b+o) / phi;
+}
+model {
+    breeding ~ gamma(alpha_b, beta_b);
+    natal ~ gamma(alpha_n, beta_n);
+    // weak priors for the mean and variance
+    mu_b ~ exponential(0.1);
+    phi ~ exponential(0.1);
+    o ~ normal(0, 10);
+}</code></pre>
+<pre class="r"><code>library(rstan)
+disp_model = stan_model(&quot;stan/bird_disp.stan&quot;)</code></pre>
+<pre class="r"><code>bird_disp_stan = list(
+    n_b = length(breeding),
+    n_n = length(natal),
+    natal = natal,
+    breeding = breeding
+)
+
+fit = sampling(disp_model, chains = 1, refresh = 0, data = bird_disp_stan)</code></pre>
+</div>
+<div class="line-block">   e. What is the probability that your
+hypothesis is true? What are plausible limits for the difference between
+the means?</div>
+<div class="soln">
+<pre class="r"><code>samps_o = as.matrix(fit)[, &#39;o&#39;]
+
+## pr(mu &gt; 0)
+sum(samps_o &gt; 0) / length(samps_o)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>## credible interval
+hist(samps_o)</code></pre>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code># our posterior looks pretty symmetrical and unimodal, so we can simply make a quantile interval
+interval = quantile(samps_o, c(0.25, 0.975))
+
+cat(&quot;There is a 95% chance that the difference in means is between&quot;, 
+    round(interval[1], 2), &quot;and&quot;, round(interval[2], 2))</code></pre>
+<pre><code>## There is a 95% chance that the difference in means is between 1.04 and 2.1</code></pre>
+<p>Our hypothesis that o &gt; 0 is quite probable. Interestingly, our
+Bayesian estimate is much more conservative than the t.test.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

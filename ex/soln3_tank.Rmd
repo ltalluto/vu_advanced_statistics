@@ -251,17 +251,21 @@ parameters {
 	real <lower = max(s)> N_latent;
 }
 model {
-//	s ~ uniform(1, floor(n_latent));
 	for(i in 1:nobs) {
 		if(floor(N_latent) < s[i]) {
+			// if any N is less than s, add -Inf to the likelihood
 			target += log(0);
 		} else {
-			target += -log(floor(N_latent)); // discrete uniform distribution with a min of 1 and max of N_latent
+			// discrete uniform distribution with a min of 1 and max of N_latent
+			target += -log(floor(N_latent)); 
 		}
 	}
 	N_latent ~ exponential(lam);
 }
 generated quantities {
+	// output N, which is the "real" max serial number
+	// this is the value we use to compute the likelihood, and is
+	// just N_latent, rounded down
 	real N = floor(N_latent);
 }
 ```
