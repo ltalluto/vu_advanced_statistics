@@ -1,0 +1,193 @@
+---
+title: "Natal vs. Breeding Dispersal in Birds"
+date: "27.11.2023"
+output: 
+  html_document:
+    self_contained: false
+    lib_dir: lib
+    css: ex.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We will use a dataset (from [Fandos et al. 2022](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13838)) of dispersal distances of European birds. One important question is whether birds overall have greater dispersal requirements when first leaving the nest where they hatched (**natal dispersal**) or when dispersing as adults among different breeding sites (**breeding dispersal**).
+
+The code below will download the data, and reshape it into a form that is useful for us.
+
+```{r message = FALSE, cache = TRUE}
+library(data.table)
+
+
+url = "https://zenodo.org/records/7191344/files/Table_S14_%20species_dispersal_distances_v1_0_2.csv?download=1"
+disp = fread(url)
+
+# get rid of columns we won't use, and subset to only breeding/natal dispersal
+disp = disp[type %in% c("breeding", "natal"), 
+			.(species, median, n, function_id, function_comparison, type, sex_code)]
+
+# they fit four dispersal functions per species/type/sex
+# the column function_comparison tells you how good each fit was relative to the others
+# we will use it to compute the weighted mean dispersal distance across the different models
+disp = disp[, .(disp_dist = weighted.mean(median, function_comparison, na.rm - TRUE), 
+				n = sum(n, na.rm = TRUE)), by = .(species, type, sex_code)]
+
+# we will further aggregate by sex (since the paper found little difference among sexes)
+# this time with sample size as the weights
+disp = disp[, .(disp_dist = weighted.mean(disp_dist, n, na.rm = TRUE)), by = .(species, type)]
+
+# use dcast to put the dispersal types next to each other
+disp = dcast(disp, species ~ type, value.var = "disp_dist")
+
+# and drop all cases where we don't have both types
+disp = disp[complete.cases(disp)]
+```
+
+The original paper details many important factors that might influence dispersal distance, but we will focus on a relatively simple hypothesis: **Across all species, natal dispersal exceeds breeding dispersal**.
+
+Some guidance to get you thinking about the exercise:
+
+1. Make some plots exploring the hypothesis.
+
+:::: {.soln}
+```{r, warning = FALSE}
+# do a bit of manipulation to make ggplot play nicely
+disp$xstart = factor("Breeding", levels = c("Breeding", "Natal"))
+disp$xend = factor("Natal", levels = c("Breeding", "Natal"))
+disp$genus = sub("(\\w+) \\w+", "\\1", disp$species)
+library(ggplot2)
+
+ggplot(data = melt(disp)) + theme_minimal() + 
+	geom_histogram(aes(x = value, fill = variable), position="identity", alpha = 0.5, bins = 30)
+```
+
+It seems there might be an effect, but hard to detect. For sure the data are highly skewed!
+
+However, these data are also paired, so it makes sense to look for an effect **by species**:
+
+```{r, warning = FALSE}
+ggplot(disp) + geom_point(aes(x = xstart, y = breeding, colour = genus)) + 
+	geom_point(aes(x = xend, y = natal, colour = genus)) + 
+	geom_segment(aes(x = xstart, y = breeding, xend = xend, yend = natal, colour = genus), linewidth = 0.2) + 
+	ylab("Dispersal Distance (km)") + theme_minimal() + xlab("Dispersal Type")
+```
+
+::::
+
+2. You probably have an idea of a basic frequentist test for this hypothesis. Go ahead and do it. What's the result? Do the data fit the assumptions of the test?
+
+:::: {.soln}
+
+Let's try a paired t-test. For sure the assumptions are not met, but we will try it anyway.
+
+``` {r}
+t.test(disp$natal, disp$breeding, paired = TRUE, hypothesis = "greater")
+
+wilcox.test(disp$natal, disp$breeding, paired = TRUE, hypothesis = "greater")
+```
+
+The non parametric test is also significant, but much less informative (we don't get, for example, any confidence interval on the difference in means).
+
+::::
+
+3. Can you design a **Bayesian model** in Stan that is both appropriate for the data (including making reasonable distributional assumptions) and models the hypothesis you want to test? Try it out, using the tools you know:
+	a. Think in terms of the statistical process generating the data (if your hypothesis is true).
+	b. Think of **parameters** that can stand in for your hypothesis.
+	
+::: {.soln}
+FIX. This is wrong! This is a 2-sample test. The paired is much easier, just need to estimate the mean difference. Still gamma, otherwise way simpler
+
+There are multiple ways to do this. We could think about two competing models: one in which the two data sets come from a single distribution (so a null model), and one with two distributions with different means. We could then use model comparison tools to evaluate these. But we don't know how to use these yet :-)
+
+Another approach is to imagine a simple offset, so that $breeding \sim \mathcal{D}(mean = \mu_b, \dots)$ and $natal \sim \mathcal{D}(mean = \mu_b + o, \dots)$. Our hypothesis is that o > 0.
+
+A final problem is the distribution. Since our data are strictly positive and strongly right skewed, it makes sense to model them with a Gamma distribution.
+:::
+	
+	c. Graph the model, and write equations.
+	
+:::: {.soln}
+
+```{r eval = FALSE}
+library("igraph")
+library("ggnetwork")
+gr = graph_from_literal(μ-+α1, μ-+β1, μ-+α2, μ-+β2, Φ-+α1, Φ-+β1, Φ-+α2, Φ-+β2, o-+α2, o-+β2,
+						α1-+breeding, β1-+breeding, α2-+natal, β2-+natal)
+V(gr)$type = c("stochastic", rep("deterministic", 4), rep("stochastic", 4))
+V(gr)$source = c(rep("unknown", 7), rep("known", 2))
+
+# Here we define an optional layout, telling ggnetwork where to put each node
+# The matrix should have one row per node, and columns are x and y coordinates
+# If you skip this, ggnetwork will try to make a pretty graph by itself
+layout = matrix(c(-1,-1,  -1.5,0, -0.5,0, 0.5,0, 1.5,0, 0,-1, 1,-1, -1,1, 1,1), 
+				byrow=TRUE, ncol=2)
+
+
+n = ggnetwork(gr, layout=layout)
+ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+   geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), 
+   								type = "closed")) + 
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1)
+```
+
+We need some reparameterisation, because the Gamma distribution has parameters $\alpha$ and $\beta$, which we can relate somehow to the mean and precision of each distribution. So we start with likelihoods:
+
+$$
+\begin{aligned}
+breeding & \sim \mathcal{G}(\alpha_1, \beta_1)\\
+natal & \sim \mathcal{G}(\alpha_2, \beta_2)\\
+\end{aligned}
+$$
+
+We can find the mean and variance of these distributions easily on Wikipedia:
+
+$$
+\begin{aligned}
+\mu & = \frac{\alpha}{\beta}\\
+\sigma^2 & = \phi = \frac{\alpha}{\beta^2}\\
+\end{aligned}
+$$
+We can rearrange these to solve for $\alpha$ and $\beta$ in terms of the parameters we want to estimate:
+
+$$
+\begin{aligned}
+\alpha_1 & = \frac{\mu^2}{\phi}\\
+\beta_1 & = \frac{\mu}{\phi}\\
+\alpha_2 & = \frac{(\mu+o)^2}{\phi}\\
+\beta_2 & = \frac{\mu+o}{\phi}\\
+\end{aligned}
+$$
+
+::::
+	
+	d. Translate the graph into Stan code and try to fit the model.
+::::{.soln}
+
+```{stan, output.var = "disp_model", cache = TRUE}
+data {
+	int <lower = 1> n;
+	real [n] breeding;
+	real [n] natal;
+}
+parameters {
+	real <lower = 0> mu;
+	real <lower = 0> phi;
+	real <lower = mu> o;
+}
+transformed parameters {
+	real <lower =0> alpha1 = mu^2 / phi;
+	real <lower = 0> beta1 = mu / phi;
+	real <lower = 0> alpha2 = (mu + o)^2 / phi;
+	real <lower = 0> beta2 = (mu + o) / phi;
+}
+model {
+	breeding ~ gamma(alpha1, beta1);
+	natal ~ gamma(alpha2, beta2);
+}
+```
+
+::::
+	e. What is the probability that your hypothesis is true? What are plausible limits for the difference between the means?
+
