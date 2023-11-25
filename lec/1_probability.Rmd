@@ -3,14 +3,15 @@ title: "Introduction, Probability, & Distributions"
 author: "M. Talluto"
 date: "21.11.2023"
 output:
-  beamer_presentation: 
-    latex_engine: xelatex
+  ioslides_presentation: default
   slidy_presentation:
     theme: cerulean
     toc_depth: 2
     css: rmd_style.css
-    self_contained: false
+    self_contained: no
     lib_dir: lib
+  beamer_presentation:
+    latex_engine: xelatex
 ---
 
 
@@ -1274,7 +1275,7 @@ pr(k = 0 | n = 10, p = 0.3) & = (0.7 \times \ldots 0.7) \\
 
 * The same logic applies for 10 zombies: 
 
-$$pr(k = 0 | n = 10, p = 0.3) = 0.3^{10} \approx 0.000 $$
+$$pr(k = 10 | n = 10, p = 0.3) = 0.3^{10} \approx 0.000 $$
 
 ::::
 :::: {.column}

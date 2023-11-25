@@ -341,7 +341,7 @@ tank_fit</code></pre>
 ## N    223.95    0.70 20.71 205.36 210.24 217.81 230.02 278.81   886 1.00
 ## lp__ -53.95    0.04  0.84 -56.61 -54.11 -53.62 -53.42 -53.37   467 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Fri Nov 24 10:53:37 2023.
+## Samples were drawn using NUTS(diag_e) at Sat Nov 25 10:48:27 2023.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -395,26 +395,35 @@ samps_sorted = sort(tank_samps[,&#39;N&#39;])
 # how many values in a 90% interval?
 int_width = ceiling(0.9 * length(samps_sorted))
 
-interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
+# initial interval to test
+interval = c(samps_sorted[1], samps_sorted[1 + int_width])
 
-# our maximum possible start is the 10th quantile
-possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
+# what are the possible lower starting points for intervals
+# our maximum possible start the length minus the interval width
+possible_intervals = 2:(length(samps_sorted) - int_width)
 for(i in possible_intervals) {
     width = interval[2] - interval[1]
-    new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
+    new_interval = c(samps_sorted[i], samps_sorted[i + int_width])
     new_width = new_interval[2] - new_interval[1]
     if(new_width &lt; width) 
         interval = new_interval
 }
 
 # compare with the quantile interval
-rbind(quantile = quant_interval, hdi = interval)</code></pre>
-<pre><code>##                5%      95%
+intervals = rbind(quantile = quant_interval, hdi = interval)
+colnames(intervals) = c(&quot;lower&quot;, &quot;upper&quot;)
+intervals</code></pre>
+<pre><code>##             lower    upper
 ## quantile 205.8410 262.2624
-## hdi      205.0124 248.4253</code></pre>
-<p>The HDI is quite a bit narrower than the quantile interval. There is
-a more complete function for doing this in the git repository in:
-<code>vu_advstats_students/r/mh.r</code></p>
+## hdi      205.0124 248.4648</code></pre>
+<p>The HDI is quite a bit narrower than the quantile interval.</p>
+<p>In the git repository, there is a function that will do this for you
+(including for multivariate problems):
+<code>vu_advstats_students/r/hdi.r</code></p>
+<pre class="r"><code>source(&quot;../vu_advstats_students/r/hdi.r&quot;)
+hdi(tank_samps[,&#39;N&#39;], density = 0.9)</code></pre>
+<pre><code>##         lower    upper
+## [1,] 205.0124 248.4648</code></pre>
 </div>
 </div>
 <div id="bonus-discrete-uniform-parameters" class="section level3">
@@ -457,38 +466,27 @@ generated quantities {
     // just N_latent, rounded down
     real N = floor(N_latent);
 }</code></pre>
-<pre class="r"><code>tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0)
-tank_samps_d = as.matrix(tank_fit_d)
+<pre class="r"><code>tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0)</code></pre>
+<pre><code>## Warning: There were 1186 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre class="r"><code>tank_samps_d = as.matrix(tank_fit_d)
 mcmc_combo(tank_samps_d, combo = c(&quot;trace&quot;, &quot;hist&quot;))</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="soln3_tank_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="soln3_tank_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>(quant_interval = quantile(tank_samps_d[,&#39;N&#39;], c(0.05, 0.95)))</code></pre>
 <pre><code>##  5% 95% 
-## 206 265</code></pre>
-<pre class="r"><code>samps_sorted = sort(tank_samps_d[,&#39;N&#39;])
+## 206 269</code></pre>
+<pre class="r"><code>hdi_interval = hdi(tank_samps_d[,&#39;N&#39;], density = 0.9)
 
-# how many values in a 90% interval?
-int_width = ceiling(0.9 * length(samps_sorted))
-
-interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
-
-# our maximum possible start is the 10th quantile
-possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
-for(i in possible_intervals) {
-    width = interval[2] - interval[1]
-    new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
-    new_width = new_interval[2] - new_interval[1]
-    if(new_width &lt; width) 
-        interval = new_interval
-}
 
 # compare with the quantile interval
-rbind(quantile = quant_interval, hdi = interval)</code></pre>
-<pre><code>##           5% 95%
-## quantile 206 265
-## hdi      205 250</code></pre>
-<p>The results very similar, but now the mode is correctly and exactly
-included!</p>
+rbind(hdi = hdi_interval, quantile = quant_interval)</code></pre>
+<pre><code>##          lower upper
+##            205   251
+## quantile   206   269</code></pre>
+<p>The results are very similar, but now the mode is correctly and
+exactly included!</p>
 </div>
 </div>
 
