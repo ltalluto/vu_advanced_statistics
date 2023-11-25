@@ -212,25 +212,36 @@ samps_sorted = sort(tank_samps[,'N'])
 # how many values in a 90% interval?
 int_width = ceiling(0.9 * length(samps_sorted))
 
-interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
+# initial interval to test
+interval = c(samps_sorted[1], samps_sorted[1 + int_width])
 
-# our maximum possible start is the 10th quantile
-possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
+# what are the possible lower starting points for intervals
+# our maximum possible start the length minus the interval width
+possible_intervals = 2:(length(samps_sorted) - int_width)
 for(i in possible_intervals) {
 	width = interval[2] - interval[1]
-	new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
+	new_interval = c(samps_sorted[i], samps_sorted[i + int_width])
 	new_width = new_interval[2] - new_interval[1]
 	if(new_width < width) 
 		interval = new_interval
 }
 
 # compare with the quantile interval
-rbind(quantile = quant_interval, hdi = interval)
+intervals = rbind(quantile = quant_interval, hdi = interval)
+colnames(intervals) = c("lower", "upper")
+intervals
 
 ```
 
 The HDI is quite a bit narrower than the quantile interval.
-There is a more complete function for doing this in the git repository in: `vu_advstats_students/r/mh.r`
+
+In the git repository, there is a function that will do this for you (including for multivariate problems): `vu_advstats_students/r/hdi.r`
+
+```{r}
+source("../vu_advstats_students/r/hdi.r")
+hdi(tank_samps[,'N'], density = 0.9)
+```
+
 :::
 
 
@@ -275,30 +286,14 @@ tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains =
 tank_samps_d = as.matrix(tank_fit_d)
 mcmc_combo(tank_samps_d, combo = c("trace", "hist"))
 (quant_interval = quantile(tank_samps_d[,'N'], c(0.05, 0.95)))
+hdi_interval = hdi(tank_samps_d[,'N'], density = 0.9)
 
-
-samps_sorted = sort(tank_samps_d[,'N'])
-
-# how many values in a 90% interval?
-int_width = ceiling(0.9 * length(samps_sorted))
-
-interval = c(samps_sorted[1], samps_sorted[1 + int_width - 1])
-
-# our maximum possible start is the 10th quantile
-possible_intervals = seq(2, floor(0.1 * length(samps_sorted)), 1)
-for(i in possible_intervals) {
-	width = interval[2] - interval[1]
-	new_interval = c(samps_sorted[i], samps_sorted[i + int_width - 1])
-	new_width = new_interval[2] - new_interval[1]
-	if(new_width < width) 
-		interval = new_interval
-}
 
 # compare with the quantile interval
-rbind(quantile = quant_interval, hdi = interval)
+rbind(hdi = hdi_interval, quantile = quant_interval)
 ```
 
-The results very similar, but now the mode is correctly and exactly included!
+The results are very similar, but now the mode is correctly and exactly included!
 
 :::  
 
