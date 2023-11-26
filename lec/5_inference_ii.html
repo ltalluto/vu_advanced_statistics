@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="M. Talluto" />
+  <title>Bayesian Inference: Workflow and Guidelines</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Bayesian Inference: Workflow and Guidelines</h1>
+  <p class="author">
+M. Talluto
+  </p>
+  <p class="date">29.11.2023</p>
+</div>
+<div id="bayesian-analysis-workflow" class="slide section level2">
+<h1>Bayesian analysis workflow</h1>
+<ol style="list-style-type: decimal">
+<li>Specify joint posterior graphically, mathematically, and in
+code</li>
+</ol>
+</div>
+<div id="bayesian-analysis-workflow-1" class="slide section level2">
+<h1>Bayesian analysis workflow</h1>
+<ol style="list-style-type: decimal">
+<li>Specify joint posterior graphically, mathematically, and in
+code</li>
+<li>Draw samples from the joint posterior distribution</li>
+</ol>
+</div>
+<div id="bayesian-analysis-workflow-2" class="slide section level2">
+<h1>Bayesian analysis workflow</h1>
+<ol style="list-style-type: decimal">
+<li>Specify joint posterior graphically, mathematically, and in
+code</li>
+<li>Draw samples from the joint posterior distribution</li>
+<li>Evaluate/diagnose the model’s performance</li>
+</ol>
+</div>
+<div id="bayesian-analysis-workflow-3" class="slide section level2">
+<h1>Bayesian analysis workflow</h1>
+<ol style="list-style-type: decimal">
+<li>Specify joint posterior graphically, mathematically, and in
+code</li>
+<li>Draw samples from the joint posterior distribution</li>
+<li>Evaluate/diagnose the model’s performance</li>
+<li>Perform posterior inference</li>
+</ol>
+</div>
+<div id="joint-posterior-likelihood" class="slide section level2">
+<h1>1. Joint posterior: likelihood</h1>
+<ul>
+<li>Choose a <strong>generative model</strong> (e.g., distribution from
+which the observations are generated)
+<ul>
+<li>whenever possible use knowledge of the appropriate processes</li>
+<li>transform parameters and sample in transformed space to improve
+behaviour</li>
+<li>e.g. use log(<span class="math inline">\(\sigma\)</span>) instead of
+<span class="math inline">\(\sigma\)</span> to avoid impossible negative
+variance in sampler</li>
+<li>in Stan, this is done by adding variable
+<strong>constraints</strong>
+(<code>real &lt;lower=0&gt; sigma</code>)</li>
+</ul></li>
+</ul>
+</div>
+<div id="joint-posterior-likelihood-1" class="slide section level2">
+<h1>1. Joint posterior: likelihood</h1>
+<ul>
+<li>Choose a <strong>generative model</strong> (e.g., distribution from
+which the observations are generated)
+<ul>
+<li>whenever possible use knowledge of the appropriate processes</li>
+<li>transform parameters and sample in transformed space to improve
+behaviour</li>
+<li>e.g. use log(<span class="math inline">\(\sigma\)</span>) instead of
+<span class="math inline">\(\sigma\)</span> to avoid impossible negative
+variance in sampler</li>
+<li>in Stan, this is done by adding variable
+<strong>constraints</strong>
+(<code>real &lt;lower=0&gt; sigma</code>)</li>
+</ul></li>
+<li>Models should be specified to be scale independent
+<ul>
+<li>Easy: scaling your predictors to have mean=0, sd=1</li>
+<li>Hard: scaling outcomes (y); this can change the generative
+model!</li>
+<li>Prefer to transform outcomes with the <strong>link
+function</strong></li>
+</ul></li>
+</ul>
+</div>
+<div id="joint-posterior-priors" class="slide section level2">
+<h1>1. Joint posterior: priors</h1>
+<ul>
+<li>Any unknowns must have a <strong>prior</strong>
+<ul>
+<li>(or possibly a hierarchical generative model and hyperpriors)</li>
+</ul></li>
+<li>Prefer regularising priors to vague priors
+<ul>
+<li>Normal(0, 5) instead of Normal(0,500)</li>
+</ul></li>
+<li>Avoid improper priors: Uniform(-Inf, Inf)
+<ul>
+<li>This is the default in Stan if you forget to specify it!</li>
+</ul></li>
+</ul>
+</div>
+<div id="joint-posterior-priors-1" class="slide section level2">
+<h1>1. Joint posterior: priors</h1>
+<ul>
+<li>Avoid hard boundaries
+<ul>
+<li><strong>No</strong>: Uniform(0, 1000)</li>
+<li><strong>Yes</strong>: Exponential(0.1)</li>
+</ul></li>
+<li>With informative priors, specify reasonable initial values</li>
+<li>Begin sampling with weaker priors, gradually strengthen once you
+know the model is working</li>
+<li>Specify priors for everything—avoid defaults</li>
+<li>Draw out your model as a digraph to make sure you don’t miss
+anything</li>
+</ul>
+</div>
+<div id="glm-in-stan" class="slide section level2">
+<h1>GLM in Stan</h1>
+<p>For this exercise, you will use the <a
+href="https://raw.githubusercontent.com/mtalluto/vu_advstats_students/main/data/birddiv.csv">birddiv</a>
+(in <code>vu_advstats_students/data/birddiv.csv</code>) dataset; you can
+load it directly from github using <code>data.table::fread()</code>.
+Bird diversity was measured in 1-km^2 plots in multiple countries of
+Europe, investigating the effects of habitat fragmentation and
+productivity on diversity. We will consider a subset of the data.
+Specificially, we will ask how various covariates are associated with
+the diversity of birds specializing on different habitat types. The data
+have the following potential predictors:</p>
+<ul>
+<li><strong>Grow.degd</strong>: growing degree days, a proxy for how
+warm the climate is.</li>
+<li><strong>For.cover</strong>: Forest cover near the sampling
+location</li>
+<li><strong>NDVI</strong>: normalized difference vegetation index, a
+proxy for productivity</li>
+<li><strong>For.diver</strong>: Forest diversity in the forested area
+nearby</li>
+<li><strong>Agr.diver</strong>: Diversity of agricultural
+landscapes</li>
+<li><strong>For.fragm</strong>: Index of forest fragmentation</li>
+</ul>
+<p>All of the above variables are standardized to a 0-100 scale.
+Consider this when choosing priors.</p>
+<p>Your response variable will be <code>richness</code>, the bird
+species richness in the plot. Additionally, you have an indicator
+variable <code>hab_type</code>. This is not telling you what habitat
+type was sampled (plots included multiple habitats). Rather, this is
+telling you what type of bird species were counted for the richness
+measurement: so <code>hab_type == "forest" &amp; richness == 7</code>
+indicates that 7 forest specialists were observed in that plot.</p>
+<p>Build one or more generalised linear models for bird richness. Your
+task should be to describe two things: (1) how does richness vary with
+climate, productivity, fragmentation, or habitat diversity, and (2) do
+these relationships vary depending on what habitat bird species
+specialize on.</p>
+</div>
+<div id="specify-joint-posterior" class="slide section level2">
+<h1>1. Specify joint posterior</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We should specify a <strong>generative model</strong></li>
+<li>Best to graph the model, ensure graph and stan code match</li>
+<li>Strive for independence of the scale of the x-variables</li>
+<li>Carefully choose priors
+<ul>
+<li>With no prior information, prefer <strong>regularising
+priors</strong></li>
+<li>Avoid priors that give probability mass to impossible values (e.g.,
+normal(0,1) for a standard deviation)</li>
+<li>Avoid flat priors or very long tails</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<ul>
+<li>We are <strong>counting</strong> species; count data suggest a
+<strong>Poisson</strong> process.
+<ul>
+<li>Poisson has a single parameter, <code>lambda</code></li>
+</ul></li>
+<li>Lacking additional information, we can put semi-informative normal
+priors on regression parameters.</li>
+<li>Scale matters!
+<ul>
+<li>The y-variable is richness. If <span class="math inline">\(a =
+10\)</span> and <span class="math inline">\(\mathbf{XB} = 0\)</span>,
+richness would be <span class="math inline">\(e^{10} \approx
+22,000\)</span>. Is this sensible?</li>
+<li>The x-variables range from 0-100. If <span class="math inline">\(b_i
+= 1\)</span>, moving from, say no forest to 100% forest could change
+bird diversity by <span class="math inline">\(e^{100}\)</span> species.
+Is this plausible?</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}(y) &amp; = \lambda \\
+\log \lambda &amp; = a + \mathbf{XB} \\
+y &amp; \sim \mathcal{P}(\lambda) \\
+a &amp; \sim \mathcal{N}(\mu_a, \sigma_a) \\
+\mathbf{B} &amp; \sim \mathcal{N}(\mu_\mathbf{B}, \sigma_\mathbf{B}) \\
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="specify-joint-posterior-1" class="slide section level2">
+<h1>1. Specify joint posterior</h1>
+<div class="columns">
+<div class="column">
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}(y) &amp; = \lambda \\
+\log \lambda &amp; = a + \mathbf{XB} \\
+y &amp; \sim \mathcal{P}(\lambda) \\
+a &amp; \sim \mathcal{N}(\mu_a, \sigma_a) \\
+\mathbf{B} &amp; \sim \mathcal{N}(\mu_\mathbf{B}, \sigma_\mathbf{B}) \\
+\end{aligned}
+\]</span></p>
+</div><div class="column">
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="specify-joint-posterior-2" class="slide section level2">
+<h1>1. Specify joint posterior</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n; <span class="co">// number of data points</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; k; <span class="co">// number of x-variables</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; richness [n];</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="dt">matrix</span> [n,k] X;</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>    </span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="co">// prior hyperparams</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="dt">real</span> mu_a;</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="dt">real</span> mu_b;</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_a;</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_b;</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="dt">vector</span> [k] B;</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; [n] lambda;</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    lambda = exp(a + X * B);</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>}</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>    richness ~ poisson(lambda);</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>    a ~ normal(mu_a, sigma_a);</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>    B ~ normal(mu_b, sigma_b);</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>}</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>    <span class="dt">int</span> r_predict [n];</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>        r_predict[i] = poisson_rng(lambda[i]);</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>    r_predict = poisson_rng(lambda);</span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="sample-from-joint-posterior" class="slide section level2">
+<h1>2. Sample from joint posterior</h1>
+<ul>
+<li>Start with a small run (10s-100s of iterations) to catch errors,
+make sure nothing surprising happens</li>
+<li>Increase to a few thousand to view convergence</li>
+<li>Select starting values and run until convergence (1.000s for Stan,
+10.000s—100.000s or more for Metropolis)</li>
+<li>Use multiple chains (it will be needed for step 3)</li>
+</ul>
+</div>
+<div id="sample-from-the-joint-posterior" class="slide section level2">
+<h1>2. Sample from the joint posterior</h1>
+<p>Let’s try two models. First, we will see how NDVI affects
+diversity.</p>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>bird_div_glm <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/bird_div_glm.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>birds <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&quot;../vu_advstats_students/data/birddiv.csv&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># stan can&#39;t handle NAs</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>birds <span class="ot">=</span> birds[<span class="fu">complete.cases</span>(birds)]</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># turn predictors into a matrix</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(birds[, <span class="fu">c</span>(<span class="st">&quot;Grow.degd&quot;</span>, <span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>, </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>                        <span class="st">&quot;For.diver&quot;</span>, <span class="st">&quot;Agr.diver&quot;</span>, <span class="st">&quot;For.fragm&quot;</span>)])</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Remove the scale from X, make the model scale independent</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>X_scaled <span class="ot">=</span> <span class="fu">scale</span>(X)</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>which_forest <span class="ot">=</span> <span class="fu">which</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;forest&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>standat1 <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(which_forest), </span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">1</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness[which_forest],</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">X =</span> X_scaled[which_forest, <span class="st">&quot;NDVI&quot;</span>, <span class="at">drop=</span><span class="cn">FALSE</span>],</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague (exp(20) is a possible intercept under this prior!)</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat1, <span class="at">iter=</span><span class="dv">2000</span>, </span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="sample-from-the-joint-posterior-1"
+class="slide section level2">
+<h1>2. Sample from the joint posterior</h1>
+<pre><code>## Inference for Stan model: anon_model.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat
+## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.95  3236    1
+## B[1] 0.19       0 0.04 0.12 0.17 0.19 0.22  0.27  2933    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:38:19 2023.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+</div>
+<div id="sample-from-the-joint-posterior-2"
+class="slide section level2">
+<h1>2. Sample from the joint posterior</h1>
+<p>Next, we choose two variables, and try them using birds of different
+habitat types.</p>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Second, looking at how two variables influence birds of different types</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># grab two variables</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>X_2 <span class="ot">=</span> X_scaled[, <span class="fu">c</span>(<span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>)]</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># add a categorical variable for bird type</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">open=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;open&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">generalist=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;generalist&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># add interaction terms with the categories</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, </span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>            <span class="at">op_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>            <span class="at">op_NDVI =</span> X_2[, <span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>            <span class="at">ge_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>],</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>            <span class="at">ge_NDVI =</span> X_2[,<span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>])</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">head</span>(X_2)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="do">##       For.cover       NDVI open generalist op_forCov op_NDVI ge_forCov ge_NDVI</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="do">## [1,]  1.1895779  0.4284131    0          0         0       0         0       0</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="do">## [2,] -1.3937570 -0.8660731    0          0         0       0         0       0</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="do">## [3,] -0.4034797 -1.2463741    0          0         0       0         0       0</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="do">## [4,] -1.0985427 -0.9977157    0          0         0       0         0       0</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="do">## [5,] -1.3937570 -1.5827942    0          0         0       0         0       0</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="do">## [6,]  1.1930054  0.2090086    0          0         0       0         0       0</span></span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>standat2 <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(birds<span class="sc">$</span>richness), </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">ncol</span>(X_2),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="at">X =</span> X_2, </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague (exp(20) is a possible intercept under this prior!)</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>)</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat2, <span class="at">iter=</span><span class="dv">2000</span>, </span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="sample-from-the-joint-posterior-3"
+class="slide section level2">
+<h1>2. Sample from the joint posterior</h1>
+<pre><code>## Inference for Stan model: anon_model.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##       mean se_mean   sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
+## a     1.86       0 0.04  1.78  1.83  1.86  1.88  1.93  3215    1
+## B[1]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  3022    1
+## B[2]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.26  3013    1
+## B[3] -1.49       0 0.10 -1.69 -1.56 -1.49 -1.42 -1.29  3816    1
+## B[4] -0.78       0 0.08 -0.94 -0.83 -0.78 -0.73 -0.63  3495    1
+## B[5] -0.61       0 0.10 -0.80 -0.68 -0.61 -0.55 -0.43  3321    1
+## B[6] -0.59       0 0.10 -0.79 -0.66 -0.59 -0.53 -0.41  3499    1
+## B[7] -0.26       0 0.08 -0.41 -0.31 -0.26 -0.20 -0.10  3383    1
+## B[8]  0.15       0 0.08  0.00  0.10  0.15  0.20  0.30  3263    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:42:55 2023.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+</div>
+<div id="evaluate-the-model-fit" class="slide section level2">
+<h1>3. Evaluate the model fit</h1>
+<div class="left lt">
+<ul>
+<li>Traceplots can tell you about model convergence and efficiency</li>
+<li>Histograms can alert you to problems with multi-modality</li>
+<li>Run multiple chains to help with diagnostics</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Use as.array if you want to keep different mcmc chains separate</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="do">## This is ideal for diagnostics</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## For inference, you usually want to lump all chains</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">## In this case, you use as.matrix</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>samp1_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit1, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">mcmc_combo</span>(samp1_pars, <span class="fu">c</span>(<span class="st">&quot;hist&quot;</span>, <span class="st">&quot;trace&quot;</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="do">## Error in mcmc_combo(samp1_pars, c(&quot;hist&quot;, &quot;trace&quot;)): could not find function &quot;mcmc_combo&quot;</span></span></code></pre></div>
+</div>
+<div class="right rt">
+<ul>
+<li>Printing the model also gives useful metrics</li>
+<li>Can filter by parameters of interest</li>
+<li>n_eff: Effective sample size (after removing autocorrelation)
+<ul>
+<li>This gives you an indication of how much precision in the tails of
+the posterior you have</li>
+</ul></li>
+<li>Rhat: convergence diagnostic, available with multiple chains
+<ul>
+<li>ideally, Rhat = 1</li>
+<li>Worry about for “real” parameters (not hierarchical, not
+deterministic)</li>
+<li>Rhat &gt; 1.1 for a real parameter is a problem</li>
+<li>Rhat &lt; 1.05 is probably ok</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">print</span>(fit1, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## Inference for Stan model: anon_model.</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.95  3236    1</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## B[1] 0.19       0 0.04 0.12 0.17 0.19 0.22  0.27  2933    1</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:38:19 2023.</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="do">## convergence, Rhat=1).</span></span></code></pre></div>
+</div>
+</div>
+<div id="inference-parameter-estimates" class="slide section level2">
+<h1>4. Inference: parameter estimates</h1>
+<div class="left lt">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp1_pars)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## Error in mcmc_intervals(samp1_pars): could not find function &quot;mcmc_intervals&quot;</span></span></code></pre></div>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>samp2_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit2, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp2_pars)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">## Error in mcmc_intervals(samp2_pars): could not find function &quot;mcmc_intervals&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="inference-retrodiction" class="slide section level2">
+<h1>4. Inference: Retrodiction</h1>
+<div class="left lt">
+<ul>
+<li>How close is the model to the original data?</li>
+<li>How well does our generative model describe the data</li>
+</ul>
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-15-1.png" width="864" /></p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># compute posterior distribution of the residual sum of squares</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>samp1_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>sq_resid1 <span class="ot">=</span> <span class="fu">apply</span>(samp1_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) (standat1<span class="sc">$</span>richness <span class="sc">-</span> x)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># sum(squared residuals)/(n - k)</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>phi <span class="ot">=</span> <span class="fu">apply</span>(sq_resid1, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">sum</span>(x)<span class="sc">/</span>(<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">2</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="do">##      50%       5%      95% </span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">## 16.49011 16.39322 16.82376</span></span></code></pre></div>
+</div>
+</div>
+<div id="inference-improve-the-model" class="slide section level2">
+<h1>4. Inference: Improve the model</h1>
+<div class="left lt">
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-17-1.png" width="864" /></p>
+</div>
+<div class="right rt">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># compute posterior distribution of the residual sum of squares</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>samp2_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit2, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>sq_resid2 <span class="ot">=</span> <span class="fu">apply</span>(samp2_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) (standat2<span class="sc">$</span>richness <span class="sc">-</span> x)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co"># sum(squared residuals)/(n - k)</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>phi <span class="ot">=</span> <span class="fu">apply</span>(sq_resid2, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">sum</span>(x)<span class="sc">/</span>(<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">2</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="do">##      50%       5%      95% </span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="do">## 7.474093 7.378721 7.657266</span></span></code></pre></div>
+<ul>
+<li>This model is still quite overdispersed
+<ul>
+<li>Consider more variables</li>
+<li>Consider other likelihoods (e.g., Negative Binomial)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="inference-partial-response-curves"
+class="slide section level2">
+<h1>4. Inference: Partial Response Curves</h1>
+<ul>
+<li>How does richness respond to the individual variables, holding other
+variables constant?</li>
+</ul>
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-19-1.png" width="960" /></p>
+</div>
+<div id="inference-response-surfaces" class="slide section level2">
+<h1>4. Inference: Response Surfaces</h1>
+<p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-20-1.png" width="1440" /></p>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
