@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <p class="author">
 M. Talluto
   </p>
-  <p class="date">23.11.2023</p>
+  <p class="date">27.11.2023</p>
 </div>
 <div id="the-german-tank-problem" class="slide section level2">
 <h1>The German Tank Problem</h1>
@@ -410,14 +410,13 @@ class="math inline">\(1-r\)</span></li>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>scale <span class="ot">=</span> <span class="fu">target</span>(s) <span class="sc">/</span> <span class="fu">proposal</span>(s) </span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>candidates <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">runif</span>(<span class="fl">1e6</span>, <span class="dv">1</span>, <span class="fl">1e6</span>))</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">target</span>(candidates)<span class="sc">/</span>(<span class="fu">proposal</span>(candidates) <span class="sc">*</span> scale)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">## Warning in dunif(s, 1, x): NaNs produced</span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">## uniform numbers between 0 and 1</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">runif</span>(<span class="fu">length</span>(r))  </span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">## TRUE if r &gt; test; WHY?</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">ifelse</span>(r <span class="sc">&gt;</span> test, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) </span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>samples <span class="ot">=</span> candidates[accept]</span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">## uniform numbers between 0 and 1</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">runif</span>(<span class="fu">length</span>(r))  </span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">## TRUE if r &gt; test; WHY?</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">ifelse</span>(r <span class="sc">&gt;</span> test, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) </span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>samples <span class="ot">=</span> candidates[accept]</span></code></pre></div>
 </div><div class="column">
 <p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-9-1.png" width="528" /></p>
 </div>

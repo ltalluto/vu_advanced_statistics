@@ -1,7 +1,7 @@
 ---
 title: "Markov Chain Monte Carlo"
 author: "M. Talluto"
-date: "23.11.2023"
+date: "27.11.2023"
 output:
   slidy_presentation:
     theme: cerulean
