@@ -52,27 +52,32 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/3_mcmc">MCMC & Sampling</a></td>
 		<td><p class = "ex"><a href = "ex/ex3_tank">German tank problem</a></p>
 			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
-			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
-			<!-- <p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p> -->
 		</td>
 	</tr>
 	<tr>
 		<td><b>Wednesday</b> 29.11<br/>8:15–12:00</td>
 		<td>Generalised linear models<br /><b>Inference II:</b><p class = "soln">Priors & Diagnostics</p>
 			<p class = "soln">Bayesian workflow</p></td>
-		<!-- <td><a href="">Inference II</a></td> -->
-		<td><a href="lec/4_regression">Regression &amp; GLM</a><br />Inference II</td>
-		<td><p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
-			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
-		<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p></td>
+		<td><a href="lec/4_regression">Regression &amp; GLM</a><br />
+			<a href="lec/5_inference_ii">Inference II</a></td>
+		<td>
+			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
+				<!-- <p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p> -->
+			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
+				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
+			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
+		</td>
 	</tr>
 	<tr>
 		<td><b>Friday</b> 01.12<br/>8:15–12:00</td>
-		<td>Hierarchical &amp; Multilevel Models<br/>
-		<b>Inference III:</b><p class = "soln">Model selection</p>
-			<p class = "soln">Multimodel inference</p></td>
+		<td>
+			<b>Inference III:</b>
+				<p class = "soln">Model selection</p>
+				<p class = "soln">Multimodel inference</p>
+			Hierarchical &amp; Multilevel Models
+		</td>
 		<!-- <td><a href="">Hierarchical Models</a></td> -->
-		<td>Hierarchical Models</td>
+		<td>Model Selection<br/>Hierarchical Models</td>
 		<td><p class = "ex"><a href = "ex/"></a></p>
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>

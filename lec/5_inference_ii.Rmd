@@ -373,12 +373,15 @@ print(fit2, par = c("a", "B"))
 
 ## 3. Evaluate the model fit
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
+
 * Traceplots can tell you about model convergence and efficiency
 * Histograms can alert you to problems with multi-modality
 * Run multiple chains to help with diagnostics
 
-```{r message = FALSE, fig.width=7}
+```{r message = FALSE, fig.width=7, fig.show='hide'}
+library(bayesplot)
 ## Use as.array if you want to keep different mcmc chains separate
 ## This is ideal for diagnostics
 ## For inference, you usually want to lump all chains
@@ -388,9 +391,22 @@ mcmc_combo(samp1_pars, c("hist", "trace"))
 
 ```
 
-</div>
+::::
+:::: {.column}
 
-<div class="right rt">
+
+```{r message = FALSE, fig.width=7, echo = FALSE}
+mcmc_combo(samp1_pars, c("hist", "trace"))
+
+```
+
+::::
+:::
+
+## 3. Evaluate the model fit
+
+::: {.columns}
+:::: {.column}
 
 * Printing the model also gives useful metrics
 * Can filter by parameters of interest
@@ -402,36 +418,49 @@ mcmc_combo(samp1_pars, c("hist", "trace"))
     - Rhat > 1.1 for a real parameter is a problem
     - Rhat < 1.05 is probably ok
 
-```{r, message=FALSE}
+
+::::
+:::: {.column}
+
+```{r}
 print(fit1, pars = c('a', 'B'))
 ```
 
-</div>
+::::
+:::
+
 
 
 
 ## 4. Inference: parameter estimates
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
+
 ```{r message = FALSE, fig.width=5}
 mcmc_intervals(samp1_pars)
 ```
-</div>
 
-<div class="right rt">
+::::
+:::: {.column}
+
 ```{r message = FALSE, fig.width=7}
 samp2_pars = as.array(fit2, pars=c('a', 'B'))
 mcmc_intervals(samp2_pars)
 ```
-</div>
+
+::::
+:::
 
 
 
 ## 4. Inference: Retrodiction
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
+
 * How close is the model to the original data?
-* How well does our generative model describe the data
+* How well does our generative model describe the data?
 
 ```{r message = FALSE, fig.width=9, echo=FALSE}
 library(gridExtra)
@@ -473,9 +502,9 @@ pl_right = ggplot(pldat1) + xlab("Observed Richness") +
 
 grid.arrange(pl_left, pl_right, ncol=2, nrow=1)
 ```
-</div>
 
-<div class="right rt">
+::::
+:::: {.column}
 
 ```{r message = FALSE, fig.width=7}
 # compute posterior distribution of the residual sum of squares
@@ -490,15 +519,17 @@ phi = apply(sq_resid1, 2, function(x) sum(x)/(length(x) - 2))
 quantile(phi, c(0.5, 0.05, 0.95))
 
 ```
-</div>
 
+::::
+:::
 
 
 
 
 ## 4. Inference: Improve the model
 
-<div class="left lt">
+::: {.columns}
+:::: {.column}
 
 ```{r message = FALSE, fig.width=9, echo=FALSE}
 library(gridExtra)
@@ -530,7 +561,7 @@ pldat2[, bird := ifelse(open == 1, "open", ifelse(generalist == 1, "generalist",
 
 
 ggplot(pldat2) + xlab("Observed Richness") + 
-	geom_errorbar(aes(x=richness, ymin=rpr_l, ymax=rpr_u), size=1.5, col=cols[4], width=0, alpha=0.3) + 
+	geom_errorbar(aes(x=richness, ymin=rpr_l, ymax=rpr_u), linewidth=1.5, col=cols[4], width=0, alpha=0.3) + 
 	geom_errorbar(aes(x=richness, ymin=lambda_l, ymax=lambda_u), width=0, alpha=0.6) + 
 	geom_point(aes(x=richness, y=lambda, colour = bird)) +
 	facet_grid(.~bird) + 
@@ -538,9 +569,9 @@ ggplot(pldat2) + xlab("Observed Richness") +
 	labs(colour="Type of bird") 
 
 ```
-</div>
 
-<div class="right rt">
+::::
+:::: {.column}
 
 ```{r message = FALSE, fig.width=7}
 # compute posterior distribution of the residual sum of squares
@@ -560,8 +591,8 @@ quantile(phi, c(0.5, 0.05, 0.95))
    - Consider more variables
    - Consider other likelihoods (e.g., Negative Binomial)
 
-</div>
-
+::::
+:::
 
 
 
@@ -613,7 +644,12 @@ ggplot(predict_dat, aes(x=x, y=y_med, col=bird)) +
 
 ## 4. Inference: Response Surfaces
 ```{r, message=FALSE, echo = FALSE, fig.width=15}
-xy = data.table(expand.grid(forcover=seq(0,1, length.out = 50), ndvi=seq(0,1, length.out = 50)))
+pts = data.table(standat2$X)
+pts$richness = standat2$richness
+pts[, type := ifelse(open==1, "open", ifelse(generalist==0, "generalist", "forest"))]
+
+xy = data.table(expand.grid(forcover=seq(min(pts$For.cover), max(pts$For.cover), length.out = 50), 
+							ndvi=seq(min(pts$NDVI), max(pts$NDVI), length.out = 50)))
 pr_for = cbind(intercept=1, xy, open=0, gen = 0, op_fc = 0, op_nd = 0, ge_fc = 0, ge_ndvi = 0)
 pr_for$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_for))), 2, median)
 
@@ -623,23 +659,19 @@ pr_open$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_ope
 pr_gen = cbind(intercept=1, xy, open=0, gen = 1, op_fc = 0, op_nd = 0, ge_fc = xy$forcover, ge_ndvi = xy$ndvi)
 pr_gen$y = apply(exp(as.matrix(fit2, pars = c('a', 'B')) %*% t(as.matrix(pr_gen))), 2, median)
 
-pts = data.table(standat2$X)
-pts$richness = standat2$richness
-pts[, type := ifelse(open==1, "open", ifelse(generalist==0, "generalist", "forest"))]
-
-
+pal = "nuuk"
 forpl = ggplot(pr_for, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
-	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	scico::scale_fill_scico(palette = pal, limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("NDVI") + labs(fill="Predicted richness") + ggtitle("Forest Birds") + 
 	geom_point(data=pts[type == "forest"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
 	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 7))
 openpl = ggplot(pr_open, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + guides(fill="none") +
-	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	scico::scale_fill_scico(palette = pal, limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Open Birds") + 
 	geom_point(data=pts[type == "open"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
 	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
 genpl = ggplot(pr_gen, aes(x=forcover, y=ndvi, fill=y)) + geom_tile() + 
-	scico::scale_fill_scico(palette = "bilbao", limits=c(0,12)) + theme_minimal() + 
+	scico::scale_fill_scico(palette = pal, limits=c(0,12)) + theme_minimal() + 
 	xlab("Forest Cover") + ylab("") + labs(fill="Predicted richness") + ggtitle("Generalist Birds") + 
 	geom_point(data=pts[type == "generalist"], aes(x=For.cover, y=NDVI, size=richness), fill="white", alpha=0.5) +
 	guides(size="none") + scale_size(limits=c(0, 20), range=c(0.1, 4))
