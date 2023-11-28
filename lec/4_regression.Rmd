@@ -1365,9 +1365,6 @@ mort_pl + geom_ribbon(data = prdat, aes(x = precip, ymin = fit1_l, ymax = fit1_u
 :::
 
 
-## The Generalised Linear Model
-
-For an observed variable $y$:
 
 
 ## The Generalised Linear Model

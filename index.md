@@ -1,7 +1,7 @@
 <style>
-.ex {margin: 0px;}
-.soln {margin: 0px 20px; font-size: x-small}
-table {font-size: small;}
+	td p {margin: 0px;}
+	.soln {margin: 0px 20px; font-size: x-small}
+	table {font-size: small;}
 </style>
 
 # Advanced (Bayesian) Statistics
@@ -32,54 +32,92 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<th> Date </th> <th> Topics </th> <th> Lecture Notes </th> <th> Exercises </th>
 	</tr>
 	<tr>
-		<td><b>Tuesday</b> 21.11<br/>14:15–18:00</td>
-		<td>Intro, Probability review<br/>Distributions</td>
+		<td>
+			<p><b>Tuesday</b> 21.11</p>
+			<p>14:15–18:00</p>
+		</td>
+		<td>
+			<p>Intro, Probability review</p>
+			<p>Distributions</p>
+		</td>
 		<td><a href="lec/1_probability">Probability & Distributions</a></td>
-		<td><p class = "ex"><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p></td>
+		<td>
+			<p><a href = "ex/ex1_distributions">Distributions in R</a></p>
+			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>
+		</td>
 	</tr>
 	<tr>
-		<td><b>Friday</b> 24.11<br/>14:15–18:00</td>
-		<td>Maximum likelihood<br/>Optimisation</td>
+		<td>
+			<p><b>Friday</b> 24.11</p>
+			<p>14:15–18:00</p>
+		</td>
+		<td>
+			<p>Maximum likelihood</p>
+			<p>Optimisation</p>
+		</td>
 		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a></td>
-		<td><p class = "ex"><a href = "ex/ex2_tree.html">Tree mortality</a></p>
+		<td>
+			<p><a href = "ex/ex2_tree.html">Tree mortality</a></p>
 			<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>
 		</td>
 	</tr>
 	<tr>
-		<td><b>Monday</b> 27.11<br/>8:15–12:00</td>
-		<td>Markov-chain Monte Carlo<br/>Inference I: Sampling &amp; hypothesis tests</td>
+		<td>
+			<p><b>Monday</b> 27.11</p>
+			<p>8:15–12:00</p>
+		</td>
+		<td>
+			<p>Markov-chain Monte Carlo</p>
+			<p>Inference I: Sampling &amp; hypothesis tests</p>
+		</td>
 		<td><a href="lec/3_mcmc">MCMC & Sampling</a></td>
-		<td><p class = "ex"><a href = "ex/ex3_tank">German tank problem</a></p>
-			<!-- <p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p> -->
+		<td>
+			<p><a href = "ex/ex3_tank">German tank problem</a></p>
+			<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>
 		</td>
 	</tr>
 	<tr>
-		<td><b>Wednesday</b> 29.11<br/>8:15–12:00</td>
-		<td>Generalised linear models<br /><b>Inference II:</b><p class = "soln">Priors & Diagnostics</p>
-			<p class = "soln">Bayesian workflow</p></td>
-		<td><a href="lec/4_regression">Regression &amp; GLM</a><br />
-			<a href="lec/5_inference_ii">Inference II</a></td>
+		<td>
+			<p><b>Wednesday</b> 29.11</p>
+			<p>8:15–12:00</p>
+		</td>
+		<td>
+			<p>Generalised linear models</p>
+			<p><b>Inference II:</b></p>
+			<p class = "soln">Priors & Diagnostics</p>
+			<p class = "soln">Bayesian workflow</p>
+		</td>
+		<td>
+			<p><a href="lec/4_regression">Regression &amp; GLM</a></p>
+			<p><a href="lec/5_inference_ii">Inference II</a></p>
+		</td>
 		<td>
 			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
-				<!-- <p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p> -->
+				<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
 				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
 		</td>
 	</tr>
 	<tr>
-		<td><b>Friday</b> 01.12<br/>8:15–12:00</td>
 		<td>
-			<b>Inference III:</b>
+			<p><b>Friday</b> 01.12</p>
+			<p>8:15–12:00</p>
+		</td>
+		<td>
+			<p><b>Inference III:</b></p>
 				<p class = "soln">Model selection</p>
 				<p class = "soln">Multimodel inference</p>
-			Hierarchical &amp; Multilevel Models
+			<p>Hierarchical &amp; Multilevel Models</p>
 		</td>
-		<!-- <td><a href="">Hierarchical Models</a></td> -->
-		<td>Model Selection<br/>Hierarchical Models</td>
-		<td><p class = "ex"><a href = "ex/"></a></p>
-			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
+		<td>
+			<p>Model Selection</p>
+			<p>Hierarchical Models</p>
+		</td>
+		<td>
+			<p class = "ex"><a href = "ex/"></a></p>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
+		</td>
 	</tr>
 	<tr>
 		<td><b>Monday</b> 04.12<br/>13:15–17:00</td>
@@ -89,11 +127,22 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
 	</tr>
 	<tr>
-		<td><b>Monday</b> 11.12<br/>13:15–17:00<p class = "soln">Meet in RR19</p></td>
-		<td>Wrap-up<br />Presentations</td>
-		<td><a href=""></a></td>
-		<td><p class = "ex"><a href = "ex/"></a></p>
-			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
+		<td>
+			<p><b>Monday</b> 11.12</p>
+			<p>13:15–17:00</p>
+			<p class = "soln">Meet in RR19</p>
+		</td>
+		<td>
+			<p>Wrap-up</p>
+			<p>Presentations</p>
+		</td>
+		<td>
+			<a href=""></a>
+		</td>
+		<td>
+			<p><a href = "ex/"></a></p>
+			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
+		</td>
 	</tr>
 </table>
 

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>!Kung people height and weight model</title>
+
+<script src="lib/header-attrs-2.23/header-attrs.js"></script>
+<script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/navigation-1.1/tabsets.js"></script>
+<link href="lib/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lib/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="ex.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">!Kung people height and weight model</h1>
+<h4 class="date">29.11.2023</h4>
+
+</div>
+
+
+<p>For these exercises, you will need the <code>Howell1</code> dataset
+from the <code>rethinking</code> package. We don’t need the rest of the
+package, so we will just download the data directly from the package’s
+github repository</p>
+<pre class="r"><code>library(data.table)
+Howell1 = fread(&quot;https://github.com/rmcelreath/rethinking/raw/master/data/Howell1.csv&quot;)</code></pre>
+<p>These data, collected by anthropologist Nancy Howell in the 1960s,
+provide the age, height, weight, and sex sampled from a population of
+!Kung in Dobe (Namibia &amp; Botswana). Note that the <code>male</code>
+variable is categorical, and is equal to 1 if the subject is male, and 0
+if female.</p>
+<ol style="list-style-type: decimal">
+<li>Do some graphical data exploration. The data are multivariate, so
+multiple plots may be necessary.</li>
+<li>Design a regression model with <code>height</code> as the
+<strong>response</strong> (i.e., outcome, y) variable. For your initial
+model, use only <code>weight</code> as a predictor. | a. Build a
+graphical model as shown in lecture.</li>
+</ol>
+<div class="soln">
+<pre class="r"><code>library(&quot;igraph&quot;)
+library(&quot;ggnetwork&quot;)
+library(ggplot2)
+gr = graph_from_literal(height+-η,
+                        weight-+η,
+                        σ-+height,
+                        a-+η, b-+η,
+                        &quot;E(lam_σ)&quot;-+σ,
+                        &quot;N(0,σ_a)&quot;-+a,
+                        &quot;N(0,σ_b)&quot;-+b)
+V(gr)$type = c(&quot;stochastic&quot;, rep(&quot;deterministic&quot;, 2), rep(&quot;stochastic&quot;, 3), rep(&quot;deterministic&quot;, 3))
+V(gr)$source = c(&quot;known&quot;, &quot;unknown&quot;, &quot;known&quot;, rep(&quot;unknown&quot;, 3), rep(&quot;known&quot;, 3))
+layout = rbind(height = c(0, 1), eta = c(0,0.5), weight = c(0.5,1), sigma = c(-0.5,0), a = c(0,0),
+      b = c(0.5,0), sig_prior = c(-0.4,-1), a_prior = c(0,-1), b_prior = c(0.5,-1))
+
+
+n = ggnetwork(gr, layout=layout)
+nlabs = c(expression(sigma), expression(Exp.(lambda[sigma])), expression(N(0,sigma[a])), 
+          &quot;a&quot;, expression(eta), expression(N(0,sigma[b])), &quot;b&quot;, &quot;weight&quot;, &quot;height&quot;)
+ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) + 
+    geom_edges(colour=&quot;gray50&quot;, arrow=arrow(length = unit(6, &quot;pt&quot;), 
+            type = &quot;closed&quot;)) + 
+    theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
+    geom_nodelabel(label = nlabs, fontface = &quot;bold&quot;, nudge_x=-0.1) + 
+    geom_label(aes(x=1.3, y=1), label = &quot;Data&quot;) + 
+    geom_label(aes(x=1.3, y=0.5), label = &quot;Parameters&quot;) + 
+    geom_label(aes(x=1.3, y=0), label = &quot;Priors/Hyperparameters&quot;) +
+    xlim(-0.1, 1.4)</code></pre>
+<p><img src="soln5_kung_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div class="line-block">   b. Translate the graphical model into
+equations. Be sure that all unknowns (including parameters) appear on
+the left side of either ~ or =.</div>
+<div class="soln">
+<p><span class="math display">\[
+\begin{aligned}
+height &amp; \sim \mathcal{N}(\eta, \sigma) \\
+\eta &amp; = a + b \times weight \\
+a &amp; \sim \mathcal{N}(0, \sigma_a) \\
+b &amp; \sim \mathcal{N}(0, \sigma_b) \\
+\sigma &amp; \sim \mathrm{Exponential}(\lambda_\sigma)
+\end{aligned}
+\]</span></p>
+</div>
+<div class="line-block">   c. Fill in a Stan model block with the
+likelihood and priors for all stocahstic nodes</div>
+<div class="soln">
+<pre class="stan"><code>model {
+    height ~ normal(eta, sigma);
+    sigma ~ exponential(lam_sig);
+    a ~ normal(0, sig_a);
+    b ~ normal(0, sig_b);
+}
+</code></pre>
+</div>
+<div class="line-block">   d. Complete your Stan program, then get a MAP
+estimate using <code>optimizing</code>.</div>
+<div class="soln">
+<pre class="stan"><code>data {
+    int &lt;lower = 1&gt; n;
+    vector [n] height;
+    vector [n] weight;
+    // priors
+    real &lt;lower = 0&gt; lam_sig;
+    real &lt;lower = 0&gt; sig_a;
+    real &lt;lower = 0&gt; sig_b;
+}
+parameters {
+    real a;
+    real b;
+    real &lt;lower = 0&gt; sigma;
+}
+transformed parameters {
+    vector [n] eta;
+    eta = a + b * weight;
+}
+model {
+    height ~ normal(eta, sigma);
+    sigma ~ exponential(lam_sig);
+    a ~ normal(0, sig_a);
+    b ~ normal(0, sig_b);
+}
+generated quantities {
+    // prediction, for part 3c
+    // 41 is the hypothetical weight for this example
+    real prediction_3c = normal_rng(a + b * 41, sigma);
+}
+</code></pre>
+<pre class="r"><code>library(rstan)
+kung_lm = stan_model(&quot;stan/kung_simple_lm.stan&quot;)</code></pre>
+<pre class="r"><code>kung_lm_data = list(
+    height = Howell1$height,
+    weight = Howell1$weight,
+    n = nrow(Howell1),
+    # very vague prior for the variance
+    lam_sig = 0.01,
+    # choose intercept prior based on what I think is a plausible/possible range of
+    #  values for the intercept. this is pretty vague!
+    sig_a = 500,
+    # the slope can have a smaller prior; a value of b = 20 (two standard deviations) implies  
+    # a 20-cm increase in height for every 1 kg increase in body weight, which is very large! 
+    sig_b = 10
+)
+kung_lm_map = optimizing(kung_lm, data = kung_lm_data)$par
+kung_lm_map[1:3] # all of the etas are also included here, but we don&#39;t need them</code></pre>
+<pre><code>##         a         b     sigma 
+## 75.437090  1.764267  9.345284</code></pre>
+</div>
+<div class="line-block">   e. Make a plot of the best-fit line; include
+the original data on the plot as well.</div>
+<div class="soln">
+<pre class="r"><code>ggplot(Howell1) + geom_point(aes(x=weight, y = height)) + 
+    geom_abline(intercept = kung_lm_map[1], slope = kung_lm_map[2]) + 
+    theme_minimal()</code></pre>
+<p><img src="soln5_kung_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<ol start="3" style="list-style-type: decimal">
+<li>Plotting this model will likely reveal it to be inadequate, because
+there is a substantial “curve” in the height-weight relationship. Repeat
+the exercise for #2, but update your model to better predict height.
+Possible approaches might include filtering the data (but I encourage
+you to use it all if possible), writing a curvilinear equation, or
+adding additional predictors. Compare the results of your attempts, and
+choose a single model that you think works “best.” Repeat a-e above for
+this model. Note any changes in the relationship between height and
+weight caused by your changes to the model. Additionally:</li>
+</ol>
+<div class="soln">
+<p>One relatively simple approach is to use a curvilinear model that
+allows height to increase more or less linearly with weight when weight
+is small, but levelling off for larger values. The logic is that people
+only grow so much vertically, but can continue to gain weight even after
+they have reached their maximum height. We can accomplish this by
+log-transforming weight.</p>
+<pre class="stan"><code>data {
+    int &lt;lower = 1&gt; n;
+    vector [n] height;
+    vector [n] weight;
+    // priors
+    real &lt;lower = 0&gt; lam_sig;
+    real &lt;lower = 0&gt; sig_a;
+    real &lt;lower = 0&gt; sig_b;
+}
+parameters {
+    real a;
+    real b;
+    real &lt;lower = 0&gt; sigma;
+}
+transformed parameters {
+    vector [n] eta;
+    eta = a + b * log(weight);
+}
+model {
+    height ~ normal(eta, sigma);
+    sigma ~ exponential(lam_sig);
+    a ~ normal(0, sig_a);
+    b ~ normal(0, sig_b);
+}
+generated quantities {
+    // prediction, for part 3c
+    // 41 is the hypothetical weight for this example
+    real prediction_3c = normal_rng(a + b * log(41), sigma);
+}
+</code></pre>
+<p>Another approach is to improve our model by adding predictors. Here,
+we can try to fit a model where the weight-height slope changes
+depending on the age of the person. We will also include the sex of the
+participants (without interactions), to see if this has any effect.</p>
+<pre class="stan"><code>data {
+    int &lt;lower = 1&gt; n;
+    vector [n] height;
+    vector [n] weight;
+    vector [n] age;
+    vector [n] sex;
+    // priors
+    real &lt;lower = 0&gt; lam_sig;
+    real &lt;lower = 0&gt; sig_a;
+    real &lt;lower = 0&gt; sig_b;
+}
+parameters {
+    real a;
+    real b_weight;
+    real b_age;
+    real b_interaction;
+    real b_sex;
+    real &lt;lower = 0&gt; sigma;
+}
+transformed parameters {
+    vector [n] eta;
+    eta = a + b_weight * weight + b_age * age + b_interaction * weight .* age + b_sex * sex;
+}
+model {
+    height ~ normal(eta, sigma);
+    sigma ~ exponential(lam_sig);
+    a ~ normal(0, sig_a);
+    b_weight ~ normal(0, sig_b);
+    b_age ~ normal(0, sig_b);
+    b_interaction ~ normal(0, sig_b);
+    b_sex ~ normal(0, sig_b);
+}
+generated quantities {
+    // prediction, for part 3c
+    // 41 is the hypothetical weight for this example
+    // 24 is the age
+    // the subject is female, so sex=0
+    real prediction_3c = normal_rng(a + b_weight * 41 + b_age * 24 + b_interaction*24*41 + b_sex * 0, sigma);
+}
+</code></pre>
+<pre class="r"><code>kung_lm_log = stan_model(&quot;stan/kung_lm_log.stan&quot;)
+kung_mlr = stan_model(&quot;stan/kung_mlr.stan&quot;)</code></pre>
+</div>
+<div class="line-block">   a. Estimate the entire posterior using
+<code>sampling</code></div>
+<pre class="r"><code># add some variables we need for the multiple regression
+kung_lm_data$age = Howell1$age
+kung_lm_data$sex = Howell1$male
+
+fit_lm = sampling(kung_lm, data = kung_lm_data, refresh = 0)
+fit_lm_log = sampling(kung_lm_log, data = kung_lm_data, refresh = 0)
+fit_mlr = sampling(kung_mlr, data = kung_lm_data, refresh = 0)
+
+# extract the posterior samples
+samps_lm = as.matrix(fit_lm, pars = c(&quot;a&quot;, &quot;b&quot;, &quot;sigma&quot;))
+samps_lm_log = as.matrix(fit_lm_log, pars = c(&quot;a&quot;, &quot;b&quot;, &quot;sigma&quot;))
+samps_mlr = as.matrix(fit_mlr, pars = c(&quot;a&quot;, &quot;b_weight&quot;, &quot;b_age&quot;, &quot;b_interaction&quot;, &quot;b_sex&quot;, &quot;sigma&quot;))
+
+# plotting is a little challenging with curves, we will accomplish it by creating a counterfactual dataset
+# the multiple regression is also difficult to visualise, so we will stick to the two univariate cases
+plot_data = data.frame(weight = seq(min(Howell1$weight), max(Howell1$weight), length.out = 200))
+plot_data$linear = median(samps_lm[,&#39;a&#39;]) + median(samps_lm[,&#39;b&#39;]) * plot_data$weight
+plot_data$log = median(samps_lm_log[,&#39;a&#39;]) + median(samps_lm_log[,&#39;b&#39;]) * log(plot_data$weight)
+
+cols = scales::hue_pal()(3)
+ggplot(Howell1) + geom_point(aes(x=weight, y = height)) + 
+    geom_line(data = plot_data, aes(x = weight, y = linear), col = cols[1], linewidth = 1.5) + 
+    geom_line(data = plot_data, aes(x = weight, y = log), col = cols[2], linewidth = 1.5) + 
+    theme_minimal()</code></pre>
+<p><img src="soln5_kung_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="line-block">   b. What are the credible intervals for the
+parameters of your model?</div>
+<div class="soln">
+<p>These posterior distributions are relatively symmetric and unimodal,
+so we will use simple quantile intervals</p>
+<pre class="r"><code>## linear model
+round(apply(samps_lm, 2, quantile, c(0.05, 0.95)),2)</code></pre>
+<pre><code>##      parameters
+##           a    b sigma
+##   5%  73.72 1.72  8.91
+##   95% 77.14 1.81  9.87</code></pre>
+<pre class="r"><code>## log-transformed model
+round(apply(samps_lm_log, 2, quantile, c(0.05, 0.95)),2)</code></pre>
+<pre><code>##      parameters
+##            a     b sigma
+##   5%  -25.85 46.37  4.90
+##   95% -21.33 47.67  5.43</code></pre>
+<pre class="r"><code>## multiple regression
+round(apply(samps_mlr, 2, quantile, c(0.05, 0.95)),2)</code></pre>
+<pre><code>##      parameters
+##           a b_weight b_age b_interaction b_sex sigma
+##   5%  57.67     2.13  1.47         -0.04  3.67  6.18
+##   95% 60.99     2.25  1.67         -0.04  5.58  6.83</code></pre>
+</div>
+<div class="line-block">   c. What is the probability that the height of
+a 24-year-old female with a weight of 41 kg is between 130 and 145 cm?
+What about for a male?</div>
+<div class="soln">
+<p>The general approach here is use the posterior distribution of the
+parameters to infer the posterior distribution for the of this new case,
+while also accounting for natural variation (the residual standard
+error, sigma from the model). We can do this via simulation, either in R
+or Stan. Here we will look at both approaches.</p>
+<p>In R, we extract the posterior distribution of each parameter, then
+draw samples from a normal distribution using the predicted mean and the
+standard deviation from the model.</p>
+<pre class="r"><code>weight = 41
+age = 24
+sex = 0 # 0 codes female, 1 male
+## linear model
+# the &#39;41&#39; below is the weight, which is the only thing that is relevant for this model
+pr_lm = rnorm(nrow(samps_lm), samps_lm[,&#39;a&#39;] + samps_lm[,&#39;b&#39;] * weight, samps_lm[,&#39;sigma&#39;])
+
+## similar logic for the other two models
+pr_lm_log = rnorm(nrow(samps_lm_log), samps_lm_log[,&#39;a&#39;] + samps_lm_log[,&#39;b&#39;] * log(weight), samps_lm_log[,&#39;sigma&#39;])
+pr_mlr = rnorm(nrow(samps_mlr), samps_mlr[,&#39;a&#39;] + samps_mlr[,&#39;b_weight&#39;] * weight + 
+               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_sex&#39;] * sex, 
+               samps_mlr[,&#39;sigma&#39;])
+
+## next we examine how many cases fall within the interval we want
+sum(pr_lm &gt;= 130 &amp; pr_lm &lt;= 145) / length(pr_lm)</code></pre>
+<pre><code>## [1] 0.36325</code></pre>
+<pre class="r"><code>sum(pr_lm_log &gt;= 130 &amp; pr_lm_log &lt;= 145) / length(pr_lm_log)</code></pre>
+<pre><code>## [1] 0.12175</code></pre>
+<pre class="r"><code>sum(pr_mlr &gt;= 130 &amp; pr_mlr &lt;= 145) / length(pr_mlr)</code></pre>
+<pre><code>## [1] 0.2215</code></pre>
+<pre class="r"><code>## for a male, only one model will change
+pr_mlr_male = rnorm(nrow(samps_mlr), samps_mlr[,&#39;a&#39;] + samps_mlr[,&#39;b_weight&#39;] * weight + 
+               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_sex&#39;] * 1, 
+               samps_mlr[,&#39;sigma&#39;])
+sum(pr_mlr_male &gt;= 130 &amp; pr_mlr_male &lt;= 145) / length(pr_mlr_male)</code></pre>
+<pre><code>## [1] 0.0785</code></pre>
+<p>To do this in Stan, we used the <code>generated quantities</code>
+block to create a simulated variable called <code>prediction_3c</code>.
+All we need to do is extract this variable and look at its
+quantiles.</p>
+<pre class="r"><code>pr_lm = as.matrix(fit_lm, pars = &quot;prediction_3c&quot;)
+pr_lm_log = as.matrix(fit_lm_log, pars = &quot;prediction_3c&quot;)
+pr_mlr = as.matrix(fit_mlr, pars = &quot;prediction_3c&quot;)
+
+sum(pr_lm &gt;= 130 &amp; pr_lm &lt;= 145) / length(pr_lm)</code></pre>
+<pre><code>## [1] 0.34625</code></pre>
+<pre class="r"><code>sum(pr_lm_log &gt;= 130 &amp; pr_lm_log &lt;= 145) / length(pr_lm_log)</code></pre>
+<pre><code>## [1] 0.12275</code></pre>
+<pre class="r"><code>sum(pr_mlr &gt;= 130 &amp; pr_mlr &lt;= 145) / length(pr_mlr)</code></pre>
+<pre><code>## [1] 0.2375</code></pre>
+</div>
+<div class="line-block">   d. Compute a posterior prediction interval
+for each case in the original dataset. You should have a median or MAP
+estimate and an interval for height along side the actual measured
+values for height from the original data. Plot the original height
+observations on the x-axis, and the predicted MAP/median on the y-axis.
+Experiment with the <code>segments</code> function (or
+<code>geom_errorbars</code> in <code>ggplot2</code>) to see if you can
+draw the intervals as vertical lines on the plot. Add a 1:1 line to the
+plot. What does this plot tell you about your model fit? What is the
+expected relationship for a “good” model?</div>
+<div class="soln">
+<p>Our Stan model fortunately does this for us! The variable
+<code>eta</code> is the predicted value for each data point. All we need
+to do is extract it, then we can plot the median and quantile limits for
+each one.</p>
+<pre class="r"><code>eta_lm = as.matrix(fit_lm, pars = &quot;eta&quot;)
+eta_lm_log = as.matrix(fit_lm_log, pars = &quot;eta&quot;)
+eta_mlr = as.matrix(fit_mlr, pars = &quot;eta&quot;)
+
+plot_data = data.frame(
+    height = Howell1$height,
+    height_pr_lm = apply(eta_lm, 2, median),
+    height_pr_lm_lower = apply(eta_lm, 2, quantile, 0.05),
+    height_pr_lm_upper = apply(eta_lm, 2, quantile, 0.95),
+    height_pr_lm_log = apply(eta_lm_log, 2, median),
+    height_pr_lm_log_lower = apply(eta_lm_log, 2, quantile, 0.05),
+    height_pr_lm_log_upper = apply(eta_lm_log, 2, quantile, 0.95),
+    height_pr_mlr = apply(eta_mlr, 2, median),
+    height_pr_mlr_lower = apply(eta_mlr, 2, quantile, 0.05),
+    height_pr_mlr_upper = apply(eta_mlr, 2, quantile, 0.95)
+)
+
+pl_lm = ggplot(data = plot_data) + 
+    geom_point(aes(x = height, y = height_pr_lm), size = 0.4) + 
+    geom_errorbar(aes(x = height, ymin = height_pr_lm_lower, ymax = height_pr_lm_upper)) +
+    theme_minimal() + ylab(&quot;Predicted Height&quot;) + xlab(&quot;Observed Height&quot;) + 
+    geom_abline(intercept = 0, slope = 1, color = &quot;blue&quot;, linewidth = 1.5)
+
+pl_lm_log = ggplot(data = plot_data) + 
+    geom_point(aes(x = height, y = height_pr_lm_log), size = 0.4) + 
+    geom_errorbar(aes(x = height, ymin = height_pr_lm_log_lower, ymax = height_pr_lm_log_upper)) +
+    theme_minimal() + ylab(&quot;Predicted Height&quot;) + xlab(&quot;Observed Height&quot;) + 
+    geom_abline(intercept = 0, slope = 1, color = &quot;blue&quot;, linewidth = 1.5)
+
+pl_mlr = ggplot(data = plot_data) + 
+    geom_point(aes(x = height, y = height_pr_mlr), size = 0.4) + 
+    geom_errorbar(aes(x = height, ymin = height_pr_mlr_lower, ymax = height_pr_mlr_upper)) +
+    theme_minimal() + ylab(&quot;Predicted Height&quot;) + xlab(&quot;Observed Height&quot;) + 
+    geom_abline(intercept = 0, slope = 1, color = &quot;blue&quot;, linewidth = 1.5)
+
+gridExtra::grid.arrange(pl_lm, pl_lm_log, pl_mlr, ncol=3)</code></pre>
+<p><img src="soln5_kung_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
+</div>
+<div id="bonus" class="section level2">
+<h2>Bonus</h2>
+<ol start="4" style="list-style-type: decimal">
+<li>Return to one of the plots you made showing height against weight.
+It appears that the variance in height is not constant with respect to
+weight. This is one of the key assumptions in linear regression, and you
+probably made this implicitly in your model (the s parameter, the
+standard deviation, is constant). However, Bayesian models need not be
+so rigid.
+<ol style="list-style-type: lower-alpha">
+<li>Can you design a model that allows the variance to increase as
+weight increases? Use whatever predictors for height that you think are
+best.</li>
+<li>Fit the model and compare the fit to your original model.</li>
+</ol></li>
+<li>Buried in the bottom of a field notebook, you find two cases that
+were missing from the original dataset. The first is an individual with
+a weight of 43.72; no height, age, or sex data is recorded. The second
+is a 38-year-old female with a height of 135.
+<ol style="list-style-type: lower-alpha">
+<li>Using the model from #3 above, can you predict a 90% credible
+interval for height of the first missing case? Is it easier if you use
+the model from #2?</li>
+<li>The second missing case is more interesting; we have the outcome of
+our model, but we are missing the weight. How could you estimate a 90%
+CI for weight, using the model from #3 (i.e., keeping height as the
+response variable)?</li>
+</ol></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
