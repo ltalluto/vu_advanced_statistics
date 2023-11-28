@@ -27,13 +27,13 @@ These data, collected by anthropologist Nancy Howell in the 1960s, provide the a
 	a. Build a graphical model as shown in lecture.
     b. Translate the graphical model into equations. Be sure that all unknowns (including parameters) appear on the left side of either ~ or =.
     c. Fill in a Stan model block with the likelihood and priors for all stocahstic nodes
-    d. Compute a MAP estimate using `optimizing`.
+    d. Complete your Stan program, then get a MAP estimate using `optimizing`.
     e. Make a plot of the best-fit line; include the original data on the plot as well.
 3. Plotting this model will likely reveal it to be inadequate, because there is a substantial "curve" in the height-weight relationship. Repeat the exercise for #2, but update your model to better predict height. Possible approaches might include filtering the data (but I encourage you to use it all if possible), writing a curvilinear equation, or adding additional predictors. Compare the results of your attempts, and choose a single model that you think works "best." Repeat a-e above for this model. Note any changes in the relationship between height and weight caused by your changes to the model. Additionally:
-    f. Estimate the entire posterior `sampling`
-    g. What are the credible intervals for the parameters of your model?
-    h. What is the probability that the height of a 24-year-old female with a weight of 41 kg is between 120 and 125 cm? What about for a male?
-    i. Compute a posterior prediction interval for each case in the original dataset. You should have a median or MAP estimate and an interval for height along side the actual measured values for height from the original data. Plot the original height observations on the x-axis, and the predicted MAP/median on the y-axis. Experiment with the `segments` function to see if you can draw the predictions as vertical lines on the plot. What does this plot tell you about your model fit? What is the expected relationship for a "good" model?
+    a. Estimate the entire posterior using `sampling`
+    b. What are the credible intervals for the parameters of your model?
+    c. What is the probability that the height of a 24-year-old female with a weight of 41 kg is between 130 and 145 cm? What about for a male?
+    d. Compute a posterior prediction interval for each case in the original dataset. You should have a median or MAP estimate and an interval for height along side the actual measured values for height from the original data. Plot the original height observations on the x-axis, and the predicted MAP/median on the y-axis. Experiment with the `segments` function (or `geom_errorbars` in `ggplot2`) to see if you can draw the intervals as vertical lines on the plot. Add a 1:1 line to the plot. What does this plot tell you about your model fit? What is the expected relationship for a "good" model?
 
 
 ## Bonus

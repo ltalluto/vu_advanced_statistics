@@ -191,7 +191,8 @@ unknowns (including parameters) appear on the left side of either ~ or
 =.</li>
 <li>Fill in a Stan model block with the likelihood and priors for all
 stocahstic nodes</li>
-<li>Compute a MAP estimate using <code>optimizing</code>.</li>
+<li>Complete your Stan program, then get a MAP estimate using
+<code>optimizing</code>.</li>
 <li>Make a plot of the best-fit line; include the original data on the
 plot as well.</li>
 </ol></li>
@@ -204,20 +205,22 @@ adding additional predictors. Compare the results of your attempts, and
 choose a single model that you think works “best.” Repeat a-e above for
 this model. Note any changes in the relationship between height and
 weight caused by your changes to the model. Additionally:
-<ol start="6" style="list-style-type: lower-alpha">
-<li>Estimate the entire posterior <code>sampling</code></li>
+<ol style="list-style-type: lower-alpha">
+<li>Estimate the entire posterior using <code>sampling</code></li>
 <li>What are the credible intervals for the parameters of your
 model?</li>
 <li>What is the probability that the height of a 24-year-old female with
-a weight of 41 kg is between 120 and 125 cm? What about for a male?</li>
+a weight of 41 kg is between 130 and 145 cm? What about for a male?</li>
 <li>Compute a posterior prediction interval for each case in the
 original dataset. You should have a median or MAP estimate and an
 interval for height along side the actual measured values for height
 from the original data. Plot the original height observations on the
 x-axis, and the predicted MAP/median on the y-axis. Experiment with the
-<code>segments</code> function to see if you can draw the predictions as
-vertical lines on the plot. What does this plot tell you about your
-model fit? What is the expected relationship for a “good” model?</li>
+<code>segments</code> function (or <code>geom_errorbars</code> in
+<code>ggplot2</code>) to see if you can draw the intervals as vertical
+lines on the plot. Add a 1:1 line to the plot. What does this plot tell
+you about your model fit? What is the expected relationship for a “good”
+model?</li>
 </ol></li>
 </ol>
 <div id="bonus" class="section level2">
