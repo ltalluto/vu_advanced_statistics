@@ -53,7 +53,6 @@ Some guidance to get you thinking about the exercise:
 
 :::: {.soln}
 ```{r, warning = FALSE}
-# do a bit of manipulation to make ggplot play nicely
 library(ggplot2)
 ggplot(disp) + theme_minimal() + 
 	geom_histogram(aes(x = disp_dist, fill = type), position="identity", alpha = 0.5, bins = 30)
@@ -69,7 +68,7 @@ It seems there is an effect. For sure the data are highly skewed!
 
 :::: {.soln}
 
-Let's try a paired t-test. For sure the assumptions are not met, but we will try it anyway.
+Let's try a two-sample t-test. For sure the assumptions are not met, but we will try it anyway.
 
 ``` {r}
 t.test(natal, breeding, hypothesis = "greater")
@@ -114,15 +113,16 @@ $$
 
 We can rearrange these to solve for $\alpha$ and $\beta$ in terms of the parameters we want to estimate:
 
+
 $$
 \begin{aligned}
 \alpha_b & = \frac{\mu_b^2}{\phi} \\
 \beta_b & = \frac{\mu_b}{\phi} \\
 \alpha_n & = \frac{(\mu_b+o)^2}{\phi} \\
 \beta_n & = \frac{\mu_b+o}{\phi} \\
-
 \end{aligned}
 $$
+
 
 Finally we define the likelihood distribution:
 
@@ -134,7 +134,7 @@ natal & \sim \mathrm{Gamma}(\alpha_n, \beta_n) \\
 $$
 
 
-```{r}
+```{r message = FALSE}
 library("igraph")
 library("ggnetwork")
 gr = graph_from_literal(μ_b-+α_b, μ_b-+β_b, Φ-+α_b, Φ-+β_b, o-+α_n, o-+β_n, α_b-+breeding, 
@@ -208,7 +208,8 @@ bird_disp_stan = list(
 	breeding = breeding
 )
 
-fit = sampling(disp_model, chains = 1, refresh = 0, data = bird_disp_stan)
+# I take a lot of samples, because I want to estimate probabilities to a few decimal places
+fit = sampling(disp_model, chains = 4, refresh = 0, data = bird_disp_stan, iter = 8000)
 
 ```
 
@@ -234,7 +235,7 @@ cat("There is a 95% chance that the difference in means is between",
 	round(interval[1], 2), "and", round(interval[2], 2))
 ```
 
-Our hypothesis that o > 0 is quite probable. Interestingly, our Bayesian estimate is much more conservative than the t.test.
+Our hypothesis that o > 0 is quite probable. Interestingly, our estimate of the difference in means is much smaller than what we get using `t.test`.
 
 ::::
 
