@@ -210,8 +210,7 @@ exceeds breeding dispersal</strong>.</p>
 <li>Make some plots exploring the hypothesis.</li>
 </ol>
 <div class="soln">
-<pre class="r"><code># do a bit of manipulation to make ggplot play nicely
-library(ggplot2)
+<pre class="r"><code>library(ggplot2)
 ggplot(disp) + theme_minimal() + 
     geom_histogram(aes(x = disp_dist, fill = type), position=&quot;identity&quot;, alpha = 0.5, bins = 30)</code></pre>
 <p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
@@ -225,8 +224,8 @@ hypothesis. Go ahead and do it. What’s the result? Do the data fit the
 assumptions of the test?</li>
 </ol>
 <div class="soln">
-<p>Let’s try a paired t-test. For sure the assumptions are not met, but
-we will try it anyway.</p>
+<p>Let’s try a two-sample t-test. For sure the assumptions are not met,
+but we will try it anyway.</p>
 <pre class="r"><code>t.test(natal, breeding, hypothesis = &quot;greater&quot;)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
@@ -303,15 +302,14 @@ href="https://en.wikipedia.org/wiki/Gamma_distribution">Wikipedia</a>:</p>
 class="math inline">\(\alpha\)</span> and <span
 class="math inline">\(\beta\)</span> in terms of the parameters we want
 to estimate:</p>
-$$
-<span class="math display">\[\begin{aligned}
+<p><span class="math display">\[
+\begin{aligned}
 \alpha_b &amp; = \frac{\mu_b^2}{\phi} \\
 \beta_b &amp; = \frac{\mu_b}{\phi} \\
 \alpha_n &amp; = \frac{(\mu_b+o)^2}{\phi} \\
 \beta_n &amp; = \frac{\mu_b+o}{\phi} \\
-
-\end{aligned}\]</span>
-<p>$$</p>
+\end{aligned}
+\]</span></p>
 <p>Finally we define the likelihood distribution:</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -319,16 +317,8 @@ breeding &amp; \sim \mathrm{Gamma}(\alpha_b, \beta_b) \\
 natal &amp; \sim \mathrm{Gamma}(\alpha_n, \beta_n) \\
 \end{aligned}
 \]</span></p>
-<pre class="r"><code>library(&quot;igraph&quot;)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;igraph&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     decompose, spectrum</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     union</code></pre>
-<pre class="r"><code>library(&quot;ggnetwork&quot;)
+<pre class="r"><code>library(&quot;igraph&quot;)
+library(&quot;ggnetwork&quot;)
 gr = graph_from_literal(μ_b-+α_b, μ_b-+β_b, Φ-+α_b, Φ-+β_b, o-+α_n, o-+β_n, α_b-+breeding, 
                         β_b-+breeding, α_n-+natal, β_n-+natal, μ_b-+α_n, μ_b-+β_n,
                         Φ-+α_n, Φ-+β_n)
@@ -390,7 +380,8 @@ disp_model = stan_model(&quot;stan/bird_disp.stan&quot;)</code></pre>
     breeding = breeding
 )
 
-fit = sampling(disp_model, chains = 1, refresh = 0, data = bird_disp_stan)</code></pre>
+# I take a lot of samples, because I want to estimate probabilities to a few decimal places
+fit = sampling(disp_model, chains = 4, refresh = 0, data = bird_disp_stan, iter = 8000)</code></pre>
 </div>
 <div class="line-block">   e. What is the probability that your
 hypothesis is true? What are plausible limits for the difference between
@@ -400,7 +391,7 @@ the means?</div>
 
 ## pr(mu &gt; 0)
 sum(samps_o &gt; 0) / length(samps_o)</code></pre>
-<pre><code>## [1] 1</code></pre>
+<pre><code>## [1] 0.999875</code></pre>
 <pre class="r"><code>## credible interval
 hist(samps_o)</code></pre>
 <p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
@@ -409,9 +400,10 @@ interval = quantile(samps_o, c(0.25, 0.975))
 
 cat(&quot;There is a 95% chance that the difference in means is between&quot;, 
     round(interval[1], 2), &quot;and&quot;, round(interval[2], 2))</code></pre>
-<pre><code>## There is a 95% chance that the difference in means is between 1.04 and 2.1</code></pre>
+<pre><code>## There is a 95% chance that the difference in means is between 1.08 and 2.08</code></pre>
 <p>Our hypothesis that o &gt; 0 is quite probable. Interestingly, our
-Bayesian estimate is much more conservative than the t.test.</p>
+estimate of the difference in means is much smaller than what we get
+using <code>t.test</code>.</p>
 </div>
 
 
