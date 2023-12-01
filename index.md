@@ -83,19 +83,15 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		</td>
 		<td>
 			<p>Generalised linear models</p>
-			<p><b>Inference II:</b></p>
-			<p class = "soln">Priors & Diagnostics</p>
-			<p class = "soln">Bayesian workflow</p>
 		</td>
 		<td>
 			<p><a href="lec/4_regression">Regression &amp; GLM</a></p>
-			<p><a href="lec/5_inference_ii">Inference II</a></p>
 		</td>
 		<td>
 			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
 				<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
-				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
+				<p class = "soln"><a href = "ex/soln">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
 		</td>
 	</tr>
@@ -105,14 +101,14 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>8:15–12:00</p>
 		</td>
 		<td>
-			<p><b>Inference III:</b></p>
-				<p class = "soln">Model selection</p>
-				<p class = "soln">Multimodel inference</p>
+			<p><b>Inference II:</b></p>
+				<p class = "soln">Priors & Diagnostics</p>
+				<p class = "soln">Bayesian workflow</p>
 			<p>Hierarchical &amp; Multilevel Models</p>
 		</td>
 		<td>
-			<p>Model Selection</p>
-			<p>Hierarchical Models</p>
+			<p><a href="lec/5_inference_ii">Inference II</a></p>
+			<p><a href="lec/6_hm">Hierarchical Models</a></p>
 		</td>
 		<td>
 			<p class = "ex"><a href = "ex/"></a></p>
@@ -120,13 +116,25 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		</td>
 	</tr>
 	<tr>
-		<td><b>Monday</b> 04.12<br/>13:15–17:00</td>
-		<td>Special Topics<p class = "soln">(Time permitting)</p>Exercise catch-up<br />Project catch-up</td>
-		<td><a href=""></a></td>
-		<td><p class = "ex"><a href = "ex/"></a></p>
-			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>--></td>
+ 		<td>
+			<p><b>Monday</b> 04.12</p>
+			<p>13:15–17:00</p>
+		</td>
+		<td>
+			<p><b>Inference III:</b></p>
+				<p class = "soln">Model selection</p>
+				<p class = "soln">Multimodel inference</p>
+			<p>Special Topics</p>
+				<p class = "soln">(Time permitting)</p>
+			<p>Exercise catch-up</p>
+			<p>Project catch-up</p>
+		</td>
+		<td>
+			<a href="">Model selection</a>
+		</td>
+		<td></td>
 	</tr>
-	<tr>
+ 	<tr>
 		<td>
 			<p><b>Monday</b> 11.12</p>
 			<p>13:15–17:00</p>
@@ -139,10 +147,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>
 			<a href=""></a>
 		</td>
-		<td>
-			<p><a href = "ex/"></a></p>
-			<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
-		</td>
+		<td></td>
 	</tr>
 </table>
 

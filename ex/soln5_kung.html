@@ -360,7 +360,7 @@ participants (without interactions), to see if this has any effect.</p>
     vector [n] height;
     vector [n] weight;
     vector [n] age;
-    vector [n] sex;
+    vector [n] is_male;
     // priors
     real &lt;lower = 0&gt; lam_sig;
     real &lt;lower = 0&gt; sig_a;
@@ -371,12 +371,12 @@ parameters {
     real b_weight;
     real b_age;
     real b_interaction;
-    real b_sex;
+    real b_male;
     real &lt;lower = 0&gt; sigma;
 }
 transformed parameters {
     vector [n] eta;
-    eta = a + b_weight * weight + b_age * age + b_interaction * weight .* age + b_sex * sex;
+    eta = a + b_weight * weight + b_age * age + b_interaction * weight .* age + b_male * is_male;
 }
 model {
     height ~ normal(eta, sigma);
@@ -385,14 +385,14 @@ model {
     b_weight ~ normal(0, sig_b);
     b_age ~ normal(0, sig_b);
     b_interaction ~ normal(0, sig_b);
-    b_sex ~ normal(0, sig_b);
+    b_male ~ normal(0, sig_b);
 }
 generated quantities {
     // prediction, for part 3c
     // 41 is the hypothetical weight for this example
     // 24 is the age
-    // the subject is female, so sex=0
-    real prediction_3c = normal_rng(a + b_weight * 41 + b_age * 24 + b_interaction*24*41 + b_sex * 0, sigma);
+    // the subject is female, so is_male=0
+    real prediction_3c = normal_rng(a + b_weight * 41 + b_age * 24 + b_interaction*24*41 + b_male * 0, sigma);
 }
 </code></pre>
 <pre class="r"><code>kung_lm_log = stan_model(&quot;stan/kung_lm_log.stan&quot;)
@@ -402,7 +402,7 @@ kung_mlr = stan_model(&quot;stan/kung_mlr.stan&quot;)</code></pre>
 <code>sampling</code></div>
 <pre class="r"><code># add some variables we need for the multiple regression
 kung_lm_data$age = Howell1$age
-kung_lm_data$sex = Howell1$male
+kung_lm_data$is_male = Howell1$male
 
 fit_lm = sampling(kung_lm, data = kung_lm_data, refresh = 0)
 fit_lm_log = sampling(kung_lm_log, data = kung_lm_data, refresh = 0)
@@ -411,7 +411,7 @@ fit_mlr = sampling(kung_mlr, data = kung_lm_data, refresh = 0)
 # extract the posterior samples
 samps_lm = as.matrix(fit_lm, pars = c(&quot;a&quot;, &quot;b&quot;, &quot;sigma&quot;))
 samps_lm_log = as.matrix(fit_lm_log, pars = c(&quot;a&quot;, &quot;b&quot;, &quot;sigma&quot;))
-samps_mlr = as.matrix(fit_mlr, pars = c(&quot;a&quot;, &quot;b_weight&quot;, &quot;b_age&quot;, &quot;b_interaction&quot;, &quot;b_sex&quot;, &quot;sigma&quot;))
+samps_mlr = as.matrix(fit_mlr, pars = c(&quot;a&quot;, &quot;b_weight&quot;, &quot;b_age&quot;, &quot;b_interaction&quot;, &quot;b_male&quot;, &quot;sigma&quot;))
 
 # plotting is a little challenging with curves, we will accomplish it by creating a counterfactual dataset
 # the multiple regression is also difficult to visualise, so we will stick to the two univariate cases
@@ -434,8 +434,8 @@ so we will use simple quantile intervals</p>
 round(apply(samps_lm, 2, quantile, c(0.05, 0.95)),2)</code></pre>
 <pre><code>##      parameters
 ##           a    b sigma
-##   5%  73.72 1.72  8.91
-##   95% 77.14 1.81  9.87</code></pre>
+##   5%  73.69 1.72  8.93
+##   95% 77.23 1.81  9.87</code></pre>
 <pre class="r"><code>## log-transformed model
 round(apply(samps_lm_log, 2, quantile, c(0.05, 0.95)),2)</code></pre>
 <pre><code>##      parameters
@@ -445,9 +445,9 @@ round(apply(samps_lm_log, 2, quantile, c(0.05, 0.95)),2)</code></pre>
 <pre class="r"><code>## multiple regression
 round(apply(samps_mlr, 2, quantile, c(0.05, 0.95)),2)</code></pre>
 <pre><code>##      parameters
-##           a b_weight b_age b_interaction b_sex sigma
-##   5%  57.67     2.13  1.47         -0.04  3.67  6.18
-##   95% 60.99     2.25  1.67         -0.04  5.58  6.83</code></pre>
+##           a b_weight b_age b_interaction b_male sigma
+##   5%  57.67     2.13  1.47         -0.04   3.67  6.18
+##   95% 60.99     2.25  1.67         -0.04   5.58  6.83</code></pre>
 </div>
 <div class="line-block">   c. What is the probability that the height of
 a 24-year-old female with a weight of 41 kg is between 130 and 145 cm?
@@ -463,7 +463,7 @@ draw samples from a normal distribution using the predicted mean and the
 standard deviation from the model.</p>
 <pre class="r"><code>weight = 41
 age = 24
-sex = 0 # 0 codes female, 1 male
+is_male = 0 # 0 codes female, 1 male
 ## linear model
 # the &#39;41&#39; below is the weight, which is the only thing that is relevant for this model
 pr_lm = rnorm(nrow(samps_lm), samps_lm[,&#39;a&#39;] + samps_lm[,&#39;b&#39;] * weight, samps_lm[,&#39;sigma&#39;])
@@ -471,19 +471,19 @@ pr_lm = rnorm(nrow(samps_lm), samps_lm[,&#39;a&#39;] + samps_lm[,&#39;b&#39;] * 
 ## similar logic for the other two models
 pr_lm_log = rnorm(nrow(samps_lm_log), samps_lm_log[,&#39;a&#39;] + samps_lm_log[,&#39;b&#39;] * log(weight), samps_lm_log[,&#39;sigma&#39;])
 pr_mlr = rnorm(nrow(samps_mlr), samps_mlr[,&#39;a&#39;] + samps_mlr[,&#39;b_weight&#39;] * weight + 
-               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_sex&#39;] * sex, 
+               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_male&#39;] * is_male, 
                samps_mlr[,&#39;sigma&#39;])
 
 ## next we examine how many cases fall within the interval we want
 sum(pr_lm &gt;= 130 &amp; pr_lm &lt;= 145) / length(pr_lm)</code></pre>
-<pre><code>## [1] 0.36325</code></pre>
+<pre><code>## [1] 0.3645</code></pre>
 <pre class="r"><code>sum(pr_lm_log &gt;= 130 &amp; pr_lm_log &lt;= 145) / length(pr_lm_log)</code></pre>
 <pre><code>## [1] 0.12175</code></pre>
 <pre class="r"><code>sum(pr_mlr &gt;= 130 &amp; pr_mlr &lt;= 145) / length(pr_mlr)</code></pre>
 <pre><code>## [1] 0.2215</code></pre>
 <pre class="r"><code>## for a male, only one model will change
 pr_mlr_male = rnorm(nrow(samps_mlr), samps_mlr[,&#39;a&#39;] + samps_mlr[,&#39;b_weight&#39;] * weight + 
-               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_sex&#39;] * 1, 
+               samps_mlr[,&#39;b_age&#39;] * age + samps_mlr[,&#39;b_interaction&#39;] * weight * age + samps_mlr[,&#39;b_male&#39;] * 1, 
                samps_mlr[,&#39;sigma&#39;])
 sum(pr_mlr_male &gt;= 130 &amp; pr_mlr_male &lt;= 145) / length(pr_mlr_male)</code></pre>
 <pre><code>## [1] 0.0785</code></pre>
@@ -496,7 +496,7 @@ pr_lm_log = as.matrix(fit_lm_log, pars = &quot;prediction_3c&quot;)
 pr_mlr = as.matrix(fit_mlr, pars = &quot;prediction_3c&quot;)
 
 sum(pr_lm &gt;= 130 &amp; pr_lm &lt;= 145) / length(pr_lm)</code></pre>
-<pre><code>## [1] 0.34625</code></pre>
+<pre><code>## [1] 0.36525</code></pre>
 <pre class="r"><code>sum(pr_lm_log &gt;= 130 &amp; pr_lm_log &lt;= 145) / length(pr_lm_log)</code></pre>
 <pre><code>## [1] 0.12275</code></pre>
 <pre class="r"><code>sum(pr_mlr &gt;= 130 &amp; pr_mlr &lt;= 145) / length(pr_mlr)</code></pre>

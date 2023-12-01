@@ -215,7 +215,7 @@ data {
 	vector [n] height;
 	vector [n] weight;
 	vector [n] age;
-	vector [n] sex;
+	vector [n] is_male;
 	// priors
 	real <lower = 0> lam_sig;
 	real <lower = 0> sig_a;
@@ -226,12 +226,12 @@ parameters {
 	real b_weight;
 	real b_age;
 	real b_interaction;
-	real b_sex;
+	real b_male;
 	real <lower = 0> sigma;
 }
 transformed parameters {
 	vector [n] eta;
-	eta = a + b_weight * weight + b_age * age + b_interaction * weight .* age + b_sex * sex;
+	eta = a + b_weight * weight + b_age * age + b_interaction * weight .* age + b_male * is_male;
 }
 model {
 	height ~ normal(eta, sigma);
@@ -240,14 +240,14 @@ model {
 	b_weight ~ normal(0, sig_b);
 	b_age ~ normal(0, sig_b);
 	b_interaction ~ normal(0, sig_b);
-	b_sex ~ normal(0, sig_b);
+	b_male ~ normal(0, sig_b);
 }
 generated quantities {
 	// prediction, for part 3c
 	// 41 is the hypothetical weight for this example
 	// 24 is the age
-	// the subject is female, so sex=0
-	real prediction_3c = normal_rng(a + b_weight * 41 + b_age * 24 + b_interaction*24*41 + b_sex * 0, sigma);
+	// the subject is female, so is_male=0
+	real prediction_3c = normal_rng(a + b_weight * 41 + b_age * 24 + b_interaction*24*41 + b_male * 0, sigma);
 }
 
 ```
@@ -264,7 +264,7 @@ kung_mlr = stan_model("stan/kung_mlr.stan")
 ```{r cache = TRUE}
 # add some variables we need for the multiple regression
 kung_lm_data$age = Howell1$age
-kung_lm_data$sex = Howell1$male
+kung_lm_data$is_male = Howell1$male
 
 fit_lm = sampling(kung_lm, data = kung_lm_data, refresh = 0)
 fit_lm_log = sampling(kung_lm_log, data = kung_lm_data, refresh = 0)
@@ -273,7 +273,7 @@ fit_mlr = sampling(kung_mlr, data = kung_lm_data, refresh = 0)
 # extract the posterior samples
 samps_lm = as.matrix(fit_lm, pars = c("a", "b", "sigma"))
 samps_lm_log = as.matrix(fit_lm_log, pars = c("a", "b", "sigma"))
-samps_mlr = as.matrix(fit_mlr, pars = c("a", "b_weight", "b_age", "b_interaction", "b_sex", "sigma"))
+samps_mlr = as.matrix(fit_mlr, pars = c("a", "b_weight", "b_age", "b_interaction", "b_male", "sigma"))
 
 # plotting is a little challenging with curves, we will accomplish it by creating a counterfactual dataset
 # the multiple regression is also difficult to visualise, so we will stick to the two univariate cases
@@ -318,7 +318,7 @@ In R, we extract the posterior distribution of each parameter, then draw samples
 ``` {r}
 weight = 41
 age = 24
-sex = 0 # 0 codes female, 1 male
+is_male = 0 # 0 codes female, 1 male
 ## linear model
 # the '41' below is the weight, which is the only thing that is relevant for this model
 pr_lm = rnorm(nrow(samps_lm), samps_lm[,'a'] + samps_lm[,'b'] * weight, samps_lm[,'sigma'])
@@ -326,7 +326,7 @@ pr_lm = rnorm(nrow(samps_lm), samps_lm[,'a'] + samps_lm[,'b'] * weight, samps_lm
 ## similar logic for the other two models
 pr_lm_log = rnorm(nrow(samps_lm_log), samps_lm_log[,'a'] + samps_lm_log[,'b'] * log(weight), samps_lm_log[,'sigma'])
 pr_mlr = rnorm(nrow(samps_mlr), samps_mlr[,'a'] + samps_mlr[,'b_weight'] * weight + 
-			   samps_mlr[,'b_age'] * age + samps_mlr[,'b_interaction'] * weight * age + samps_mlr[,'b_sex'] * sex, 
+			   samps_mlr[,'b_age'] * age + samps_mlr[,'b_interaction'] * weight * age + samps_mlr[,'b_male'] * is_male, 
 			   samps_mlr[,'sigma'])
 
 ## next we examine how many cases fall within the interval we want
@@ -336,7 +336,7 @@ sum(pr_mlr >= 130 & pr_mlr <= 145) / length(pr_mlr)
 
 ## for a male, only one model will change
 pr_mlr_male = rnorm(nrow(samps_mlr), samps_mlr[,'a'] + samps_mlr[,'b_weight'] * weight + 
-			   samps_mlr[,'b_age'] * age + samps_mlr[,'b_interaction'] * weight * age + samps_mlr[,'b_sex'] * 1, 
+			   samps_mlr[,'b_age'] * age + samps_mlr[,'b_interaction'] * weight * age + samps_mlr[,'b_male'] * 1, 
 			   samps_mlr[,'sigma'])
 sum(pr_mlr_male >= 130 & pr_mlr_male <= 145) / length(pr_mlr_male)
 

@@ -1,0 +1,1157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="M. Talluto" />
+  <title>Hierarchical Models</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Hierarchical Models</h1>
+  <p class="author">
+M. Talluto
+  </p>
+  <p class="date">01.12.2023</p>
+</div>
+<div id="kidney-cancer-death-rates-in-the-us"
+class="slide section level2">
+<h1>Kidney cancer death rates in the US</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Kidney cancer death rates in the US, by county</li>
+<li>Is there a geographic pattern? If so, why?</li>
+</ul>
+<div class="small">
+<p>Data source: Gelman et al. 2004. <a
+href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data
+Analysis</a>.</p>
+</div>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/cancer_map-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-death-rates-in-the-us-1"
+class="slide section level2">
+<h1>Kidney cancer death rates in the US</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Kidney cancer death rates in the US, by county</li>
+<li>Is there a geographic pattern? If so, why?</li>
+</ul>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/cancer_quantile_map-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-death-rates-in-the-us-2"
+class="slide section level2">
+<h1>Kidney cancer death rates in the US</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Kidney cancer death rates in the US, by county</li>
+<li>Is there a geographic pattern? If so, why?</li>
+</ul>
+<p><img src="https://imgs.xkcd.com/comics/heatmap_2x.png"
+width="400" /></p>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/cancer_quantile_map2-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-death-rates-in-the-us-3"
+class="slide section level2">
+<h1>Kidney cancer death rates in the US</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Kidney cancer death rates in the US, by county</li>
+<li>Is there a geographic pattern? If so, why?</li>
+<li>How can we estimate county-specific rates in a reasonable way?</li>
+</ul>
+<p><img src="6_hm_files/figure-slidy/pop_map-1.png" width="768" /></p>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/cancer_quantile_combo-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-globalconstant-rate"
+class="slide section level2">
+<h1>Kidney cancer Stan model: global/constant rate</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our data are counts, suggesting Poisson
+<ul>
+<li>We don’t use binomial in part because we care about death
+<strong>rate</strong>, not probability</li>
+</ul></li>
+<li>Here we build a model accounting for <strong>exposure</strong>
+(population size)</li>
+<li>We assume mortality rate <span
+class="math inline">\(\lambda\)</span> is constant for the entire
+dataset
+<ul>
+<li><span class="math inline">\(\lambda\)</span> is
+<strong>pooled</strong> across units (county)</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>(<span class="at">cancer =</span> <span class="fu">readRDS</span>(<span class="st">&quot;../vu_advstats_students/data/us_k_cancer.rds&quot;</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="do">##         state     county kidney_cancer_deaths population death_rate_per_1000</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">##    1: alabama    autauga                    2      61921          0.03229922</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="do">##    2: alabama    baldwin                    7     170945          0.04094884</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">##    3: alabama    barbour                    0      33316          0.00000000</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">##    4: alabama       bibb                    0      30152          0.00000000</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">##    5: alabama     blount                    3      88342          0.03395893</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">##   ---                                                                       </span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="do">## 6256: wyoming sweetwater                    2     104192          0.01919533</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">## 6257: wyoming      teton                    0      26751          0.00000000</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">## 6258: wyoming      uinta                    1      52910          0.01890002</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="do">## 6259: wyoming   washakie                    2      22814          0.08766547</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">## 6260: wyoming     weston                    0      17802          0.00000000</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-globalconstant-rate-1"
+class="slide section level2">
+<h1>Kidney cancer Stan model: global/constant rate</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our data are counts, suggesting Poisson
+<ul>
+<li>We don’t use binomial in part because we care about death
+<strong>rate</strong>, not probability</li>
+</ul></li>
+<li>Here we build a model accounting for <strong>exposure</strong>
+(population size)</li>
+<li>We assume mortality rate <span
+class="math inline">\(\lambda\)</span> is constant for the entire
+dataset
+<ul>
+<li><span class="math inline">\(\lambda\)</span> is
+<strong>pooled</strong> across units (county)</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n;</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; deaths [n];</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; population [n];</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; alpha;</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; beta;</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>}</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="co">// cancer is rare, lets make the numbers more reasonable</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n] exposure;</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>        exposure[i] = population[i] / <span class="fl">1000.0</span>;</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; lambda;</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    deaths ~ poisson(exposure * lambda);</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    lambda ~ gamma(alpha, beta);</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-globalconstant-rate-2"
+class="slide section level2">
+<h1>Kidney cancer Stan model: global/constant rate</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our data are counts, suggesting Poisson
+<ul>
+<li>We don’t use binomial in part because we care about death
+<strong>rate</strong>, not probability</li>
+</ul></li>
+<li>Here we build a model accounting for <strong>exposure</strong>
+(population size)</li>
+<li>We assume mortality rate <span
+class="math inline">\(\lambda\)</span> is constant for the entire
+dataset
+<ul>
+<li><span class="math inline">\(\lambda\)</span> is
+<strong>pooled</strong> across units (county)</li>
+<li>Interpretation of <span class="math inline">\(\lambda\)</span>:
+cancer deaths per five years per 1000 people</li>
+</ul></li>
+</ul>
+<p><strong>Question</strong>: Is there geographic variation in cancer
+rates?</p>
+</div><div class="column">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>cancer_pooled <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/kidney_cancer_pooled.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>cancer <span class="ot">=</span> cancer[<span class="fu">complete.cases</span>(cancer)]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>cancer_data_stan <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(cancer),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">deaths =</span> cancer<span class="sc">$</span>kidney_cancer_deaths,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">population =</span> cancer<span class="sc">$</span>population,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.01</span>, <span class="co"># extremely vague priors, probably too vague!</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">beta =</span> <span class="fl">0.01</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>cancer_p_fit <span class="ot">=</span> <span class="fu">sampling</span>(cancer_pooled, <span class="at">data =</span> cancer_data_stan, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">quantile</span>(<span class="fu">as.matrix</span>(cancer_p_fit, <span class="at">pars =</span> <span class="st">&quot;lambda&quot;</span>)[,<span class="dv">1</span>], <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">##         5%        95% </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## 0.04989320 0.05063279</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-rates-per-county"
+class="slide section level2">
+<h1>Kidney cancer Stan model: rates per county</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We assume mortality rate <span
+class="math inline">\(\lambda\)</span> is independent for each county
+<ul>
+<li><span class="math inline">\(\lambda\)</span> is
+<strong>unpooled</strong> across units (county)</li>
+</ul></li>
+<li>This model has a lot of parameters, and doesn’t fit well</li>
+<li>Max of 2 observations per lambda!</li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n;</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_counties;</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; deaths [n];</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; population [n];</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = n_counties&gt; county_id [n];</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; alpha;</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; beta;</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="co">// cancer is rare, lets make the numbers more reasonable</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n] exposure;</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>        exposure[i] = population[i] / <span class="fl">1000.0</span>;</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n_counties] lambda;</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>}</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>        <span class="dt">int</span> j = county_id[i];</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>        deaths[i] ~ poisson(exposure[i] * lambda[j]);</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>    }</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>    lambda ~ gamma(alpha, beta);</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-partial-pooling"
+class="slide section level2">
+<h1>Kidney cancer Stan model: partial pooling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the overall rate for the whole country as a prior for
+individual counties</li>
+<li>Areas with few observations will use the whole country as a slight
+reality check</li>
+<li><span class="math inline">\(\lambda\)</span> is <strong>partially
+pooled</strong></li>
+</ul>
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-1-1.png" width="768" /></p>
+</div><div class="column">
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n;</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_counties;</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; deaths [n];</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; population [n];</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = n_counties&gt; county_id [n];</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="co">// hyper-hyper parameters, for the hyperprior</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a_alpha;</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a_beta;</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b_alpha;</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b_beta;</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>}</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>    <span class="co">// cancer is rare, lets make the numbers more reasonable</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n] exposure;</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>        exposure[i] = population[i] / <span class="fl">1000.0</span>;</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>}</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n_counties] lambda;</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>    </span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>    <span class="co">// prior hyperparameters for lambda are now parameters we will estimate!</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; alpha;</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; beta;</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>    </span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>}</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>        <span class="dt">int</span> j = county_id[i];</span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>        deaths[i] ~ poisson(exposure[i] * lambda[j]);</span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>    }</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>    </span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>    <span class="co">// prior for lambda</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>    lambda ~ gamma(alpha, beta);</span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a>    </span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a>    <span class="co">// hyperpriors for alpha and beta</span></span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a>    alpha ~ gamma(a_alpha, a_beta);</span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a>    beta ~ gamma(b_alpha, b_beta);</span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a>}</span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a>    <span class="co">// save the overal mean and variance in cancer rate</span></span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a>    <span class="dt">real</span> lambda_mu = alpha/beta;</span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a>    <span class="dt">real</span> lambda_var = alpha/beta^<span class="dv">2</span>;</span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-partial-pooling-1"
+class="slide section level2">
+<h1>Kidney cancer Stan model: partial pooling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the overall rate for the whole country as a prior for
+individual counties</li>
+<li>Areas with few observations will use the whole country as a slight
+reality check</li>
+<li><span class="math inline">\(\lambda\)</span> is <strong>partially
+pooled</strong></li>
+<li>Parameters with limited information can <strong>borrow
+strength</strong> from the rest of the dataset</li>
+<li>We must take care when choosing the hyperprior parameters
+<ul>
+<li>this cancer is rare, less than one per 1000 on average</li>
+<li>we choose a range for alpha and beta that is wide, but makes mostly
+impossible values very unlikely</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">mean</span>(cancer<span class="sc">$</span>death_rate_per_1000<span class="sc">/</span>(cancer<span class="sc">$</span>population<span class="sc">/</span><span class="dv">1000</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="do">## [1] 0.00214512</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">sd</span>(cancer<span class="sc">$</span>death_rate_per_1000<span class="sc">/</span>(cancer<span class="sc">$</span>population<span class="sc">/</span><span class="dv">1000</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">## [1] 0.009377513</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>alpha_a <span class="ot">=</span> <span class="fl">0.01</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>beta_a <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># our hyperparameter alpha has a 99% prob of being between these two values</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>(<span class="at">a_int =</span> <span class="fu">qgamma</span>(<span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>), alpha_a, beta_a))</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="do">## [1] 5.660738e-201  2.650526e-01</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>alpha_b <span class="ot">=</span> <span class="fl">0.8</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>beta_b <span class="ot">=</span> <span class="fl">0.4</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co"># our hyperparameter alpha has a 99% prob of being between these two values</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>(<span class="at">b_int =</span> (<span class="fu">round</span>(<span class="fu">qgamma</span>(<span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>), alpha_b, beta_b), <span class="dv">2</span>)))</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="do">## [1]  0.01 10.32</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="do">## what would the mean lambda look like at these extremes?</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(a_int[<span class="dv">1</span>] <span class="sc">/</span> b_int[<span class="dv">1</span>], a_int[<span class="dv">2</span>]<span class="sc">/</span>b_int[<span class="dv">1</span>], a_int[<span class="dv">1</span>] <span class="sc">/</span> b_int[<span class="dv">2</span>], a_int[<span class="dv">2</span>] <span class="sc">/</span> b_int[<span class="dv">2</span>]), <span class="at">nrow =</span> <span class="dv">2</span>, </span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>       <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;min a&quot;</span>, <span class="st">&quot;max a&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;min b&quot;</span>, <span class="st">&quot;max b&quot;</span>))),<span class="dv">2</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="do">##       min b max b</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="do">## min a  0.00  0.00</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="do">## max a 26.51  0.03</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>a_alpha <span class="ot">=</span> alpha_a</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>b_alpha <span class="ot">=</span> alpha_b</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>a_beta <span class="ot">=</span> beta_a</span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>b_beta <span class="ot">=</span> beta_b</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-partially-pooled-rates-per-county"
+class="slide section level2">
+<h1>Kidney cancer Stan model: partially pooled rates per county</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the overall rate for the whole country as a prior for
+individual counties</li>
+<li>Areas with few observations will use the whole country as a slight
+reality check</li>
+<li><span class="math inline">\(\lambda\)</span> is <strong>partially
+pooled</strong></li>
+<li>Parameters with limited information can <strong>borrow
+strength</strong> from the rest of the dataset</li>
+<li>We must take care when choosing the hyperprior parameters
+<ul>
+<li>this cancer is rare, less than one per 1000 on average</li>
+<li>we choose a range for alpha and beta that is wide, but makes mostly
+impossible values very unlikely</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>cancer_unpooled <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/kidney_cancer_ppooled.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>cancer<span class="sc">$</span>county_id <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">factor</span>(cancer<span class="sc">$</span>county))</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>county_id <span class="ot">=</span> cancer<span class="sc">$</span>county_id</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>cancer_data_stan<span class="sc">$</span>n_counties <span class="ot">=</span> <span class="fu">max</span>(cancer<span class="sc">$</span>county_id)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>cancer_ppool_fit <span class="ot">=</span> <span class="fu">sampling</span>(cancer_ppooled, <span class="at">data =</span> cancer_data_stan, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">iter =</span> <span class="dv">5000</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>cancer_ppool_samps <span class="ot">=</span> <span class="fu">as.matrix</span>(cancer_ppool_fit, <span class="at">pars =</span> <span class="st">&quot;lambda&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>quants <span class="ot">=</span> <span class="fu">t</span>(<span class="fu">apply</span>(cancer_ppool_samps , <span class="dv">2</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)))</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="fu">head</span>(quants)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="do">##            </span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="do">## parameters          5%        95%</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="do">##   lambda[1] 0.04886829 0.10226476</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="do">##   lambda[2] 0.05026754 0.09265617</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="do">##   lambda[3] 0.04533926 0.09547808</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="do">##   lambda[4] 0.03326814 0.05394974</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="do">##   lambda[5] 0.03847852 0.07227180</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="do">##   lambda[6] 0.03667585 0.04910167</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co"># quantile interval for the overall mean</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">pooled =</span> <span class="fu">quantile</span>(<span class="fu">as.matrix</span>(cancer_p_fit, <span class="at">pars =</span> <span class="st">&quot;lambda&quot;</span>), <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)),</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="at">partial_pooled =</span> <span class="fu">quantile</span>(<span class="fu">as.matrix</span>(cancer_ppool_fit, <span class="at">pars =</span> <span class="st">&quot;lambda_mu&quot;</span>), <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))), <span class="dv">4</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="do">##                    5%    95%</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="do">## pooled         0.0499 0.0506</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="do">## partial_pooled 0.0508 0.0527</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="kidney-cancer-stan-model-partially-pooled-maps"
+class="slide section level2">
+<h1>Kidney cancer Stan model: partially pooled maps</h1>
+<p><img src="6_hm_files/figure-slidy/cancer_fit_maps-1.png" width="1152" /></p>
+</div>
+<div id="kidney-cancer-stan-model-partially-pooled-maps-1"
+class="slide section level2">
+<h1>Kidney cancer Stan model: partially pooled maps</h1>
+<p><img src="6_hm_files/figure-slidy/cancer_fit_maps2-1.png" width="1152" /></p>
+</div>
+<div id="precipitation-mortality-relationships-in-tsuga"
+class="slide section level2">
+<h1>Precipitation-mortality relationships in Tsuga</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We return to the mortality of trees in North American forests</li>
+<li>The dataset contains information for multiple species and years
+<ul>
+<li>there is replication within units</li>
+</ul></li>
+<li>For now, we focus on <em>Tsuga canadensis</em></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>trees <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&quot;../vu_advstats_students/data/treedata.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>tsuga <span class="ot">=</span> trees[<span class="fu">grep</span>(<span class="st">&quot;Tsuga&quot;</span>, species_name)]</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># remove NAs</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>tsuga <span class="ot">=</span> tsuga[<span class="fu">complete.cases</span>(tsuga), ]</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">head</span>(tsuga)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">##    n died year     species_name annual_mean_temp tot_annual_pp   prior_mu</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">## 1: 5    3 1989 Tsuga canadensis         3.849333     1003.0000 0.02222166</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## 2: 6    0 1989 Tsuga canadensis         3.452000     1076.1333 0.02222166</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">## 3: 3    0 1997 Tsuga canadensis         3.620000     1099.4000 0.03245619</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## 4: 4    4 1989 Tsuga canadensis         4.596000      989.4667 0.02222166</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">## 5: 3    0 1994 Tsuga canadensis         4.244667     1116.2000 0.02816339</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">## 6: 7    0 2002 Tsuga canadensis         4.730000     1137.2667 0.04108793</span></span></code></pre></div>
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-3-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="precipitation-mortality-relationships-in-tsuga-h1"
+class="slide section level2">
+<h1>Precipitation-mortality relationships in Tsuga: H1</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li><strong>Question:</strong> Does mortality of <em>Tsuga
+canadensis</em> vary with precipitation?
+<ul>
+<li>The species generally prefers moist conditions</li>
+</ul></li>
+<li><strong>Hypothesis 1</strong>: The precipitation-mortality
+relationship is the same across all years (<strong>Complete
+pooling</strong>, 2 params)</li>
+</ul>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-4-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="precipitation-mortality-relationships-in-tsuga-h2"
+class="slide section level2">
+<h1>Precipitation-mortality relationships in Tsuga: H2</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li><strong>Question:</strong> Does mortality of <em>Tsuga
+canadensis</em> vary with precipitation?
+<ul>
+<li>The species generally prefers moist conditions</li>
+</ul></li>
+<li><strong>Hypothesis 1</strong>: The precipitation-mortality
+relationship is the same across all years (<strong>Complete
+pooling</strong>, 2 params)</li>
+<li><strong>Hypothesis 2</strong>: The <em>average survival</em> varies
+by year, but the slope between precipitation and mortality is constant
+(<strong>Unpooled intercepts, pooled slopes</strong>, 17 params)
+<ul>
+<li>Sample size by year ranges from 1 to 208</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-5-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="precipitation-mortality-relationships-in-tsuga-h3"
+class="slide section level2">
+<h1>Precipitation-mortality relationships in Tsuga: H3</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li><strong>Question:</strong> Does mortality of <em>Tsuga
+canadensis</em> vary with precipitation?
+<ul>
+<li>The species generally prefers moist conditions</li>
+</ul></li>
+<li><strong>Hypothesis 1</strong>: The precipitation-mortality
+relationship is the same across all years (<strong>Complete
+pooling</strong>, 2 params)</li>
+<li><strong>Hypothesis 2</strong>: The <em>average survival</em> varies
+by year, but the slope between precipitation and mortality is constant
+(<strong>Unpooled intercepts, pooled slopes</strong>, 17 params)
+<ul>
+<li>Sample size by year ranges from 1 to 208</li>
+</ul></li>
+<li><strong>Hypothesis 3</strong>: There is a different regression line
+for each year (<strong>No pooling</strong>, 32 parameters)</li>
+</ul>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-6-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="pooled-model-code" class="slide section level2">
+<h1>Pooled model code</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># compile the model (below)</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>tsuga_pooled <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/tsuga_pooled.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>    <span class="st">```</span><span class="at">{stan file = &quot;../stan/tsuga_pooled.stan&quot;, output.var=&quot;tsuga_pooled&quot;, cache = TRUE}</span></span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="do">## Fit the model</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="do">## note that I have rescaled precipitaiton</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="do">## additionally, we add the year variable as a factor</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>precip <span class="ot">=</span> <span class="fu">scale</span>(tsuga<span class="sc">$</span>tot_annual_pp) </span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>standat <span class="ot">=</span> <span class="fu">with</span>(tsuga, <span class="fu">list</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(died),</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="at">n_trees =</span> n,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>    <span class="at">died =</span> died,</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>    <span class="at">precip =</span> precip[,<span class="dv">1</span>],</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">as.factor</span>(year)))  </span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>fit_pooled <span class="ot">=</span> <span class="fu">sampling</span>(tsuga_pooled, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">iter=</span><span class="dv">3000</span>, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">data =</span> standat)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">## Error in h(simpleError(msg, call)): error in evaluating the argument &#39;object&#39; in selecting a method for function &#39;sampling&#39;: object &#39;tsuga_pooled&#39; not found</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="pooled-models-trade-accuracy-for-precision"
+class="slide section level2">
+<h1>Pooled models trade accuracy for precision</h1>
+<ul>
+<li>All data for a single set of estimates
+<ul>
+<li>highly precise parameter estimates</li>
+</ul></li>
+</ul>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;fit_pooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;fit_pooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;ci_pooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;errs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;pl_intervals_pooled&#39; not found</code></pre>
+</div>
+<div id="pooled-models-trade-accuracy-for-precision-1"
+class="slide section level2">
+<h1>Pooled models trade accuracy for precision</h1>
+<ul>
+<li>All data for a single set of estimates
+<ul>
+<li>highly precise parameter estimates</li>
+</ul></li>
+<li>High prediction errors for individual groups</li>
+<li>Groups with small samples biased towards the mean</li>
+</ul>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;pl_probs_pooled&#39; not found</code></pre>
+</div>
+<div id="unpooled-model-code" class="slide section level2">
+<h1>Unpooled model: code</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># compile the model (below)</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>tsuga_unpooled <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/tsuga_unpooled.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co">// file: stan/tsuga_unpooled.stan</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>    <span class="co">// same as in the pooled model</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n; </span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_trees [n]; </span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; died [n]; </span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    <span class="dt">vector</span> [n] precip;</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>    </span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>    <span class="co">// grouping variables</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>    <span class="co">// year_id is an integer starting at 1 (the earliest year)</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>    <span class="co">// ending at n_groups (the latest year)</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>    <span class="co">// we use this value as an index for any group-level effects</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span> = n_groups&gt; year_id [n];</span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>}</span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>    <span class="co">// one intercept per group</span></span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a;</span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>    <span class="dt">real</span> b;</span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>}</span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; [n] p;</span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a>    </span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a>    <span class="co">// a is different for each data point, depending on the group</span></span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a>    <span class="co">// so we need a loop to compute this</span></span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a>        <span class="dt">int</span> gid = year_id[i];</span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a>        p[i] = inv_logit(a[gid] + b * precip[i]);</span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a>    }</span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a>}</span>
+<span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a>    died ~ binomial(n_trees, p);</span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a>    a ~ normal(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a>    b ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a>}</span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a>    <span class="co">// we use generated quantities to keep track of log likelihood and</span></span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a>    <span class="co">// deviance, useful for model selection</span></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a>    <span class="co">// and also to perform poserior predictive simulations</span></span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a>    <span class="dt">real</span> deviance = <span class="dv">0</span>;</span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a>    <span class="dt">vector</span> [n] loglik;</span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a>    <span class="dt">int</span> ppd_died [n];</span>
+<span id="cb17-44"><a href="#cb17-44" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb17-45"><a href="#cb17-45" tabindex="-1"></a>        loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);</span>
+<span id="cb17-46"><a href="#cb17-46" tabindex="-1"></a>        deviance += loglik[i];</span>
+<span id="cb17-47"><a href="#cb17-47" tabindex="-1"></a>        ppd_died[i] = binomial_rng(<span class="dv">20</span>, p[i]);</span>
+<span id="cb17-48"><a href="#cb17-48" tabindex="-1"></a>    }</span>
+<span id="cb17-49"><a href="#cb17-49" tabindex="-1"></a>    deviance = -<span class="dv">2</span> * deviance;</span>
+<span id="cb17-50"><a href="#cb17-50" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># factor variables must be converted to integers for stan</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>standat<span class="sc">$</span>year_id <span class="ot">=</span> <span class="fu">as.integer</span>(standat<span class="sc">$</span>year)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co"># we also need to tell stan how many groups (i.e., years) there are</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>standat<span class="sc">$</span>n_groups <span class="ot">=</span> <span class="fu">max</span>(standat<span class="sc">$</span>year_id)</span></code></pre></div>
+<pre><code>##      year year_int
+## [1,] 1989        1
+## [2,] 1994        2
+## [3,] 1997        3
+## [4,] 1998        4
+## [5,] 2001        5
+## [6,] 2002        6</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>fit_unpooled <span class="ot">=</span> <span class="fu">sampling</span>(tsuga_unpooled, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">iter=</span><span class="dv">3000</span>, <span class="at">refresh=</span><span class="dv">0</span>, </span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                        <span class="at">data =</span> standat)</span></code></pre></div>
+<pre><code>## Warning in gzfile(file, &quot;rb&quot;): cannot open compressed file
+## &#39;misc/7_tsuga_unpooled.rds&#39;, probable reason &#39;No such file or directory&#39;
+## Error in gzfile(file, &quot;rb&quot;): cannot open the connection</code></pre>
+</div>
+</div>
+</div>
+<div id="unpooled-models-use-less-data-per-parameter"
+class="slide section level2">
+<h1>Unpooled models use less data per parameter</h1>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;fit_unpooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;fit_unpooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;ci_unpooled&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;errs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;pl_intervals_unpooled&#39; not found</code></pre>
+</div>
+<div id="unpooled-models-use-less-data-per-parameter-1"
+class="slide section level2">
+<h1>Unpooled models use less data per parameter</h1>
+<ul>
+<li>Very imprecise, especially for groups with few samples</li>
+<li>Prediction to new groups (years) impossible</li>
+</ul>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;pl_probs_unpooled&#39; not found</code></pre>
+</div>
+<div id="compromise-partial-pooling" class="slide section level2">
+<h1>Compromise: partial pooling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We don’t really expect each year to be independent
+<ul>
+<li>it’s all one species, response to temperature should be similar</li>
+<li>some years are better or worse than others</li>
+</ul></li>
+<li>Imagine instead there is a population of possible years, each with
+its own mortality</li>
+<li>This population has a true mean and a true variance</li>
+<li>The samples we’ve taken will come from that distribution</li>
+<li>This can tell us something about all possible years, not just these
+years</li>
+</ul>
+</div><div class="column">
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-20-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="partial-pooling-code" class="slide section level2">
+<h1>Partial Pooling: Code</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># compile the model (below)</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>tsuga_ppool <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/tsuga_ppool.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>    <span class="st">```</span><span class="at">{stan file = &quot;../stan/tsuga_ppool.stan&quot;, output.var=&quot;tsuga_ppool&quot;, cache = TRUE}</span></span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>fit_ppool <span class="ot">=</span> <span class="fu">sampling</span>(tsuga_ppool, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">iter=</span><span class="dv">3000</span>, <span class="at">refresh=</span><span class="dv">0</span>, </span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>                        <span class="at">data =</span> standat)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">## Error in h(simpleError(msg, call)): error in evaluating the argument &#39;object&#39; in selecting a method for function &#39;sampling&#39;: object &#39;tsuga_ppool&#39; not found</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="partial-pooling-is-a-compromise" class="slide section level2">
+<h1>Partial pooling is a compromise</h1>
+<ul>
+<li>for a given group, we combine the information for this group with
+information from all groups</li>
+<li>balances precision and accuracy</li>
+<li>can be best approach for new groups</li>
+<li>weak/undersampled groups can “borrow strength” from others</li>
+</ul>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;fit_ppool&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;fit_ppool&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;probs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;ci_ppool&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;errs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;par_samples&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;pl_intervals_ppool&#39; not found</code></pre>
+</div>
+<div id="partial-pooling-is-a-compromise-1"
+class="slide section level2">
+<h1>Partial pooling is a compromise</h1>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;pl_probs_ppool&#39; not found</code></pre>
+</div>
+<div id="pooling-comparison" class="slide section level2">
+<h1>Pooling comparison</h1>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;pl_err_pooled&#39; not found</code></pre>
+</div>
+<div id="pooling-comparison-1" class="slide section level2">
+<h1>Pooling comparison</h1>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;pl_intervals_pooled&#39; not found</code></pre>
+</div>
+<div id="when-do-we-need-hierarchical-models"
+class="slide section level2">
+<h1>When do we need hierarchical models?</h1>
+<ul>
+<li>Repeated sampling within units (e.g., samples nested within
+plots/individuals)</li>
+<li>Inference at multiple levels of organisation
+<ul>
+<li>Covariates at multiple spatial scales</li>
+</ul></li>
+<li>Uneven sampling among units</li>
+<li>Accounting for nonindependence of samples</li>
+<li>Avoiding pre-averaging
+<ul>
+<li>Don’t: perform repeat samples on a unit, perform analysis on the
+average</li>
+<li>Do: Build an HM accounting for variability within and among
+units</li>
+</ul></li>
+<li>A common category of HM is often called mixed modeling
+<ul>
+<li>All mixed models are hierarchical, not all hierarchical models are
+mixed models</li>
+</ul></li>
+</ul>
+</div>
+<div id="designing-hierarchical-models-in-stan"
+class="slide section level2">
+<h1>Designing hierarchical models in Stan</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>You must specify data/objects at all levels</li>
+<li>Often we use an indexing variable to link observations to their
+group</li>
+<li>This variable <strong>must</strong> start at 1 and end at
+<em>n_groups</em></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_groups&gt; group_id [n];</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>}</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a; </span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>    </span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>    <span class="dt">real</span> a_mu;</span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>    <span class="dt">real</span> a_sig;</span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a>}</span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a>    pr[i] = inv_logit(a[group_id[i]]);</span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a>}</span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>    a ~ normal(a_mu, a_sig);  <span class="co">// hierarchical prior for a</span></span>
+<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="designing-hierarchical-models-in-stan-1"
+class="slide section level2">
+<h1>Designing hierarchical models in Stan</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>You must specify data/objects at all levels</li>
+<li>Often we use an indexing variable to link observations to their
+group</li>
+<li>This variable <strong>must</strong> start at 1 and end at
+<em>n_groups</em></li>
+<li>Multiple non-nested groups are possible</li>
+</ul>
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-29-1.png" width="768" /></p>
+</div><div class="column">
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] precip;</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
+<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n];</span>
+<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a>}</span>
+<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
+<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
+<span id="cb32-17"><a href="#cb32-17" tabindex="-1"></a>    </span>
+<span id="cb32-18"><a href="#cb32-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb32-19"><a href="#cb32-19" tabindex="-1"></a>    <span class="dt">real</span> a1_mu;</span>
+<span id="cb32-20"><a href="#cb32-20" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
+<span id="cb32-21"><a href="#cb32-21" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
+<span id="cb32-22"><a href="#cb32-22" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
+<span id="cb32-23"><a href="#cb32-23" tabindex="-1"></a>}</span>
+<span id="cb32-24"><a href="#cb32-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb32-25"><a href="#cb32-25" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
+<span id="cb32-26"><a href="#cb32-26" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb32-27"><a href="#cb32-27" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + a2[group2_id[i]] + b*precip[i]);</span>
+<span id="cb32-28"><a href="#cb32-28" tabindex="-1"></a>}</span>
+<span id="cb32-29"><a href="#cb32-29" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb32-30"><a href="#cb32-30" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
+<span id="cb32-31"><a href="#cb32-31" tabindex="-1"></a></span>
+<span id="cb32-32"><a href="#cb32-32" tabindex="-1"></a>    a1 ~ normal(a1_mu, a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
+<span id="cb32-33"><a href="#cb32-33" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
+<span id="cb32-34"><a href="#cb32-34" tabindex="-1"></a></span>
+<span id="cb32-35"><a href="#cb32-35" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
+<span id="cb32-36"><a href="#cb32-36" tabindex="-1"></a>    a1_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb32-37"><a href="#cb32-37" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb32-38"><a href="#cb32-38" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb32-39"><a href="#cb32-39" tabindex="-1"></a>    a2_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb32-40"><a href="#cb32-40" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="designing-hierarchical-models-in-stan-2"
+class="slide section level2">
+<h1>Designing hierarchical models in Stan</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Nested groups add an additional hierarchical layer</li>
+</ul>
+<p><img src="6_hm_files/figure-slidy/unnamed-chunk-31-1.png" width="768" /></p>
+</div><div class="column">
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] temperature;</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
+<span id="cb33-12"><a href="#cb33-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n_group1];</span>
+<span id="cb33-13"><a href="#cb33-13" tabindex="-1"></a>}</span>
+<span id="cb33-14"><a href="#cb33-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb33-15"><a href="#cb33-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
+<span id="cb33-16"><a href="#cb33-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
+<span id="cb33-17"><a href="#cb33-17" tabindex="-1"></a>    </span>
+<span id="cb33-18"><a href="#cb33-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb33-19"><a href="#cb33-19" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
+<span id="cb33-20"><a href="#cb33-20" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
+<span id="cb33-21"><a href="#cb33-21" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
+<span id="cb33-22"><a href="#cb33-22" tabindex="-1"></a>}</span>
+<span id="cb33-23"><a href="#cb33-23" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb33-24"><a href="#cb33-24" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
+<span id="cb33-25"><a href="#cb33-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb33-26"><a href="#cb33-26" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + b*precip[i]);</span>
+<span id="cb33-27"><a href="#cb33-27" tabindex="-1"></a>}</span>
+<span id="cb33-28"><a href="#cb33-28" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb33-29"><a href="#cb33-29" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
+<span id="cb33-30"><a href="#cb33-30" tabindex="-1"></a></span>
+<span id="cb33-31"><a href="#cb33-31" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> n_group1)</span>
+<span id="cb33-32"><a href="#cb33-32" tabindex="-1"></a>        a1 ~ normal(a2[i], a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
+<span id="cb33-33"><a href="#cb33-33" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
+<span id="cb33-34"><a href="#cb33-34" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
+<span id="cb33-35"><a href="#cb33-35" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb33-36"><a href="#cb33-36" tabindex="-1"></a>    </span>
+<span id="cb33-37"><a href="#cb33-37" tabindex="-1"></a>    <span class="co">// hyperhyperprior</span></span>
+<span id="cb33-38"><a href="#cb33-38" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb33-39"><a href="#cb33-39" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-predictive-distributions"
+class="slide section level2">
+<h1>Posterior predictive distributions</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Do we want to predict new observations from a known group?
+<ul>
+<li>e.g: What is the PPD for trees in 1989?</li>
+<li>Use <strong>generated quantities</strong> block in Stan</li>
+</ul></li>
+<li>Or new observations from an unknown group?
+<ul>
+<li>Simulate new values for each param, drawn from hyper params</li>
+<li>Then simulate the individual observations</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>sim1 <span class="ot">=</span> <span class="cf">function</span>(amu, asig, bmu, bsig, N, precip) {</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>    a <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), amu, asig)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), bmu, bsig)</span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>    p <span class="ot">=</span> <span class="fu">plogis</span>(a <span class="sc">+</span> b<span class="sc">*</span>precip)</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>    <span class="fu">rbinom</span>(<span class="fu">length</span>(precip), N, p)</span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-predictive-distributions-1"
+class="slide section level2">
+<h1>Posterior predictive distributions</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>newx <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(standat<span class="sc">$</span>precip), <span class="fu">max</span>(standat<span class="sc">$</span>precip), <span class="at">length.out=</span><span class="dv">400</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>pars <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">as.matrix</span>(fit_ppool, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&quot;a_mu&quot;</span>, <span class="st">&quot;a_sig&quot;</span>, <span class="st">&quot;b_mu&quot;</span>, <span class="st">&quot;b_sig&quot;</span>)))</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="do">## Error in eval(expr, envir, enclos): object &#39;fit_ppool&#39; not found</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="co"># For our hypothetical, we need to decide how many trees we would see</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="co"># more trees means less sampling uncertainty</span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>sims <span class="ot">=</span> <span class="fu">mapply</span>(sim1, <span class="at">amu =</span> pars<span class="sc">$</span>a_mu, <span class="at">asig =</span> pars<span class="sc">$</span>a_sig,</span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>              <span class="at">bmu =</span> pars<span class="sc">$</span>b_mu, <span class="at">bsig =</span> pars<span class="sc">$</span>b_sig, </span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>              <span class="at">MoreArgs =</span> <span class="fu">list</span>(<span class="at">N =</span> <span class="dv">20</span>, <span class="at">precip =</span> newx))</span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="do">## Error in eval(expr, envir, enclos): object &#39;pars&#39; not found</span></span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a>sim_quantiles <span class="ot">=</span> <span class="fu">apply</span>(sims, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a><span class="do">## Error in eval(expr, envir, enclos): object &#39;sims&#39; not found</span></span></code></pre></div>
+</div><div class="column">
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sim_quantiles&#39; not found
+## Error: object &#39;sim_qs&#39; not found
+## Error: object &#39;sim_qs&#39; not found
+## Error in eval(expr, envir, enclos): object &#39;sim_qs&#39; not found</code></pre>
+</div>
+</div>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
