@@ -480,7 +480,7 @@ diversity.</p>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>)</span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat1, <span class="at">iter=</span><span class="dv">2000</span>, </span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat1, <span class="at">iter=</span><span class="dv">5000</span>, </span>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 </div>
@@ -489,14 +489,14 @@ diversity.</p>
 class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <pre><code>## Inference for Stan model: anon_model.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 4 chains, each with iter=5000; warmup=2500; thin=1; 
+## post-warmup draws per chain=2500, total post-warmup draws=10000.
 ## 
 ##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat
-## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.95  3236    1
-## B[1] 0.19       0 0.04 0.12 0.17 0.19 0.22  0.27  2933    1
+## a    1.88       0 0.04 1.79 1.85 1.88 1.90  1.95  6420    1
+## B[1] 0.19       0 0.04 0.11 0.17 0.19 0.22  0.27  6829    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:38:19 2023.
+## Samples were drawn using NUTS(diag_e) at Wed Nov 29 14:53:41 2023.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -546,7 +546,7 @@ habitat types.</p>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>)</span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat2, <span class="at">iter=</span><span class="dv">2000</span>, </span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat2, <span class="at">iter=</span><span class="dv">5000</span>, </span>
 <span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 </div>
@@ -555,21 +555,21 @@ habitat types.</p>
 class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <pre><code>## Inference for Stan model: anon_model.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 4 chains, each with iter=5000; warmup=2500; thin=1; 
+## post-warmup draws per chain=2500, total post-warmup draws=10000.
 ## 
 ##       mean se_mean   sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-## a     1.86       0 0.04  1.78  1.83  1.86  1.88  1.93  3215    1
-## B[1]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  3022    1
-## B[2]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.26  3013    1
-## B[3] -1.49       0 0.10 -1.69 -1.56 -1.49 -1.42 -1.29  3816    1
-## B[4] -0.78       0 0.08 -0.94 -0.83 -0.78 -0.73 -0.63  3495    1
-## B[5] -0.61       0 0.10 -0.80 -0.68 -0.61 -0.55 -0.43  3321    1
-## B[6] -0.59       0 0.10 -0.79 -0.66 -0.59 -0.53 -0.41  3499    1
-## B[7] -0.26       0 0.08 -0.41 -0.31 -0.26 -0.20 -0.10  3383    1
-## B[8]  0.15       0 0.08  0.00  0.10  0.15  0.20  0.30  3263    1
+## a     1.86       0 0.04  1.77  1.83  1.86  1.88  1.94  8089    1
+## B[1]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7609    1
+## B[2]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7823    1
+## B[3] -1.49       0 0.11 -1.70 -1.56 -1.49 -1.42 -1.29  8969    1
+## B[4] -0.78       0 0.08 -0.94 -0.83 -0.78 -0.73 -0.63  8640    1
+## B[5] -0.62       0 0.10 -0.81 -0.68 -0.62 -0.55 -0.43  8347    1
+## B[6] -0.60       0 0.10 -0.79 -0.66 -0.60 -0.53 -0.41  9712    1
+## B[7] -0.26       0 0.08 -0.41 -0.31 -0.26 -0.20 -0.10  9006    1
+## B[8]  0.15       0 0.07  0.01  0.10  0.15  0.20  0.29  8098    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:42:55 2023.
+## Samples were drawn using NUTS(diag_e) at Wed Nov 29 14:53:47 2023.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -619,14 +619,14 @@ deterministic)</li>
 </div><div class="column">
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">print</span>(fit1, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## Inference for Stan model: anon_model.</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## 4 chains, each with iter=2000; warmup=1000; thin=1; </span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## post-warmup draws per chain=1000, total post-warmup draws=4000.</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## 4 chains, each with iter=5000; warmup=2500; thin=1; </span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## post-warmup draws per chain=2500, total post-warmup draws=10000.</span></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.95  3236    1</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## B[1] 0.19       0 0.04 0.12 0.17 0.19 0.22  0.27  2933    1</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">## a    1.88       0 0.04 1.79 1.85 1.88 1.90  1.95  6420    1</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## B[1] 0.19       0 0.04 0.11 0.17 0.19 0.22  0.27  6829    1</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## Samples were drawn using NUTS(diag_e) at Sun Nov 26 13:38:19 2023.</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## Samples were drawn using NUTS(diag_e) at Wed Nov 29 14:53:41 2023.</span></span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
 <span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="do">## convergence, Rhat=1).</span></span></code></pre></div>
@@ -656,18 +656,28 @@ deterministic)</li>
 </ul>
 <p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-16-1.png" width="864" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># compute posterior distribution of the residual sum of squares</span></span>
+<p>For the Poisson, we want to ensure that the <span
+class="math inline">\(Var(y|x) = \mathbb{E}(y|x)\)</span>. We can
+approximate this by computing the dispersion parameter, which we expect
+to be equal to one:</p>
+<p><span class="math display">\[
+\phi = \frac{-2 \times \log pr(x|y)}{n-k}
+\]</span> Where <span class="math inline">\(k\)</span> is the number of
+parameters in the model.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>samp1_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>sq_resid1 <span class="ot">=</span> <span class="fu">apply</span>(samp1_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) (standat1<span class="sc">$</span>richness <span class="sc">-</span> x)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># sum(squared residuals)/(n - k)</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>phi <span class="ot">=</span> <span class="fu">apply</span>(sq_resid1, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">sum</span>(x)<span class="sc">/</span>(<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">2</span>))</span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="do">##      50%       5%      95% </span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">## 16.49011 16.39322 16.82376</span></span></code></pre></div>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>dev1 <span class="ot">=</span> <span class="fu">apply</span>(samp1_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat1<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># deviance/(n - k)</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>phi <span class="ot">=</span> dev1 <span class="sc">/</span> (<span class="fu">length</span>(standat1<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">## 6.144257 6.209191</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -677,22 +687,20 @@ deterministic)</li>
 <div class="column">
 <p><img src="5_inference_ii_files/figure-slidy/unnamed-chunk-18-1.png" width="864" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># compute posterior distribution of the residual sum of squares</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>samp2_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit2, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>sq_resid2 <span class="ot">=</span> <span class="fu">apply</span>(samp2_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) (standat2<span class="sc">$</span>richness <span class="sc">-</span> x)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># sum(squared residuals)/(n - k)</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>phi <span class="ot">=</span> <span class="fu">apply</span>(sq_resid2, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">sum</span>(x)<span class="sc">/</span>(<span class="fu">length</span>(x) <span class="sc">-</span> <span class="dv">2</span>))</span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="do">##      50%       5%      95% </span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="do">## 7.474093 7.378721 7.657266</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>samp2_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>dev2 <span class="ot">=</span> <span class="fu">apply</span>(samp2_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat2<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>phi <span class="ot">=</span> dev2 <span class="sc">/</span> (<span class="fu">length</span>(standat2<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">9</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="do">## 7.364491 8.147563</span></span></code></pre></div>
 <ul>
 <li>This model is still quite overdispersed
 <ul>
-<li>Consider more variables</li>
+<li>Consider more (and better!) variables</li>
 <li>Consider other likelihoods (e.g., Negative Binomial)</li>
 </ul></li>
 </ul>
