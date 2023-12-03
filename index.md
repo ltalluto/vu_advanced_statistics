@@ -104,11 +104,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p><b>Inference II:</b></p>
 				<p class = "soln">Priors & Diagnostics</p>
 				<p class = "soln">Bayesian workflow</p>
-			<p>Hierarchical &amp; Multilevel Models</p>
 		</td>
 		<td>
 			<p><a href="lec/5_inference_ii">Inference II</a></p>
-			<p><a href="lec/6_hm">Hierarchical Models</a></p>
 		</td>
 		<td>
 			<p class = "ex"><a href = "ex/"></a></p>
@@ -121,18 +119,19 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>13:15–17:00</p>
 		</td>
 		<td>
+			<p>Hierarchical &amp; Multilevel Models</p>
 			<p><b>Inference III:</b></p>
 				<p class = "soln">Model selection</p>
 				<p class = "soln">Multimodel inference</p>
-			<p>Special Topics</p>
-				<p class = "soln">(Time permitting)</p>
-			<p>Exercise catch-up</p>
-			<p>Project catch-up</p>
 		</td>
 		<td>
-			<a href="">Model selection</a>
+			<p><a href="lec/6_hm">Hierarchical Models</a></p>
+			<a href="7_model_selection">Model selection</a>
 		</td>
-		<td></td>
+		<td>
+			<p>Exercises catch-up</p>
+			<p>Project work</p>
+		</td>
 	</tr>
  	<tr>
 		<td>
@@ -141,11 +140,12 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p class = "soln">Meet in RR19</p>
 		</td>
 		<td>
+			<p>Special Topics</p>
 			<p>Wrap-up</p>
 			<p>Presentations</p>
 		</td>
 		<td>
-			<a href=""></a>
+			<a href="8_more_hm">More Hierarchical Models</a>
 		</td>
 		<td></td>
 	</tr>
