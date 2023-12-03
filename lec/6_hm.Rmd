@@ -83,27 +83,6 @@ pl_c_quantile
 ::::
 :::
 
-## Kidney cancer death rates in the US
-::: {.columns}
-:::: {.column}
-
-* Kidney cancer death rates in the US, by county
-* Is there a geographic pattern? If so, why?
-
-![](https://imgs.xkcd.com/comics/heatmap_2x.png){width=400px}
-
-::::
-:::: {.column}
-
-```{r cancer_quantile_map2, cache = TRUE, echo = FALSE, message = FALSE}
-pl_c_quantile
-```
-
-::::
-:::
-
-
-
 
 ## Kidney cancer death rates in the US
 ::: {.columns}
@@ -320,16 +299,11 @@ grpl_pool = ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
 	geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), 
 			type = "closed")) + 
 	theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
-	# geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1) +
 	geom_nodelabel(label = nlabs, fontface = "bold", nudge_x=-0.1) +
 	annotate(geom = "label", x = 1.3, y = 1, label = "Data") +
 	annotate(geom = "label", x = 1.3, y = 0.67, label = "Parameters") +
 	annotate(geom = "label", x = 1.3, y = 0.33, label = "Priors/Hyperparameters") +
 	annotate(geom = "label", x = 1.3, y = 0, label = "Hyper-Hyperparameters") +
-	# geom_label(aes(x=1.3, y=1), label = "Data") +
-	# geom_label(aes(x=1.3, y=0.5), label = "Parameters") +
-	# geom_label(aes(x=1.3, y=0), label = "Priors/Hyperparameters") +
-	# geom_label(aes(x=1.3, y=-0.5), label = "Hyper-Hyperparameters") +
 	xlim(-0.1, 1.6)
 grpl_pool
 
@@ -548,7 +522,7 @@ grid.arrange(pl_c_quantile_fit, pl_c_quantile + ggtitle("Kidney Cancer Quantiles
 
 ::::
 :::: {.column}
-```{r}
+```{r tsuga_load}
 trees = fread("../vu_advstats_students/data/treedata.csv")
 tsuga = trees[grep("Tsuga", species_name)]
 # remove NAs
@@ -556,12 +530,13 @@ tsuga = tsuga[complete.cases(tsuga), ]
 head(tsuga)
 ```
 
-```{r echo=FALSE}
+```{r tree_samp_size, echo=FALSE}
 tab = table(trees[, .(species_name, year)])
 tab = reshape2::melt(tab)
 ggplot(tab, aes(x = species_name, y = as.factor(year), fill=value)) + 
 	geom_tile() + scale_fill_viridis_c(option="magma") + theme_minimal() + xlab("Species") +
-	ylab("Year") + labs(fill="sample size")
+	ylab("Year") + labs(fill="sample size") + 
+	theme(text = element_text(size=10), axis.text.x = element_text(angle=90, hjust=1)) 
 ```
 
 ::::
@@ -579,20 +554,27 @@ ggplot(tab, aes(x = species_name, y = as.factor(year), fill=value)) +
 
 ::::
 :::: {.column}
-```{r, echo = FALSE, fig.width=8}
-gr = graph_from_literal(died+-p, died+-N, p+-a, p+-b, p+-precip, a+-"μ_a=0", a+-"σ_a=10", b+-"μ_b=0", b+-"σ_b=5")
-V(gr)$type = c("random", "deterministic", "deterministic", "random", "random", rep("deterministic", 5))
-V(gr)$source = c("known", "unknown", "known", "unknown", "unknown", rep("known", 5))
-layout = matrix(c(0,2,  0,1.2,  -0.5,1.8,  -0.5,1,  0.5, 1,  0.5, 1.8, -0.75,0, -0.25,0,  0.25,0,  0.75,0), byrow=TRUE, ncol=2)
+```{r tsuga_pool_graph, echo = FALSE, fig.width=8, warning = FALSE}
+gr = graph_from_literal(died+-p, died+-N, p+-eta, p+-eta, eta+-a, eta+-b, eta+-precip, 
+						a+-mu_a, a+-sig_a, b+-mu_b, b+-sig_b)
+V(gr)$type = c("stochastic", rep("deterministic", 3), rep("stochastic", 2), rep("deterministic", 5))
+V(gr)$source = c("known", "unknown", "known", rep("unknown", 3), rep("known", 5))
+layout = rbind(died = c(0,1),  p = c(0, 0.7),  N = c(-0.5, 0.9),  eta = c(0, 0.5), a = c(-0.5, 0.4),
+			   b = c(0.5, 0.4),  precip = c(0.5, 0.9), mua = c(-0.75, 0), siga = c(-0.25, 0), 
+			   mub = c(0.25, 0), sigb = c(0.75, 0))
 nt = ggnetwork(gr, layout=layout)
+nlabs = c(expression(mu[a]), "a", "N", expression(sigma[a]), expression(eta), "p", 
+		  expression(mu[b]), "b", "precip", expression(sigma[b]), "died")
+
 grpl_pool = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
    geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
    theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
-   geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1, nudge_y=0.05) + 
-   annotate(geom="label", x = 1.3, y = -0.1, label = "Hyperparameter layer") + 
-   annotate(geom="label", x = 1.3, y = 0.5, label = "Parameter layer") + 
-   annotate(geom="label", x = 1.3, y = 1, label = "Observation layer") + 
-   xlim(-0.5, 1.5) + ggtitle("Complete Pooling")
+	geom_nodelabel(label = nlabs, fontface = "bold", nudge_x=-0.1) +
+   # geom_nodelabel(aes(label = name), fontface = "bold", nudge_x=-0.1, nudge_y=0.05) + 
+   annotate(geom="label", x = 1.4, y = 0, label = "Hyperparameter layer") + 
+   annotate(geom="label", x = 1.4, y = 0.5, label = "Parameter layer") + 
+   annotate(geom="label", x = 1.4, y = 0.95, label = "Observation layer") + 
+   xlim(-0.5, 1.6) + ggtitle("Complete Pooling")
 grpl_pool
 ```
 
@@ -613,29 +595,41 @@ grpl_pool
     - Sample size by year ranges from 1 to 208
 ::::
 :::: {.column}
-```{r, echo = FALSE, fig.width=8}
-gr = graph_from_literal(died+-p, died+-N, 
-						p+-a1989, p+-"a1994...", p+-"...a2012",
-						p+-b, p+-precip, 
-						a1989+-"μ_a=0", a1989+-"σ_a=10", 
-						"a1994..."+-"μ_a=0", "a1994..."+-"σ_a=10",
-						"...a2012"+-"μ_a=0", "...a2012"+-"σ_a=10",
-						b+-"μ_b=0", b+-"σ_b=5")
-V(gr)$type = c("random", "deterministic", "deterministic", 
-			   rep("random", 4), rep("deterministic", 5))
-V(gr)$source = c("known", "unknown", "known", rep("unknown", 4), rep("known", 5))
-layout = matrix(c(0,2,  0,1.2,  -0.5,1.8,  
-				  c(-0.5,1) + c(-0.1,0, 0,0, 0.1,0),  
-				  0.5, 1,  0.5, 1.8, -0.75,0, -0.25,0,  0.25,0,  0.75,0), byrow=TRUE, ncol=2)
+```{r tsuga_spool_graph, echo = FALSE, fig.width=8, warning = FALSE}
+gr = graph_from_literal(died+-p, died+-N, p+-eta, precip-+eta,
+						eta+-a89, eta+-a97, eta+-a94, eta+-a02, eta+-a01, eta+-a09,
+						eta+-a07, eta+-a06, eta+-a98, eta+-a10, eta+-a08, eta+-a12,
+						eta+-a11, eta+-a05, eta+-a04, eta+-a03,
+						eta+-b, b+-mub, b+-sigb, 
+						mua-+a89, mua-+a97, mua-+a94, mua-+a02, mua-+a01, mua-+a09,
+						mua-+a07, mua-+a06, mua-+a98, mua-+a10, mua-+a08, mua-+a12,
+						mua-+a11, mua-+a05, mua-+a04, mua-+a03,
+						siga-+a89, siga-+a97, siga-+a94, siga-+a02, siga-+a01, siga-+a09,
+						siga-+a07, siga-+a06, siga-+a98, siga-+a10, siga-+a08, siga-+a12,
+						siga-+a11, siga-+a05, siga-+a04, siga-+a03)
+V(gr)$type = c("stochastic", rep("deterministic", 4), rep("stochastic", 17), rep("deterministic", 4)) 
+V(gr)$source = c("known", "unknown", "known", "unknown", "known", rep("unknown", 17), rep("known", 4))
+layout = rbind(died = c(0, 1), p = c(0,0.7), N = c(-0.5, 0.9),  eta = c(0, 0.5), precip = c(0.5, 0.9),
+	  cbind(seq(-0.8, -0.2, length.out = 16), rep(0.4, 16)), b = c(0.5, 0.4), 
+	  mub = c(0.25, 0), sigb = c(0.75, 0), mua = c(-0.75, 0), siga = c(-0.25, 0))
 nt = ggnetwork(gr, layout=layout)
+nlabs = c(rep(NA, 9), "N", rep(NA, 10), "p", NA, "b", "precip", NA, "died")
+
+
 grpl_slpool = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
    geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
-   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
-   geom_nodelabel_repel(aes(label = name), fontface = "bold", nudge_x=-0.1, nudge_y=0.05, segment.colour = "#99999955") + 
-   annotate(geom="label", x = 1.3, y = -0.1, label = "Hyperparameter layer") + 
-   annotate(geom="label", x = 1.3, y = 0.5, label = "Parameter layer") + 
-   annotate(geom="label", x = 1.3, y = 1, label = "Observation layer") + 
-   xlim(-0.5, 1.5) + ggtitle("Pooled Slopes")
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=4) + 
+	geom_nodelabel(label = nlabs, nudge_x=-0.1) +
+   annotate(geom="label", x = -0.1, y = 0.45, label = expression(a[1989-2012])) + 
+   annotate(geom="label", x = 0.5, y = 0.55, label = expression(eta)) + 
+   annotate(geom="label", x = -0.05, y = 0.05, label = expression(mu[a])) + 
+   annotate(geom="label", x = 0.4, y = 0.05, label = expression(sigma[a])) + 
+   annotate(geom="label", x = 0.65, y = 0.05, label = expression(mu[b])) + 
+   annotate(geom="label", x = 0.95, y = 0.05, label = expression(sigma[b])) + 
+   annotate(geom="label", x = 1.5, y = 0, label = "Hyperparameter layer") + 
+   annotate(geom="label", x = 1.5, y = 0.5, label = "Parameter layer") + 
+   annotate(geom="label", x = 1.5, y = 1, label = "Observation layer") + 
+   xlim(-0.5, 1.7) + ggtitle("Unooled Intercepts")
 grpl_slpool
 ```
 ::::
@@ -656,53 +650,108 @@ grpl_slpool
 
 ::::
 :::: {.column}
-```{r, echo = FALSE, fig.width=8}
-gr = graph_from_literal(died+-p, died+-N, 
-						p+-a1989, p+-"a1994...", p+-"...a2012",
-						p+-b1989, p+-"b1994...", p+-"...b2012",
-						p+-precip, 
-						a1989+-"μ_a=0", a1989+-"σ_a=10", 
-						"a1994..."+-"μ_a=0", "a1994..."+-"σ_a=10",
-						"...a2012"+-"μ_a=0", "...a2012"+-"σ_a=10",
-						b1989+-"μ_b=0", b1989+-"σ_b=5", 
-						"b1994..."+-"μ_b=0", "b1994..."+-"σ_b=5",
-						"...b2012"+-"μ_b=0", "...b2012"+-"σ_b=5")
-V(gr)$type = c("random", "deterministic", "deterministic", 
-			   rep("random", 6), rep("deterministic", 5))
-V(gr)$source = c("known", "unknown", "known", rep("unknown", 6), rep("known", 5))
-layout = matrix(c(0,2,  0,1.2,  -0.5,1.8,  
-				  c(-0.5,1) + c(-0.1,0, 0,0, 0.1,0), c(0.5,1) + c(-0.1,0, 0,0, 0.1,0),  
-				  0.5, 1.8, -0.75,0, -0.25,0,  0.25,0,  0.75,0), byrow=TRUE, ncol=2)
+```{r tsuga_unpool_graph, echo = FALSE, fig.width=8, warning = FALSE}
+gr = graph_from_literal(died+-p, died+-N, p+-eta, precip-+eta,
+						eta+-a89, eta+-a97, eta+-a94, eta+-a02, eta+-a01, eta+-a09,
+						eta+-a07, eta+-a06, eta+-a98, eta+-a10, eta+-a08, eta+-a12,
+						eta+-a11, eta+-a05, eta+-a04, eta+-a03,
+						eta+-b89, eta+-b97, eta+-b94, eta+-b02, eta+-b01, eta+-b09,
+						eta+-b07, eta+-b06, eta+-b98, eta+-b10, eta+-b08, eta+-b12,
+						eta+-b11, eta+-b05, eta+-b04, eta+-b03,
+						mua-+a89, mua-+a97, mua-+a94, mua-+a02, mua-+a01, mua-+a09,
+						mua-+a07, mua-+a06, mua-+a98, mua-+a10, mua-+a08, mua-+a12,
+						mua-+a11, mua-+a05, mua-+a04, mua-+a03,
+						siga-+a89, siga-+a97, siga-+a94, siga-+a02, siga-+a01, siga-+a09,
+						siga-+a07, siga-+a06, siga-+a98, siga-+a10, siga-+a08, siga-+a12,
+						siga-+a11, siga-+a05, siga-+a04, siga-+a03,
+						mub-+b89, mub-+b97, mub-+b94, mub-+b02, mub-+b01, mub-+b09,
+						mub-+b07, mub-+b06, mub-+b98, mub-+b10, mub-+b08, mub-+b12,
+						mub-+b11, mub-+b05, mub-+b04, mub-+b03,
+						sigb-+b89, sigb-+b97, sigb-+b94, sigb-+b02, sigb-+b01, sigb-+b09,
+						sigb-+b07, sigb-+b06, sigb-+b98, sigb-+b10, sigb-+b08, sigb-+b12,
+						sigb-+b11, sigb-+b05, sigb-+b04, sigb-+b03)
+V(gr)$type = c("stochastic", rep("deterministic", 4), rep("stochastic", 32), rep("deterministic", 4)) 
+V(gr)$source = c("known", "unknown", "known", "unknown", "known", rep("unknown", 32), rep("known", 4))
+layout = rbind(died = c(0, 1), p = c(0,0.7), N = c(-0.5, 0.9),  eta = c(0, 0.5), precip = c(0.5, 0.9),
+	  cbind(seq(0.2, 0.8, length.out = 16), rep(0.4, 16)),
+	  cbind(seq(-0.8, -0.2, length.out = 16), rep(0.4, 16)),
+	  mub = c(0.25, 0), sigb = c(0.75, 0), mua = c(-0.75, 0), siga = c(-0.25, 0))
 nt = ggnetwork(gr, layout=layout)
+nlabs = c(rep(NA, 9), "N", rep(NA, 10), "p", rep(NA, 9), "precip", rep(NA, 9), "died")
+# rep(NA, 20)
+
 grpl_nopool = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
    geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
-   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
-   geom_nodelabel_repel(aes(label = name), fontface = "bold", nudge_x=-0.1, nudge_y=0.05, segment.colour = "#99999955") + 
-   annotate(geom="label", x = 1.3, y = -0.1, label = "Hyperparameter layer") + 
-   annotate(geom="label", x = 1.3, y = 0.5, label = "Parameter layer") + 
-   annotate(geom="label", x = 1.3, y = 1, label = "Observation layer") + 
-   xlim(-0.5, 1.5) + ggtitle("No Pooling")
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=4) + 
+	geom_nodelabel(label = nlabs, nudge_x=-0.1) +
+   annotate(geom="label", x = -0.1, y = 0.45, label = expression(a[1989-2012])) + 
+   annotate(geom="label", x = 1, y = 0.45, label = expression(b[1989-2012])) + 
+   annotate(geom="label", x = 0.5, y = 0.55, label = expression(eta)) + 
+   annotate(geom="label", x = -0.05, y = 0.05, label = expression(mu[a])) + 
+   annotate(geom="label", x = 0.4, y = 0.05, label = expression(sigma[a])) + 
+   annotate(geom="label", x = 0.65, y = 0.05, label = expression(mu[b])) + 
+   annotate(geom="label", x = 0.95, y = 0.05, label = expression(sigma[b])) + 
+   annotate(geom="label", x = 1.5, y = 0, label = "Hyperparameter layer") + 
+   annotate(geom="label", x = 1.5, y = 0.5, label = "Parameter layer") + 
+   annotate(geom="label", x = 1.5, y = 1, label = "Observation layer") + 
+   xlim(-0.5, 1.7) + ggtitle("No Pooling")
 grpl_nopool
 ```
+
 ::::
 :::
 
-## Pooled model code
-::: {.columns}
-:::: {.column}
-```{r eval = FALSE}
-# compile the model (below)
-tsuga_pooled = stan_model("stan/tsuga_pooled.stan")
+## Pooled model: code
+
+```{stan stan_tsuga_pool, output.var="tsuga_pooled", cache = TRUE}
+data {
+	// number of data points
+	int <lower=0> n; 
+	
+	// number of trees in each plot
+	int <lower=1> n_trees [n]; 
+
+	// number died
+	int <lower=0> died [n]; 
+	vector [n] precip;
+}
+parameters {
+	real a;
+	real b;
+}
+transformed parameters {
+	vector <lower=0, upper=1> [n] p;
+	p = inv_logit(a + b * precip);
+}
+model {
+	died ~ binomial(n_trees, p);
+	a ~ normal(0, 10);
+	b ~ normal(0, 5);
+}
+generated quantities {
+	// we use generated quantities to keep track of log likelihood and
+	// deviance, useful for model selection
+	// and also to perform poserior predictive simulations
+	real deviance = 0;
+	vector [n] loglik;
+	int ppd_died [n];
+	for (i in 1:n) {
+		loglik[i] = binomial_lpmf(died[i] | n_trees[i], p[i]);
+		deviance += loglik[i];
+		ppd_died[i] = binomial_rng(20, p[i]);
+	}
+	deviance = -2 * deviance;
+}
 ```
 
-```{r eval = FALSE}
-	```{stan file = "../stan/tsuga_pooled.stan", output.var="tsuga_pooled", cache = TRUE}
-```
 
 
-::::
-:::: {.column}
-```{r, cache = TRUE}
+## Pooled models trade accuracy for precision
+
+* All data for a single set of estimates
+	- highly precise parameter estimates
+
+```{r tsuga_pool_fit, cache = TRUE, echo = FALSE}
 ## Fit the model
 ## note that I have rescaled precipitaiton
 ## additionally, we add the year variable as a factor
@@ -715,13 +764,6 @@ standat = with(tsuga, list(
 	year = as.factor(year)))  
 fit_pooled = sampling(tsuga_pooled, chains=4, iter=3000, refresh=0, data = standat)
 ```
-::::
-:::
-
-## Pooled models trade accuracy for precision
-
-* All data for a single set of estimates
-	- highly precise parameter estimates
 
 ```{r plotfuns, echo = FALSE}
 prob_ci = function(pr, data) {
@@ -767,7 +809,7 @@ rc_plot = function(samp) {
 }
 ```
 
-```{r, cache = TRUE, echo = FALSE, fig.width=15}
+```{r plot_tsuga_pooledfit, cache = TRUE, echo = FALSE, fig.width=15}
 probs = as.matrix(fit_pooled, pars='p')
 par_samples = as.matrix(fit_pooled, pars=c("a", "b"))
 ci_pooled = prob_ci(probs, standat)
@@ -788,25 +830,48 @@ grid.arrange(pl_intervals_pooled, rc, ncol=2)
 * High prediction errors for individual groups 
 * Groups with small samples biased towards the mean
 
-```{r, cache = TRUE, echo = FALSE, fig.width=15}
+```{r plot_tsuga_pooledfit2, cache = TRUE, echo = FALSE, fig.width=15}
 grid.arrange(pl_probs_pooled, pl_err_pooled, ncol=2)
 ```
 
 
 ## Unpooled model: code
 
-::: {.columns}
-:::: {.column}
-```{r eval = FALSE}
+```{stan tsuga_unpooled_code, output.var="tsuga_unpooled_dead", eval = FALSE}
+data {
+	// not the complete program, only differences from pooled model
+
+	// grouping variables
+	// year_id is an integer starting at 1 (the earliest year)
+	// ending at n_groups (the latest year)
+	// we use this value as an index for any group-level effects
+	int <lower=1> n_groups;
+	int <lower=1, upper = n_groups> year_id [n];
+}
+parameters {
+	// one intercept per group
+	vector [n_groups] a;
+}
+transformed parameters {
+	// a is different for each data point, depending on the group
+	// so we need a loop to compute this
+	for(i in 1:n) {
+		int gid = year_id[i];
+		p[i] = inv_logit(a[gid] + b * precip[i]);
+	}
+}
+
+```
+
+```{r tsuga_unpooled_compile, cache = TRUE, message = FALSE, error = FALSE, echo = FALSE}
 # compile the model (below)
-tsuga_unpooled = stan_model("stan/tsuga_unpooled.stan")
+tsuga_unpooled = stan_model("../vu_advstats_students/stan/tsuga_unpooled.stan")
 ```
 
-```{stan file = "../stan/tsuga_unpooled.stan", output.var="tsuga_unpooled", cache = TRUE}
-```
 
-::::
-:::: {.column}
+## Unpooled model: code
+
+
 ```{r}
 # factor variables must be converted to integers for stan
 standat$year_id = as.integer(standat$year)
@@ -815,35 +880,18 @@ standat$year_id = as.integer(standat$year)
 standat$n_groups = max(standat$year_id)
 ```
 
-```{r, echo = FALSE}
-# here is what the different levels for year_id look like
-yeartab = unique(cbind(
-	year = as.integer(as.character(standat$year)),
-	year_int = standat$year_id
-))
-# sorted by year
-head(yeartab[order(yeartab[,1]),])
-```
 
-```{r, eval = FALSE}
+
+```{r fit_tsuga_unpooled, cache = TRUE}
 fit_unpooled = sampling(tsuga_unpooled, chains=4, iter=3000, refresh=0, 
 						data = standat)
 ```
 
-```{r, cache = TRUE, echo = FALSE, results = 'hide'}
-## done in two blocks to hide rstan warnings
-## saved here, locally cached file, recreate by running the block above
-fit_unpooled = readRDS("misc/7_tsuga_unpooled.rds")
-```
-
-
-::::
-:::
 
 
 ## Unpooled models use less data per parameter
 
-```{r, cache = TRUE, echo = FALSE, fig.width=15}
+```{r plot_unpooled, cache = TRUE, echo = FALSE, fig.width=15}
 
 rc_plot_year = function(samp) {
 	yearnames = sort(as.integer(as.character(levels(standat$year))))
@@ -886,7 +934,7 @@ grid.arrange(pl_intervals_unpooled, rc, ncol=2)
 * Very imprecise, especially for groups with few samples
 * Prediction to new groups (years) impossible
 
-```{r, cache = TRUE, echo = FALSE, fig.width=15}
+```{r plot_unpooled 2, cache = TRUE, echo = FALSE, fig.width=15}
 grid.arrange(pl_probs_unpooled, pl_err_unpooled, ncol=2)
 ```
 
@@ -910,39 +958,66 @@ grid.arrange(pl_probs_unpooled, pl_err_unpooled, ncol=2)
 :::: {.column}
 
 
-```{r, echo = FALSE, fig.width=8}
+```{r graph_tsuga_parpool, echo = FALSE, fig.width=8, warning = FALSE}
+gr = graph_from_literal(died+-p, died+-N, p+-eta, precip-+eta,
+						eta+-a89, eta+-a97, eta+-a94, eta+-a02, eta+-a01, eta+-a09,
+						eta+-a07, eta+-a06, eta+-a98, eta+-a10, eta+-a08, eta+-a12,
+						eta+-a11, eta+-a05, eta+-a04, eta+-a03,
+						eta+-b89, eta+-b97, eta+-b94, eta+-b02, eta+-b01, eta+-b09,
+						eta+-b07, eta+-b06, eta+-b98, eta+-b10, eta+-b08, eta+-b12,
+						eta+-b11, eta+-b05, eta+-b04, eta+-b03,
+						mua-+a89, mua-+a97, mua-+a94, mua-+a02, mua-+a01, mua-+a09,
+						mua-+a07, mua-+a06, mua-+a98, mua-+a10, mua-+a08, mua-+a12,
+						mua-+a11, mua-+a05, mua-+a04, mua-+a03,
+						siga-+a89, siga-+a97, siga-+a94, siga-+a02, siga-+a01, siga-+a09,
+						siga-+a07, siga-+a06, siga-+a98, siga-+a10, siga-+a08, siga-+a12,
+						siga-+a11, siga-+a05, siga-+a04, siga-+a03,
+						mub-+b89, mub-+b97, mub-+b94, mub-+b02, mub-+b01, mub-+b09,
+						mub-+b07, mub-+b06, mub-+b98, mub-+b10, mub-+b08, mub-+b12,
+						mub-+b11, mub-+b05, mub-+b04, mub-+b03,
+						sigb-+b89, sigb-+b97, sigb-+b94, sigb-+b02, sigb-+b01, sigb-+b09,
+						sigb-+b07, sigb-+b06, sigb-+b98, sigb-+b10, sigb-+b08, sigb-+b12,
+						sigb-+b11, sigb-+b05, sigb-+b04, sigb-+b03,
+						mu_mu_a-+mua, sig_mu_a-+mua, alpha_sig_a-+siga, beta_sig_a-+siga,
+						mu_mu_b-+mub, sig_mu_b-+mub, alpha_sig_b-+sigb, beta_sig_b-+sigb)
+V(gr)$type = c("stochastic", rep("deterministic", 4), rep("stochastic", 32), rep("stochastic", 4), rep("deterministic", 8)) 
+V(gr)$source = c("known", "unknown", "known", "unknown", "known", rep("unknown", 36), rep("known", 8))
+layout = rbind(died = c(0, 1), p = c(0,0.8), N = c(-0.5, 0.95),  eta = c(0, 0.7), precip = c(0.5, 0.95),
+	  cbind(seq(0.2, 0.8, length.out = 16), rep(0.5, 16)),
+	  cbind(seq(-0.8, -0.2, length.out = 16), rep(0.5, 16)),
+	  mub = c(0.25, 0.25), sigb = c(0.75, 0.25), mua = c(-0.75, 0.25), siga = c(-0.25, 0.25),
+	  mu_mu_b = c(0.15, 0), sig_mu_b = c(0.35, 0), alpha_sig_b = c(0.65, 0), beta_sig_b = c(0.85, 0),
+	  mu_mu_a = c(-0.85, 0), sig_mu_a = c(-0.65, 0), alpha_sig_a = c(-0.35, 0), beta_sig_a = c(-0.15, 0))
 
-
-gr = graph_from_literal(died+-p, died+-N, 
-						p+-a1989, p+-"a1994...", p+-"...a2012",
-						p+-b1989, p+-"b1994...", p+-"...b2012",
-						p+-precip, 
-						a1989+-"μ_a", a1989+-"σ_a", 
-						"a1994..."+-"μ_a", "a1994..."+-"σ_a",
-						"...a2012"+-"μ_a", "...a2012"+-"σ_a",
-						b1989+-"μ_b", b1989+-"σ_b", 
-						"b1994..."+-"μ_b", "b1994..."+-"σ_b",
-						"...b2012"+-"μ_b", "...b2012"+-"σ_b", 
-						"μ_a"+-"Normal(0,20)", "σ_a"+-"Half Cauchy(0, 20)",
-						"μ_b"+-"Normal(0,20)", "σ_b"+-"Half Cauchy(0, 20)")
-V(gr)$type = c("random", "deterministic", "deterministic", 
-			   rep("random", 6), "deterministic", rep("random", 4), rep("deterministic", 2))
-V(gr)$source = c("known", "unknown", "known", rep("unknown", 6), "known", rep("unknown", 4), rep("known", 2))
-layout = matrix(NA, nrow = length(V(gr)), ncol = 2)
-#			   died, p,   N,    a...,           b...,        precip, hyper_a,      hyper_b,    prior
-layout[,1] = c(0,    0,   -0.5, -0.6,-0.5,-0.4, 0.4,0.5,0.6, 0.5,    -0.75, -0.25, 0.25, 0.75,  -0.25, 0.25)
-layout[,2] = c(2,    1.2, 1.8,  rep(1, 6),                   1.8,    rep(0, 4),                rep(-1, 2))
 nt = ggnetwork(gr, layout=layout)
-grpl_ppool = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
+nlabs = c(rep(NA, 11), "N", rep(NA, 12), "p", rep(NA, 11), "precip", rep(NA, 11), "died")
+
+grpl_parpool = ggplot(nt, aes(x = x, y = y, xend = xend, yend = yend)) + 
    geom_edges(colour="gray50", arrow=arrow(length = unit(6, "pt"), type = "closed")) + 
-   theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
-   geom_nodelabel_repel(aes(label = name), fontface = "bold", nudge_x=-0.1, nudge_y=0.05, segment.colour = "#99999955") + 
-   annotate(geom="label", x = 1.3, y = 0, label = "Hyperprior layer") + 
-   annotate(geom="label", x = 1.3, y = 0.3, label = "Hyperparameter layer") + 
-   annotate(geom="label", x = 1.3, y = 0.67, label = "Parameter layer") + 
-   annotate(geom="label", x = 1.3, y = 1, label = "Observation layer") + 
-   xlim(-0.5, 1.5) + ggtitle("Partial Pooling")
-grpl_ppool
+   theme_blank() + geom_nodes(aes(color=type, shape = source), size=4) + 
+	geom_nodelabel(label = nlabs, nudge_x=-0.1) +
+   annotate(geom="label", x = -0.1, y = 0.45, label = expression(a[1989-2012])) + 
+   annotate(geom="label", x = 1, y = 0.45, label = expression(b[1989-2012])) + 
+   annotate(geom="label", x = 0.55, y = 0.7, label = expression(eta)) + 
+   annotate(geom="label", x = -0.05, y = 0.3, label = expression(mu[a])) + 
+   annotate(geom="label", x = -0.05, y = 0.05, label = expression(mu[mu[a]])) + 
+   annotate(geom="label", x = 0.15, y = 0.05, label = expression(sigma[mu[a]])) + 
+   annotate(geom="label", x = 0.35, y = 0.3, label = expression(sigma[a])) + 
+   annotate(geom="label", x = 0.25, y = -0.05, label = expression(mu[sigma[a]])) + 
+   annotate(geom="label", x = 0.4, y = -0.05, label = expression(sigma[sigma[a]])) + 
+   annotate(geom="label", x = 0.65, y = 0.3, label = expression(mu[b])) + 
+   annotate(geom="label", x = 0.55, y = 0.05, label = expression(mu[mu[b]])) + 
+   annotate(geom="label", x = 0.7, y = 0.05, label = expression(sigma[mu[b]])) + 
+   annotate(geom="label", x = 0.95, y = 0.3, label = expression(sigma[b])) + 
+   annotate(geom="label", x = 0.85, y = -0.05, label = expression(mu[sigma[b]])) + 
+   annotate(geom="label", x = 1, y = -0.05, label = expression(sigma[sigma[b]])) + 
+   annotate(geom="label", x = 1.5, y = 0, label = "Hyperprior layer") + 
+   annotate(geom="label", x = 1.5, y = 0.25, label = "Hyperparameter layer") + 
+   annotate(geom="label", x = 1.5, y = 0.5, label = "Parameter layer") + 
+   annotate(geom="label", x = 1.5, y = 1, label = "Observation layer") + 
+   xlim(-0.5, 1.7) + ggtitle("Partial Pooling")
+grpl_parpool
+
 ```
 
 
@@ -952,28 +1027,59 @@ grpl_ppool
 
 ## Partial Pooling: Code
 
-::: {.columns}
-:::: {.column}
-```{r eval = FALSE}
+
+
+```{stan tsuga_parpooled_code, output.var="tsuga_parpooled_dead", eval = FALSE}
+data {
+	// not the complete program, only differences from pooled model
+
+	// grouping variables
+	// year_id is an integer starting at 1 (the earliest year)
+	// ending at n_groups (the latest year)
+	// we use this value as an index for any group-level effects
+	int <lower=1> n_groups;
+	int <lower=1, upper = n_groups> year_id [n];
+}
+parameters {
+	// one intercept and one slope per group
+	vector [n_groups] a;
+	vector [n_groups] b;
+
+	// hyperparameters describe higher-level structure in the data
+	// in this case both the a's and b's come from populations
+	// with their own mean and variance to be estimated from the data
+	real a_mu;
+	real <lower=0> a_sig;
+	real b_mu;
+	real <lower=0> b_sig;
+}
+transformed parameters {
+	for(i in 1:n) {
+		int gid = year_id[i];
+		p[i] = inv_logit(a[gid] + b[gid] * precip[i]);
+	}
+}
+model {
+	// The priors are now estimated from the data
+	a ~ normal(a_mu, a_sig);
+	b ~ normal(b_mu, b_sig);
+	
+	// hyperpriors describe what we know about higher (group-level) structure
+	a_mu ~ normal(0, 20);
+	b_mu ~ normal(0, 20);
+	// half cauchy is common for hierarchical stdev
+	a_sig ~ cauchy(0, 20);
+	b_sig ~ cauchy(0, 20);
+
+}
+```
+
+```{r tsuga_parpooled_compile, cache = TRUE, message = FALSE, error = FALSE, echo = FALSE, warning = FALSE, results = 'hide'}
 # compile the model (below)
-tsuga_ppool = stan_model("stan/tsuga_ppool.stan")
-```
-
-```{r eval = FALSE}
-	```{stan file = "../stan/tsuga_ppool.stan", output.var="tsuga_ppool", cache = TRUE}
-```
-
-::::
-:::: {.column}
-
-```{r cache = TRUE}
+tsuga_ppool = stan_model("../vu_advstats_students/stan/tsuga_parpool.stan")
 fit_ppool = sampling(tsuga_ppool, chains=4, iter=3000, refresh=0, 
 						data = standat)
 ```
-
-
-::::
-:::
 
 
 
