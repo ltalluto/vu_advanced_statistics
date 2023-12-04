@@ -126,7 +126,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		</td>
 		<td>
 			<p><a href="lec/6_hm">Hierarchical Models</a></p>
-			<a href="7_model_selection">Model selection</a>
+			<a href="lec/7_model_selection">Model selection</a>
 		</td>
 		<td>
 			<p>Exercises catch-up</p>
