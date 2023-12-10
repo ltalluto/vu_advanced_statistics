@@ -1,0 +1,236 @@
+---
+title: "Spatial Model Implementation"
+author: "Matthew Talluto"
+date: "14.05.2021"
+output:
+  slidy_presentation:
+    theme: cerulean
+    toc_depth: 2
+    css: rmd_style.css
+---
+
+```{r setup, include=FALSE, results = "hide"}
+knitr::opts_chunk$set(fig.width=5.5, fig.height=5.5, collapse = TRUE, comment = "##", dev="png")
+cols = c("#F8766D", "#7CAE00", "#00BFC4", "#C77CFF")
+
+library(data.table)
+library(ggplot2)
+library(gridExtra)
+library(rstan)
+library(bayesplot)
+library(loo)
+```
+
+## *Tsuga* mortality revisited
+
+<div class="left lt">
+* Here using a subset of data from 2005, considering only *Tsuga* again (to keep our model simpler)
+* There are clear spatial patterns!
+
+```{r}
+tsuga = readRDS("exercises/data/tsuga_spatial.rds")
+pl1 = ggplot(tsuga, aes(x=X, y=Y, colour = died/n)) + geom_point() + 
+	coord_fixed() + theme_minimal() + labs(color="pr(death)") + 
+	scico::scale_color_scico(palette="imola") + 
+	ylab("Latitude (m)") + xlab("") + coord_fixed()
+pl2 = ggplot(tsuga, aes(x=X, y=Y, colour = annual_mean_temp)) + 
+	geom_point() + coord_fixed() + theme_minimal() + 
+	scico::scale_color_scico(palette="vik") + 
+	labs(color="temperature") + ylab("Latitude (m)") + 
+	xlab("Longitude (m)") + coord_fixed()
+
+```
+
+</div>
+<div class="right rt">
+```{r echo = FALSE, fig.width = 9}
+grid.arrange(pl1, pl2, nrow=2)
+
+```
+
+</div>
+
+## Fitting the model
+<div class="left lt">
+* We compare 4 models
+   - Spatial + temperature effect
+   - Spatial only
+   - Temperature only
+   - Spatial + temperature + precipitation
+
+**Note**: To run the code in this .rmd, you first need to run `r/tsuga_fit.r`, with your working directory set to `docs`.
+
+```{r cache=TRUE}
+models = readRDS("../scratch/gp_models.rds")
+p1 = mcmc_trace(as.matrix(models[[1]], pars=c("a","b"))) + 
+	theme_minimal() + ggtitle("T")
+p2 = mcmc_trace(as.matrix(models[[2]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP")
+p3 = mcmc_trace(as.matrix(models[[3]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP+T")
+p4 = mcmc_trace(as.matrix(models[[4]], pars=c("a","rho"))) + 
+	theme_minimal() + ggtitle("GP+T+P")
+
+```
+
+</div>
+<div class="right rt">
+```{r echo=FALSE, fig.height=9.5, fig.width=7}
+grid.arrange(p1, p2, p3, p4, nrow=4)
+
+```
+
+</div>
+
+## Model Comparison w/ loo
+
+<div class="left lt">
+* Loo has a hard time with the GP models
+
+```{r cache=TRUE}
+loos = readRDS("../scratch/gp_loos.rds")
+print(loos[[2]])
+```
+
+
+* WAIC is also problematic
+
+```{r cache=TRUE}
+waics = lapply(models, function(x) waic(as.matrix(x, pars="loglik")))
+```
+
+</div>
+<div class="right rt">
+
+* At this point we must proceed with caution.
+   - Try to reparameterize/transform
+   - Proceed with inference from a single model
+   - Biggest model is safest, it includes everything
+* Model averaging is not an option
+
+```{r}
+loo_compare(loos)
+```
+
+```{r}
+loo_compare(waics)
+```
+
+</div>
+
+## Visualising the scale of the spatial effect
+
+```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.width=12}
+kern = function(alpha, rho, dist)
+	alpha^2 * exp(-(dist^2)/(2*rho^2))
+
+kern_summary = function(samples, dist) {
+	## we use a for loop here to reduce memory usage
+	res = matrix(NA, nrow=length(dist), ncol=3, dimnames=list(NULL, c("median", "lower", "upper")))
+	for(i in 1:nrow(res)) {
+		kvals = mapply(kern, alpha = samples[,'alpha'], rho = samples[,'rho'], MoreArgs= list(dist = dist[i]))
+		res[i,] = quantile(kvals, c(0.5, 0.05, 0.95))
+	}
+	res
+}
+
+standat = readRDS("../scratch/standat.rds")
+kern_samps = lapply(models[2:4], as.matrix, pars = c("alpha", "rho"))
+
+dd = seq(0, max(dist(standat$coords)), length.out=400)
+ypl = parallel::mclapply(kern_samps, kern_summary, dist=dd, mc.cores=3)
+
+# the original distances were on scales of 100 km, so we convert back here
+# so we can plot covariance against distance in km
+ypl2 = lapply(ypl, function(x) {
+	x = as.data.table(x)
+	x$distance = dd*100
+	x
+})
+ypl2 = rbindlist(ypl2, idcol="model")
+
+ggplot(ypl2, aes(x = distance, y = median, colour=model)) + geom_line() + geom_ribbon(aes(ymin=lower, ymax=upper, fill=model), alpha=0.5) + 
+	theme_minimal() + xlab("Distance (km)") + ylab("Covariance") + facet_grid(~model) + xlim(0, 500)
+
+```
+
+
+## Comparing parameter estimates
+
+<div class="left lt">
+
+```{r echo=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+samples = lapply(models[c(1,3,4)], as.matrix, pars=c("a", "b"))
+samples_comb = rbindlist(lapply(samples, data.table), idcol="model", fill=TRUE)
+samples_comb = melt(samples_comb, id.vars = "model", variable.name = "parameter")
+samples_comb[parameter == "b[1]", parameter := "temperature"]
+samples_comb[parameter == "b[2]", parameter := "precipitation"]
+
+# stats = lapply(samples, function(x)
+# 	data.table(param = c("a", "b"), median = apply(x, 2, median), lower = apply(x, 2, quantile, 0.05), upper = apply(x, 2, quantile, 0.95)))
+# stats = rbindlist(stats, idcol="model")
+ggplot(samples_comb, aes(x=parameter, y=value, fill=model)) + 
+	geom_boxplot(notch=TRUE, outlier.shape=NA) + theme_minimal() + ylim(-3, 2.5)
+```
+
+</div>
+
+<div class="right rt">
+
+
+```{r echo=FALSE, warning=FALSE, figure.width=9, figure.height=9}
+mcmc_pairs(as.matrix(models[[3]], pars=c("a", "b", "alpha", "rho")))
+```
+
+</div>
+
+
+## Temperature response curves
+<div class="left lt">
+
+* Note that the prediction for any data point might vary considerably from this
+* This shows the effect after marginalising out any spatial effects
+
+```{r echo=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+xx = seq(min(standat$x[,'annual_mean_temp']), max(standat$x[,'annual_mean_temp']), length.out=250)
+prep_rc = function(mod) {
+	samps_params = as.matrix(mod, pars=c('a', 'b'))
+	xx = rbind(1, xx) ## add intercept
+	if(ncol(samps_params) == 3)
+		xx = rbind(xx, 0)  ## add zero effect for precip; set to median
+	mu = plogis(samps_params %*% xx)
+	data.table(
+		temperature = xx[2,] * sd(tsuga$annual_mean_temp) + mean(tsuga$annual_mean_temp),
+		median = apply(mu, 2, median),
+		lower = apply(mu, 2, quantile, 0.05),
+		upper = apply(mu, 2, quantile, 0.95))
+}
+resp_curve = rbindlist(lapply(models[c(1,3,4)], prep_rc), idcol="model")
+
+ggplot(resp_curve, aes(x=temperature, y = median, colour=model)) + geom_line(size=1.2) + 
+	geom_ribbon(aes(x=temperature, ymin=lower, ymax=upper, fill=model), alpha=0.4, size=0) + theme_minimal() +
+	xlab("Mean Annual Temperature") + ylab("Mortality Probability") + 
+	ggtitle("Predictions without Spatial Effects")
+
+
+```
+
+</div>
+
+<div class="right rt">
+
+```{r echo=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+plpts = rbindlist(lapply(models, function(mod) {
+	samps = as.matrix(mod, pars="mu")
+	data.table(temperature = tsuga$annual_mean_temp,
+		median = apply(samps, 2, median),
+		lower = apply(samps, 2, quantile, 0.05),
+		upper = apply(samps, 2, quantile, 0.95))
+}), idcol="model")
+ggplot(plpts, aes(x=temperature, y=median, colour=model)) + geom_point() + theme_minimal() +
+	xlab("Mean Annual Temperature") + ylab("Mortality Probability") + facet_wrap(~model) + 
+	ggtitle("Predictions w/ Spatial Effects")
+
+```
+</div>
+

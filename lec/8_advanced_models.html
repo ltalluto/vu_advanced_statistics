@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="M. Talluto" />
+  <title>Advanced Models</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Advanced Models</h1>
+  <p class="author">
+M. Talluto
+  </p>
+  <p class="date">11.12.2023</p>
+</div>
+<div id="chapter-1-an-abundance-model-for-prosopistoma"
+class="slide section level2">
+<h1>Chapter 1: An abundance model for Prosopistoma</h1>
+<p>Indroducing <em>Prosopistoma peregrinum</em></p>
+<p><img src="../assets/img/proso1.jpg" style="width:30.0%"
+alt="proso" /> <img src="../assets/img/prosopistoma_vjosa.jpg"
+style="width:30.0%" alt="proso" /></p>
+<p>Nearly extinct, known from only 3 rivers in Europe.</p>
+<p><strong>Question:</strong> What habitat features are important for
+maintaining large populations?</p>
+</div>
+<div id="prosopistoma-abundance" class="slide section level2">
+<h1>Prosopistoma abundance</h1>
+<p><strong>Question:</strong> What habitat features are important for
+maintaining large populations?</p>
+<div class="columns">
+<div class="column">
+<p><img src="../assets/img/proso_pa.jpg" style="width:70.0%" /></p>
+</div><div class="column">
+<p><img src="../assets/img/proso_abundance.jpg"
+style="width:70.0%" /></p>
+</div>
+</div>
+<div class="small">
+<p>Source: <a
+href="https://resjournals.onlinelibrary.wiley.com/doi/full/10.1111/icad.12620">Martini
+et. al 2022. Insect Cons. Div.</a></p>
+</div>
+</div>
+<div id="prosopistoma-abundance-1" class="slide section level2">
+<h1>Prosopistoma abundance</h1>
+<p><img src="8_advanced_models_files/figure-slidy/proso_hist-1.png" width="528" /></p>
+</div>
+<div id="proso-species-distribution-model" class="slide section level2">
+<h1>Proso species distribution model</h1>
+<p><strong>Easier question</strong>: What determines
+<em>Prosopistoma</em> presence and absence?</p>
+<p>We can build an <strong>SDM</strong> using a binomial
+presence-absence model</p>
+<p><img src="../assets/img/proso_pa.jpg" style="width:70.0%" /></p>
+</div>
+<div id="proso-species-distribution-model-1"
+class="slide section level2">
+<h1>Proso species distribution model</h1>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n; <span class="co">// number of data points</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; k; <span class="co">// number of variables</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; pres_abs [n];</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="dt">matrix</span> [n, k] X;</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="dt">vector</span> [k] B;</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; [n] theta;</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    prob_pres = inv_logit(a + X * B);</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>}</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>    pres_abs ~ binomial(<span class="dv">1</span>, theta);</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>    a ~ normal(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    B ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/proso_sdm_graph-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="proso-abundance" class="slide section level2">
+<h1>Proso abundance</h1>
+<p>We can imagine a two-step process:</p>
+<p><strong>Q1</strong>: Is the site suitable?</p>
+<p><span class="math display">\[ pres\_abs \sim
+\mathrm{Binomial}(\theta) \]</span></p>
+<p><strong>Q2</strong>: If suitable, how many Proso are there?</p>
+<p><span class="math display">\[ count \sim \mathrm{Poisson}(\lambda)
+\]</span></p>
+<p><strong>Problem:</strong> An observed count of zero can be generated
+in two ways! (Binomial or Poisson)</p>
+</div>
+<div id="proso-abundance-1" class="slide section level2">
+<h1>Proso abundance</h1>
+<p><strong>Problem:</strong> An observed count of zero can be generated
+in two ways! (Binomial or Poisson)</p>
+<p>We need the <strong>addition rule</strong> and the <strong>product
+rule</strong> from day 1!</p>
+<h3 id="product-rule">Product rule:</h3>
+<p>If <span class="math inline">\(count &gt; 0\)</span>, we know that
+the species is present (with probability <span
+class="math inline">\(\theta\)</span>) <strong>and</strong> it has a
+poisson probability, so the total probability is <span
+class="math inline">\(\theta \times \mathcal{P}(count |
+\lambda)\)</span>.</p>
+<h3 id="addition-rule">Addition rule:</h3>
+<p>If <span class="math inline">\(count = 0\)</span>, either the site is
+unsuitable (with probability <span
+class="math inline">\(1-\theta\)</span>) <strong>or</strong> it is
+suitable (prob <span class="math inline">\(\theta\)</span>)
+<strong>and</strong> it has a poisson count of zero.: <span
+class="math inline">\((1- \theta) + \theta \times \mathcal{P}(0 |
+\lambda)\)</span></p>
+</div>
+<div id="proso-abundance-2" class="slide section level2">
+<h1>Proso abundance</h1>
+<p>This is a <strong>zero-inflated model</strong>, a special case of a
+<strong>finite mixture model</strong></p>
+<p><span class="math display">\[
+pr(count_i | \theta,\lambda) =
+\begin{cases}
+    (1 - \theta) + \theta \times \mathcal{P}(0 | \lambda) &amp; &amp;
+count_i = 0 \\
+    \theta \times \mathcal{P}(count_i | \lambda) &amp; &amp; count_i
+&gt; 0 \\
+\end{cases}
+\]</span></p>
+</div>
+<div id="finite-mixtures" class="slide section level2">
+<h1>Finite mixtures</h1>
+<p>More generally, if an observation <span
+class="math inline">\(y_i\)</span> comes from a mixture of <span
+class="math inline">\(n\)</span> distributions, each with parameters
+<span class="math inline">\(\theta_j\)</span> and with mixing proportion
+<span class="math inline">\(\lambda_j\)</span>:</p>
+<p><span class="math display">\[
+    pr(y_i | \Theta) = \sum_{j=1}^n \lambda_j \mathcal{D}(y_i |
+\theta_j)
+\]</span></p>
+</div>
+<div id="finite-mixtures-1" class="slide section level2">
+<h1>Finite mixtures</h1>
+<p>More generally, if an observation <span
+class="math inline">\(y_i\)</span> comes from a mixture of <span
+class="math inline">\(n\)</span> distributions, each with parameters
+<span class="math inline">\(\theta_j\)</span> and with mixing proportion
+<span class="math inline">\(\lambda_j\)</span>…</p>
+<p>We can of course fit a regression with a link function and covariates
+to each distribution!</p>
+<p><span class="math display">\[
+\begin{aligned}
+    pr(y_i | \Theta) &amp; = \sum_{j=1}^n \lambda_j \mathcal{D}(y_i |
+\eta_{ij}, \theta_j) \\
+    \eta_{ij} &amp; = \mathcal{f}_j^{-1}(a_j +
+\mathbf{X}_{ij}\mathbf{B}_j)
+\end{aligned}
+\]</span></p>
+</div>
+<div id="fitting-proso-abundance" class="slide section level2">
+<h1>Fitting proso abundance</h1>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co">// file: proso_mixture.stan</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="co">// we split the dataset into zeros and not-zeros</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="co">// we also allow two sets of covariates, one for presence-absence and one for nonzero counts</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n_zeros;</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n_counts;</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; k_pa;</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; k_pois;</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="co">// four covariate matrices:</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="co">//      observed zeros, presence-absence process</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="co">//      observed nonzeros, presence-absence process</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="co">//      observed zeros, poisson (count) process</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="co">//      observed nonzeros, poisson process</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">matrix</span> [n_zeros, k_pa] X_zeros_pa; <span class="co">// binomial process, observed zeros</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    <span class="dt">matrix</span> [n_counts, k_pa] X_count_pa; <span class="co">// binomial process, observed nonzeros</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    <span class="dt">matrix</span> [n_zeros, k_pois] X_zeros_pois; <span class="co">// poisson process, observed zeros</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">matrix</span> [n_counts, k_pois] X_count_pois; <span class="co">// poisson process, observed zeros</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    <span class="co">// the observed nonzero counts</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; counts [n_counts];</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    <span class="co">// prior hyperparams</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>    <span class="dt">real</span> a_pa_scale;</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    <span class="dt">real</span> B_pa_scale;</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="dt">real</span> a_pois_scale;</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>    <span class="dt">real</span> B_pois_scale;</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>}</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>    <span class="co">// one set of linear parameters for determining the probability of presence</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>    <span class="dt">real</span> a_pa;</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>    <span class="dt">vector</span> [k_pa] B_pa;</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>    <span class="co">// a second set of parameters for determining the count if present</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>    <span class="dt">real</span> a_count;</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>    <span class="dt">vector</span> [k_pois] B_count;</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>}</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>    <span class="co">// first, we have a probability of presence and an expected count for each observed zero</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; [n_zeros] prob_pres_zeros;</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n_zeros] lam_zeros;</span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>    <span class="co">// then we have the same for each observed (nonzero) count</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; [n_counts] prob_pres_counts;</span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n_counts] lam_counts;</span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>    </span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>    prob_pres_zeros = inv_logit(a_pa + X_zeros_pa * B_pa);</span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>    lam_zeros = exp(a_count + X_zeros_pois * B_count);</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>    prob_pres_counts = inv_logit(a_pa + X_count_pa * B_pa);</span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>    lam_counts = exp(a_count + X_count_pois * B_count);</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>}</span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_zeros) {</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>        <span class="co">// on the probability scale, just to see</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>        <span class="co">// in the end we must work on the log scale, so it&#39;s a bit more complicated</span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a>        <span class="co">//      target *= (1 - prob_pres[i]) + prob_pres[i] * poisson_pmf(0 | lam_zeros[i]);</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a>        <span class="co">// log_sum_exp performs the computation above, but keeping all values on the log scale</span></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>        <span class="co">// log_sum_exp(x1, x2) is equivalent to log(e^x1 + e^x2), but it never performs exponentiation</span></span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>        <span class="co">// x1 and x2 are kept on the log scale, so we avoid numerical problems</span></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>        <span class="co">// see: https://mc-stan.org/docs/stan-users-guide/log-sum-of-exponentials.html</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>        <span class="kw">target +=</span> log_sum_exp(</span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>            <span class="co">// first term, the binomial term, now on the log scale</span></span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>            log(<span class="dv">1</span> - prob_pres_zeros[i]),</span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>            <span class="co">// second term, the poisson term, on the log scale</span></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>            log(prob_pres_zeros[i]) + poisson_lpmf(<span class="dv">0</span> | lam_zeros[i])</span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a>        );</span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a>    }</span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a>    <span class="co">// for the nonzero counts, we use a poisson likelihood as usual, with the added complication</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>    <span class="co">// that we must account for the probability of presence!</span></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_counts) {</span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>        <span class="kw">target +=</span> log(prob_pres_counts[i]) + poisson_lpmf(counts[i] | lam_counts[i]);</span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a>    }</span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a>    a_pa ~ normal(<span class="dv">0</span>, a_pa_scale);</span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a>    B_pa ~ normal(<span class="dv">0</span>, B_pa_scale);</span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a>    a_count ~ normal(<span class="dv">0</span>, a_pois_scale);</span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a>    B_count ~ normal(<span class="dv">0</span>, B_pois_scale);</span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a>}</span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a>    <span class="co">// capture model deviance and lppd</span></span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a>    <span class="dt">real</span> deviance = <span class="dv">0</span>;</span>
+<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a>    <span class="dt">vector</span> [n_zeros + n_counts] lppd;</span>
+<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a>    <span class="co">// simulate to get the PPD</span></span>
+<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a>    <span class="dt">int</span> ppd_counts [n_zeros + n_counts];</span>
+<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a>    <span class="co">// first simulate for all observed zeros</span></span>
+<span id="cb2-93"><a href="#cb2-93" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_zeros) {</span>
+<span id="cb2-94"><a href="#cb2-94" tabindex="-1"></a>        <span class="co">// first term simulates the presence-absence part</span></span>
+<span id="cb2-95"><a href="#cb2-95" tabindex="-1"></a>        <span class="co">// then we multiply by a simulated poisson</span></span>
+<span id="cb2-96"><a href="#cb2-96" tabindex="-1"></a>        ppd_counts[i] = binomial_rng(<span class="dv">1</span>, prob_pres_zeros[i]) * poisson_rng(lam_zeros[i]);</span>
+<span id="cb2-97"><a href="#cb2-97" tabindex="-1"></a>        lppd[i] = log_sum_exp(log(<span class="dv">1</span> - prob_pres_zeros[i]), </span>
+<span id="cb2-98"><a href="#cb2-98" tabindex="-1"></a>            log(prob_pres_zeros[i]) + poisson_lpmf(<span class="dv">0</span> | lam_zeros[i]));</span>
+<span id="cb2-99"><a href="#cb2-99" tabindex="-1"></a>        deviance += lppd[i];</span>
+<span id="cb2-100"><a href="#cb2-100" tabindex="-1"></a>    }</span>
+<span id="cb2-101"><a href="#cb2-101" tabindex="-1"></a></span>
+<span id="cb2-102"><a href="#cb2-102" tabindex="-1"></a>    <span class="co">// next simulate all observed nonzeros</span></span>
+<span id="cb2-103"><a href="#cb2-103" tabindex="-1"></a>    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span>:n_counts) {</span>
+<span id="cb2-104"><a href="#cb2-104" tabindex="-1"></a>        ppd_counts[j + n_zeros] = binomial_rng(<span class="dv">1</span>, prob_pres_counts[j]) * poisson_rng(lam_counts[j]);</span>
+<span id="cb2-105"><a href="#cb2-105" tabindex="-1"></a>        lppd[j + n_zeros] = log(prob_pres_counts[j]) + poisson_lpmf(counts[j] | lam_counts[j]);</span>
+<span id="cb2-106"><a href="#cb2-106" tabindex="-1"></a>        deviance += lppd[j + n_zeros];</span>
+<span id="cb2-107"><a href="#cb2-107" tabindex="-1"></a>    }</span>
+<span id="cb2-108"><a href="#cb2-108" tabindex="-1"></a>    deviance *= -<span class="dv">2</span>;</span>
+<span id="cb2-109"><a href="#cb2-109" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="fitting-proso-abundance-1" class="slide section level2">
+<h1>Fitting proso abundance</h1>
+<h3 id="specific-hypotheses">Specific hypotheses:</h3>
+<ol style="list-style-type: decimal">
+<li>Habitat suitability (presence-absence) depends on river size, water
+temperature, and sediment deposition.</li>
+<li>These covariates matter for abundance as well, but competition is
+also important.</li>
+</ol>
+</div>
+<div id="fitting-proso-abundance-2" class="slide section level2">
+<h1>Fitting proso abundance</h1>
+<h3 id="specific-hypotheses-1">Specific hypotheses:</h3>
+<ol style="list-style-type: decimal">
+<li>Habitat suitability (presence-absence) depends on river size, water
+temperature, and sediment deposition.</li>
+<li>These covariates matter for abundance as well, but competition is
+also important.</li>
+</ol>
+<p><img src="8_advanced_models_files/figure-slidy/proso_fmm_plot-1.png" width="1440" /></p>
+</div>
+<div id="response-surfaces" class="slide section level2">
+<h1>Response surfaces</h1>
+<p><img src="8_advanced_models_files/figure-slidy/proso_resp_surface-1.png" width="1440" /></p>
+</div>
+<div id="capturing-zero-inflation" class="slide section level2">
+<h1>Capturing zero inflation</h1>
+<p><img src="8_advanced_models_files/figure-slidy/proso_posterior_hist-1.png" width="672" /></p>
+</div>
+<div id="chapter-2-lost-in-space" class="slide section level2">
+<h1>Chapter 2: Lost in space</h1>
+<h3 id="the-problem-of-nonindependence">The problem of
+nonindependence</h3>
+<ul>
+<li>Recall that all of our linear models have an <strong>independence
+assumption</strong></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+    \mathrm{L}[\mathbb{E}(y)] &amp; = \alpha + \beta{\mathbf{X}} \\
+    \theta &amp; = \mathcal{f}[\mathbb{E}(y)] \\
+    y &amp; \sim \mathcal{D}(\theta) \\
+    \\
+    \mathrm{pr}(y_i | \color{red}{y_{-i}}, \alpha, \beta, \mathbf{X})
+&amp; \equiv
+    \mathrm{pr}(y_i | \alpha, \beta, \mathbf{X})
+\end{aligned}
+\]</span></p>
+<ul>
+<li>This assumption is what allows us to compute the log-likelihood of
+all the data as the sum of the log-likelihoods of individual data
+points</li>
+</ul>
+</div>
+<div id="nonidependence-consequences" class="slide section level2">
+<h1>Nonidependence consequences</h1>
+<ul>
+<li>We <strong>must</strong> incorporate nonindependence in the model
+<ul>
+<li>Potentially biased parameter estimates</li>
+<li>Standard errors and <em>p</em>-values will be too low</li>
+<li>Potential for misspecification (important effects will appear
+unimportant, unimportant effects appear important)</li>
+</ul></li>
+</ul>
+</div>
+<div id="reducing-nonindependence" class="slide section level2">
+<h1>Reducing nonindependence</h1>
+<ul class="incremental">
+<li>Add important <em>x</em>-variables and remove unimportant ones (but
+how can we know?)</li>
+<li>Incorporate known structure into the model using hierarchical
+terms</li>
+<li>Model covariance directly, estimating it from the data</li>
+</ul>
+</div>
+<div id="the-random-intercepts-model" class="slide section level2">
+<h1>The random intercepts model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Mixed models allow us to relax the conditional independence</li>
+<li>Individual observations covary by means of shared group-level
+parameters</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/penguin_glm-1.png" width="480" /></p>
+</div>
+</div>
+</div>
+<div id="the-random-intercepts-model-1" class="slide section level2">
+<h1>The random intercepts model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Mixed models allow us to relax the conditional independence</li>
+<li>Individual observations covary by means of shared group-level
+parameters</li>
+</ul>
+<p>When observation <span class="math inline">\(i\)</span> is in group
+<span class="math inline">\(j\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}(y_i) &amp; = \alpha + \gamma_j + \beta X \\
+y &amp; \sim \mathcal{N}\left (\mathbb{E} \left (y \right ), \sigma
+\right) \\
+\gamma &amp; \sim \mathcal{N}(0, \sigma_\gamma)
+\end{aligned}
+\]</span></p>
+<p><span class="math inline">\(\gamma\)</span> models an
+<strong>offset</strong> from the global intercept (hence prior mean of
+0)</p>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/penguin_glmm-1.png" width="480" /></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/plot_scotland-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours-1"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+<li>As with the US cancer dataset, we can use a Poisson model,
+controlling for population size (<span
+class="math inline">\(E\)</span>)</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/plot_scotland2-1.png" width="528" /></p>
+<p><span class="math display">\[
+\begin{aligned}
+    y &amp; \sim \mathcal{P}(\lambda E) \\
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours-2"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+<li>As with the US cancer dataset, we can use a Poisson model,
+controlling for population size (<span
+class="math inline">\(E\)</span>)</li>
+<li>This time, we instead of a global random effect, we add a local
+effect:
+<ul>
+<li>Each district has a unique group, consisting of itself and it’s
+<span class="math inline">\(\nu\)</span> neighbours</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/plot_scot_nb-1.png" width="528" /></p>
+<p><span class="math display">\[
+\begin{aligned}
+    y &amp; \sim \mathcal{P}(\lambda E) \\
+    \lambda_i &amp; = \frac{\sum_{j=1}^{\nu_i} \lambda_j}{\nu_i} \\
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours-3"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+<li>As with the US cancer dataset, we can use a Poisson model,
+controlling for population size (<span
+class="math inline">\(E\)</span>)</li>
+<li>This time, we instead of a global random effect, we add a local
+effect:
+<ul>
+<li>Each district has a unique group, consisting of itself and it’s
+<span class="math inline">\(\nu\)</span> neighbours</li>
+</ul></li>
+<li>We can also add <strong>unstructured</strong> effects</li>
+</ul>
+<p><strong>Hypothesis</strong>: Working outdoors (AFF: agriculture,
+forestry, and fishing) leads to lip cancer.</p>
+<p>We need to account for space, or we might be wrong about AFF!</p>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/plot_scot_aff-1.png" width="528" /></p>
+<p><span class="math display">\[
+\begin{aligned}
+    y &amp; \sim \mathcal{P}(\lambda E) \\
+    \lambda_i &amp; = \frac{\sum_{j=1}^{\nu_i} \lambda_j}{\nu_i} \\
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours-4"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+<li>As with the US cancer dataset, we can use a Poisson model,
+controlling for population size (<span
+class="math inline">\(E\)</span>)</li>
+<li>This time, we instead of a global random effect, we add a local
+effect:
+<ul>
+<li>Each district has a unique group, consisting of itself and it’s
+<span class="math inline">\(\nu\)</span> neighbours</li>
+</ul></li>
+<li>We can also add <strong>unstructured</strong> effects</li>
+<li>Here we use an formulation for <strong>spatial random
+effects</strong>
+<ul>
+<li>global intercept <span class="math inline">\(a\)</span></li>
+<li>regression term <span
+class="math inline">\(\mathbf{X}\mathbf{B}\)</span></li>
+<li>spatial random effect <span class="math inline">\(\gamma\)</span>
+which is an <strong>offset</strong> from the global intercept</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/plot_scot_aff2-1.png" width="528" /></p>
+<p><span class="math display">\[
+\begin{aligned}
+    y &amp; \sim \mathcal{P}(\lambda E) \\
+    \log \lambda_i &amp; = a  + \mathbf{X}\mathbf{B} + \gamma \\
+    \gamma &amp; \sim \mathcal{N}(\mu_\gamma, \sigma_\gamma) \\
+    \mu_{\gamma,i} &amp; = \frac{\sum_{j=1}^nw_{i,j}\gamma_j}{\nu_i}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="group-membership-via-spatial-neighbours-5"
+class="slide section level2">
+<h1>Group membership via spatial neighbours</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Here we have a strong spatial pattern in lip cancer incidence in
+Scotland (1975-1980)</li>
+<li>As with the US cancer dataset, we can use a Poisson model,
+controlling for population size (<span
+class="math inline">\(E\)</span>)</li>
+<li>This time, we instead of a global random effect, we add a local
+effect:
+<ul>
+<li>Each district has a unique group, consisting of itself and it’s
+<span class="math inline">\(\nu\)</span> neighbours</li>
+</ul></li>
+<li>We can also add <strong>unstructured</strong> effects</li>
+<li>Here we use an formulation for <strong>spatial random
+effects</strong>
+<ul>
+<li>Global intercept <span class="math inline">\(a\)</span></li>
+<li>Regression term <span
+class="math inline">\(\mathbf{X}\mathbf{B}\)</span></li>
+<li>Spatial random effect <span class="math inline">\(\gamma\)</span>
+which is an <strong>offset</strong> from the global intercept</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/scotlip_graph-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="coding-our-car" class="slide section level2">
+<h1>Coding our CAR</h1>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n; <span class="co">// total number of districts, one data point per district</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; k; <span class="co">// number of regression variables</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="co">// spatial neighbourhood data</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="co">// this is a sparse array</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="co">// the district ID in column one is adjacent to column 2</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_nb; <span class="co">// number of adjacencies</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>, <span class="kw">upper</span> = n&gt; neighbours [n_nb, <span class="dv">2</span>];</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="co">// regression data</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; deaths [n];</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n] exposure;</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="dt">matrix</span> [n,k] X;</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    </span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="co">// prior hyperparams</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a_sig;</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; B_sig;</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    </span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    <span class="co">// controls the strength of the spatial effect</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; gamma_scale_sig;</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>}</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>    <span class="dt">vector</span> [n] nu = rep_vector(<span class="dv">0</span>, n); <span class="co">// number of neighbors per region</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_nb)</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>        nu[neighbours[i,<span class="dv">1</span>]] += <span class="dv">1</span>;</span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>    </span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>}</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>    <span class="co">// regression params</span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>    <span class="dt">vector</span> [k] B;</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="co">// latent variable for spatial random effect</span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>    <span class="dt">real</span> gamma_scale;</span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>    <span class="dt">vector</span> [n] gamma;</span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>}</span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>    <span class="dt">vector</span> [n] gamma_expectation = rep_vector(<span class="dv">0</span>, n);</span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; [n] lambda;</span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>    </span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n_nb)</span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>        gamma_expectation[neighbours[i,<span class="dv">1</span>]] += gamma[neighbours[i,<span class="dv">2</span>]];</span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>        <span class="cf">if</span>(nu[i] &gt; <span class="dv">0</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>            gamma_expectation[i] = gamma_expectation[i] / nu[i];</span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>    }</span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>    lambda = exp(a + gamma + X*B);</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>}</span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>    deaths ~ poisson(exposure .* lambda);</span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a>    gamma ~ normal(gamma_expectation, gamma_scale);</span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a>    gamma_scale ~ normal(<span class="dv">0</span>, gamma_scale_sig);</span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a>    a ~ normal(<span class="dv">0</span>, a_sig);</span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>    B ~ normal(<span class="dv">0</span>, B_sig);</span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>}</span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a>    <span class="dt">int</span> ppd [n];</span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a>    ppd = poisson_rng(exposure .* lambda);</span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="fitting-the-model" class="slide section level2">
+<h1>Fitting the model</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>scotlip <span class="ot">=</span> <span class="fu">st_read</span>(<span class="st">&quot;../vu_advstats_students/data/scotlip.gpkg&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>scotlip_nb <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../vu_advstats_students/data/scotlip_neighbours.rds&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## read neighbours</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>stan_cancer_car <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;vu_advstats_students/stan/scotlip.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(scotlip<span class="sc">$</span>AFF, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>standata <span class="ot">=</span> <span class="fu">list</span>(    </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">nrow</span>(scotlip),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">ncol</span>(X),</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="at">n_nb =</span> <span class="fu">nrow</span>(scotlip_nb),</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">neighbours =</span> scotlip_nb,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="at">deaths =</span> scotlip<span class="sc">$</span>CANCER,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="at">exposure =</span> scotlip<span class="sc">$</span>POP<span class="sc">/</span><span class="dv">1000</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="at">X =</span> X,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="at">a_sig =</span> <span class="dv">10</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="at">B_sig =</span> <span class="dv">5</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    <span class="at">gamma_scale_sig =</span> <span class="dv">10</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co"># we need inits to keep the poisson function small</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>initfun <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">list</span>(<span class="at">a =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">3</span>,<span class="dv">0</span>), <span class="at">B =</span> <span class="fu">runif</span>(<span class="fu">ncol</span>(X), <span class="sc">-</span><span class="dv">3</span>, <span class="dv">0</span>), <span class="at">gamma =</span> <span class="fu">runif</span>(<span class="fu">nrow</span>(scotlip), <span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>fit_car <span class="ot">=</span> <span class="fu">sampling</span>(cancer_car, <span class="at">data =</span> standata, <span class="at">iter =</span> <span class="dv">50000</span>, <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">max_treedepth =</span> <span class="dv">20</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>                   <span class="at">init =</span> initfun, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">open_progress =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="examining-the-model" class="slide section level2">
+<h1>Examining the model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Spatial effects are not identifiable!</li>
+<li>Non-structured effects are still clear
+<ul>
+<li>B = 0.04: ~ 4 extra cancer deaths / 100k people for every 1%
+increase in outdoor employment</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/intervals-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="examining-the-model-1" class="slide section level2">
+<h1>Examining the model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Spatial effects are not identifiable!</li>
+<li>Non-structured effects are still clear
+<ul>
+<li>B = 0.04: ~ 4 extra cancer deaths / 100k people for every 1%
+increase in outdoor employment</li>
+</ul></li>
+<li>Prediction accuracy is good!</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/car_fit-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="examining-the-model-2" class="slide section level2">
+<h1>Examining the model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Spatial effects are not identifiable!</li>
+<li>Non-structured effects are still clear
+<ul>
+<li>B = 0.04: ~ 4 extra cancer deaths / 100k people for every 1%
+increase in outdoor employment</li>
+</ul></li>
+<li>Prediction accuracy is good!</li>
+<li>We can map predicted cancer rates</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/car_spatial_pred-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="examining-the-model-3" class="slide section level2">
+<h1>Examining the model</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Spatial effects are not identifiable!</li>
+<li>Non-structured effects are still clear
+<ul>
+<li>B = 0.04: ~ 4 extra cancer deaths / 100k people for every 1%
+increase in outdoor employment</li>
+</ul></li>
+<li>Prediction accuracy is good!</li>
+<li>We can map predicted cancer rates</li>
+<li>We can also map the median (but unidentifiable!) spatial random
+effect and the detrended residuals</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/car_spatial_resid-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="continuous-spatial-models" class="slide section level2">
+<h1>Continuous spatial models</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>With point data, all points are neighbours, but some neighbours are
+more important than others</li>
+<li>The weights matrix <span class="math inline">\(w\)</span> now has no
+zeros, instead we weight based on some function of the distance</li>
+<li>Here, I use <span class="math inline">\(w_{ij} =
+\frac{1}{d_ij}\)</span></li>
+</ul>
+<div class="small">
+<p><span class="math display">\[ w =
+\begin{pmatrix}
+Inf &amp; 0.58 &amp; 0.48 &amp; 0.30 &amp; 0.22 &amp; 0.20 &amp; 0.16
+&amp; 0.14 &amp; 0.12 &amp; 0.11 \\
+0.58 &amp; Inf &amp; 0.75 &amp; 0.49 &amp; 0.32 &amp; 0.23 &amp; 0.20
+&amp; 0.17 &amp; 0.14 &amp; 0.12 \\
+0.48 &amp; 0.75 &amp; Inf &amp; 0.72 &amp; 0.39 &amp; 0.32 &amp; 0.24
+&amp; 0.19 &amp; 0.17 &amp; 0.14 \\
+0.30 &amp; 0.49 &amp; 0.72 &amp; Inf &amp; 0.73 &amp; 0.37 &amp; 0.32
+&amp; 0.24 &amp; 0.20 &amp; 0.16 \\
+0.22 &amp; 0.32 &amp; 0.39 &amp; 0.73 &amp; Inf &amp; 0.39 &amp; 0.46
+&amp; 0.33 &amp; 0.24 &amp; 0.19 \\
+0.20 &amp; 0.23 &amp; 0.32 &amp; 0.37 &amp; 0.39 &amp; Inf &amp; 0.52
+&amp; 0.32 &amp; 0.30 &amp; 0.24 \\
+0.16 &amp; 0.20 &amp; 0.24 &amp; 0.32 &amp; 0.46 &amp; 0.52 &amp; Inf
+&amp; 0.77 &amp; 0.50 &amp; 0.30 \\
+0.14 &amp; 0.17 &amp; 0.19 &amp; 0.24 &amp; 0.33 &amp; 0.32 &amp; 0.77
+&amp; Inf &amp; 0.75 &amp; 0.35 \\
+0.12 &amp; 0.14 &amp; 0.17 &amp; 0.20 &amp; 0.24 &amp; 0.30 &amp; 0.50
+&amp; 0.75 &amp; Inf &amp; 0.62 \\
+0.11 &amp; 0.12 &amp; 0.14 &amp; 0.16 &amp; 0.19 &amp; 0.24 &amp; 0.30
+&amp; 0.35 &amp; 0.62 &amp; Inf \\
+\end{pmatrix} \]</span></p>
+</div>
+<ul>
+<li>This can be applied to covariance in many situations!
+<ul>
+<li>Genetic/phylogenetic relatedness</li>
+<li>Temporal autocorrelation</li>
+<li>Functional similarity</li>
+</ul></li>
+<li>Prior mixed models had <strong>unordered</strong> (i.e., nominal)
+groups</li>
+<li>Now the grouping variable is continuous</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/cspatialmod-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="fully-parameterized-sar" class="slide section level2">
+<h1>Fully parameterized SAR</h1>
+<div class="columns">
+<div class="column">
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}(y_i) &amp; = \alpha + \gamma_{i} + \beta X \\
+y &amp; \sim \mathcal{N}\left (\mathbb{E} \left (y \right ), \sigma
+\right) \\
+\gamma_i &amp; \sim \mathcal{N} \left( \frac{\sum_{j=1}^{n} w_{ij}
+\gamma_j}{\sum_{j=1}^{n}w_{ij}}, \sigma_\gamma \right)
+\end{aligned}
+\]</span></p>
+<p><strong>Problem</strong></p>
+<ul>
+<li>Computing <span class="math inline">\(\gamma\)</span> becomes
+problematic as <span class="math inline">\(n\)</span> increases</li>
+<li>Too many parameters!
+<ul>
+<li><span class="math inline">\(n=10\)</span>: 40
+(pseudo-)parameters</li>
+<li><span class="math inline">\(n=100\)</span>: 4900</li>
+<li><span class="math inline">\(n=1000\)</span>: ~5e5</li>
+</ul></li>
+<li>We need another hierarchical layer to reduce computation</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/cspatialmod2-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="multivariate-normal-parameterization"
+class="slide section level2">
+<h1>Multivariate normal parameterization</h1>
+<ul>
+<li>The previous model can be reparameterized with a multivariate
+normal</li>
+<li>The multivariate normal is parameterized with a <strong>mean
+vector</strong> and a <strong>variance-covariance</strong> matrix</li>
+<li>Diagonal elements are the variance (usually assumed to be constant
+for all points)</li>
+<li>Off diagonals are covariance between two points</li>
+<li>The outcomes here are the result of a <strong>Gaussian
+Process</strong>, and the model is called <strong>GP
+Regression</strong></li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+    \mathbb{E}(y) &amp; = \alpha + \beta \mathbf{X} \\
+    y &amp; \sim \mathcal{MN} \left( \mathbb{E}(y), \Sigma \right) \\
+    \Sigma_{ij} &amp; = \frac{\rho_{ij}}{d_{ij}}
+\end{align}
+\]</span></p>
+<ul>
+<li><strong>Note</strong>: The GLM is a special case of a GP with
+covariance = 0!</li>
+</ul>
+</div>
+<div id="covariance-functions" class="slide section level2">
+<h1>Covariance functions</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can add a hyperparemeter layer to reduce the number of parameters
+we need for <span class="math inline">\(\Sigma\)</span></li>
+<li>In effect, we compute a regression model with <span
+class="math inline">\(\Sigma\)</span> as the response and the spatial
+(or other) distance as the predictor</li>
+<li>Instead of treating covariance as a <strong>random</strong>
+variable, we insert the <strong>expectation</strong> of this regression
+model (which is a deterministic function of its parameters)</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/unnamed-chunk-1-1.png" width="384" /></p>
+</div>
+</div>
+</div>
+<div id="covariance-kernel-functions" class="slide section level2">
+<h1>Covariance kernel functions</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li><p>We usually use <strong>kernel</strong> functions to describe the
+shape of the covariance-distance relationship</p></li>
+<li><p>A common kernel for spatial models is the Matérn<span
+class="math inline">\(^{3/2}\)</span> function:</p></li>
+<li><p><span class="math inline">\(\sigma\)</span>: standard
+deviation</p></li>
+<li><p><span class="math inline">\(\rho\)</span>: lengthscale or
+correlation length</p>
+<ul>
+<li>controls how quickly covariance decays with distance</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+    \Sigma_{ij} = \sigma^2 \left( 1 +
+\frac{\sqrt{3}d_{ij}}{\rho}\right)\left(\mathrm{e}^\frac{-\sqrt{3}d_{ij}}{\rho}
+\right)
+\]</span></p>
+<ul>
+<li>Note that this only requires 2 hyperparameters!</li>
+</ul>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/unnamed-chunk-2-1.png" width="384" /></p>
+</div>
+</div>
+</div>
+<div id="gp-glms" class="slide section level2">
+<h1>GP GLMs</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can easily extend this to a GLM</li>
+<li>We reparameterize again, adding a latent variable in the form of a
+<strong>Gaussian Random Field</strong></li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+    \mathrm{L}[\mathbb{E}(y)] &amp; = \alpha + \beta \mathbf{X} + \gamma
+\\
+    \theta &amp;= \mathcal{f}[\mathbb{E}(y), \phi] \\
+    y &amp; \sim \mathcal{D}(\theta) \\
+    \gamma &amp; \sim \mathcal{MN} \left( \mathbf{0}, \Sigma \right) \\
+    \Sigma_{ij} &amp; = \sigma^2 \left( 1 +
+\frac{\sqrt{3}d_{ij}}{\rho}\right)\left(\mathrm{e}^\frac{-\sqrt{3}d_{ij}}{\rho}
+\right)
+\end{align}
+\]</span></p>
+</div><div class="column">
+<p><img src="8_advanced_models_files/figure-slidy/unnamed-chunk-4-1.png" width="432" /></p>
+<p><img src="8_advanced_models_files/figure-slidy/unnamed-chunk-5-1.png" width="432" /></p>
+</div>
+</div>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>

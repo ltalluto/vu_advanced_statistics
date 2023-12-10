@@ -71,7 +71,7 @@ $$
 
 ## Entropy
 
-Imagine a series of rolls from a weighted coin:
+Imagine a series of flips of a weighted coin:
 
 ```{r coinflips}
 pr_unfair = c(0.8, 0.2)

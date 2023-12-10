@@ -145,7 +145,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>Presentations</p>
 		</td>
 		<td>
-			<a href="8_more_hm">More Hierarchical Models</a>
+			<a href="lec/8_advanced_models">Advanced Models</a>
 		</td>
 		<td></td>
 	</tr>

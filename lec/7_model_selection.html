@@ -225,7 +225,7 @@ p_i\log(p_i)
 </div>
 <div id="entropy" class="slide section level2">
 <h1>Entropy</h1>
-<p>Imagine a series of rolls from a weighted coin:</p>
+<p>Imagine a series of flips of a weighted coin:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>pr_unfair <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>flips <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Heads&quot;</span>, <span class="st">&quot;Tails&quot;</span>), <span class="at">size =</span> <span class="dv">20</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> pr_unfair)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">table</span>(flips)</span>
