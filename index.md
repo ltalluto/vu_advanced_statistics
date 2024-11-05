@@ -5,7 +5,7 @@
 </style>
 
 # Advanced (Bayesian) Statistics
-**Instructor**: M. Talluto
+**Instructor**: Lauren Talluto
 
 **Office**: Technikerstraße 25, Room 506
 
