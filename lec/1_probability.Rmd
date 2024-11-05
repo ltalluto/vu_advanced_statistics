@@ -1,7 +1,7 @@
 ---
 title: "Introduction, Probability, & Distributions"
-author: "M. Talluto"
-date: "21.11.2023"
+author: "Lauren Talluto"
+date: "21.11.2024"
 output:
   slidy_presentation:
     theme: cerulean
@@ -27,12 +27,12 @@ library(xtable)
 ## Course Introduction
 
 > - Introduce ourselves - name, research area, what you want from this course
-> - The [course web page](https://mtalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
+> - The [course web page](https://ltalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
 
 ## Course Introduction
 
 * Introduce ourselves - name, research area, what you want from this course
-* The [course web page](https://mtalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
+* The [course web page](https://ltalluto.github.io/vu_advanced_statistics/) has links to all code and presentations
 
 ### Format
 

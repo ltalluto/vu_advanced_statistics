@@ -1,6 +1,6 @@
 ---
 title: "Advanced Models"
-author: "M. Talluto"
+author: "Lauren Talluto"
 date: "11.12.2023"
 output:
   slidy_presentation:
