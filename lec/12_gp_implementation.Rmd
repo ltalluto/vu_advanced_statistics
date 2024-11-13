@@ -1,6 +1,6 @@
 ---
 title: "Spatial Model Implementation"
-author: "Matthew Talluto"
+author: "Lauren Talluto"
 date: "14.05.2021"
 output:
   slidy_presentation:

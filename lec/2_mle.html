@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="M. Talluto" />
+  <meta name="author" content="Lauren Talluto" />
   <title>Maximum Likelihood &amp; Optimisation</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
@@ -27,7 +27,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -92,7 +92,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +144,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -170,9 +170,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="slide titlepage">
   <h1 class="title">Maximum Likelihood &amp; Optimisation</h1>
   <p class="author">
-M. Talluto
+Lauren Talluto
   </p>
-  <p class="date">24.11.2023</p>
+  <p class="date">26.11.2024</p>
 </div>
 <div id="what-is-a-likelihood" class="slide section level2">
 <h1>What is a likelihood?</h1>
@@ -435,6 +435,9 @@ class="math inline">\(pr(X|\theta)\)</span></li>
 for the maximum likelihood? Guessing might take a long time!</li>
 </ul>
 </div><div class="column">
+<pre><code>## Warning in geom_point(aes(x = 7/25, y = dbinom(7, 25, 7/25)), size = 2, : All aesthetics have length 1, but the data has 201 rows.
+## ℹ Please consider using `annotate()` or provide this layer with data containing
+##   a single row.</code></pre>
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-17-1.png" width="528" /></p>
 </div>
 </div>
@@ -481,38 +484,38 @@ impractical.</li>
 </ul>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># write a custom function that returns the log likelihood</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>) <span class="do">## why log??</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>}</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># write a custom function that returns the log likelihood</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>) <span class="do">## why log??</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>}</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
 </div><div class="column">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># the terms n = ... and k = ... must be named the way they are in llfun</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n, <span class="at">k =</span> k, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">## $par</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">## $value</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="do">## [1] -1.740834</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="do">## $counts</span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="do">## function gradient </span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="do">##       NA       NA </span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="do">## $convergence</span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="do">## [1] 0</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="do">## $message</span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># the terms n = ... and k = ... must be named the way they are in llfun</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n, <span class="at">k =</span> k, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="do">## $par</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="do">## $value</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="do">## [1] -1.740834</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="do">## $counts</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="do">## function gradient </span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="do">##       NA       NA </span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="do">## $convergence</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="do">## [1] 0</span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="do">## $message</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -555,11 +558,11 @@ be positive, and n &gt;= k</li>
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -576,14 +579,14 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -600,17 +603,17 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href=
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    k ~ binomial(n, p);</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>}</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -628,9 +631,9 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -644,30 +647,30 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 <code>optim</code> but for Stan models</li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># already did this, don&#39;t do it twice</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># zomb_p = stan_model(&quot;stan/zomb_p.stan&quot;) </span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># prepare data</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="at">k =</span> <span class="dv">7</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">## $par</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">## 0.2800003 </span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="do">## $value</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="do">## [1] -14.82383</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="do">## $return_code</span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="do">## [1] 0</span></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="do">## $theta_tilde</span></span>
-<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a><span class="do">##              p</span></span>
-<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a><span class="do">## [1,] 0.2800003</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># already did this, don&#39;t do it twice</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># zomb_p = stan_model(&quot;stan/zomb_p.stan&quot;) </span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># prepare data</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="do">## $par</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## 0.2800003 </span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="do">## $value</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="do">## [1] -14.82383</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="do">## $return_code</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="do">## [1] 0</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="do">## $theta_tilde</span></span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="do">##              p</span></span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="do">## [1,] 0.2800003</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -721,20 +724,20 @@ is independent. Thus:</li>
 \end{array}
 \]</span></p>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># define our data set and initial guess</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>n_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>k_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># we take the sum of all the individual log liklihoods</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co"># take only the part we want out of this, $par, the parameter estimate</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n_vec, <span class="at">k =</span> k_vec, </span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>      <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## [1] 0.2222222</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># define our data set and initial guess</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>n_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>k_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co"># we take the sum of all the individual log liklihoods</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>}</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co"># take only the part we want out of this, $par, the parameter estimate</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n_vec, <span class="at">k =</span> k_vec, </span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>      <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="do">## [1] 0.2222222</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -750,32 +753,32 @@ is independent. Thus:</li>
 multiple observations with no changes.</li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs; <span class="co">// number of data points</span></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs]; <span class="co">// number of trials for each data point</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>}</span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>}</span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>    k ~ binomial(n, p);</span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>zomb_p2 <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p2.stan&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs; <span class="co">// number of data points</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs]; <span class="co">// number of trials for each data point</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>}</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>}</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>zomb_p2 <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p2.stan&quot;</span>) </span></code></pre></div>
 </div>
 </div>
 </div>
 <div id="multiple-observations-in-stan-1" class="slide section level2">
 <h1>Multiple observations in Stan</h1>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># prepare data</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>), <span class="at">k =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>), <span class="at">n_obs =</span> <span class="dv">3</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="do">## 0.2222222</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># prepare data</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">12</span>, <span class="dv">134</span>), <span class="at">k =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">27</span>), <span class="at">n_obs =</span> <span class="dv">3</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="do">## 0.2222222</span></span></code></pre></div>
 </div>
 <div id="why-bayes" class="slide section level2">
 <h1>Why Bayes?</h1>
@@ -924,9 +927,9 @@ class="math inline">\(pr(\theta)\)</span>?</p>
 <li>We could assign equal probabilities using a uniform
 distribution:</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>pr_theta <span class="ot">=</span> <span class="fu">dunif</span>(theta, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">plot</span>(theta, pr_theta, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pr_theta <span class="ot">=</span> <span class="fu">dunif</span>(theta, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">plot</span>(theta, pr_theta, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-30-1.png" width="528" /></p>
 </div>
@@ -944,8 +947,8 @@ distribution.</li>
 likely?</li>
 <li>A <strong>beta</strong> distribution makes many shapes possible</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pr_theta_1 <span class="ot">=</span> <span class="fu">dbeta</span>(theta, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>pr_theta_1 <span class="ot">=</span> <span class="fu">dbeta</span>(theta, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
 </div>
@@ -964,33 +967,33 @@ methods we used before</li>
 </ul>
 <div class="columns">
 <div class="column" style="width:47%;">
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>log_liklihood <span class="ot">=</span> <span class="cf">function</span>(p, n, k)</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>log_prior <span class="ot">=</span> <span class="cf">function</span>(p, a, b)</span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">dbeta</span>(p, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>log_posterior <span class="ot">=</span> <span class="cf">function</span>(p, n, k, a, b)</span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">log_liklihood</span>(p, n, k) <span class="sc">+</span> <span class="fu">log_prior</span>(p, a, b)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>log_liklihood <span class="ot">=</span> <span class="cf">function</span>(p, n, k)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>log_prior <span class="ot">=</span> <span class="cf">function</span>(p, a, b)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>  <span class="fu">dbeta</span>(p, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>log_posterior <span class="ot">=</span> <span class="cf">function</span>(p, n, k, a, b)</span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="fu">log_liklihood</span>(p, n, k) <span class="sc">+</span> <span class="fu">log_prior</span>(p, a, b)</span></code></pre></div>
 </div><div class="column" style="width:6%;">
 
 </div><div class="column" style="width:47%;">
-<div class="sourceCode" id="cb21"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">// Saved in vu_advstats_students/stan/zomb_p_bayes.stan</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs;</span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs];</span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a;</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b;</span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>}</span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>}</span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>    k ~ binomial(n, p);</span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>    p ~ beta(a, b);</span>
-<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">// Saved in vu_advstats_students/stan/zomb_p_bayes.stan</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs;</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs];</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a;</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b;</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>}</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>}</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>    p ~ beta(a, b);</span>
+<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1000,26 +1003,26 @@ class="slide section level2">
 <p>Now we can fit the model, either in R or in Stan</p>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>zomb_p_bayes <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p_bayes.stan&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="at">n_obs =</span> <span class="dv">1</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">as.array</span>(<span class="dv">25</span>), <span class="co"># force a single-value array, avoids an error</span></span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">as.array</span>(<span class="dv">7</span>),</span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>    <span class="at">a =</span> <span class="dv">1</span>, <span class="co"># totally flat prior to start</span></span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>    <span class="at">b =</span> <span class="dv">1</span></span>
-<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>)</span>
-<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="do">## starting value for the optimisation</span></span>
-<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a></span>
-<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, log_posterior, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> zomb_data<span class="sc">$</span>n, </span>
-<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    <span class="at">k =</span> zomb_data<span class="sc">$</span>k, <span class="at">a =</span> zomb_data<span class="sc">$</span>a, <span class="at">b =</span> zomb_data<span class="sc">$</span>b, </span>
-<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
-<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
-<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="do">##    p </span></span>
-<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>zomb_p_bayes <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p_bayes.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>    <span class="at">n_obs =</span> <span class="dv">1</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">as.array</span>(<span class="dv">25</span>), <span class="co"># force a single-value array, avoids an error</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">as.array</span>(<span class="dv">7</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>    <span class="at">a =</span> <span class="dv">1</span>, <span class="co"># totally flat prior to start</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>    <span class="at">b =</span> <span class="dv">1</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>)</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="do">## starting value for the optimisation</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="fu">optim</span>(p_init, log_posterior, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> zomb_data<span class="sc">$</span>n, </span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>    <span class="at">k =</span> zomb_data<span class="sc">$</span>k, <span class="at">a =</span> zomb_data<span class="sc">$</span>a, <span class="at">b =</span> zomb_data<span class="sc">$</span>b, </span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)<span class="sc">$</span>par</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="do">## [1] 0.28</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##    p </span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
 <p>This prior has no influence on the posterior</p>
@@ -1030,14 +1033,14 @@ class="slide section level2">
 <h1>Changing the prior</h1>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="do">## 0.2963089</span></span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">3</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="fl">1.5</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.3272731</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.2963089</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">3</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="fl">1.5</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## 0.3272731</span></span></code></pre></div>
 <p>These priors are informative, but relatively weak (our data has
 weight equivalent to <code>alpha=7, beta=18</code>)</p>
 </div><div class="column">
@@ -1051,10 +1054,10 @@ weight equivalent to <code>alpha=7, beta=18</code>)</p>
 <div class="column">
 <p>What if we had already conducted an identical prior sample, with 20
 zombies and 5 normals?</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.5416647</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="do">## 0.5416647</span></span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
 </div>

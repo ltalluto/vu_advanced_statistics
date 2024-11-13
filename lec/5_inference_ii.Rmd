@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Inference: Workflow and Guidelines"
-author: "M. Talluto"
-date: "29.11.2023"
+author: "Lauren Talluto"
+date: "03.12.2024"
 output:
   slidy_presentation:
     theme: cerulean

@@ -1,6 +1,6 @@
 ---
 title: "Maximum likelihood: *Tsuga* mortality"
-date: "24.11.2023"
+date: "26.11.2024"
 output: 
   html_document:
     self_contained: false
@@ -24,7 +24,7 @@ library(data.table)
 tsuga = readRDS("data/tsuga.rds")
 
 ## if you don't have the repository saved locally
-# tsuga = readRDS(url("https://github.com/mtalluto/vu_advstats_students/raw/main/data/tsuga.rds"))
+# tsuga = readRDS(url("https://github.com/ltalluto/vu_advstats_students/raw/main/data/tsuga.rds"))
 ```
 
 This dataset gives statistics about *Tsuga canadensis* observed over multiple years in forest plots in eastern Canada. Included are the number of trees `born`, the number observed to have `died` that year, the total number of trees (including dead ones) `n`, and the climate. Filter the dataset so that it contains only observations from the year 2005 with at least 1 individual (`n > 0`)

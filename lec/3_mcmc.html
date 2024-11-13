@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="M. Talluto" />
+  <meta name="author" content="Lauren. Talluto" />
   <title>Markov Chain Monte Carlo</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
@@ -27,7 +27,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -92,7 +92,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +144,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -170,9 +170,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="slide titlepage">
   <h1 class="title">Markov Chain Monte Carlo</h1>
   <p class="author">
-M. Talluto
+Lauren. Talluto
   </p>
-  <p class="date">27.11.2023</p>
+  <p class="date">28.11.2024</p>
 </div>
 <div id="the-german-tank-problem" class="slide section level2">
 <h1>The German Tank Problem</h1>
@@ -928,7 +928,7 @@ Credible Interval</strong>)?</li>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Estimate&quot;</span>, <span class="st">&quot;Std. Error&quot;</span>, <span class="st">&quot;pr(E &lt;= 0)&quot;</span>))</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">Estimate</th>
 <th align="right">Std. Error</th>
@@ -936,13 +936,13 @@ Credible Interval</strong>)?</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left">intercept</td>
 <td align="right">5.09</td>
 <td align="right">1.08</td>
 <td align="right">0</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">slope</td>
 <td align="right">0.21</td>
 <td align="right">0.02</td>
@@ -974,7 +974,7 @@ an interval to a point estimate</li>
 <span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">mean</th>
 <th align="right">median</th>
@@ -982,19 +982,19 @@ an interval to a point estimate</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left">intercept</td>
 <td align="right">5.09055</td>
 <td align="right">5.08527</td>
 <td align="right">5.12095</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">slope</td>
 <td align="right">0.20825</td>
 <td align="right">0.20835</td>
 <td align="right">0.20761</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">s</td>
 <td align="right">0.75813</td>
 <td align="right">0.75605</td>
@@ -1015,7 +1015,7 @@ an interval to a point estimate</li>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">intercept</th>
 <th align="right">slope</th>
@@ -1023,7 +1023,7 @@ an interval to a point estimate</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"></td>
 <td align="right">5.09</td>
 <td align="right">0.21</td>
@@ -1058,7 +1058,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">intercept</th>
 <th align="right">slope</th>
@@ -1066,7 +1066,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"></td>
 <td align="right">5.09</td>
 <td align="right">0.21</td>
@@ -1104,7 +1104,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">intercept</th>
 <th align="right">slope</th>
@@ -1112,7 +1112,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"></td>
 <td align="right">5.09</td>
 <td align="right">0.21</td>
@@ -1150,7 +1150,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </div><div class="column">
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th align="left"></th>
 <th align="right">intercept</th>
 <th align="right">slope</th>
@@ -1158,7 +1158,7 @@ posterior distribution of <span class="math inline">\(Z\)</span></p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left"></td>
 <td align="right">5.09</td>
 <td align="right">0.21</td>
@@ -1228,15 +1228,15 @@ arbitrary value of <span class="math inline">\(x\)</span></li>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="do">##            [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7]</span></span>
 <span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="do">##   [1,] 13.14111 13.41325 13.37436 13.41913 13.42445 13.41655 13.54323</span></span>
 <span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##   [2,] 13.16521 13.43425 13.39509 13.43927 13.44552 13.43807 13.56181</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">##   [3,] 13.18931 13.45526 13.41581 13.45940 13.46659 13.45959 13.58039</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="do">##      </span></span>
-<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="do">##           [,1]     [,2]     [,3]     [,4]     [,5]</span></span>
-<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a><span class="do">##   5%  13.11697 13.14181 13.16670 13.19165 13.21614</span></span>
-<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a><span class="do">##   95% 13.72653 13.74386 13.76265 13.78045 13.79788</span></span></code></pre></div>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">##   [3,] 13.18931 13.45526 13.41581 13.45940 13.46659 13.45959 13.58039</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="do">##      </span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="do">##           [,1]     [,2]     [,3]     [,4]     [,5]</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="do">##   5%  13.11697 13.14181 13.16670 13.19165 13.21614</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="do">##   95% 13.72653 13.74386 13.76265 13.78045 13.79788</span></span></code></pre></div>
 </div><div class="column">
 <p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-38-1.png" width="528" /></p>
 </div>
@@ -1276,21 +1276,21 @@ class="math inline">\(s\)</span></li>
 intervals</strong></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>}</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>}</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -1,6 +1,6 @@
 ---
 title: "!Kung people height and weight model"
-date: "29.11.2023"
+date: "29.11.2024"
 output: 
   html_document:
     self_contained: false

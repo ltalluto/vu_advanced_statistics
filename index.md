@@ -33,8 +33,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td>
-			<p><b>Tuesday</b> 21.11</p>
-			<p>14:15–18:00</p>
+			<p><b>Thursday</b> 21.11</p>
+			<p>13:15–17:00</p>
 		</td>
 		<td>
 			<p>Intro, Probability review</p>
@@ -48,8 +48,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td>
-			<p><b>Friday</b> 24.11</p>
-			<p>14:15–18:00</p>
+			<p><b>Tuesday</b> 26.11</p>
+			<p>13:15–17:00</p>
 		</td>
 		<td>
 			<p>Maximum likelihood</p>
@@ -63,8 +63,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td>
-			<p><b>Monday</b> 27.11</p>
-			<p>8:15–12:00</p>
+			<p><b>Thursday</b> 28.11</p>
+			<p>13:15–17:00</p>
 		</td>
 		<td>
 			<p>Markov-chain Monte Carlo</p>
@@ -78,8 +78,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td>
-			<p><b>Wednesday</b> 29.11</p>
-			<p>8:15–12:00</p>
+			<p><b>Friday</b> 29.11</p>
+			<p>13:15–17:00</p>
 		</td>
 		<td>
 			<p>Generalised linear models</p>
@@ -97,8 +97,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
 		<td>
-			<p><b>Friday</b> 01.12</p>
-			<p>8:15–12:00</p>
+			<p><b>Tuesday</b> 03.12</p>
+			<p>13:15–17:00</p>
 		</td>
 		<td>
 			<p><b>Inference II:</b></p>
@@ -115,7 +115,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
 	<tr>
  		<td>
-			<p><b>Monday</b> 04.12</p>
+			<p><b>Thursday</b> 05.12</p>
 			<p>13:15–17:00</p>
 		</td>
 		<td>
@@ -135,9 +135,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 	</tr>
  	<tr>
 		<td>
-			<p><b>Monday</b> 11.12</p>
+			<p><b>Thursday</b> 12.12</p>
 			<p>13:15–17:00</p>
-			<p class = "soln">Meet in RR19</p>
+			<p class = "soln">Meet in Praktikumsraum Biologie</p>
 		</td>
 		<td>
 			<p>Special Topics</p>
@@ -155,9 +155,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 Most lectures will include exercises, which can be completed individually or in groups. I encourage you to work through them as much as you can. I will not grade the exercises, and it is not necessary to turn them in, but I'm happy to provide individual feedback/help as needed. During official meeting times, I will also walk through the exercises (as much as time allows) and explain the code to everyone at once.
 
 ## Course files
-All of the files for the course are on Github. To create a local copy on your computer, you can follow the instructions [here](https://github.com/mtalluto/vu_advstats_students).
+All of the files for the course are on Github. To create a local copy on your computer, you can follow the instructions [here](https://github.com/ltalluto/vu_advstats_students).
 
 ## Projects
 Everyone will complete a data analysis group project using a Bayesian analysis of your choice. I am happy to provide feedback to your group as you are developing your project to help steer you toward the proper analysis. Projects will be presented on the last day of instruction. Presentations should be roughly 10-15 minutes, and should include a brief description of the data and the scientific questions, an explanation of the model structure and why the structure is appropriate, other technical details that will help the other groups understand your model, and the status (MCMC diagnostics, results, etc). Additionally, you should collectively prepare a short write-up of your project, to be submitted by the end of the semester. This write up should be more complete than the presentation, with a short introduction, methods section detailing the model structure and why it was chosen, a **brief** description of the dataset and any information needed to understand it, results with figures as appropriate, and a short discussion with some interpretation of your model results.
 
-These write-ups are due on **28.02.2024**
+These write-ups are due on **28.02.2025**
