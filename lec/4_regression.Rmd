@@ -1,7 +1,7 @@
 ---
 title: "Regression & the Generalised Linear Model"
-author: "M. Talluto"
-date: "29.11.2023"
+author: "Lauren Talluto"
+date: "29.11.2024"
 output:
   slidy_presentation:
     theme: cerulean
@@ -39,7 +39,7 @@ options(digits=3)
 ::::
 :::: {.column}
 
-```{r echo = FALSE, fig.width=4, fig.height=9}
+```{r y_covary, echo = FALSE, fig.width=4, fig.height=9}
 n = 50
 x = runif(n, -1, 1)
 a = 0.5
@@ -73,7 +73,7 @@ plot(x, y3, pch=16, ylab=expression(y[3]), xlab="x")
 :::: {.column}
 
 
-```{r echo = FALSE, fig.width=4, fig.height=9}
+```{r y_covary_lines, echo = FALSE, fig.width=4, fig.height=9}
 
 xpr = seq(min(x), max(x), length.out=100)
 par(mfrow = c(3, 1), bty='n', mar=c(4,4,0,0))
@@ -108,7 +108,7 @@ lines(xpr, plogis(a + b3*xpr), col='red', lwd=2)
 :::: {.column}
 
 
-```{r echo = FALSE, fig.width=5, fig.height=5}
+```{r y_covary_lines_pt, echo = FALSE, fig.width=5, fig.height=5}
 xex = -0.3
 ypr = function(xx) a + b1*xx 
 par(bty='n', mar=c(4,4,0,0))
@@ -142,7 +142,7 @@ legend("bottomright", legend=paste("x =", xex), bty='n', pch=16, cex=1.3, col='b
 :::: {.column}
 
 
-```{r echo = FALSE, fig.width=5, fig.height=5}
+```{r y_covary_lines_dist, echo = FALSE, fig.width=5, fig.height=5}
 par(bty='n', mar=c(4,4,0,0))
 plot(x, y1, pch=16, cex=0.8, col="#777777", ylab="y", xlab="x")
 lines(xpr, ypr(xpr), col='red', lwd=2)
@@ -183,7 +183,7 @@ points(rep(xex, length(yex)), yex, col='blue', pch=16, cex=ycex)
 :::: {.column}
 
 
-```{r echo = FALSE, fig.width=5, fig.height=5}
+```{r y_covary_lines_dist_2, echo = FALSE, fig.width=5, fig.height=5}
 par(bty='n', mar=c(4,4,0,0))
 plot(x, y1, pch=16, cex=0.8, col="#777777", ylab="y", xlab="x")
 lines(xpr, ypr(xpr), col='red', lwd=2)
@@ -218,7 +218,7 @@ points(rep(xex, length(yex)), yex, col='blue', pch=16, cex=ycex)
 :::: {.column}
 
 
-```{r, echo = FALSE}
+```{r regression_graph, echo = FALSE}
 gr = graph_from_literal(a-+"E(y)", b-+"E(y)", s-+y, x-+"E(y)", "E(y)"-+y)
 V(gr)$type = c("stochastic", "deterministic", "stochastic", "stochastic", "stochastic", "deterministic")
 V(gr)$source = c("unknown", "unknown", "unknown", "unknown", "known", "known")
@@ -247,7 +247,7 @@ pl
 * Bayesian models that can be fit in Stan are **directed acyclic graphs**
 * Can draw them by hand, or use `igraph` and `ggnetwork`
 
-```{r eval = FALSE}
+```{r regression_graph_code, eval = FALSE}
 library("igraph")
 library("ggnetwork")
 
@@ -283,7 +283,7 @@ n = ggnetwork(gr, layout=layout)
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp, echo = FALSE}
 pl
 ```
 
@@ -305,7 +305,7 @@ pl
 	- Appear in the `data` block (everything else)
 	- Stochastic variables that are also measured will be in `data` **and** on the left side of `~`\
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan empty_stan, output.var = "lm", eval = FALSE}
 data {
 
 }
@@ -324,7 +324,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_2, echo = FALSE}
 pl
 ```
 
@@ -349,7 +349,7 @@ Syntax:
 	| real y [n];   // array of n real numbers
 	| vector [n] y; // vector of n real numbers
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan stan_1, output.var = "lm", eval = FALSE}
 data {
 	vector [n] y;
 }
@@ -368,7 +368,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_3, echo = FALSE}
 pl
 ```
 
@@ -383,7 +383,7 @@ pl
 4. Everything I used to declare/define `y` now needs it's own declaration and definition.
 	- Here we do `s` and `n`, which have no dependencies.
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan stan_2, output.var = "lm", eval = FALSE}
 data {
 	int <lower = 1> n;
 	vector [n] y;
@@ -404,7 +404,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_4, echo = FALSE}
 pl
 ```
 
@@ -419,7 +419,7 @@ pl
 
 5. Iterate, following each dependency until everything on the graph is in the model
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan stan_3, output.var = "lm", eval = FALSE}
 data {
 	int <lower = 1> n;
 	vector [n] y;
@@ -441,7 +441,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_5, echo = FALSE}
 pl
 ```
 
@@ -459,7 +459,7 @@ pl
 
 5. Iterate, following each dependency until everything on the graph is in the model
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan stan_4, output.var = "lm", eval = FALSE}
 data {
 	int <lower = 1> n;
 	vector [n] y;
@@ -486,7 +486,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_6, echo = FALSE}
 pl
 ```
 
@@ -504,7 +504,7 @@ These are guidelines not strict rules...
 ::: {.columns}
 :::: {.column}
 
-```{stan output.var = "lm", eval = FALSE}
+```{stan stan_5, output.var = "lm", eval = FALSE}
 data {
 	// declaration of all knowns
 }
@@ -523,7 +523,7 @@ model {
 :::: {.column}
 
 
-```{r echo = FALSE}
+```{r regression_graph_code_disp_7, echo = FALSE}
 pl
 ```
 
@@ -541,7 +541,7 @@ pl
 ![](../assets/img/palmerpenguins.png){width=75}
 ![](../assets/img/culmen_depth.png){width=150}
 
-```{r echo = FALSE, warning = FALSE}
+```{r peng_plot, echo = FALSE, warning = FALSE}
 penguins = as.data.frame(palmerpenguins::penguins)
 penguins = subset(penguins, complete.cases(penguins) & species == "Gentoo")
 (pl = ggplot(penguins) + geom_point(aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) + 
@@ -552,7 +552,7 @@ penguins = subset(penguins, complete.cases(penguins) & species == "Gentoo")
 ::::
 :::: {.column}
 
-```{stan output.var = "peng_lm", cache = TRUE}
+```{stan peng_lm_stan, output.var = "peng_lm", cache = TRUE}
 data {
 	int <lower = 1> n;
 	vector [n] bill_depth;
@@ -590,7 +590,7 @@ model {
 ![](../assets/img/palmerpenguins.png){width=75}
 ![](../assets/img/culmen_depth.png){width=150}
 
-```{r echo = FALSE, warning = FALSE}
+```{r peng_line, echo = FALSE, warning = FALSE}
 pl + geom_abline(intercept =5.1, slope = 0.21, col = "#841D15", linewidth = 1.5)
 
 ```
@@ -598,12 +598,12 @@ pl + geom_abline(intercept =5.1, slope = 0.21, col = "#841D15", linewidth = 1.5)
 ::::
 :::: {.column}
 
-```{r eval = FALSE}
+```{r peng_load, eval = FALSE}
 library(rstan)
 peng_lm = stan_model("stan/penguin_lm.stan")
 ```
 
-```{r cache = TRUE}
+```{r peng_fit_lm, cache = TRUE}
 penguins = as.data.frame(palmerpenguins::penguins)
 penguins = subset(penguins, complete.cases(penguins) & species == "Gentoo")
 peng_dat = with(penguins, list(
@@ -666,7 +666,7 @@ Dataset: Nancy Howell (Univ. Toronto) | Measurements of the Dobe !Kung people | 
 
 
 
-```{r message = FALSE, cache = TRUE}
+```{r kung_read, message = FALSE, cache = TRUE}
 library(data.table)
 kung = fread("https://github.com/rmcelreath/rethinking/raw/master/data/Howell1.csv")
 (pl = ggplot(data = kung, aes(x = weight, y = height)) + geom_point(col = "#555555aa", size = 0.9) +
@@ -708,7 +708,7 @@ $$
 
 
 
-```{r echo = FALSE, message = FALSE}
+```{r kung_plot, echo = FALSE, message = FALSE}
 pl
 ```
 

@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="M. Talluto" />
+  <meta name="author" content="Lauren Talluto" />
   <title>Model Selection &amp; Comparison</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
@@ -27,7 +27,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -92,7 +92,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +144,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.23/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -170,9 +170,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="slide titlepage">
   <h1 class="title">Model Selection &amp; Comparison</h1>
   <p class="author">
-M. Talluto
+Lauren Talluto
   </p>
-  <p class="date">04.12.2023</p>
+  <p class="date">05.12.2024</p>
 </div>
 <div id="there-is-no-right-solution-to-evaluation"
 class="slide section level2">
@@ -354,7 +354,7 @@ anything about <span class="math inline">\(\theta_{true}\)</span></li>
 <li>We can compare the models’ relative performance without knowing
 anything about <span class="math inline">\(\theta_{true}\)</span></li>
 <li>We just need to know the entropy of each model: <span
-class="math inline">\(H_{\theta} = -\mathbb{E}\left [\log pr \left(x |
+class="math inline">\(H_{\theta} = -\mathbb{E}\left [\log  pr \left(x |
 \theta \right) \right ]\)</span></li>
 <li><strong>Deviance</strong> is an estimate of the entropy of a
 model:</li>

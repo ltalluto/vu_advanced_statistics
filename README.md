@@ -1,8 +1,8 @@
 # Advanced Statistics
 
-Please see the [course web site](https://mtalluto.github.io/vu_advanced_statistics) for more information on the course.
+Please see the [course web site](https://ltalluto.github.io/vu_advanced_statistics) for more information on the course.
 
-After completing the setup below, you can get the [course files](https://github.com/mtalluto/vu_advstats_students).
+After completing the setup below, you can get the [course files](https://github.com/ltalluto/vu_advstats_students).
 
 ## Software required
 To participate in the course, you will need to bring a laptop with the following software packages. Install them in the order listed below!

@@ -1,7 +1,7 @@
 ---
 title: "Model Selection & Comparison"
-author: "M. Talluto"
-date: "04.12.2023"
+author: "Lauren Talluto"
+date: "05.12.2024"
 output:
   slidy_presentation:
     theme: cerulean

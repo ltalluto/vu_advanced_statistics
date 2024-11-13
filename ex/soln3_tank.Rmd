@@ -1,6 +1,6 @@
 ---
 title: "The German Tank Problem (MCMC Edition)"
-date: "27.11.2023"
+date: "28.11.2023"
 output: 
   html_document:
     self_contained: false
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 1. **Optional**. Implement your own Metropolis algorithm
 
-See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. Alternatively, there is an implementation provided on the [github repository](https://raw.githubusercontent.com/mtalluto/vu_advstats_statudents/main/r/metrop.r).
+See the bottom of this page for some scaffolding code to get you started. Fill in the appropriate places with the code for making the algorithm work. Alternatively, there is an implementation provided on the [github repository](https://raw.githubusercontent.com/ltalluto/vu_advstats_statudents/main/r/metrop.r).
 
 ### 2. German Tank Problem
 
