@@ -43,7 +43,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/1_probability">Probability & Distributions</a></td>
 		<td>
 			<p><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>
+			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>-->
 		</td>
 	</tr>
 	<tr>
@@ -58,7 +58,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a></td>
 		<td>
 			<p><a href = "ex/ex2_tree.html">Tree mortality</a></p>
-			<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>
+			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
 		</td>
 	</tr>
 	<tr>
@@ -73,7 +73,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/3_mcmc">MCMC & Sampling</a></td>
 		<td>
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
-			<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>
+			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>-->
 		</td>
 	</tr>
 	<tr>
@@ -89,9 +89,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		</td>
 		<td>
 			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
-				<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>
+				<!--<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
-				<p class = "soln"><a href = "ex/soln">Solutions</a></p>
+				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
 		</td>
 	</tr>
