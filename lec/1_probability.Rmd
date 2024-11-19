@@ -984,6 +984,7 @@ The zombie example is cute, but it is a real biological problem. "True" state is
 :::: {.column}
 ![](../assets/img/empid.jpg){width=60%}
 
+
 ```{r echo = FALSE, results='asis'}
 emat = matrix(c("—", "—", "—", "—"), ncol=2, 
 			  dimnames=list(c("Present", "Absent"), c("Observed", "Not Observed")))
