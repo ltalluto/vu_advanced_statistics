@@ -214,15 +214,16 @@ pois = dpois(11, 9.9))</code></pre>
 c(
    ## ppois(10, ...) is the prob of 10 or less events
    ## 1 - ppois(10, ...) gives the prob of more than 10
-   1 - ppois(10, 9.9),  
+   ppois1 = 1 - ppois(10, 9.9),  
    ## we can achieve the same thing with the lower.tail argument
-   ppois(10, 9.9, lower.tail=FALSE),
+   ppois2 = ppois(10, 9.9, lower.tail=FALSE),
    ## the poisson is discrete, so we can also sum the mass function
-   1 - sum(dpois(0:10, 9.9)),
+   dpois1 = 1 - sum(dpois(0:10, 9.9)),
    ## technically we need to go to infinity, but the error is small
-   sum(dpois(11:1e6, 9.9))
+   dpois2 = sum(dpois(11:1e6, 9.9))
 )</code></pre>
-<pre><code>## [1] 0.404 0.404 0.404 0.404</code></pre>
+<pre><code>## ppois1 ppois2 dpois1 dpois2 
+##  0.404  0.404  0.404  0.404</code></pre>
 </div>
 <ol start="3" style="list-style-type: decimal">
 <li>Is a <strong>probability density</strong> the same as a
@@ -238,7 +239,7 @@ maximum probability density occurs?</li>
 </ol>
 <div class="soln">
 <p>The maximum density of the normal is at the mean, so <span
-class="math inline">\(x_{max}=164.7\)</span>**</p>
+class="math inline">\(x_{max}=164.7\)</span></p>
 <pre class="r"><code>xmax = 164.7
 mean_ht = 164.7
 sd_ht = 7.1

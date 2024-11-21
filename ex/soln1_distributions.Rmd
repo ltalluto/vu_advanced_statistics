@@ -56,13 +56,13 @@ Lots of ways to arrive at the same answer
 c(
    ## ppois(10, ...) is the prob of 10 or less events
    ## 1 - ppois(10, ...) gives the prob of more than 10
-   1 - ppois(10, 9.9),  
+   ppois1 = 1 - ppois(10, 9.9),  
    ## we can achieve the same thing with the lower.tail argument
-   ppois(10, 9.9, lower.tail=FALSE),
+   ppois2 = ppois(10, 9.9, lower.tail=FALSE),
    ## the poisson is discrete, so we can also sum the mass function
-   1 - sum(dpois(0:10, 9.9)),
+   dpois1 = 1 - sum(dpois(0:10, 9.9)),
    ## technically we need to go to infinity, but the error is small
-   sum(dpois(11:1e6, 9.9))
+   dpois2 = sum(dpois(11:1e6, 9.9))
 )
 ```
 :::
@@ -72,7 +72,7 @@ c(
 a. Human height is normally distributed within populations. From 1980-1994 within 20 wealthy countries, mean female height was 164.7 cm, with a standard deviation of 7.1 cm. What is the **maximum probability density** of this normal distribution, and what is the x-value $x_{max}$ at which maximum probability density occurs?
 
 ::: {.soln}
-The maximum density of the normal is at the mean, so $x_{max}=164.7$** 
+The maximum density of the normal is at the mean, so $x_{max}=164.7$ 
 
 ```{r}
 xmax = 164.7
