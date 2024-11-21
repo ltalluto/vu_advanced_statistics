@@ -43,7 +43,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/1_probability">Probability & Distributions</a></td>
 		<td>
 			<p><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<!--<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>-->
+			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>
 		</td>
 	</tr>
 	<tr>
