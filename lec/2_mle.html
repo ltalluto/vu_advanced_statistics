@@ -174,8 +174,9 @@ Lauren Talluto
   </p>
   <p class="date">26.11.2024</p>
 </div>
-<div id="what-is-a-likelihood" class="slide section level2">
-<h1>What is a likelihood?</h1>
+<div id="the-problem-of-parameter-estimation"
+class="slide section level2">
+<h1>The problem of parameter estimation</h1>
 <div class="columns">
 <div class="column">
 <ul>
@@ -185,9 +186,9 @@ Lauren Talluto
 zombies <span class="math inline">\(k\)</span> in a sample of <span
 class="math inline">\(n=10\)</span></li>
 <li>More typically, we would observe <span
-class="math inline">\(k\)</span> and <span
-class="math inline">\(n\)</span> via <em>sampling</em>, and want to
-estimate <span class="math inline">\(p_z\)</span>.</li>
+class="math inline">\(k\)</span> via taking a <em>sample</em> of size
+<span class="math inline">\(n\)</span>, and then try to estimate <span
+class="math inline">\(p_z\)</span>.</li>
 </ul>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-1-1.png" width="528" /></p>
@@ -222,8 +223,8 @@ the population that is a zombie.</li>
 observed <span class="math inline">\(k=7\)</span> zombies.</li>
 <li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
 the population that is a zombie.</li>
-<li><strong>Use intuition:</strong> We know the best estimate is <span
-class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
+<li><strong>Intuition:</strong> We know the best estimate is <span
+class="math inline">\(p_z = 7/25 \approx 0.28\)</span>. Why?</li>
 </ul>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-2-1.png" width="528" /></p>
@@ -241,10 +242,15 @@ class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
 observed <span class="math inline">\(k=7\)</span> zombies.</li>
 <li>Estimate <span class="math inline">\(p_z\)</span>, the proportion of
 the population that is a zombie.</li>
-<li><strong>Use intuition:</strong> We know the best estimate is <span
-class="math inline">\(p_z = 7/25 = 0.28\)</span>. Why?</li>
-<li>Many other values of <span class="math inline">\(p_z\)</span> are
-also possible.</li>
+<li><strong>Intuition:</strong> We know the best estimate is <span
+class="math inline">\(p_z = 7/25 \approx 0.28\)</span>. Why?</li>
+<li><strong>However:</strong> Many other values of <span
+class="math inline">\(p_z\)</span> are nearly as likely.
+<ul>
+<li>Here, even if <span class="math inline">\(p_z = 0.4\)</span>, there
+is an 8% chance of getting <span class="math inline">\(k =
+7\)</span>.</li>
+</ul></li>
 </ul>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-3-1.png" width="528" /></p>
@@ -271,53 +277,41 @@ also be nice</li>
 <div id="the-likelihood-model" class="slide section level2">
 <h1>The likelihood model</h1>
 <ul class="incremental">
-<li>If I <em>assume</em> a model <span
-class="math inline">\(\theta\)</span>…</li>
-<li>Can I compute the probability that the data came from this
-model?</li>
+<li>If I have a model <span class="math inline">\(\theta\)</span>…</li>
+<li>And a dataset <span class="math inline">\(X\)</span>…</li>
+<li>Can I compute the probability that the data came from this model?
+<span class="math inline">\(pr(X | \theta)\)</span></li>
 </ul>
 </div>
 <div id="the-likelihood-model-1" class="slide section level2">
 <h1>The likelihood model</h1>
-<ul>
-<li>If I <em>assume</em> a model <span
-class="math inline">\(\theta\)</span>…</li>
-<li>Can I compute the probability that the data came from this
-model?</li>
-</ul>
-<p><span class="math display">\[
-pr(\mathrm{Data} | \theta)
-\]</span></p>
-</div>
-<div id="the-likelihood-model-2" class="slide section level2">
-<h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
 <ul class="incremental">
-<li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
-<li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
+<li>Example: <span class="math inline">\(\theta = p_z\)</span>, assume
+for the moment that <span class="math inline">\(p_z = 0.4\)</span></li>
 <li>What is the probability of observing the data (<span
-class="math inline">\(k = 7, n = 25\)</span>) if this model is
-true?</li>
+class="math inline">\(k = 7\)</span> with<span class="math inline">\(n =
+25\)</span>) if this model is true?</li>
 </ul>
 </div><div class="column">
 
 </div>
 </div>
 </div>
-<div id="the-likelihood-model-3" class="slide section level2">
+<div id="the-likelihood-model-2" class="slide section level2">
 <h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Example: <span class="math inline">\(\theta = p_z\)</span></li>
-<li>Assume <span class="math inline">\(\hat{p}_z = 0.4\)</span></li>
+<li>Example: <span class="math inline">\(\theta = p_z\)</span>, assume
+for the moment that <span class="math inline">\(p_z = 0.4\)</span></li>
 <li>What is the probability of observing the data (<span
-class="math inline">\(k = 7, n = 25\)</span>) if this model is
-true?</li>
+class="math inline">\(k = 7\)</span> with<span class="math inline">\(n =
+25\)</span>) if this model is true?</li>
 </ul>
 <p><span class="math display">\[
-    pr(k=7,n=25 | p_z = 0.4) = ?
+    pr(k=7| p_z = 0.4, n = 25) = ?
 \]</span></p>
 <p>Any guesses how?</p>
 </div><div class="column">
@@ -325,7 +319,7 @@ true?</li>
 </div>
 </div>
 </div>
-<div id="the-likelihood-model-4" class="slide section level2">
+<div id="the-likelihood-model-3" class="slide section level2">
 <h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
@@ -342,7 +336,7 @@ observed data.</li>
 </div>
 </div>
 </div>
-<div id="the-likelihood-model-5" class="slide section level2">
+<div id="the-likelihood-model-4" class="slide section level2">
 <h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
@@ -364,7 +358,7 @@ observed data.</li>
 </div>
 </div>
 </div>
-<div id="the-likelihood-model-6" class="slide section level2">
+<div id="the-likelihood-model-5" class="slide section level2">
 <h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
@@ -381,7 +375,7 @@ observed data.</li>
 </div>
 </div>
 </div>
-<div id="the-likelihood-model-7" class="slide section level2">
+<div id="the-likelihood-model-6" class="slide section level2">
 <h1>The likelihood model</h1>
 <div class="columns">
 <div class="column">
@@ -412,8 +406,12 @@ observed data.</li>
 <li>The <strong>likelihood function</strong> is a function <em>f</em> of
 the data <span class="math inline">\(X\)</span> and model/parameters
 <span class="math inline">\(\theta\)</span></li>
-<li>Here <span class="math inline">\(X = \{k,n\}\)</span> and <span
-class="math inline">\(\theta = \{p_z\}\)</span></li>
+<li>Here <span class="math inline">\(X = \{k\}\)</span> and <span
+class="math inline">\(\theta = \{p_z\}\)</span>
+<ul>
+<li><span class="math inline">\(n\)</span> is a constant defined by our
+study design.</li>
+</ul></li>
 <li><span class="math inline">\(f(X,\theta)\)</span> returns the
 <em>probability of observing</em> <span
 class="math inline">\(X\)</span>, given a particular model <span
@@ -431,18 +429,33 @@ class="math inline">\(pr(X|\theta)\)</span></li>
 <div class="columns">
 <div class="column">
 <ul>
-<li>Intuition is fine, but how do we estimate or (in some cases) solve
-for the maximum likelihood? Guessing might take a long time!</li>
+<li>Intuition is fine, but how do we estimate or solve for the maximum
+likelihood? Guessing might take a long time!</li>
 </ul>
 </div><div class="column">
-<pre><code>## Warning in geom_point(aes(x = 7/25, y = dbinom(7, 25, 7/25)), size = 2, : All aesthetics have length 1, but the data has 201 rows.
-## ℹ Please consider using `annotate()` or provide this layer with data containing
-##   a single row.</code></pre>
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-17-1.png" width="528" /></p>
 </div>
 </div>
 </div>
 <div id="solving-for-the-mle" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{L}(k,n|p) &amp; = {n \choose k} p^k(1-p)^{(n-k)}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-1" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{L}(k,n|p) &amp; = {n \choose k} p^k(1-p)^{(n-k)} \\
+\frac{d \mathcal{L}(k,n|p)}{dp} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-2" class="slide section level2">
 <h1>Solving for the MLE</h1>
 <p><span class="math display">\[
 \begin{aligned}
@@ -453,12 +466,124 @@ k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
 \end{aligned}
 \]</span></p>
 </div>
-<div id="solving-for-the-mle-1" class="slide section level2">
+<div id="solving-for-the-mle-3" class="slide section level2">
 <h1>Solving for the MLE</h1>
 <p><span class="math display">\[
 \begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
 {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
-k}kp^{k-1}(1-p)^{(n-k)} \\
+k}kp^{k-1}(1-p)^{(n-k)}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-4" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{\xcancel{n \choose k}} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {\xcancel{n
+\choose k}}kp^{k-1}(1-p)^{(n-k)}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-5" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-6" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p{\xcancel{(p^{k-1})}} (n-k){\xcancel{(1-p)^{(n-k-1)}}} &amp; =
+k{\xcancel{p^{k-1}}}(1-p){\xcancel{(1-p)^{(n-k-1)}}} \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-7" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) &amp; = k(1-p) \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-8" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) &amp; = k(1-p) \\
+pn -pk &amp; = k-pk \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-9" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) &amp; = k(1-p) \\
+pn - {\xcancel{pk}} &amp; = k-{\xcancel{pk}} \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-10" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) &amp; = k(1-p) \\
+pn -pk &amp; = k-pk \\
+pn &amp; = k \\
+\end{aligned}
+\]</span></p>
+</div>
+<div id="solving-for-the-mle-11" class="slide section level2">
+<h1>Solving for the MLE</h1>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} &amp; = {n \choose
+k}kp^{k-1}(1-p)^{(n-k)}
+\\
 p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} &amp; = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
 p (n-k) &amp; = k(1-p) \\
 pn -pk &amp; = k-pk \\
@@ -482,42 +607,45 @@ impractical.</li>
 impractical.</li>
 <li>We turn to various algorithms for numerical optimisation</li>
 </ul>
-<div class="columns">
-<div class="column">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># write a custom function that returns the log likelihood</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>) <span class="do">## why log??</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>}</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
-</div><div class="column">
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># the terms n = ... and k = ... must be named the way they are in llfun</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n, <span class="at">k =</span> k, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="do">## $par</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="do">## $value</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="do">## [1] -1.740834</span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="do">## $counts</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="do">## function gradient </span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="do">##       NA       NA </span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="do">## $convergence</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="do">## [1] 0</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="do">## $message</span></span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># define our data set</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">25</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">7</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># write a custom function that returns the log likelihood</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>llfun <span class="ot">=</span> <span class="cf">function</span>(p, n, k) {</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">dbinom</span>(k, n, p, <span class="at">log=</span><span class="cn">TRUE</span>) <span class="do">## why log??</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># we need an initial guess for the parameter we want to optimise</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>p_init <span class="ot">=</span> <span class="fl">0.5</span></span></code></pre></div>
 </div>
-</div>
+<div id="optimisation-2" class="slide section level2">
+<h1>Optimisation</h1>
+<ul>
+<li>In many (most) cases, analytical solutions are unavailable or
+impractical.</li>
+<li>We turn to various algorithms for numerical optimisation</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># optim will start at p_init, evaluate llfun using the data we pass</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># and return the optimum (if found)</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># the terms n = ... and k = ... must be named the way they are in llfun</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">optim</span>(p_init, llfun, <span class="at">method =</span> <span class="st">&quot;Brent&quot;</span>, <span class="at">n =</span> n, <span class="at">k =</span> k, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">lower=</span><span class="dv">0</span>, <span class="at">upper=</span><span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">## $par</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="do">## $value</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="do">## [1] -1.740834</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="do">## $counts</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="do">## function gradient </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="do">##       NA       NA </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="do">## $convergence</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="do">## [1] 0</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="do">## $message</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="do">## NULL</span></span></code></pre></div>
 </div>
 <div id="parameter-estimation-in-stan" class="slide section level2">
 <h1>Parameter estimation in Stan</h1>
@@ -554,15 +682,17 @@ any input data for your model
 <li>Here, <code>int</code> indicates a variable that is an integer</li>
 <li><strong>Constraints</strong> give rules about variables; here k must
 be positive, and n &gt;= k</li>
+<li>The data block is also a great place for <strong>constants</strong>
+(like n)!</li>
 </ul></li>
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -579,14 +709,14 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href=
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>}</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -597,23 +727,23 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 <ul>
 <li>In the <code>model</code> block we specify our likelihood function
 <ul>
-<li><code>k</code> comes from a binomial distribution with probability
-<code>p</code> and <code>n</code> observations</li>
+<li><code>k</code> comes from a binomial distribution with n
+observations and probability parameter <code>p</code></li>
 </ul></li>
 </ul>
 </div><div class="column">
 <p>File: <code>vu_advstats_students/stan/zomb_p.stan</code></p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>}</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>}</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    k ~ binomial(n, p);</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = k&gt; n;</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    k ~ binomial(n, p);</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -631,9 +761,9 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb12-1"><a href=
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -647,30 +777,32 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb12-1"><a href=
 <code>optim</code> but for Stan models</li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># already did this, don&#39;t do it twice</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># zomb_p = stan_model(&quot;stan/zomb_p.stan&quot;) </span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co"># prepare data</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="at">k =</span> <span class="dv">7</span>)</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="do">## $par</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## 0.2800003 </span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="do">## $value</span></span>
-<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="do">## [1] -14.82383</span></span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a><span class="do">## $return_code</span></span>
-<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="do">## [1] 0</span></span>
-<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="do">## $theta_tilde</span></span>
-<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a><span class="do">##              p</span></span>
-<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="do">## [1,] 0.2800003</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># assuming working directory is vu_advstats_students</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">## reminder: only do this once unless zomb_p.stan changes!</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>zomb_p <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/zomb_p.stan&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># prepare data</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># names must match the data block in Stan</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>zomb_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">25</span>, <span class="at">k =</span> <span class="dv">7</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span></code></pre></div>
+<pre><code>## $par
+##         p 
+## 0.2800003 
+## 
+## $value
+## [1] -14.82383
+## 
+## $return_code
+## [1] 0
+## 
+## $theta_tilde
+##              p
+## [1,] 0.2800003</code></pre>
 </div>
 </div>
 </div>
@@ -778,7 +910,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb16-1"><a href=
 <span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
 <span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="do">## 0.2222222</span></span></code></pre></div>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="do">## 0.2222296</span></span></code></pre></div>
 </div>
 <div id="why-bayes" class="slide section level2">
 <h1>Why Bayes?</h1>
@@ -837,10 +969,6 @@ positive”), we were able to add up all of the ways one could test
 positive.</li>
 <li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
 pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
-<li><span class="math inline">\(pr(X) = \sum_i^n
-pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
-set <span class="math inline">\(n\)</span></li>
-<li>What about for continuous problems?</li>
 </ul>
 </div>
 <div id="the-normalizing-constant-1" class="slide section level2">
@@ -851,6 +979,26 @@ positive”), we were able to add up all of the ways one could test
 positive.</li>
 <li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
 pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+</ul>
+<h3 id="more-generally">More generally:</h3>
+<ul>
+<li><span class="math inline">\(pr(X) = \sum_i^n
+pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
+set <span class="math inline">\(n\)</span></li>
+<li>What about for continuous problems?</li>
+</ul>
+</div>
+<div id="the-normalizing-constant-2" class="slide section level2">
+<h1>The normalizing constant</h1>
+<ul>
+<li>For the first zombie problem, we had a single observation (“I tested
+positive”), we were able to add up all of the ways one could test
+positive.</li>
+<li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
+pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+</ul>
+<h3 id="more-generally-1">More generally:</h3>
+<ul>
 <li><span class="math inline">\(pr(X) = \sum_i^n
 pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
 set <span class="math inline">\(n\)</span></li>
@@ -862,7 +1010,7 @@ class="math inline">\(pr(\theta)\)</span> is a continuous PDF.</li>
 </ul></li>
 </ul>
 </div>
-<div id="the-normalizing-constant-2" class="slide section level2">
+<div id="the-normalizing-constant-3" class="slide section level2">
 <h1>The normalizing constant</h1>
 <ul>
 <li>For the first zombie problem, we had a single observation (“I tested
@@ -870,6 +1018,9 @@ positive”), we were able to add up all of the ways one could test
 positive.</li>
 <li><span class="math inline">\(pr(T) = pr(T,Z) + pr(T,Z&#39;) =
 pr(T|Z)pr(Z) + pr(T|Z&#39;)pr(Z&#39;)\)</span></li>
+</ul>
+<h3 id="more-generally-2">More generally:</h3>
+<ul>
 <li><span class="math inline">\(pr(X) = \sum_i^n
 pr(X|\theta_i)pr(\theta_i)\)</span> where all possible models are in the
 set <span class="math inline">\(n\)</span></li>
@@ -931,7 +1082,7 @@ distribution:</li>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pr_theta <span class="ot">=</span> <span class="fu">dunif</span>(theta, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">plot</span>(theta, pr_theta, <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
 </div><div class="column">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-30-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
 </div>
 </div>
 </div>
@@ -950,7 +1101,7 @@ likely?</li>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>pr_theta_1 <span class="ot">=</span> <span class="fu">dbeta</span>(theta, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span></code></pre></div>
 </div><div class="column">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-32-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-33-1.png" width="528" /></p>
 </div>
 </div>
 </div>
@@ -1021,10 +1172,10 @@ class="slide section level2">
 <span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="do">## [1] 0.28</span></span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a></span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##    p </span></span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##         p </span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.2800001</span></span></code></pre></div>
 </div><div class="column">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-37-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-38-1.png" width="528" /></p>
 <p>This prior has no influence on the posterior</p>
 </div>
 </div>
@@ -1036,15 +1187,15 @@ class="slide section level2">
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.2963089</span></span></code></pre></div>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.2963022</span></span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">3</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="fl">1.5</span></span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## 0.3272731</span></span></code></pre></div>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## 0.3272728</span></span></code></pre></div>
 <p>These priors are informative, but relatively weak (our data has
 weight equivalent to <code>alpha=7, beta=18</code>)</p>
 </div><div class="column">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-40-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-41-1.png" width="528" /></p>
 </div>
 </div>
 </div>
@@ -1057,9 +1208,9 @@ zombies and 5 normals?</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
 <span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="do">## 0.5416647</span></span></code></pre></div>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="do">## 0.5416636</span></span></code></pre></div>
 </div><div class="column">
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-42-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /></p>
 </div>
 </div>
 </div>
@@ -1130,7 +1281,7 @@ quadratic (the posterior is approximately normal)</li>
 <li><strong>Laplace approximation</strong> (or Quadratic approximation)
 is a method for approximating the shape of this curve</li>
 </ul>
-<p><img src="2_mle_files/figure-slidy/unnamed-chunk-43-1.png" width="528" /></p>
+<p><img src="2_mle_files/figure-slidy/unnamed-chunk-44-1.png" width="528" /></p>
 </div>
 <div id="geting-a-normalized-posterior-5" class="slide section level2">
 <h1>Geting a normalized posterior</h1>
@@ -1152,7 +1303,7 @@ MCMC)</li>
     (function () {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
       document.getElementsByTagName("head")[0].appendChild(script);
     })();
   </script>
