@@ -9,6 +9,7 @@ output:
     css: rmd_style.css
     self_contained: false
     lib_dir: lib
+    mathjax: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   beamer_presentation: default
 ---
 
@@ -20,13 +21,13 @@ library(ggplot2)
 library(xtable)
 ```
 
-## What is a likelihood?
+## The problem of parameter estimation
 
 ::: {.columns}
 :::: {.column}
 * In the Zombie example, we knew the probability of being a zombie: $p_z = 0.3$
 * We wanted to know the probability of observing some number of zombies $k$ in a sample of $n=10$
-* More typically, we would observe $k$ and $n$ via *sampling*, and want to estimate $p_z$.
+* More typically, we would observe $k$ via taking a *sample* of size $n$, and then try to estimate $p_z$.
 ::::
 :::: {.column}
 
@@ -67,7 +68,7 @@ pt(pl)
 * Assume samples were random, *iid* 
 * Given a sample of $n=25$, we observed $k=7$ zombies.
 * Estimate $p_z$, the proportion of the population that is a zombie.
-* **Use intuition:** We know the best estimate is $p_z = 7/25 = 0.28$. Why?
+* **Intuition:** We know the best estimate is $p_z = 7/25 \approx 0.28$. Why?
 ::::
 :::: {.column}
 ```{r echo = FALSE, warning=FALSE}
@@ -95,8 +96,9 @@ pl
 * Assume samples were random, *iid* 
 * Given a sample of $n=25$, we observed $k=7$ zombies.
 * Estimate $p_z$, the proportion of the population that is a zombie.
-* **Use intuition:** We know the best estimate is $p_z = 7/25 = 0.28$. Why?
-* Many other values of $p_z$ are also possible.
+* **Intuition:** We know the best estimate is $p_z = 7/25 \approx 0.28$. Why?
+* **However:** Many other values of $p_z$ are nearly as likely.
+	- Here, even if $p_z = 0.4$, there is an 8% chance of getting $k = 7$.
 ::::
 :::: {.column}
 ```{r echo = FALSE}
@@ -129,24 +131,17 @@ pl
 :::
 
 ## The likelihood model
-> - If I *assume* a model $\theta$...
-> - Can I compute the probability that the data came from this model?
+> - If I have a model $\theta$...
+> - And a dataset $X$...
+> - Can I compute the probability that the data came from this model? $pr(X | \theta)$
 
-## The likelihood model
-* If I *assume* a model $\theta$...
-* Can I compute the probability that the data came from this model?
-
-$$
-pr(\mathrm{Data} | \theta)
-$$
 
 ## The likelihood model
 
 ::: {.columns}
 :::: {.column}
-> - Example: $\theta = p_z$
-> - Assume $\hat{p}_z = 0.4$
-> - What is the probability of observing the data ($k = 7, n = 25$) if this model is true?
+> - Example: $\theta = p_z$, assume for the moment that $p_z = 0.4$
+> - What is the probability of observing the data ($k = 7$ with$n = 25$) if this model is true?
 
 ::::
 :::: {.column}
@@ -157,12 +152,11 @@ $$
 
 ::: {.columns}
 :::: {.column}
-* Example: $\theta = p_z$
-* Assume $\hat{p}_z = 0.4$
-* What is the probability of observing the data ($k = 7, n = 25$) if this model is true?
+* Example: $\theta = p_z$, assume for the moment that $p_z = 0.4$
+* What is the probability of observing the data ($k = 7$ with$n = 25$) if this model is true?
 
 $$
-	pr(k=7,n=25 | p_z = 0.4) = ?
+	pr(k=7| p_z = 0.4, n = 25) = ?
 $$
 
 Any guesses how?
@@ -289,7 +283,8 @@ binom_plot
 ::: {.columns}
 :::: {.column}
 * The **likelihood function** is a function *f* of the data $X$ and model/parameters $\theta$
-* Here $X = \{k,n\}$ and $\theta = \{p_z\}$
+* Here $X = \{k\}$ and $\theta = \{p_z\}$
+	- $n$ is a constant defined by our study design.
 * $f(X,\theta)$ returns the *probability of observing* $X$, given a particular model $\theta$: $pr(X|\theta)$
 * Here, the *binomial PMF* is a useful likelihood function
 ::::
@@ -308,17 +303,44 @@ binom_plot
 
 ::: {.columns}
 :::: {.column}
-* Intuition is fine, but how do we estimate or (in some cases) solve for the maximum likelihood? Guessing might take a long time!
+* Intuition is fine, but how do we estimate or solve for the maximum likelihood? Guessing might take a long time!
 ::::
 :::: {.column}
 
 ```{r, echo=FALSE}
-binom_plot = binom_plot + geom_point(aes(x = 7/25, y = dbinom(7, 25, 7/25)), size = 2, colour='blue')
+binom_plot = binom_plot + 
+	geom_point(data = data.frame(x = 7/25, y = dbinom(7, 25, 7/25)), 
+			   aes(x = x, y = y), size = 2, colour='blue')
 binom_plot
 ```
 
 ::::
 :::
+
+
+
+## Solving for the MLE
+
+
+$$
+\begin{aligned}
+\mathcal{L}(k,n|p) & = {n \choose k} p^k(1-p)^{(n-k)}
+\end{aligned}
+$$
+
+
+## Solving for the MLE
+
+
+$$
+\begin{aligned}
+\mathcal{L}(k,n|p) & = {n \choose k} p^k(1-p)^{(n-k)} \\
+\frac{d \mathcal{L}(k,n|p)}{dp} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)}
+\end{aligned}
+$$
+
+
+
 
 
 ## Solving for the MLE
@@ -332,10 +354,104 @@ $$
 \end{aligned}
 $$
 
+
 ## Solving for the MLE
 $$
 \begin{aligned}
-{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} \\
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\end{aligned}
+$$
+
+
+## Solving for the MLE
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{\xcancel{n \choose k}} p^k (n-k)(1-p)^{(n-k-1)} & = {\xcancel{n \choose k}}kp^{k-1}(1-p)^{(n-k)} 
+\end{aligned}
+$$
+
+## Solving for the MLE
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p{\xcancel{(p^{k-1})}} (n-k){\xcancel{(1-p)^{(n-k-1)}}} & = k{\xcancel{p^{k-1}}}(1-p){\xcancel{(1-p)^{(n-k-1)}}} \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) & = k(1-p) \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) & = k(1-p) \\
+pn -pk & = k-pk \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) & = k(1-p) \\
+pn - {\xcancel{pk}} & = k-{\xcancel{pk}} \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
+p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
+p (n-k) & = k(1-p) \\
+pn -pk & = k-pk \\
+pn & = k \\
+\end{aligned}
+$$
+
+## Solving for the MLE
+
+$$
+\begin{aligned}
+\frac{d \mathcal{L}(k,n|p)}{dp} = 0 & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} - {n \choose k} p^k (n-k)(1-p)^{(n-k-1)} \\
+{n \choose k} p^k (n-k)(1-p)^{(n-k-1)} & = {n \choose k}kp^{k-1}(1-p)^{(n-k)} 
+\\
 p(p^{k-1}) (n-k)(1-p)^{(n-k-1)} & = kp^{k-1}(1-p)(1-p)^{(n-k-1)} \\
 p (n-k) & = k(1-p) \\
 pn -pk & = k-pk \\
@@ -343,6 +459,9 @@ pn & = k \\
 p & = \frac{k}{n} \\
 \end{aligned}
 $$
+
+
+
 
  
 ## Optimisation
@@ -356,8 +475,7 @@ $$
 * In many (most) cases, analytical solutions are unavailable or impractical.
 * We turn to various algorithms for numerical optimisation
 
-::: {.columns}
-:::: {.column}
+
 ```{r}
 # define our data set
 n = 25
@@ -372,8 +490,13 @@ llfun = function(p, n, k) {
 p_init = 0.5
 ```
 
-::::
-:::: {.column}
+
+## Optimisation
+
+* In many (most) cases, analytical solutions are unavailable or impractical.
+* We turn to various algorithms for numerical optimisation
+
+
 ```{r}
 
 # optim will start at p_init, evaluate llfun using the data we pass
@@ -381,8 +504,7 @@ p_init = 0.5
 # the terms n = ... and k = ... must be named the way they are in llfun
 optim(p_init, llfun, method = "Brent", n = n, k = k, control = list(fnscale = -1), lower=0, upper=1)
 ```
-::::
-:::
+
 
 
 
@@ -410,6 +532,7 @@ optim(p_init, llfun, method = "Brent", n = n, k = k, control = list(fnscale = -1
 	- Variables must have a **type**
 	- Here, `int` indicates a variable that is an integer
 	- **Constraints** give rules about variables; here k must be positive, and n >= k
+	- The data block is also a great place for **constants** (like n)!
 ::::
 :::: {.column}
 
@@ -452,7 +575,7 @@ parameters {
 ::: {.columns}
 :::: {.column}
 * In the `model` block we specify our likelihood function
-	- `k` comes from a binomial distribution with probability `p` and `n` observations
+	- `k` comes from a binomial distribution with n observations and probability parameter `p`
 
 ::::
 :::: {.column}
@@ -503,11 +626,13 @@ zomb_p = stan_model("stan/zomb_p.stan")
 ::::
 :::: {.column}
 
-```{r message = FALSE}
+```{r message = FALSE, eval = FALSE}
 # assuming working directory is vu_advstats_students
 library(rstan)
-# already did this, don't do it twice
-# zomb_p = stan_model("stan/zomb_p.stan") 
+
+## reminder: only do this once unless zomb_p.stan changes!
+zomb_p = stan_model("stan/zomb_p.stan")
+
 
 # prepare data
 # names must match the data block in Stan
@@ -517,6 +642,21 @@ zomb_data = list(n = 25, k = 7)
 optimizing(zomb_p, data = zomb_data)
 
 ```
+
+```{r echo = FALSE, message = FALSE}
+## hidden block for actually doing the work
+library(rstan)
+
+# prepare data
+# names must match the data block in Stan
+zomb_data = list(n = 25, k = 7)
+
+# estimate the parameter
+optimizing(zomb_p, data = zomb_data)
+
+```
+
+
 ::::
 :::
 
@@ -681,8 +821,17 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 
 > - For the first zombie problem, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 > - $pr(T) = pr(T,Z) + pr(T,Z') = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
-> - $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-> - What about for continuous problems?
+
+
+## The normalizing constant
+
+* For the first zombie problem, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
+* $pr(T) = pr(T,Z) + pr(T,Z') = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+
+### More generally:
+
+* $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
+* What about for continuous problems?
 
 
 
@@ -690,8 +839,11 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 
 * For the first zombie problem, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 * $pr(T) = pr(T,Z) + pr(T,Z') = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+
+### More generally:
+
 * $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-* What about for continuous problems? 
+* What about for continuous problems?
     - There are an infinite number of possible models if $pr(\theta)$ is a continuous PDF.
     - There are infinitely many possible datasets if X is real-valued
 
@@ -701,8 +853,11 @@ When we do Bayesian inference, each of these terms is a full **probability distr
 
 * For the first zombie problem, we had a single observation ("I tested positive"), we were able to add up all of the ways one could test positive.
 * $pr(T) = pr(T,Z) + pr(T,Z') = pr(T|Z)pr(Z) + pr(T|Z')pr(Z')$
+
+### More generally:
+
 * $pr(X) = \sum_i^n pr(X|\theta_i)pr(\theta_i)$ where all possible models are in the set $n$
-* What about for continuous problems? 
+* What about for continuous problems?
     - There are an infinite number of possible models if $pr(\theta)$ is a continuous PDF.
     - There are infinitely many possible datasets if X is real-valued
 
