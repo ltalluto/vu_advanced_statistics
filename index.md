@@ -54,11 +54,16 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>
 			<p>Maximum likelihood</p>
 			<p>Optimisation</p>
+			<p>Markov-chain Monte Carlo</p>
 		</td>
-		<td><a href="lec/2_mle">Maximum Likelihood Estimation</a></td>
+		<td>
+			<p><a href="lec/2_mle">Maximum Likelihood Estimation</a></p>
+			<a href="lec/3_mcmc">MCMC & Sampling</a>
+		</td>
 		<td>
 			<p><a href = "ex/ex2_tree.html">Tree mortality</a></p>
-			<!--<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>-->
+			<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>
+			<p><a href = "ex/ex3_tank">German tank problem</a></p>
 		</td>
 	</tr>
 	<tr>
@@ -67,10 +72,9 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>13:15–17:00</p>
 		</td>
 		<td>
-			<p>Markov-chain Monte Carlo</p>
 			<p>Inference I: Sampling &amp; hypothesis tests</p>
 		</td>
-		<td><a href="lec/3_mcmc">MCMC & Sampling</a></td>
+		<td><a href="lec/4_inference_i">Inference I</a></td>
 		<td>
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
 			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>-->

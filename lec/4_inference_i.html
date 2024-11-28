@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Lauren. Talluto" />
+  <title>Posterior Inference I</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
+  <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+  <script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+  <style>h1 {font-size: 34px;}
+         h1.title {font-size: 38px;}
+         h2 {font-size: 30px;}
+         h3 {font-size: 24px;}
+         h4 {font-size: 18px;}
+         h5 {font-size: 16px;}
+         h6 {font-size: 12px;}
+         code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+         pre:not([class]) { background-color: white }</style>
+  <link href="lib/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="lib/slidy-2/scripts/slidy.js"></script>
+  <script src="lib/slidy_shiny-1/slidy_shiny.js"></script>
+  <script src="lib/kePrint-0.0.1/kePrint.js"></script>
+  <link href="lib/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  <link href="lib/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+  <script src="lib/bsTable-3.3.7/bootstrapTable.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="rmd_style.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Posterior Inference I</h1>
+  <p class="author">
+Lauren. Talluto
+  </p>
+  <p class="date">28.11.2024</p>
+</div>
+<div id="posterior-inference-i-sampling" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+
+</div><div class="column">
+
+</div>
+</div>
+<ul class="incremental">
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+</div>
+<div id="posterior-inference-i-sampling-1" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+<p>Dataset: Palmer penguins</p>
+<p><img src="../assets/img/palmerpenguins.png" width="150" /> <img
+src="../assets/img/culmen_depth.png" width="250" /></p>
+<div class="small">
+<blockquote>
+<p>Dataset: Dr. Kristen Gorman, University of Alaska (<a
+href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
+2014)</a></p>
+<p>R package <code>palmerpenguins</code></p>
+<p>Artwork by <span class="citation">@allison_horst</span></p>
+</blockquote>
+</div>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-2" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+<p>Dataset: Palmer penguins</p>
+<p><img src="../assets/img/palmerpenguins.png" width="150" /> <img
+src="../assets/img/culmen_depth.png" width="250" /></p>
+<div class="small">
+<blockquote>
+<p>Dataset: Dr. Kristen Gorman, University of Alaska (<a
+href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
+2014)</a></p>
+<p>R package <code>palmerpenguins</code></p>
+<p>Artwork by <span class="citation">@allison_horst</span></p>
+</blockquote>
+</div>
+</div><div class="column">
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n;</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="dt">vector</span> [n] x;</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="dt">vector</span> [n] y;</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="dt">real</span> intercept;</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="dt">real</span> slope;</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; s;</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    y ~ normal(intercept + slope * x, s);</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>penguin_lm <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/basic_lm.stan&quot;</span>) </span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-3" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+</ul>
+<p>Dataset: Palmer penguins</p>
+<p><img src="../assets/img/palmerpenguins.png" width="150" /> <img
+src="../assets/img/culmen_depth.png" width="250" /></p>
+<div class="small">
+<blockquote>
+<p>Dataset: Dr. Kristen Gorman, University of Alaska (<a
+href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
+2014)</a></p>
+<p>R package <code>palmerpenguins</code></p>
+<p>Artwork by <span class="citation">@allison_horst</span></p>
+</blockquote>
+</div>
+</div><div class="column">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">data</span>(penguins, <span class="at">package =</span> <span class="st">&quot;palmerpenguins&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>penguins <span class="ot">=</span> <span class="fu">as.data.frame</span>(penguins[<span class="fu">complete.cases</span>(penguins),])</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>penguins <span class="ot">=</span> <span class="fu">subset</span>(penguins, species <span class="sc">==</span> <span class="st">&quot;Gentoo&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>peng_dat <span class="ot">=</span> <span class="fu">with</span>(penguins, <span class="fu">list</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">x =</span> bill_length_mm,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="at">y =</span> bill_depth_mm,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(bill_length_mm)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>))</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># refresh = 0 just turns off the status display to keep the slides neat</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># you can omit it in your own code!</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>peng_fit <span class="ot">=</span> <span class="fu">sampling</span>(penguin_lm, <span class="at">data =</span> peng_dat, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-4" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?</li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># samples are a bit easier to deal with in a matrix</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>peng_samps <span class="ot">=</span> <span class="fu">as.matrix</span>(peng_fit)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">head</span>(peng_samps)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">##           parameters</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## iterations intercept     slope         s      lp__</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##       [1,]  6.790132 0.1739852 0.8368009 -27.18301</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##       [2,]  6.707194 0.1758275 0.7691898 -26.04086</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">##       [3,]  4.091735 0.2309583 0.7726220 -25.72605</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">##       [4,]  3.572192 0.2392024 0.7861896 -25.84279</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">##       [5,]  3.892801 0.2343940 0.7330994 -25.43181</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">##       [6,]  6.447683 0.1803667 0.7783494 -25.40238</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-5" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-7-1.png" width="384" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>slope_015 <span class="ot">=</span> peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">table</span>(slope_015)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">## slope_015</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">## FALSE  TRUE </span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">##    26  3974</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">sum</span>(slope_015 <span class="sc">/</span> <span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">## [1] 0.9935</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-6" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, e.g., <span
+class="math inline">\(0.15 &lt; slope &lt; 0.2\)</span></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-9-1.png" width="384" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">sum</span>(peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span> <span class="sc">&amp;</span> peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&lt;</span> <span class="fl">0.25</span>) <span class="sc">/</span> </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="fu">nrow</span>(peng_samps)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">## [1] 0.9675</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-7" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, say $ 0.15 &lt; slope
+&lt; 0.2$</li>
+<li>What interval encompasses 90% of the probability mass (<strong>90%
+Credible Interval</strong>)?</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-11-1.png" width="768" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">apply</span>(samps, <span class="dv">2</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)))</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">##            </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## parameters           5%         95%</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##   intercept   3.3830868   6.9219857</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">##   slope       0.1691958   0.2439565</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">##   s           0.6840424   0.8440211</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">##   lp__      -28.3636050 -24.5817686</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-8" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Taking samples turns out to be a very useful way to learn about a
+distribution!</li>
+<li>For example: Bayesian linear regression in Stan</li>
+<li>What can we learn from our samples?
+<ul>
+<li>What is the probability that the slope &gt; 0.15?</li>
+<li>What is the probability of a range of values, say <span
+class="math inline">\(0.15 &lt; slope &lt; 0.2\)</span></li>
+<li>What interval encompasses 90% of the probability mass (<strong>90%
+Credible Interval</strong>)?</li>
+</ul></li>
+<li>We could emulate the output of <code>summary(lm(...))</code></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, median),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">ste =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, sd)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>)</span></code></pre></div>
+<div style="width:50%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Std. Error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+intercept
+</td>
+<td style="text-align:right;">
+5.14
+</td>
+<td style="text-align:right;">
+1.10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+slope
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="posterior-inference-i-sampling-9" class="slide section level2">
+<h1>Posterior inference I: Sampling</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>What about central tendency? What’s the most likely or “best guess”
+for each parameter?</li>
+<li>For normally distributed posterior, all three are equal</li>
+<li>Otherwise, median performs best, but <strong>always</strong> prefer
+an interval to a point estimate</li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">colMeans</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="dv">2</span>, median),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="do">## need optimizing to get the posterior mode</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="at">mode =</span> <span class="fu">optimizing</span>(penguin_lm, <span class="at">data =</span> peng_dat)<span class="sc">$</span>par)</span></code></pre></div>
+<div style="width:75%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+median
+</th>
+<th style="text-align:right;">
+mode
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+intercept
+</td>
+<td style="text-align:right;">
+5.14159
+</td>
+<td style="text-align:right;">
+5.13949
+</td>
+<td style="text-align:right;">
+5.12095
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+slope
+</td>
+<td style="text-align:right;">
+0.20718
+</td>
+<td style="text-align:right;">
+0.20717
+</td>
+<td style="text-align:right;">
+0.20761
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+s
+</td>
+<td style="text-align:right;">
+0.75794
+</td>
+<td style="text-align:right;">
+0.75534
+</td>
+<td style="text-align:right;">
+0.74274
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="posterior-prediction" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+</ul>
+</div><div class="column">
+<div style="width:50%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+intercept
+</th>
+<th style="text-align:right;">
+slope
+</th>
+<th style="text-align:right;">
+s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+5.14
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-18-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-1" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+</div><div class="column">
+<div style="width:50%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+intercept
+</th>
+<th style="text-align:right;">
+slope
+</th>
+<th style="text-align:right;">
+s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+5.14
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-20-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-2" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+<ul>
+<li>We can use this to get a posterior distribution of
+<strong>regression lines</strong>
+<ul>
+<li>Each posterior sample is one potential regression line</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div style="width:50%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+intercept
+</th>
+<th style="text-align:right;">
+slope
+</th>
+<th style="text-align:right;">
+s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+5.14
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-22-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-3" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>We can use the medians to easily predict the regression line.</li>
+<li>Posterior distributions are <em>transitive</em></li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is a set of
+samples approximating the posterior distribution of <span
+class="math inline">\(\theta\)</span>, and if some desired variable
+<span class="math inline">\(Z = f(\theta)\)</span>, then <span
+class="math inline">\(f(\hat{\theta})\)</span> approximates the
+posterior distribution of <span class="math inline">\(Z\)</span></p>
+</blockquote>
+<ul>
+<li>We can use this to get a posterior distribution of
+<strong>regression lines</strong>
+<ul>
+<li>Each posterior sample is one potential regression line</li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div style="width:50%;">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+intercept
+</th>
+<th style="text-align:right;">
+slope
+</th>
+<th style="text-align:right;">
+s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+5.14
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-4" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?
+<ul>
+<li>There is a 90% chance the conditional expectation is in the
+range(?!)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># predict from one x, one sample</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fl">55.6</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># just apply prediction to every row of samples</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># then get the quantiles</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">quantile</span>(test_y, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="do">## 16.33720 16.98103</span></span></code></pre></div>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-26-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-5" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?</li>
+<li>We can do the same across many x-values to produce a
+<strong>confidence ribbon</strong>.
+<ul>
+<li>This is very similar to regression confidence intervals produced by
+<code>lm</code></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># predict from many x, one sample</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># test_x is a vector, so result is a matrix</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># each row in this matrix is the prediction for a single x</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># each column a single sample</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="fu">colnames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;samp&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="fu">rownames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;bill_len=&quot;</span>, <span class="fu">round</span>(test_x, <span class="dv">2</span>))</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>test_y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="do">##                iterations</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="do">##                    samp1    samp2    samp3    samp4    samp5    samp6</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="do">##   bill_len=40   13.74954 13.74029 13.33007 13.14029 13.26856 13.66235</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="do">##   bill_len=40.1 13.76703 13.75796 13.35328 13.16433 13.29212 13.68048</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="do">##   bill_len=40.2 13.78451 13.77563 13.37649 13.18837 13.31567 13.69861</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-6" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?</li>
+<li>We can do the same across many x-values to produce a
+<strong>confidence ribbon</strong>.
+<ul>
+<li>This is very similar to regression confidence intervals produced by
+<code>lm</code></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">##      </span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">##       bill_len=40 bill_len=40.1 bill_len=40.2 bill_len=40.3 bill_len=40.4</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##   5%     13.11952      13.14429      13.16920      13.19365      13.21858</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="do">##   95%    13.73734      13.75457      13.77286      13.79004      13.80743</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-7" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>This means we can easily use the samples to predict a credible
+interval for <span class="math inline">\(\mathbb{E}(y)\)</span> for any
+arbitrary value of <span class="math inline">\(x\)</span></li>
+<li>What information is this telling us?</li>
+<li>We can do the same across many x-values to produce a
+<strong>confidence ribbon</strong>.
+<ul>
+<li>This is very similar to regression confidence intervals produced by
+<code>lm</code></li>
+</ul></li>
+</ul>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-8" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our model is <strong>generative</strong></li>
+<li>It postulates a <em>statistical</em> process (not mechanistic) by
+which the outcomes <span class="math inline">\(y\)</span> are
+created</li>
+<li>We can use posterior predictive simulations to learn the
+distribution of <strong>outcomes</strong></li>
+<li>For a given value of <span class="math inline">\(x\)</span>, the
+interval tells you where 90% of the values of <span
+class="math inline">\(y\)</span> will fall (not <span
+class="math inline">\(\mathbb{E}[y]\)</span>)</li>
+<li>To do this:
+<ul>
+<li>for each sample of <span class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, and <span
+class="math inline">\(s\)</span></li>
+<li>for each value of a <strong>prediction dataset</strong> <span
+class="math inline">\(\hat{x}\)</span></li>
+<li>compute <span class="math inline">\(\eta = \mathbb{E}(y)\)</span>
+using the regression equation</li>
+<li>simulate a new dataset <span class="math inline">\(\hat{y}\)</span>
+from <span class="math inline">\(\eta\)</span> and <span
+class="math inline">\(s\)</span></li>
+<li>compute quantiles for <span class="math inline">\(\hat{y} |
+\hat{x}\)</span></li>
+</ul></li>
+<li>Similar to typical regression <strong>prediction
+intervals</strong></li>
+</ul>
+</div><div class="column">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>}</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="posterior-prediction-9" class="slide section level2">
+<h1>Posterior prediction</h1>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Our model is <strong>generative</strong></li>
+<li>It postulates a <em>statistical</em> process (not mechanistic) by
+which the outcomes <span class="math inline">\(y\)</span> are
+created</li>
+<li>We can use posterior predictive simulations to learn the
+distribution of <strong>outcomes</strong></li>
+<li>For a given value of <span class="math inline">\(x\)</span>, the
+interval tells you where 90% of the values of <span
+class="math inline">\(y\)</span> will fall (not <span
+class="math inline">\(\mathbb{E}[y]\)</span>)</li>
+<li>To do this:
+<ul>
+<li>for each sample of <span class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, and <span
+class="math inline">\(s\)</span></li>
+<li>for each value of a <strong>prediction dataset</strong> <span
+class="math inline">\(\hat{x}\)</span></li>
+<li>compute <span class="math inline">\(\eta = \mathbb{E}(y)\)</span>
+using the regression equation</li>
+<li>simulate a new dataset <span class="math inline">\(\hat{y}\)</span>
+from <span class="math inline">\(\eta\)</span> and <span
+class="math inline">\(s\)</span></li>
+<li>compute quantiles for <span class="math inline">\(\hat{y} |
+\hat{x}\)</span></li>
+</ul></li>
+<li>Similar to typical regression <strong>prediction
+intervals</strong></li>
+</ul>
+</div><div class="column">
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
+</div>
+</div>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>
