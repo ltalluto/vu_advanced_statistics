@@ -29,7 +29,7 @@ This dataset gives statistics about *Tsuga canadensis* observed over multiple ye
    a. Write a function taking three parameters:
       i. `p`: a *single value*, the probability that a randomly chosen individual is dead
       ii. `n`: a *vector*, the number of trees in each plot
-      iii. `k`: a *vetor*, the number of dead trees in each plot
+      iii. `k`: a *vector*, the number of dead trees in each plot
       iv. The function should return the *log likelihood*: $\log pr(n,k|p)$
 
 ```{r}

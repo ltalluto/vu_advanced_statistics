@@ -34,6 +34,7 @@ c. Translate `a` and `b` above into a Stan statement for the `model` block. It w
 d. Add a prior for $N$ to your Stan program. What prior is reasonable? **Bonus**: Write a prior and posterior function in R, and plot them as in part `a`.
 e. Finish the Stan program, then use it to get the MAP estimate for N using the `optimizing` function. What's the MAP estimate?
 	- Hint: You will need to use the `vector` datatype, which we haven't seen yet. Look it up in the Stan manual to see if you can understand how and where to use it.
+	
 ### 3. Sampling the posterior
 
 Use `sampling()` to get 5000 samples from the posterior distribution. Alternatively, if you finished part 1 above, try this with your own sampler.

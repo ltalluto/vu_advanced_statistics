@@ -38,7 +38,7 @@ tsuga = tsuga[year == 2005 & n > 0]
    a. Write a function taking three parameters:
       i. `p`: a *single value*, the probability that a randomly chosen individual is dead
       ii. `n`: a *vector*, the number of trees in each plot
-      iii. `k`: a *vetor*, the number of dead trees in each plot
+      iii. `k`: a *vector*, the number of dead trees in each plot
       iv. The function should return the *log likelihood*: $\log pr(n,k|p)$
 
 ::: {.soln} 
@@ -57,8 +57,14 @@ lfun = function(p, n, k) {
 ::: {.soln} 
 ```{r}
 p_plot = seq(0,1,length.out=100)
-## sapply because p_plot is a vector, but lfun expects a single value
+# sapply because p_plot is a vector, but lfun expects a single value
 ll_plot = sapply(p_plot, lfun, n = tsuga$n, k = tsuga$died) 
+
+# equivalent for loop
+# ll_plot = vector(100)
+# for(i in 1:100)
+# 	ll_plot[i] = lfun(p_plot, n = tsuga$n, k = tsuga$died)
+
 plot(p_plot, ll_plot, type='l', col='blue', lwd=2, xlab='p', ylab='log likelihood')
 ```
 :::
@@ -98,8 +104,8 @@ lpost = function(p, a, b, n, k) lfun(p, n, k) + lpr(p, a, b)
 a_weak = 0.5
 b_weak = 4
 
-## stronger prior, we use prior_mu from the dataset to be the average prior probability, and assume this is based on a prior
-## sample of 1000 trees
+# stronger prior, we use prior_mu from the dataset 
+# assume this is based on a prior sample of 1000 trees
 a_strong = tsuga$prior_mu[1] * 1000
 b_strong = 1000 - a_strong
 ```
