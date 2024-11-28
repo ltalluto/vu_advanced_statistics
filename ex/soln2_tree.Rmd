@@ -279,7 +279,7 @@ c(map = map, mean = mean(tsuga$n))
 
    
 
-3. Use the MAP estimate from 3b and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
+3. Use the MAP estimate from 2c and the `r****()` function corresponding to the likelihood function to simulate a new dataset, with as many observations as in the original data.
 
 ```{r}
 samp = rpois(nrow(tsuga), map)
