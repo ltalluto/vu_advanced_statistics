@@ -78,6 +78,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
 			<!--<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>-->
+			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
+				<!--<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>-->
 		</td>
 	</tr>
 	<tr>
@@ -89,11 +91,10 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>Generalised linear models</p>
 		</td>
 		<td>
-			<p><a href="lec/4_regression">Regression &amp; GLM</a></p>
+			<p><a href="lec/5_regression">Regression &amp; GLM</a></p>
 		</td>
 		<td>
-			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
-				<!--<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>-->
+			
 			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
 				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
 			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
