@@ -77,7 +77,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td><a href="lec/4_inference_i">Inference I</a></td>
 		<td>
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
-			<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a>
+			<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
 				<!--<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>-->
 		</td>
