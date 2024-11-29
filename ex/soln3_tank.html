@@ -341,7 +341,7 @@ tank_fit</code></pre>
 ## N    223.95    0.70 20.71 205.36 210.24 217.81 230.02 278.81   886 1.00
 ## lp__ -53.95    0.04  0.84 -56.61 -54.11 -53.62 -53.42 -53.37   467 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Wed Nov 13 13:36:21 2024.
+## Samples were drawn using NUTS(diag_e) at Fri Nov 29 14:10:24 2024.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -449,15 +449,7 @@ parameters {
     real &lt;lower = max(s)&gt; N_latent;
 }
 model {
-    for(i in 1:nobs) {
-        if(floor(N_latent) &lt; s[i]) {
-            // if any N is less than s, add -Inf to the likelihood
-            target += log(0);
-        } else {
-            // discrete uniform distribution with a min of 1 and max of N_latent
-            target += -log(floor(N_latent)); 
-        }
-    }
+    s ~ uniform(1, floor(N_latent));
     N_latent ~ exponential(lam);
 }
 generated quantities {
@@ -466,25 +458,21 @@ generated quantities {
     // just N_latent, rounded down
     real N = floor(N_latent);
 }</code></pre>
-<pre class="r"><code>tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0)</code></pre>
-<pre><code>## Warning: There were 1186 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-## https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
-<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-<pre class="r"><code>tank_samps_d = as.matrix(tank_fit_d)
+<pre class="r"><code>tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0, control = list(max_treedepth = 20))
+tank_samps_d = as.matrix(tank_fit_d)
 mcmc_combo(tank_samps_d, combo = c(&quot;trace&quot;, &quot;hist&quot;))</code></pre>
-<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="soln3_tank_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code>(quant_interval = quantile(tank_samps_d[,&#39;N&#39;], c(0.05, 0.95)))</code></pre>
 <pre><code>##  5% 95% 
-## 206 269</code></pre>
+## 206 266</code></pre>
 <pre class="r"><code>hdi_interval = hdi(tank_samps_d[,&#39;N&#39;], density = 0.9)
 
 
 # compare with the quantile interval
 rbind(hdi = hdi_interval, quantile = quant_interval)</code></pre>
 <pre><code>##          lower upper
-##            205   251
-## quantile   206   269</code></pre>
+##            205   250
+## quantile   206   266</code></pre>
 <p>The results are very similar, but now the mode is correctly and
 exactly included!</p>
 </div>

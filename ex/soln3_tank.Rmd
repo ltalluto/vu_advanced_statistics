@@ -262,15 +262,7 @@ parameters {
 	real <lower = max(s)> N_latent;
 }
 model {
-	for(i in 1:nobs) {
-		if(floor(N_latent) < s[i]) {
-			// if any N is less than s, add -Inf to the likelihood
-			target += log(0);
-		} else {
-			// discrete uniform distribution with a min of 1 and max of N_latent
-			target += -log(floor(N_latent)); 
-		}
-	}
+	s ~ uniform(1, floor(N_latent));
 	N_latent ~ exponential(lam);
 }
 generated quantities {
@@ -281,8 +273,8 @@ generated quantities {
 }
 ```
 
-```{r}
-tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0)
+```{r, message = FALSE}
+tank_fit_d = sampling(tank_mod_discrete, data = tank_data, iter = 5000, chains = 1, refresh = 0, control = list(max_treedepth = 20))
 tank_samps_d = as.matrix(tank_fit_d)
 mcmc_combo(tank_samps_d, combo = c("trace", "hist"))
 (quant_interval = quantile(tank_samps_d[,'N'], c(0.05, 0.95)))
