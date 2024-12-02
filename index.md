@@ -111,7 +111,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 				<p class = "soln">Bayesian workflow</p>
 		</td>
 		<td>
-			<p><a href="lec/5_inference_ii">Inference II</a></p>
+			<p><a href="lec/6_inference_ii">Inference II</a></p>
 		</td>
 		<td>
 			<p class = "ex"><a href = "ex/"></a></p>
@@ -130,8 +130,8 @@ This course will cover the basics of Bayesian statistical methods with applicati
 				<p class = "soln">Multimodel inference</p>
 		</td>
 		<td>
-			<p><a href="lec/6_hm">Hierarchical Models</a></p>
-			<a href="lec/7_model_selection">Model selection</a>
+			<p><a href="lec/7_hm">Hierarchical Models</a></p>
+			<a href="lec/8_model_selection">Model selection</a>
 		</td>
 		<td>
 			<p>Exercises catch-up</p>
@@ -150,7 +150,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p>Presentations</p>
 		</td>
 		<td>
-			<a href="lec/8_advanced_models">Advanced Models</a>
+			<a href="lec/9_advanced_models">Advanced Models</a>
 		</td>
 		<td></td>
 	</tr>
