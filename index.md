@@ -79,7 +79,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
 			<p class = "soln"><a href = "ex/soln3_tank.html">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex4_birddisp.html">Bird dispersal</a></p>
-				<!--<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>-->
+				<p class = "soln"><a href = "ex/soln4_birddisp.html">Solutions</a></p>
 		</td>
 	</tr>
 	<tr>
