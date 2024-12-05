@@ -96,7 +96,7 @@ This course will cover the basics of Bayesian statistical methods with applicati
 		<td>
 			
 			<p class = "ex"><a href = "ex/ex5_kung.html">!Kung height</a></p>
-				<!--<p class = "soln"><a href = "ex/soln">Solutions</a></p>-->
+				<p class = "soln"><a href = "ex/soln">Solutions</a></p>
 			<p class = "ex"><a href = "ex/ex6_birddiv_glm.html">Bird diversity</a></p>
 		</td>
 	</tr>

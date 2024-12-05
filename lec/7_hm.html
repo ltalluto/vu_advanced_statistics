@@ -831,29 +831,16 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb20-1"><a href=
 <span id="cb20-20"><a href="#cb20-20" tabindex="-1"></a>        p[i] = inv_logit(a[gid] + b * precip[i]);</span>
 <span id="cb20-21"><a href="#cb20-21" tabindex="-1"></a>    }</span>
 <span id="cb20-22"><a href="#cb20-22" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## Running /Library/Frameworks/R.framework/Resources/bin/R CMD SHLIB foo.c
-## using C compiler: ‘clang version 14.0.6’
-## using SDK: ‘’
-## clang -arch arm64 -I&quot;/Library/Frameworks/R.framework/Resources/include&quot; -DNDEBUG   -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/Rcpp/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppEigen/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppEigen/include/unsupported&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/BH/include&quot; -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/StanHeaders/include/src/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/StanHeaders/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppParallel/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DUSE_STANC3 -DSTRICT_R_HEADERS  -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION  -D_HAS_AUTO_PTR_ETC=0  -include &#39;/Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/StanHeaders/include/stan/math/prim/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1   -I/opt/R/arm64/include    -fPIC  -falign-functions=64 -Wall -g -O2  -c foo.c -o foo.o
-## In file included from &lt;built-in&gt;:1:
-## In file included from /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/StanHeaders/include/stan/math/prim/fun/Eigen.hpp:22:
-## In file included from /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppEigen/include/Eigen/Dense:1:
-## In file included from /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppEigen/include/Eigen/Core:19:
-## /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:679:10: fatal error: &#39;cmath&#39; file not found
-## #include &lt;cmath&gt;
-##          ^~~~~~~
-## 1 error generated.
-## make: *** [foo.o] Error 1</code></pre>
 </div>
 <div id="unpooled-model-code-1" class="slide section level2">
 <h1>Unpooled model: code</h1>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># factor variables must be converted to integers for stan</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>standat<span class="sc">$</span>year_id <span class="ot">=</span> <span class="fu">as.integer</span>(standat<span class="sc">$</span>year)</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co"># we also need to tell stan how many groups (i.e., years) there are</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>standat<span class="sc">$</span>n_groups <span class="ot">=</span> <span class="fu">max</span>(standat<span class="sc">$</span>year_id)</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>fit_unpooled <span class="ot">=</span> <span class="fu">sampling</span>(tsuga_unpooled, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">iter=</span><span class="dv">3000</span>, <span class="at">refresh=</span><span class="dv">0</span>, </span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>                        <span class="at">data =</span> standat)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># factor variables must be converted to integers for stan</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>standat<span class="sc">$</span>year_id <span class="ot">=</span> <span class="fu">as.integer</span>(standat<span class="sc">$</span>year)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co"># we also need to tell stan how many groups (i.e., years) there are</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>standat<span class="sc">$</span>n_groups <span class="ot">=</span> <span class="fu">max</span>(standat<span class="sc">$</span>year_id)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>fit_unpooled <span class="ot">=</span> <span class="fu">sampling</span>(tsuga_unpooled, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">iter=</span><span class="dv">3000</span>, <span class="at">refresh=</span><span class="dv">0</span>, </span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>                        <span class="at">data =</span> standat)</span></code></pre></div>
 </div>
 <div id="unpooled-models-use-less-data-per-parameter"
 class="slide section level2">
@@ -876,9 +863,12 @@ class="slide section level2">
 <ul>
 <li>We don’t really expect each year to be independent
 <ul>
-<li>it’s all one species, response to temperature should be similar</li>
+<li>it’s all one species, response to precipitation should be
+similar</li>
 <li>some years are better or worse than others</li>
 </ul></li>
+</ul>
+<ul class="incremental">
 <li>Imagine instead there is a population of possible years, each with
 its own mortality</li>
 <li>This population has a true mean and a true variance</li>
@@ -893,49 +883,49 @@ years</li>
 </div>
 <div id="partial-pooling-code" class="slide section level2">
 <h1>Partial Pooling: Code</h1>
-<div class="sourceCode" id="cb24"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>    <span class="co">// not the complete program, only differences from pooled model</span></span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>    <span class="co">// grouping variables</span></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>    <span class="co">// year_id is an integer starting at 1 (the earliest year)</span></span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>    <span class="co">// ending at n_groups (the latest year)</span></span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>    <span class="co">// we use this value as an index for any group-level effects</span></span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span> = n_groups&gt; year_id [n];</span>
-<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>}</span>
-<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>    <span class="co">// one intercept and one slope per group</span></span>
-<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a;</span>
-<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] b;</span>
-<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a></span>
-<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>    <span class="co">// hyperparameters describe higher-level structure in the data</span></span>
-<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>    <span class="co">// in this case both the a&#39;s and b&#39;s come from populations</span></span>
-<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>    <span class="co">// with their own mean and variance to be estimated from the data</span></span>
-<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>    <span class="dt">real</span> a_mu;</span>
-<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a_sig;</span>
-<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a>    <span class="dt">real</span> b_mu;</span>
-<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; b_sig;</span>
-<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a>}</span>
-<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb24-25"><a href="#cb24-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
-<span id="cb24-26"><a href="#cb24-26" tabindex="-1"></a>        <span class="dt">int</span> gid = year_id[i];</span>
-<span id="cb24-27"><a href="#cb24-27" tabindex="-1"></a>        p[i] = inv_logit(a[gid] + b[gid] * precip[i]);</span>
-<span id="cb24-28"><a href="#cb24-28" tabindex="-1"></a>    }</span>
-<span id="cb24-29"><a href="#cb24-29" tabindex="-1"></a>}</span>
-<span id="cb24-30"><a href="#cb24-30" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb24-31"><a href="#cb24-31" tabindex="-1"></a>    <span class="co">// The priors are now estimated from the data</span></span>
-<span id="cb24-32"><a href="#cb24-32" tabindex="-1"></a>    a ~ normal(a_mu, a_sig);</span>
-<span id="cb24-33"><a href="#cb24-33" tabindex="-1"></a>    b ~ normal(b_mu, b_sig);</span>
-<span id="cb24-34"><a href="#cb24-34" tabindex="-1"></a>    </span>
-<span id="cb24-35"><a href="#cb24-35" tabindex="-1"></a>    <span class="co">// hyperpriors describe what we know about higher (group-level) structure</span></span>
-<span id="cb24-36"><a href="#cb24-36" tabindex="-1"></a>    a_mu ~ normal(<span class="dv">0</span>, <span class="dv">20</span>);</span>
-<span id="cb24-37"><a href="#cb24-37" tabindex="-1"></a>    b_mu ~ normal(<span class="dv">0</span>, <span class="dv">20</span>);</span>
-<span id="cb24-38"><a href="#cb24-38" tabindex="-1"></a>    <span class="co">// half cauchy is common for hierarchical stdev</span></span>
-<span id="cb24-39"><a href="#cb24-39" tabindex="-1"></a>    a_sig ~ cauchy(<span class="dv">0</span>, <span class="dv">20</span>);</span>
-<span id="cb24-40"><a href="#cb24-40" tabindex="-1"></a>    b_sig ~ cauchy(<span class="dv">0</span>, <span class="dv">20</span>);</span>
-<span id="cb24-41"><a href="#cb24-41" tabindex="-1"></a></span>
-<span id="cb24-42"><a href="#cb24-42" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="co">// not the complete program, only differences from pooled model</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="co">// grouping variables</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>    <span class="co">// year_id is an integer starting at 1 (the earliest year)</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>    <span class="co">// ending at n_groups (the latest year)</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>    <span class="co">// we use this value as an index for any group-level effects</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span> = n_groups&gt; year_id [n];</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>}</span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    <span class="co">// one intercept and one slope per group</span></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a;</span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] b;</span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a>    <span class="co">// hyperparameters describe higher-level structure in the data</span></span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a>    <span class="co">// in this case both the a&#39;s and b&#39;s come from populations</span></span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a>    <span class="co">// with their own mean and variance to be estimated from the data</span></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a>    <span class="dt">real</span> a_mu;</span>
+<span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a_sig;</span>
+<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a>    <span class="dt">real</span> b_mu;</span>
+<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; b_sig;</span>
+<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a>}</span>
+<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb23-25"><a href="#cb23-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb23-26"><a href="#cb23-26" tabindex="-1"></a>        <span class="dt">int</span> gid = year_id[i];</span>
+<span id="cb23-27"><a href="#cb23-27" tabindex="-1"></a>        p[i] = inv_logit(a[gid] + b[gid] * precip[i]);</span>
+<span id="cb23-28"><a href="#cb23-28" tabindex="-1"></a>    }</span>
+<span id="cb23-29"><a href="#cb23-29" tabindex="-1"></a>}</span>
+<span id="cb23-30"><a href="#cb23-30" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb23-31"><a href="#cb23-31" tabindex="-1"></a>    <span class="co">// The priors are now estimated from the data</span></span>
+<span id="cb23-32"><a href="#cb23-32" tabindex="-1"></a>    a ~ normal(a_mu, a_sig);</span>
+<span id="cb23-33"><a href="#cb23-33" tabindex="-1"></a>    b ~ normal(b_mu, b_sig);</span>
+<span id="cb23-34"><a href="#cb23-34" tabindex="-1"></a>    </span>
+<span id="cb23-35"><a href="#cb23-35" tabindex="-1"></a>    <span class="co">// hyperpriors describe what we know about higher (group-level) structure</span></span>
+<span id="cb23-36"><a href="#cb23-36" tabindex="-1"></a>    a_mu ~ normal(<span class="dv">0</span>, <span class="dv">20</span>);</span>
+<span id="cb23-37"><a href="#cb23-37" tabindex="-1"></a>    b_mu ~ normal(<span class="dv">0</span>, <span class="dv">20</span>);</span>
+<span id="cb23-38"><a href="#cb23-38" tabindex="-1"></a>    <span class="co">// half cauchy is common for hierarchical stdev</span></span>
+<span id="cb23-39"><a href="#cb23-39" tabindex="-1"></a>    a_sig ~ cauchy(<span class="dv">0</span>, <span class="dv">20</span>);</span>
+<span id="cb23-40"><a href="#cb23-40" tabindex="-1"></a>    b_sig ~ cauchy(<span class="dv">0</span>, <span class="dv">20</span>);</span>
+<span id="cb23-41"><a href="#cb23-41" tabindex="-1"></a></span>
+<span id="cb23-42"><a href="#cb23-42" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="partial-pooling-is-a-compromise" class="slide section level2">
 <h1>Partial pooling is a compromise</h1>
@@ -964,14 +954,43 @@ class="slide section level2">
 <div id="when-do-we-need-hierarchical-models"
 class="slide section level2">
 <h1>When do we need hierarchical models?</h1>
+<ul class="incremental">
+<li>Repeated sampling within units (e.g., samples nested within
+plots/individuals)</li>
+<li>Inference at multiple levels of organisation (e.g., Covariates at
+multiple spatial scales)</li>
+<li>Uneven sampling among units (Number of trees by year)</li>
+<li>Accounting for nonindependence of samples</li>
+</ul>
+</div>
+<div id="when-do-we-need-hierarchical-models-1"
+class="slide section level2">
+<h1>When do we need hierarchical models?</h1>
 <ul>
 <li>Repeated sampling within units (e.g., samples nested within
 plots/individuals)</li>
-<li>Inference at multiple levels of organisation
+<li>Inference at multiple levels of organisation (e.g., Covariates at
+multiple spatial scales)</li>
+<li>Uneven sampling among units (Number of trees by year)</li>
+<li>Accounting for nonindependence of samples</li>
+<li>Avoiding pre-averaging
 <ul>
-<li>Covariates at multiple spatial scales</li>
+<li>Don’t: perform repeat samples on a unit, perform analysis on the
+average</li>
+<li>Do: Build an HM accounting for variability within and among
+units</li>
 </ul></li>
-<li>Uneven sampling among units</li>
+</ul>
+</div>
+<div id="when-do-we-need-hierarchical-models-2"
+class="slide section level2">
+<h1>When do we need hierarchical models?</h1>
+<ul>
+<li>Repeated sampling within units (e.g., samples nested within
+plots/individuals)</li>
+<li>Inference at multiple levels of organisation (e.g., Covariates at
+multiple spatial scales)</li>
+<li>Uneven sampling among units (Number of trees by year)</li>
 <li>Accounting for nonindependence of samples</li>
 <li>Avoiding pre-averaging
 <ul>
@@ -1000,25 +1019,25 @@ group</li>
 <em>n_groups</em></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb25"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_groups&gt; group_id [n];</span>
-<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>}</span>
-<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a; </span>
-<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>    </span>
-<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
-<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>    <span class="dt">real</span> a_mu;</span>
-<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="dt">real</span> a_sig;</span>
-<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>}</span>
-<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>    pr[i] = inv_logit(a[group_id[i]]);</span>
-<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>}</span>
-<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>    a ~ normal(a_mu, a_sig);  <span class="co">// hierarchical prior for a</span></span>
-<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_groups;</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_groups&gt; group_id [n];</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>}</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>    <span class="dt">vector</span> [n_groups] a; </span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>    </span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>    <span class="dt">real</span> a_mu;</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>    <span class="dt">real</span> a_sig;</span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>}</span>
+<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>    pr[i] = inv_logit(a[group_id[i]]);</span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>}</span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>    a ~ normal(a_mu, a_sig);  <span class="co">// hierarchical prior for a</span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1037,47 +1056,47 @@ group</li>
 </ul>
 <p><img src="7_hm_files/figure-slidy/unnamed-chunk-8-1.png" width="768" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb26"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
-<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] precip;</span>
-<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
-<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
-<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
-<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a></span>
-<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
-<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n];</span>
-<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>}</span>
-<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
-<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
-<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a>    </span>
-<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
-<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a>    <span class="dt">real</span> a1_mu;</span>
-<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
-<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
-<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
-<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a>}</span>
-<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
-<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
-<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + a2[group2_id[i]] + b*precip[i]);</span>
-<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a>}</span>
-<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
-<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a></span>
-<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a>    a1 ~ normal(a1_mu, a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
-<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
-<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a></span>
-<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
-<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a>    a1_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
-<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
-<span id="cb26-38"><a href="#cb26-38" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
-<span id="cb26-39"><a href="#cb26-39" tabindex="-1"></a>    a2_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
-<span id="cb26-40"><a href="#cb26-40" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] precip;</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n];</span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>}</span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>    </span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a>    <span class="dt">real</span> a1_mu;</span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
+<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
+<span id="cb25-23"><a href="#cb25-23" tabindex="-1"></a>}</span>
+<span id="cb25-24"><a href="#cb25-24" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb25-25"><a href="#cb25-25" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
+<span id="cb25-26"><a href="#cb25-26" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb25-27"><a href="#cb25-27" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + a2[group2_id[i]] + b*precip[i]);</span>
+<span id="cb25-28"><a href="#cb25-28" tabindex="-1"></a>}</span>
+<span id="cb25-29"><a href="#cb25-29" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb25-30"><a href="#cb25-30" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
+<span id="cb25-31"><a href="#cb25-31" tabindex="-1"></a></span>
+<span id="cb25-32"><a href="#cb25-32" tabindex="-1"></a>    a1 ~ normal(a1_mu, a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
+<span id="cb25-33"><a href="#cb25-33" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
+<span id="cb25-34"><a href="#cb25-34" tabindex="-1"></a></span>
+<span id="cb25-35"><a href="#cb25-35" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
+<span id="cb25-36"><a href="#cb25-36" tabindex="-1"></a>    a1_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb25-37"><a href="#cb25-37" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb25-38"><a href="#cb25-38" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb25-39"><a href="#cb25-39" tabindex="-1"></a>    a2_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb25-40"><a href="#cb25-40" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1091,46 +1110,46 @@ class="slide section level2">
 </ul>
 <p><img src="7_hm_files/figure-slidy/unnamed-chunk-10-1.png" width="768" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
-<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
-<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
-<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] temperature;</span>
-<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
-<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
-<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
-<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a></span>
-<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
-<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n_group1];</span>
-<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>}</span>
-<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
-<span id="cb27-16"><a href="#cb27-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
-<span id="cb27-17"><a href="#cb27-17" tabindex="-1"></a>    </span>
-<span id="cb27-18"><a href="#cb27-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
-<span id="cb27-19"><a href="#cb27-19" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
-<span id="cb27-20"><a href="#cb27-20" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
-<span id="cb27-21"><a href="#cb27-21" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
-<span id="cb27-22"><a href="#cb27-22" tabindex="-1"></a>}</span>
-<span id="cb27-23"><a href="#cb27-23" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb27-24"><a href="#cb27-24" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
-<span id="cb27-25"><a href="#cb27-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
-<span id="cb27-26"><a href="#cb27-26" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + b*precip[i]);</span>
-<span id="cb27-27"><a href="#cb27-27" tabindex="-1"></a>}</span>
-<span id="cb27-28"><a href="#cb27-28" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb27-29"><a href="#cb27-29" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
-<span id="cb27-30"><a href="#cb27-30" tabindex="-1"></a></span>
-<span id="cb27-31"><a href="#cb27-31" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> n_group1)</span>
-<span id="cb27-32"><a href="#cb27-32" tabindex="-1"></a>        a1 ~ normal(a2[i], a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
-<span id="cb27-33"><a href="#cb27-33" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
-<span id="cb27-34"><a href="#cb27-34" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
-<span id="cb27-35"><a href="#cb27-35" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
-<span id="cb27-36"><a href="#cb27-36" tabindex="-1"></a>    </span>
-<span id="cb27-37"><a href="#cb27-37" tabindex="-1"></a>    <span class="co">// hyperhyperprior</span></span>
-<span id="cb27-38"><a href="#cb27-38" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
-<span id="cb27-39"><a href="#cb27-39" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>    <span class="dt">int</span> n; <span class="co">// number of data points</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>    <span class="dt">int</span> died [n]</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>    <span class="dt">int</span> N[n];</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>    <span class="dt">vector</span> [n] temperature;</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>    <span class="co">// group-level objects</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group1;</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group1&gt; group1_id [n];</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_group2;</span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">1</span>, <span class="kw">upper</span>=n_group2&gt; group2_id [n_group1];</span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>}</span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a>    <span class="dt">vector</span> [n_group1] a1; </span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a>    <span class="dt">vector</span> [n_group2] a2; </span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a>    </span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a>    <span class="co">// hyperparameters</span></span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a1_sig;</span>
+<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a>    <span class="dt">real</span> a2_mu;</span>
+<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; a2_sig;</span>
+<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a>}</span>
+<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a>    <span class="dt">vector</span> [n] pr;</span>
+<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a>        pr[i] = inv_logit(a1[group1_id[i]] + b*precip[i]);</span>
+<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a>}</span>
+<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a>    died ~ binomial(N, pr); <span class="co">// likelihood</span></span>
+<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a></span>
+<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> n_group1)</span>
+<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a>        a1 ~ normal(a2[i], a1_sig);  <span class="co">// hierarchical prior for a1</span></span>
+<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a>    <span class="co">// hyperpriors</span></span>
+<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a>    a2 ~ normal(a2_mu, a2_sig);  <span class="co">// hierarchical prior for a2</span></span>
+<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a>    a1_sig ~ gamma(<span class="fl">0.1</span>, <span class="fl">0.1</span>);</span>
+<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a>    </span>
+<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a>    <span class="co">// hyperhyperprior</span></span>
+<span id="cb26-38"><a href="#cb26-38" tabindex="-1"></a>    a2_mu ~ normal(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb26-39"><a href="#cb26-39" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1152,12 +1171,12 @@ class="slide section level2">
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>sim1 <span class="ot">=</span> <span class="cf">function</span>(amu, asig, bmu, bsig, N, precip) {</span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>    a <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), amu, asig)</span>
-<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), bmu, bsig)</span>
-<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>    p <span class="ot">=</span> <span class="fu">plogis</span>(a <span class="sc">+</span> b<span class="sc">*</span>precip)</span>
-<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>    <span class="fu">rbinom</span>(<span class="fu">length</span>(precip), N, p)</span>
-<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>sim1 <span class="ot">=</span> <span class="cf">function</span>(amu, asig, bmu, bsig, N, precip) {</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>    a <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), amu, asig)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>    b <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(precip), bmu, bsig)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>    p <span class="ot">=</span> <span class="fu">plogis</span>(a <span class="sc">+</span> b<span class="sc">*</span>precip)</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>    <span class="fu">rbinom</span>(<span class="fu">length</span>(precip), N, p)</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1166,16 +1185,16 @@ class="slide section level2">
 <h1>Posterior predictive distributions</h1>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>newx <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(standat<span class="sc">$</span>precip), <span class="fu">max</span>(standat<span class="sc">$</span>precip), <span class="at">length.out=</span><span class="dv">400</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>pars <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">as.matrix</span>(fit_ppool, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&quot;a_mu&quot;</span>, <span class="st">&quot;a_sig&quot;</span>, <span class="st">&quot;b_mu&quot;</span>, <span class="st">&quot;b_sig&quot;</span>)))</span>
-<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co"># For our hypothetical, we need to decide how many trees we would see</span></span>
-<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co"># more trees means less sampling uncertainty</span></span>
-<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">20</span></span>
-<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>sims <span class="ot">=</span> <span class="fu">mapply</span>(sim1, <span class="at">amu =</span> pars<span class="sc">$</span>a_mu, <span class="at">asig =</span> pars<span class="sc">$</span>a_sig,</span>
-<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>              <span class="at">bmu =</span> pars<span class="sc">$</span>b_mu, <span class="at">bsig =</span> pars<span class="sc">$</span>b_sig, </span>
-<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>              <span class="at">MoreArgs =</span> <span class="fu">list</span>(<span class="at">N =</span> <span class="dv">20</span>, <span class="at">precip =</span> newx))</span>
-<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>sim_quantiles <span class="ot">=</span> <span class="fu">apply</span>(sims, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>newx <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(standat<span class="sc">$</span>precip), <span class="fu">max</span>(standat<span class="sc">$</span>precip), <span class="at">length.out=</span><span class="dv">400</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>pars <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">as.matrix</span>(fit_ppool, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&quot;a_mu&quot;</span>, <span class="st">&quot;a_sig&quot;</span>, <span class="st">&quot;b_mu&quot;</span>, <span class="st">&quot;b_sig&quot;</span>)))</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co"># For our hypothetical, we need to decide how many trees we would see</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co"># more trees means less sampling uncertainty</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>sims <span class="ot">=</span> <span class="fu">mapply</span>(sim1, <span class="at">amu =</span> pars<span class="sc">$</span>a_mu, <span class="at">asig =</span> pars<span class="sc">$</span>a_sig,</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a>              <span class="at">bmu =</span> pars<span class="sc">$</span>b_mu, <span class="at">bsig =</span> pars<span class="sc">$</span>b_sig, </span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>              <span class="at">MoreArgs =</span> <span class="fu">list</span>(<span class="at">N =</span> <span class="dv">20</span>, <span class="at">precip =</span> newx))</span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>sim_quantiles <span class="ot">=</span> <span class="fu">apply</span>(sims, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 </div><div class="column">
 <p><img src="7_hm_files/figure-slidy/unnamed-chunk-14-1.png" width="768" /></p>
 </div>
