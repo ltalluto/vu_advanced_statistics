@@ -901,7 +901,7 @@ parameters {
 	vector [k] B;
 }
 transformed parameters {
-	vector eta = a + X * B;
+	vector [n] eta = a + X * B;
 }
 model {
 	y ~ normal(eta, s);

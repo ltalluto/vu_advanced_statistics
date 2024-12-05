@@ -892,9 +892,9 @@ transformed parameters {
 
 ```
 
-```{r tsuga_unpooled_compile, cache = TRUE, message = FALSE, error = FALSE, echo = FALSE}
+```{r tsuga_unpooled_compile, results = 'hide', cache = TRUE, message = FALSE, error = FALSE, echo = FALSE}
 # compile the model (below)
-tsuga_unpooled = stan_model("../vu_advstats_students/stan/tsuga_unpooled.stan")
+tsuga_unpooled <- stan_model("../vu_advstats_students/stan/tsuga_unpooled.stan")
 ```
 
 
@@ -975,12 +975,13 @@ grid.arrange(pl_probs_unpooled, pl_err_unpooled, ncol=2)
 :::: {.column}
 
 * We don't really expect each year to be independent
-    - it's all one species, response to temperature should be similar
+    - it's all one species, response to precipitation should be similar
     - some years are better or worse than others
-* Imagine instead there is a population of possible years, each with its own mortality
-* This population has a true mean and a true variance
-* The samples we've taken will come from that distribution
-* This can tell us something about all possible years, not just these years
+
+> - Imagine instead there is a population of possible years, each with its own mortality
+> - This population has a true mean and a true variance
+> - The samples we've taken will come from that distribution
+> - This can tell us something about all possible years, not just these years
 
 
 ::::
@@ -1180,17 +1181,30 @@ grid.arrange(pl_intervals_pooled + ggtitle("Pooled"),
 
 
 ## When do we need hierarchical models?
+> - Repeated sampling within units (e.g., samples nested within plots/individuals)
+> - Inference at multiple levels of organisation (e.g., Covariates at multiple spatial scales)
+> - Uneven sampling among units (Number of trees by year)
+> - Accounting for nonindependence of samples
+
+## When do we need hierarchical models?
 * Repeated sampling within units (e.g., samples nested within plots/individuals)
-* Inference at multiple levels of organisation
-    - Covariates at multiple spatial scales
-* Uneven sampling among units
+* Inference at multiple levels of organisation (e.g., Covariates at multiple spatial scales)
+* Uneven sampling among units (Number of trees by year)
+* Accounting for nonindependence of samples
+* Avoiding pre-averaging
+    - Don't: perform repeat samples on a unit, perform analysis on the average
+    - Do: Build an HM accounting for variability within and among units
+
+## When do we need hierarchical models?
+* Repeated sampling within units (e.g., samples nested within plots/individuals)
+* Inference at multiple levels of organisation (e.g., Covariates at multiple spatial scales)
+* Uneven sampling among units (Number of trees by year)
 * Accounting for nonindependence of samples
 * Avoiding pre-averaging
     - Don't: perform repeat samples on a unit, perform analysis on the average
     - Do: Build an HM accounting for variability within and among units
 * A common category of HM is often called mixed modeling
     - All mixed models are hierarchical, not all hierarchical models are mixed models
-
 
 
 ## Designing hierarchical models in Stan
