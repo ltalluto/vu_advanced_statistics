@@ -1,0 +1,3 @@
+[submodule "vu_advstats_students"]
+	path = vu_advstats_students
+	url = git@github.com:ltalluto/vu_advstats_students.git
