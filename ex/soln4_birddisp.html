@@ -13,7 +13,7 @@
 
 <title>Natal vs. Breeding Dispersal in Birds</title>
 
-<script src="lib/header-attrs-2.27/header-attrs.js"></script>
+<script src="lib/header-attrs-2.30/header-attrs.js"></script>
 <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -162,7 +162,7 @@ pre code {
 
 
 <h1 class="title toc-ignore">Natal vs. Breeding Dispersal in Birds</h1>
-<h4 class="date">29.11.2024</h4>
+<h4 class="date">03.02.2026</h4>
 
 </div>
 
@@ -213,9 +213,9 @@ exceeds breeding dispersal</strong>.</p>
 <pre class="r"><code>library(ggplot2)
 ggplot(disp) + theme_minimal() + 
     geom_histogram(aes(x = disp_dist, fill = type), position=&quot;identity&quot;, alpha = 0.5, bins = 30)</code></pre>
-<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-1.png" alt="" width="672" /></p>
 <pre class="r"><code>ggplot(disp) + geom_boxplot(aes(y = disp_dist, fill = type)) + theme_minimal() + ylab(&quot;Dispersal Distance (km)&quot;)</code></pre>
-<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-2-2.png" alt="" width="672" /></p>
 <p>It seems there is an effect. For sure the data are highly skewed!</p>
 </div>
 <ol start="2" style="list-style-type: decimal">
@@ -341,7 +341,9 @@ ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
                                 type = &quot;closed&quot;)) + 
    theme_blank() + geom_nodes(aes(color=type, shape = source), size=6) + 
    geom_nodelabel(aes(label = name), fontface = &quot;bold&quot;, nudge_x=-0.1)</code></pre>
-<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre><code>## Warning in geom_nodelabel(aes(label = name), fontface = &quot;bold&quot;, nudge_x =
+## -0.1): Ignoring unknown parameters: `label.size`</code></pre>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 </div>
 <div class="line-block">   d. Translate the graph into Stan code and try
 to fit the model.</div>
@@ -391,16 +393,16 @@ the means?</div>
 
 ## pr(mu &gt; 0)
 sum(samps_o &gt; 0) / length(samps_o)</code></pre>
-<pre><code>## [1] 0.999875</code></pre>
+<pre><code>## [1] 0.9998125</code></pre>
 <pre class="r"><code>## credible interval
 hist(samps_o)</code></pre>
-<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="soln4_birddisp_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 <pre class="r"><code># our posterior looks pretty symmetrical and unimodal, so we can simply make a quantile interval
 interval = quantile(samps_o, c(0.25, 0.975))
 
 cat(&quot;There is a 95% chance that the difference in means is between&quot;, 
     round(interval[1], 2), &quot;and&quot;, round(interval[2], 2))</code></pre>
-<pre><code>## There is a 95% chance that the difference in means is between 1.08 and 2.08</code></pre>
+<pre><code>## There is a 95% chance that the difference in means is between 1.07 and 2.07</code></pre>
 <p>Our hypothesis that o &gt; 0 is quite probable. Interestingly, our
 estimate of the difference in means is much smaller than what we get
 using <code>t.test</code>.</p>

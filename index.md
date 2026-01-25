@@ -184,3 +184,11 @@ major biological problem here, but you should be able to draw some **biological*
 from the output of your model.
 
 These write-ups are due on **28.02.2026**. Please note that this is a hard deadline (so that we can submit final marks)!
+
+## Assessment:
+
+* 40%: Participation in the exercises and group work
+* 30%: Group presentation on **09.02.2026**
+* 30%: Group project writeup due **28.02.2026**
+
+>50% is a passing mark
