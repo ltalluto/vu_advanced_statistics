@@ -13,7 +13,7 @@
 
 <title>Maximum likelihood: Tsuga mortality</title>
 
-<script src="lib/header-attrs-2.27/header-attrs.js"></script>
+<script src="lib/header-attrs-2.30/header-attrs.js"></script>
 <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -163,7 +163,7 @@ pre code {
 
 <h1 class="title toc-ignore">Maximum likelihood: <em>Tsuga</em>
 mortality</h1>
-<h4 class="date">26.11.2024</h4>
+<h4 class="date">02.02.2026</h4>
 
 </div>
 
@@ -227,7 +227,7 @@ ll_plot = sapply(p_plot, lfun, n = tsuga$n, k = tsuga$died)
 #   ll_plot[i] = lfun(p_plot, n = tsuga$n, k = tsuga$died)
 
 plot(p_plot, ll_plot, type=&#39;l&#39;, col=&#39;blue&#39;, lwd=2, xlab=&#39;p&#39;, ylab=&#39;log likelihood&#39;)</code></pre>
-<p><img src="soln2_tree_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="soln2_tree_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 </div>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Use <code>optim</code> to find the MLE for <code>p</code></li>
@@ -280,7 +280,7 @@ prior_dat = data.table(p = p_plot, weak = lpr(p_plot, a_weak, b_weak),
 prior_dat = melt(prior_dat, id = &quot;p&quot;)
 ggplot(prior_dat, aes(x=p, y=value, colour=variable)) + geom_line() +
    ylab(&quot;log prior&quot;) + xlab(&quot;p&quot;) + theme_minimal()</code></pre>
-<p><img src="soln2_tree_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="soln2_tree_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 <pre class="r"><code>posterior_dat = data.table(p = p_plot,
       weak = sapply(p_plot, function(pr) lpost(pr, a_weak, b_weak, tsuga$n, tsuga$died)),
       strong = sapply(p_plot, function(pr) lpost(pr, a_strong, b_strong, tsuga$n, tsuga$died)))
@@ -289,7 +289,7 @@ ggplot(posterior_dat, aes(x=p, y=value, colour=variable)) + geom_line() +
    ylab(&quot;log unnormalized posterior&quot;) + xlab(&quot;p&quot;) + theme_minimal()</code></pre>
 <pre><code>## Warning: Removed 1 row containing missing values or values outside the scale range
 ## (`geom_line()`).</code></pre>
-<p><img src="soln2_tree_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<p><img src="soln2_tree_files/figure-html/unnamed-chunk-8-2.png" alt="" width="672" /></p>
 </div>
 <ol start="7" style="list-style-type: lower-alpha">
 <li>Compute the maximum a posteriori estimate for <em>p</em> using
@@ -448,7 +448,7 @@ ggplot(hdat, aes(x=n, fill=source)) +
    geom_histogram(position=&quot;dodge&quot;, binwidth=1) + theme_minimal() + 
    annotate(&quot;text&quot;, x=15, y=25, label=lab1, colour=&quot;#F8766D&quot;, fontface=2, hjust=0, vjust=1) + 
    annotate(&quot;text&quot;, x=15, y=22, label=lab2, colour=&quot;#00BFC4&quot;, fontface=2, hjust=0, vjust=1)</code></pre>
-<p><img src="soln2_tree_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="soln2_tree_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" /></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Consider how you could improve this <strong>generative
 model</strong> to better describe the dataset. Do you need a new
@@ -494,7 +494,7 @@ ggplot(hdat_nb, aes(x=n, fill=source)) +
     geom_histogram(position=&quot;dodge&quot;, binwidth=1) + theme_minimal() + 
     annotate(&quot;text&quot;, x=15, y=25, label=lab1, colour=&quot;#F8766D&quot;, fontface=2, hjust=0, vjust=1) + 
     annotate(&quot;text&quot;, x=15, y=22, label=lab2, colour=&quot;#00BFC4&quot;, fontface=2, hjust=0, vjust=1)</code></pre>
-<p><img src="soln2_tree_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="soln2_tree_files/figure-html/unnamed-chunk-24-1.png" alt="" width="672" /></p>
 </div>
 </div>
 

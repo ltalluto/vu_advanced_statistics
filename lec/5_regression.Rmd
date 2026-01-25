@@ -1,7 +1,7 @@
 ---
 title: "Regression & the Generalised Linear Model"
-author: "Lauren Talluto"
-date: "29.11.2024"
+author: "Adrienne Étard"
+date: "03.02.2026"
 output:
   slidy_presentation:
     theme: cerulean
@@ -203,7 +203,7 @@ p1pd
 :::: {.column}
 
 
-```{r regression_graph, echo = FALSE}
+```{r regression_graph, echo = FALSE, warning=FALSE}
 gr = graph_from_literal(a-+"E(y)", b-+"E(y)", s-+y, x-+"E(y)", "E(y)"-+y)
 V(gr)$type = c("stochastic", "deterministic", "stochastic", "stochastic", "stochastic", "deterministic")
 V(gr)$source = c("unknown", "unknown", "unknown", "unknown", "known", "known")

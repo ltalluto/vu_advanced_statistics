@@ -1,6 +1,6 @@
 ---
 title: "The German Tank Problem (MCMC Edition)"
-date: "28.11.2024"
+date: "03.02.2026"
 output: 
   html_document:
     self_contained: false

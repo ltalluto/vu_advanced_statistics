@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="Lauren. Talluto" />
+  <meta name="author" content="Lauren Talluto" />
   <title>Posterior Inference I</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
@@ -15,8 +15,9 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+            html { -webkit-text-size-adjust: 100%; }
             pre > code.sourceCode { white-space: pre; position: relative; }
-            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
             pre > code.sourceCode > span:empty { height: 1.2em; }
             .sourceCode { overflow: visible; }
             code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -27,7 +28,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -80,8 +81,9 @@
             code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
           </style>
   <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -92,7 +94,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +146,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.30/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -174,9 +176,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="slide titlepage">
   <h1 class="title">Posterior Inference I</h1>
   <p class="author">
-Lauren. Talluto
+Lauren Talluto
   </p>
-  <p class="date">28.11.2024</p>
+  <p class="date">03.02.2026</p>
 </div>
 <div id="posterior-inference-i-sampling" class="slide section level2">
 <h1>Posterior inference I: Sampling</h1>
@@ -215,7 +217,7 @@ href="https://doi.org/10.1371/journal.pone.0090081">Gorman et al
 </blockquote>
 </div>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-1-1.png" width="624" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-1-1.png" alt="" width="624" /></p>
 </div>
 </div>
 </div>
@@ -312,12 +314,12 @@ distribution!</li>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">head</span>(peng_samps)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">##           parameters</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## iterations intercept     slope         s      lp__</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##       [1,]  6.790132 0.1739852 0.8368009 -27.18301</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##       [2,]  6.707194 0.1758275 0.7691898 -26.04086</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">##       [3,]  4.091735 0.2309583 0.7726220 -25.72605</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">##       [4,]  3.572192 0.2392024 0.7861896 -25.84279</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">##       [5,]  3.892801 0.2343940 0.7330994 -25.43181</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">##       [6,]  6.447683 0.1803667 0.7783494 -25.40238</span></span></code></pre></div>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">##       [1,]  4.327070 0.2240388 0.6671229 -26.35499</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">##       [2,]  4.417360 0.2207002 0.6792690 -26.56142</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">##       [3,]  4.893192 0.2111910 0.6604217 -26.76978</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">##       [4,]  4.902920 0.2113316 0.6599114 -26.57599</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">##       [5,]  3.651149 0.2364696 0.8081511 -26.70807</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">##       [6,]  5.829585 0.1946857 0.7548675 -25.50562</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -335,14 +337,14 @@ distribution!</li>
 </ul></li>
 </ul>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-7-1.png" width="384" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-7-1.png" alt="" width="384" /></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>slope_015 <span class="ot">=</span> peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">table</span>(slope_015)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">## slope_015</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="do">## FALSE  TRUE </span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">##    26  3974</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">sum</span>(slope_015 <span class="sc">/</span> <span class="fu">nrow</span>(peng_samps))</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">## [1] 0.9935</span></span></code></pre></div>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">##    36  3964</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">sum</span>(slope_015 <span class="sc">/</span> <span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="do">## [1] 0.991</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -362,10 +364,10 @@ class="math inline">\(0.15 &lt; slope &lt; 0.2\)</span></li>
 </ul></li>
 </ul>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-9-1.png" width="384" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">sum</span>(peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span> <span class="sc">&amp;</span> peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&lt;</span> <span class="fl">0.25</span>) <span class="sc">/</span> </span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="fu">nrow</span>(peng_samps)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">## [1] 0.9675</span></span></code></pre></div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-9-1.png" alt="" width="384" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">sum</span>(peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&gt;</span> <span class="fl">0.15</span> <span class="sc">&amp;</span> peng_samps[, <span class="st">&#39;slope&#39;</span>] <span class="sc">&lt;</span> <span class="fl">0.25</span>) <span class="sc">/</span> </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="fu">nrow</span>(peng_samps)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">## [1] 0.969</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -387,14 +389,14 @@ Credible Interval</strong>)?</li>
 </ul></li>
 </ul>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-11-1.png" width="768" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">apply</span>(samps, <span class="dv">2</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)))</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">##            </span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## parameters           5%         95%</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">##   intercept   3.3830868   6.9219857</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">##   slope       0.1691958   0.2439565</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="do">##   s           0.6840424   0.8440211</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="do">##   lp__      -28.3636050 -24.5817686</span></span></code></pre></div>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-11-1.png" alt="" width="768" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">apply</span>(samps, <span class="dv">2</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>)))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="do">##            </span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">## parameters           5%         95%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">##   intercept   3.4496078   6.9806483</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">##   slope       0.1687487   0.2422317</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="do">##   s           0.6778897   0.8448743</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="do">##   lp__      -28.4490187 -24.5702378</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -417,10 +419,10 @@ Credible Interval</strong>)?</li>
 <li>We could emulate the output of <code>summary(lm(...))</code></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, median),</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">ste =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, sd)</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, median),</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="at">ste =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="dv">2</span>, sd)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>)</span></code></pre></div>
 <div style="width:50%;">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -441,10 +443,10 @@ Std. Error
 intercept
 </td>
 <td style="text-align:right;">
-5.14
+5.15
 </td>
 <td style="text-align:right;">
-1.10
+1.06
 </td>
 </tr>
 <tr>
@@ -476,11 +478,11 @@ for each parameter?</li>
 an interval to a point estimate</li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">colMeans</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="dv">2</span>, median),</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="do">## need optimizing to get the posterior mode</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="at">mode =</span> <span class="fu">optimizing</span>(penguin_lm, <span class="at">data =</span> peng_dat)<span class="sc">$</span>par)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">colMeans</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">apply</span>(peng_samps[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="dv">2</span>, median),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="do">## need optimizing to get the posterior mode</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="at">mode =</span> <span class="fu">optimizing</span>(penguin_lm, <span class="at">data =</span> peng_dat)<span class="sc">$</span>par)</span></code></pre></div>
 <div style="width:75%;">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -504,13 +506,13 @@ mode
 intercept
 </td>
 <td style="text-align:right;">
-5.14159
+5.16935
 </td>
 <td style="text-align:right;">
-5.13949
+5.15127
 </td>
 <td style="text-align:right;">
-5.12095
+5.12090
 </td>
 </tr>
 <tr>
@@ -518,10 +520,10 @@ intercept
 slope
 </td>
 <td style="text-align:right;">
-0.20718
+0.20658
 </td>
 <td style="text-align:right;">
-0.20717
+0.20708
 </td>
 <td style="text-align:right;">
 0.20761
@@ -532,10 +534,10 @@ slope
 s
 </td>
 <td style="text-align:right;">
-0.75794
+0.75635
 </td>
 <td style="text-align:right;">
-0.75534
+0.75220
 </td>
 <td style="text-align:right;">
 0.74274
@@ -577,19 +579,19 @@ s
 <td style="text-align:left;">
 </td>
 <td style="text-align:right;">
-5.14
+5.15
 </td>
 <td style="text-align:right;">
 0.21
 </td>
 <td style="text-align:right;">
-0.76
+0.75
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-18-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-18-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -632,19 +634,19 @@ s
 <td style="text-align:left;">
 </td>
 <td style="text-align:right;">
-5.14
+5.15
 </td>
 <td style="text-align:right;">
 0.21
 </td>
 <td style="text-align:right;">
-0.76
+0.75
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-20-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-20-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -694,19 +696,19 @@ s
 <td style="text-align:left;">
 </td>
 <td style="text-align:right;">
-5.14
+5.15
 </td>
 <td style="text-align:right;">
 0.21
 </td>
 <td style="text-align:right;">
-0.76
+0.75
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-22-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-22-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -756,19 +758,19 @@ s
 <td style="text-align:left;">
 </td>
 <td style="text-align:right;">
-5.14
+5.15
 </td>
 <td style="text-align:right;">
 0.21
 </td>
 <td style="text-align:right;">
-0.76
+0.75
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-24-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-24-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -786,18 +788,18 @@ arbitrary value of <span class="math inline">\(x\)</span></li>
 range(?!)</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># predict from one x, one sample</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fl">55.6</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># just apply prediction to every row of samples</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># then get the quantiles</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">quantile</span>(test_y, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="do">## 16.33720 16.98103</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># predict from one x, one sample</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fl">55.6</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co"># just apply prediction to every row of samples</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co"># then get the quantiles</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">quantile</span>(test_y, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## 16.33331 16.96370</span></span></code></pre></div>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-26-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-26-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -818,23 +820,23 @@ arbitrary value of <span class="math inline">\(x\)</span></li>
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># predict from many x, one sample</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># test_x is a vector, so result is a matrix</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># each row in this matrix is the prediction for a single x</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># each column a single sample</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="fu">colnames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;samp&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="fu">rownames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;bill_len=&quot;</span>, <span class="fu">round</span>(test_x, <span class="dv">2</span>))</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>test_y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="do">##                iterations</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="do">##                    samp1    samp2    samp3    samp4    samp5    samp6</span></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="do">##   bill_len=40   13.74954 13.74029 13.33007 13.14029 13.26856 13.66235</span></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="do">##   bill_len=40.1 13.76703 13.75796 13.35328 13.16433 13.29212 13.68048</span></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="do">##   bill_len=40.2 13.78451 13.77563 13.37649 13.18837 13.31567 13.69861</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># predict from many x, one sample</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>pry <span class="ot">=</span> <span class="cf">function</span>(samp, x) samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> x</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co"># test_x is a vector, so result is a matrix</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co"># each row in this matrix is the prediction for a single x</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co"># each column a single sample</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>test_y <span class="ot">=</span> <span class="fu">apply</span>(peng_samps, <span class="dv">1</span>, pry, <span class="at">x =</span> test_x)</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="fu">colnames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;samp&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="fu">rownames</span>(test_y) <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;bill_len=&quot;</span>, <span class="fu">round</span>(test_x, <span class="dv">2</span>))</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>test_y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="do">##                iterations</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="do">##                    samp1    samp2    samp3    samp4    samp5    samp6</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="do">##   bill_len=40   13.28862 13.24537 13.34083 13.35618 13.10993 13.61701</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="do">##   bill_len=40.1 13.31114 13.26755 13.36206 13.37742 13.13370 13.63658</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="do">##   bill_len=40.2 13.33365 13.28973 13.38328 13.39866 13.15747 13.65614</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -855,13 +857,13 @@ arbitrary value of <span class="math inline">\(x\)</span></li>
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">##      </span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">##       bill_len=40 bill_len=40.1 bill_len=40.2 bill_len=40.3 bill_len=40.4</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##   5%     13.11952      13.14429      13.16920      13.19365      13.21858</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="do">##   95%    13.73734      13.75457      13.77286      13.79004      13.80743</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># then we get the quantiles by row</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>interval_y <span class="ot">=</span> <span class="fu">apply</span>(test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>interval_y[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="do">##      </span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="do">##       bill_len=40 bill_len=40.1 bill_len=40.2 bill_len=40.3 bill_len=40.4</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="do">##   5%     13.14260      13.16763      13.19113      13.21401      13.23752</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="do">##   95%    13.74101      13.75833      13.77511      13.79278      13.80974</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -882,7 +884,7 @@ arbitrary value of <span class="math inline">\(x\)</span></li>
 </ul></li>
 </ul>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-29-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-29-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -920,21 +922,21 @@ class="math inline">\(s\)</span></li>
 intervals</strong></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>}</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># from a single sample, generate a new prediction dataset from xhat</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>sim <span class="ot">=</span> <span class="cf">function</span>(samp, xhat) {</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    eta <span class="ot">=</span> samp[<span class="dv">1</span>] <span class="sc">+</span> samp[<span class="dv">2</span>] <span class="sc">*</span> xhat</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="fu">length</span>(xhat), eta, samp[<span class="dv">3</span>])</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>}</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>test_x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">60</span>, <span class="at">length.out =</span> <span class="dv">200</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>pr_test_y <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">ncol =</span> <span class="fu">nrow</span>(peng_samps), <span class="at">nrow =</span> <span class="fu">length</span>(test_x))</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># for clarity, using a for loop. could (should) do this instead with mapply</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(peng_samps))</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>    pr_test_y[,i] <span class="ot">=</span> <span class="fu">sim</span>(peng_samps[i,], test_x)</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># now get quantiles for each value in x</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>pr_int_y <span class="ot">=</span> <span class="fu">apply</span>(pr_test_y, <span class="dv">1</span>, quantile, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -972,7 +974,7 @@ class="math inline">\(s\)</span></li>
 intervals</strong></li>
 </ul>
 </div><div class="column">
-<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-31-1.png" width="528" /></p>
+<p><img src="4_inference_i_files/figure-slidy/unnamed-chunk-31-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>

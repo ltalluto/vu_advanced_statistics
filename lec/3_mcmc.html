@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="Lauren. Talluto" />
+  <meta name="author" content="Lauren Talluto" />
   <title>Markov Chain Monte Carlo</title>
   <style type="text/css">
     code{white-space: pre-wrap;}
@@ -15,8 +15,9 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+            html { -webkit-text-size-adjust: 100%; }
             pre > code.sourceCode { white-space: pre; position: relative; }
-            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
             pre > code.sourceCode > span:empty { height: 1.2em; }
             .sourceCode { overflow: visible; }
             code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -27,7 +28,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -80,8 +81,9 @@
             code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
           </style>
   <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -92,7 +94,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +146,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.30/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -170,9 +172,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="slide titlepage">
   <h1 class="title">Markov Chain Monte Carlo</h1>
   <p class="author">
-Lauren. Talluto
+Lauren Talluto
   </p>
-  <p class="date">26.11.2024</p>
+  <p class="date">02.02.2026</p>
 </div>
 <div id="the-german-tank-problem" class="slide section level2">
 <h1>The German Tank Problem</h1>
@@ -229,7 +231,7 @@ the same probability of capture</li>
 class="math inline">\(s = N\)</span></em></li>
 </ul>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-1-1.png" width="576" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-1-1.png" alt="" width="576" /></p>
 </div>
 </div>
 </div>
@@ -250,7 +252,7 @@ the same probability of capture</li>
 class="math inline">\(s = N\)</span></em></li>
 </ul>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-2-1.png" width="576" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-2-1.png" alt="" width="576" /></p>
 </div>
 </div>
 </div>
@@ -270,7 +272,7 @@ just the model</li>
 </ul></li>
 </ul>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-3-1.png" width="576" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-3-1.png" alt="" width="576" /></p>
 </div>
 </div>
 </div>
@@ -295,7 +297,7 @@ just the model</li>
 <li>The same logic applies!</li>
 </ul>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-4-1.png" alt="" width="576" /></p>
 </div>
 </div>
 </div>
@@ -325,7 +327,7 @@ that?</p>
 <p><span class="math display">\[ s \sim  Uniform(min = 1, max =
 N)\]</span></p>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-5-1.png" alt="" width="576" /></p>
 </div>
 </div>
 </div>
@@ -378,7 +380,7 @@ class="math inline">\(1-r\)</span></li>
 </ol>
 </div>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-7-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-7-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -410,16 +412,16 @@ class="math inline">\(1-r\)</span></li>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>scale <span class="ot">=</span> <span class="fu">target</span>(s) <span class="sc">/</span> <span class="fu">proposal</span>(s) </span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>candidates <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">runif</span>(<span class="fl">1e6</span>, <span class="dv">1</span>, <span class="fl">1e6</span>))</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">target</span>(candidates)<span class="sc">/</span>(<span class="fu">proposal</span>(candidates) <span class="sc">*</span> scale)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">## Warning in dunif(s, 1, x): NaNs produced</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="do">## uniform numbers between 0 and 1</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">runif</span>(<span class="fu">length</span>(r))  </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">## TRUE if r &gt; test; WHY?</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">ifelse</span>(r <span class="sc">&gt;</span> test, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) </span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>samples <span class="ot">=</span> candidates[accept]</span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="do">## Warning in dunif(s, 1, x): NaNs produced</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">## uniform numbers between 0 and 1</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">runif</span>(<span class="fu">length</span>(r))  </span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="do">## TRUE if r &gt; test; WHY?</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>accept <span class="ot">=</span> <span class="fu">ifelse</span>(r <span class="sc">&gt;</span> test, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>) </span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>samples <span class="ot">=</span> candidates[accept]</span></code></pre></div>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-9-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-9-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -450,7 +452,7 @@ happening in discrete time steps (e.g., population growth)</li>
 <p><span class="math display">\[ S_t = S_{t-1} + fecundity \times
 S_{t-1} - mortality \times S_{t-1} \]</span></p>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-10-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-10-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -473,7 +475,7 @@ most recently accepted value</li>
 posterior</li>
 </ul>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-11-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-11-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -496,7 +498,7 @@ posterior</li>
 pr(\theta | X) \propto pr(X | \theta)pr(\theta)
 \]</span></p>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-12-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-12-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -520,7 +522,7 @@ pr(\theta | X) \propto pr(X | \theta)pr(\theta)
 <li>Choose a starting value</li>
 </ol>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-13-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-13-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -561,7 +563,7 @@ class="math inline">\(S_0\)</span></strong>
 </ul></li>
 </ol>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-14-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-14-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -604,7 +606,7 @@ class="math inline">\(S_0\)</span></strong>
 distribution</li>
 </ol>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-15-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-15-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -646,7 +648,7 @@ class="math inline">\(S_0\)</span></strong>
 distribution</li>
 </ol>
 </div><div class="column">
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-16-1.png" width="528" /></p>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-16-1.png" alt="" width="528" /></p>
 </div>
 </div>
 </div>
@@ -705,10 +707,10 @@ efficiently</li>
 <li>Other helpful plots: <code>mcmc_hist()</code> and
 <code>mcmc_pairs</code> (multivariate)</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../assets/misc/traceplt_ex.rds&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">mcmc_trace</span>(samples)</span></code></pre></div>
-<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-18-1.png" width="960" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;../assets/misc/traceplt_ex.rds&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">mcmc_trace</span>(samples)</span></code></pre></div>
+<p><img src="3_mcmc_files/figure-slidy/unnamed-chunk-18-1.png" alt="" width="960" /></p>
 </div>
 <div id="mcmc-in-stan" class="slide section level2">
 <h1>MCMC in Stan</h1>

@@ -1,6 +1,6 @@
 ---
 title: "Distributions in R"
-date: "21.11.2024"
+date: "02.02.2026"
 output: 
   html_document:
     self_contained: false
