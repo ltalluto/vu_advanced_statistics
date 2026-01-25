@@ -25,7 +25,6 @@ library(rstan)
 library(bayesplot)
 library(lme4)
 library(mvtnorm)
-library(raster)
 library(gstat)
 
 options(mc.cores = parallel::detectCores())
@@ -1376,8 +1375,9 @@ $$
 :::: {.column}
 
 ```{r include=FALSE}
-output = raster(nrows=100, ncol=100, xmn=-1, xmx=1, ymn=-1, ymx=1)
-out_pts = coordinates(output)
+# output = rast(nrows=100, ncol=100, xmn=-1, xmx=1, ymn=-1, ymx=1)
+# out_pts = coordinates(output)
+out_pts <- expand.grid(x = seq(-1, 1, length.out = 100), y = seq(-1, 1, length.out = 100))
 out_pts = st_as_sf(data.frame(out_pts), coords=c('x', 'y'))
 dat_sf = st_as_sf(dat, coords=c('x', 'y'))
 out_z = krige(z~1, locations=dat_sf, newdata = out_pts)

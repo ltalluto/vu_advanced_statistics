@@ -15,8 +15,9 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+            html { -webkit-text-size-adjust: 100%; }
             pre > code.sourceCode { white-space: pre; position: relative; }
-            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
             pre > code.sourceCode > span:empty { height: 1.2em; }
             .sourceCode { overflow: visible; }
             code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -27,7 +28,7 @@
             }
             @media print {
             pre > code.sourceCode { white-space: pre-wrap; }
-            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
             }
             pre.numberSource code
               { counter-reset: source-line 0; }
@@ -80,8 +81,9 @@
             code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
           </style>
   <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -92,7 +94,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -144,7 +146,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <script src="lib/header-attrs-2.27/header-attrs.js"></script>
+  <script src="lib/header-attrs-2.30/header-attrs.js"></script>
   <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="lib/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -389,7 +391,9 @@ a &amp; \sim \mathcal{N}(\mu_a, \sigma_a) \\
 \end{aligned}
 \]</span></p>
 </div><div class="column">
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-1-1.png" width="672" /></p>
+<pre><code>## Warning in geom_nodelabel(aes(label = name), fontface = &quot;bold&quot;, nudge_x =
+## -0.1): Ignoring unknown parameters: `label.size`</code></pre>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-1-1.png" alt="" width="672" /></p>
 </div>
 </div>
 </div>
@@ -397,40 +401,40 @@ a &amp; \sim \mathcal{N}(\mu_a, \sigma_a) \\
 <h1>1. Specify joint posterior</h1>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode stan"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n; <span class="co">// number of data points</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; k; <span class="co">// number of x-variables</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; richness [n];</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    <span class="dt">matrix</span> [n,k] X;</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>    </span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="co">// prior hyperparams</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="dt">real</span> mu_a;</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="dt">real</span> mu_b;</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_a;</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_b;</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>}</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="dt">vector</span> [k] B;</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>}</span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; [n] lambda;</span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    lambda = exp(a + X * B);</span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>}</span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>    richness ~ poisson(lambda);</span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>    a ~ normal(mu_a, sigma_a);</span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>    B ~ normal(mu_b, sigma_b);</span>
-<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>}</span>
-<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>    <span class="dt">int</span> r_predict [n];</span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
-<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>        r_predict[i] = poisson_rng(lambda[i]);</span>
-<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>    r_predict = poisson_rng(lambda);</span>
-<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode stan"><code class="sourceCode stan"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n; <span class="co">// number of data points</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; k; <span class="co">// number of x-variables</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; richness [n];</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="dt">matrix</span> [n,k] X;</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    </span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="co">// prior hyperparams</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="dt">real</span> mu_a;</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="dt">real</span> mu_b;</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_a;</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma_b;</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>}</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="dt">vector</span> [k] B;</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    <span class="dt">vector</span> &lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; [n] lambda;</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    lambda = exp(a + X * B);</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>}</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    richness ~ poisson(lambda);</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    a ~ normal(mu_a, sigma_a);</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>    B ~ normal(mu_b, sigma_b);</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>}</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>    <span class="dt">int</span> r_predict [n];</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span>:n)</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>        r_predict[i] = poisson_rng(lambda[i]);</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>    r_predict = poisson_rng(lambda);</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>}</span></code></pre></div>
 </div><div class="column">
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-3-1.png" alt="" width="672" /></p>
 </div>
 </div>
 </div>
@@ -448,42 +452,42 @@ make sure nothing surprising happens</li>
 <div id="sample-from-the-joint-posterior" class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <p>First we compile the model and prepare the data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>bird_div_glm <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/bird_div_glm.stan&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>birds <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&quot;../vu_advstats_students/data/birddiv.csv&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># stan can&#39;t handle NAs</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>birds <span class="ot">=</span> birds[<span class="fu">complete.cases</span>(birds)]</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># turn predictors into a matrix</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(birds[, <span class="fu">c</span>(<span class="st">&quot;Grow.degd&quot;</span>, <span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>, </span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>                        <span class="st">&quot;For.diver&quot;</span>, <span class="st">&quot;Agr.diver&quot;</span>, <span class="st">&quot;For.fragm&quot;</span>)])</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Remove the scale from X, make the model scale independent</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>X_scaled <span class="ot">=</span> <span class="fu">scale</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>bird_div_glm <span class="ot">=</span> <span class="fu">stan_model</span>(<span class="st">&quot;stan/bird_div_glm.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>birds <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">&quot;../vu_advstats_students/data/birddiv.csv&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># stan can&#39;t handle NAs</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>birds <span class="ot">=</span> birds[<span class="fu">complete.cases</span>(birds)]</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># turn predictors into a matrix</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(birds[, <span class="fu">c</span>(<span class="st">&quot;Grow.degd&quot;</span>, <span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>, </span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>                        <span class="st">&quot;For.diver&quot;</span>, <span class="st">&quot;Agr.diver&quot;</span>, <span class="st">&quot;For.fragm&quot;</span>)])</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co"># Remove the scale from X, make the model scale independent</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>X_scaled <span class="ot">=</span> <span class="fu">scale</span>(X)</span></code></pre></div>
 </div>
 <div id="sample-from-the-joint-posterior-1"
 class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <p>Next we fit an initial model using only NVDI as a predictor.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>which_forest <span class="ot">=</span> <span class="fu">which</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;forest&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>standat1 <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(which_forest), </span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">1</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness[which_forest],</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">X =</span> X_scaled[which_forest, <span class="st">&quot;NDVI&quot;</span>, <span class="at">drop=</span><span class="cn">FALSE</span>],</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="co"># exp(20) is a possible intercept under this prior!</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>)</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat1, <span class="at">iter=</span><span class="dv">5000</span>, </span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>which_forest <span class="ot">=</span> <span class="fu">which</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;forest&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>standat1 <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(which_forest), </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">1</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness[which_forest],</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="at">X =</span> X_scaled[which_forest, <span class="st">&quot;NDVI&quot;</span>, <span class="at">drop=</span><span class="cn">FALSE</span>],</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="co"># exp(20) is a possible intercept under this prior!</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>)</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat1, <span class="at">iter=</span><span class="dv">5000</span>, </span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 <div id="sample-from-the-joint-posterior-2"
 class="slide section level2">
@@ -493,10 +497,10 @@ class="slide section level2">
 ## post-warmup draws per chain=2500, total post-warmup draws=10000.
 ## 
 ##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat
-## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.96  7254    1
-## B[1] 0.19       0 0.04 0.11 0.17 0.19 0.22  0.28  7365    1
+## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.96  6837    1
+## B[1] 0.19       0 0.04 0.11 0.16 0.19 0.22  0.27  7036    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Dec  2 13:01:18 2024.
+## Samples were drawn using NUTS(diag_e) at Sun Jan 25 18:41:09 2026.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -506,51 +510,51 @@ class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <p>Next, we choose two variables, and try them using birds of different
 habitat types.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Second, looking at how two variables influence birds of different types</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># grab two variables</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>X_2 <span class="ot">=</span> X_scaled[, <span class="fu">c</span>(<span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>)]</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># add a categorical variable for bird type</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">open=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;open&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">generalist=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;generalist&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># add interaction terms with the categories</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, </span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>            <span class="at">op_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>            <span class="at">op_NDVI =</span> X_2[, <span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>            <span class="at">ge_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>],</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>            <span class="at">ge_NDVI =</span> X_2[,<span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>])</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">head</span>(X_2)</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="do">##       For.cover       NDVI open generalist op_forCov op_NDVI ge_forCov ge_NDVI</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="do">## [1,]  1.1895779  0.4284131    0          0         0       0         0       0</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="do">## [2,] -1.3937570 -0.8660731    0          0         0       0         0       0</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="do">## [3,] -0.4034797 -1.2463741    0          0         0       0         0       0</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="do">## [4,] -1.0985427 -0.9977157    0          0         0       0         0       0</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="do">## [5,] -1.3937570 -1.5827942    0          0         0       0         0       0</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="do">## [6,]  1.1930054  0.2090086    0          0         0       0         0       0</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Second, looking at how two variables influence birds of different types</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># grab two variables</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>X_2 <span class="ot">=</span> X_scaled[, <span class="fu">c</span>(<span class="st">&quot;For.cover&quot;</span>, <span class="st">&quot;NDVI&quot;</span>)]</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># add a categorical variable for bird type</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">open=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;open&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, <span class="at">generalist=</span><span class="fu">ifelse</span>(birds<span class="sc">$</span>hab_type <span class="sc">==</span> <span class="st">&quot;generalist&quot;</span>,<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># add interaction terms with the categories</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>X_2 <span class="ot">=</span> <span class="fu">cbind</span>(X_2, </span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>            <span class="at">op_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>            <span class="at">op_NDVI =</span> X_2[, <span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;open&quot;</span>], </span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>            <span class="at">ge_forCov =</span> X_2[,<span class="st">&quot;For.cover&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>],</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>            <span class="at">ge_NDVI =</span> X_2[,<span class="st">&quot;NDVI&quot;</span>] <span class="sc">*</span> X_2[,<span class="st">&quot;generalist&quot;</span>])</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="fu">head</span>(X_2)</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="do">##       For.cover       NDVI open generalist op_forCov op_NDVI ge_forCov ge_NDVI</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="do">## [1,]  1.1895779  0.4284131    0          0         0       0         0       0</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="do">## [2,] -1.3937570 -0.8660731    0          0         0       0         0       0</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="do">## [3,] -0.4034797 -1.2463741    0          0         0       0         0       0</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="do">## [4,] -1.0985427 -0.9977157    0          0         0       0         0       0</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="do">## [5,] -1.3937570 -1.5827942    0          0         0       0         0       0</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="do">## [6,]  1.1930054  0.2090086    0          0         0       0         0       0</span></span></code></pre></div>
 </div>
 <div id="sample-from-the-joint-posterior-4"
 class="slide section level2">
 <h1>2. Sample from the joint posterior</h1>
 <p>Next, we choose two variables, and try them using birds of different
 habitat types.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>standat2 <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(birds<span class="sc">$</span>richness), </span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">ncol</span>(X_2),</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness,</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="at">X =</span> X_2, </span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague (exp(20) is a possible intercept under this prior!)</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>)</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat2, <span class="at">iter=</span><span class="dv">5000</span>, </span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>standat2 <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">length</span>(birds<span class="sc">$</span>richness), </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="at">k =</span> <span class="fu">ncol</span>(X_2),</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    <span class="at">richness =</span> birds<span class="sc">$</span>richness,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="at">X =</span> X_2, </span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="at">mu_a =</span> <span class="dv">0</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="at">mu_b =</span> <span class="dv">0</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    <span class="co"># these prior scales are still SUPER vague (exp(20) is a possible intercept under this prior!)</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    <span class="at">sigma_a =</span> <span class="dv">10</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    <span class="at">sigma_b =</span> <span class="dv">5</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">sampling</span>(bird_glm, <span class="at">data =</span> standat2, <span class="at">iter=</span><span class="dv">5000</span>, </span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>   <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 <div id="sample-from-the-joint-posterior-5"
 class="slide section level2">
@@ -560,17 +564,17 @@ class="slide section level2">
 ## post-warmup draws per chain=2500, total post-warmup draws=10000.
 ## 
 ##       mean se_mean   sd  2.5%   25%   50%   75% 97.5% n_eff Rhat
-## a     1.86       0 0.04  1.77  1.83  1.86  1.88  1.94  8121    1
-## B[1]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7279    1
-## B[2]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7975    1
-## B[3] -1.50       0 0.10 -1.70 -1.56 -1.49 -1.43 -1.30  8538    1
-## B[4] -0.78       0 0.08 -0.94 -0.83 -0.78 -0.73 -0.62  8346    1
-## B[5] -0.61       0 0.10 -0.80 -0.68 -0.61 -0.55 -0.43  8142    1
-## B[6] -0.60       0 0.10 -0.79 -0.66 -0.60 -0.53 -0.41  8717    1
-## B[7] -0.26       0 0.08 -0.41 -0.31 -0.26 -0.20 -0.10  8060    1
-## B[8]  0.15       0 0.07  0.00  0.10  0.15  0.20  0.29  8507    1
+## a     1.86       0 0.04  1.77  1.83  1.86  1.88  1.94  7822    1
+## B[1]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7436    1
+## B[2]  0.17       0 0.04  0.09  0.14  0.17  0.20  0.25  7963    1
+## B[3] -1.49       0 0.10 -1.70 -1.56 -1.49 -1.42 -1.29  8848    1
+## B[4] -0.78       0 0.08 -0.94 -0.83 -0.78 -0.72 -0.63  8091    1
+## B[5] -0.61       0 0.10 -0.80 -0.68 -0.61 -0.55 -0.43  8522    1
+## B[6] -0.60       0 0.10 -0.79 -0.66 -0.60 -0.53 -0.41  8654    1
+## B[7] -0.26       0 0.08 -0.41 -0.31 -0.26 -0.20 -0.10  8876    1
+## B[8]  0.15       0 0.07  0.00  0.10  0.15  0.20  0.30  8111    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Dec  2 13:01:24 2024.
+## Samples were drawn using NUTS(diag_e) at Sun Jan 25 18:41:15 2026.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -584,15 +588,15 @@ class="slide section level2">
 <li>Histograms can alert you to problems with multi-modality</li>
 <li>Run multiple chains to help with diagnostics</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="do">## Use as.array if you want to keep different mcmc chains separate</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## This is ideal for diagnostics</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">## For inference, you usually want to lump all chains</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">## In this case, you use as.matrix</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>samp1_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit1, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">mcmc_combo</span>(samp1_pars, <span class="fu">c</span>(<span class="st">&quot;hist&quot;</span>, <span class="st">&quot;trace&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## Use as.array if you want to keep different mcmc chains separate</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## This is ideal for diagnostics</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## For inference, you usually want to lump all chains</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="do">## In this case, you use as.matrix</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>samp1_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit1, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">mcmc_combo</span>(samp1_pars, <span class="fu">c</span>(<span class="st">&quot;hist&quot;</span>, <span class="st">&quot;trace&quot;</span>))</span></code></pre></div>
 </div><div class="column">
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-12-1.png" alt="" width="672" /></p>
 </div>
 </div>
 </div>
@@ -618,19 +622,19 @@ deterministic)</li>
 </ul></li>
 </ul>
 </div><div class="column">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">print</span>(fit1, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="do">## Inference for Stan model: anon_model.</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## 4 chains, each with iter=5000; warmup=2500; thin=1; </span></span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="do">## post-warmup draws per chain=2500, total post-warmup draws=10000.</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="do">## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.96  7254    1</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## B[1] 0.19       0 0.04 0.11 0.17 0.19 0.22  0.28  7365    1</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="do">## Samples were drawn using NUTS(diag_e) at Mon Dec  2 13:01:18 2024.</span></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="do">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="do">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="do">## convergence, Rhat=1).</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">print</span>(fit1, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="do">## Inference for Stan model: anon_model.</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">## 4 chains, each with iter=5000; warmup=2500; thin=1; </span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="do">## post-warmup draws per chain=2500, total post-warmup draws=10000.</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="do">##      mean se_mean   sd 2.5%  25%  50%  75% 97.5% n_eff Rhat</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="do">## a    1.88       0 0.04 1.80 1.85 1.88 1.90  1.96  6837    1</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="do">## B[1] 0.19       0 0.04 0.11 0.16 0.19 0.22  0.27  7036    1</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="do">## Samples were drawn using NUTS(diag_e) at Sun Jan 25 18:41:09 2026.</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="do">## For each parameter, n_eff is a crude measure of effective sample size,</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="do">## and Rhat is the potential scale reduction factor on split chains (at </span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="do">## convergence, Rhat=1).</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -638,12 +642,12 @@ deterministic)</li>
 <h1>4. Inference: parameter estimates</h1>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp1_pars)</span></code></pre></div>
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-14-1.png" width="480" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp1_pars)</span></code></pre></div>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-14-1.png" alt="" width="480" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>samp2_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit2, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp2_pars)</span></code></pre></div>
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-15-1.png" width="672" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>samp2_pars <span class="ot">=</span> <span class="fu">as.array</span>(fit2, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;B&#39;</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">mcmc_intervals</span>(samp2_pars)</span></code></pre></div>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-15-1.png" alt="" width="672" /></p>
 </div>
 </div>
 </div>
@@ -655,7 +659,7 @@ deterministic)</li>
 <li>How close is the model to the original data?</li>
 <li>How well does our generative model describe the data?</li>
 </ul>
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-16-1.png" width="864" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-16-1.png" alt="" width="864" /></p>
 </div><div class="column">
 <p>For the Poisson, we want to ensure that the <span
 class="math inline">\(Var(y|x) = \mathbb{E}(y|x)\)</span>. We can
@@ -665,20 +669,20 @@ to be equal to one:</p>
 \phi = \frac{-2 \times \log pr(x|y)}{n-k}
 \]</span> Where <span class="math inline">\(k\)</span> is the number of
 parameters in the model.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>samp1_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>dev1 <span class="ot">=</span> <span class="fu">apply</span>(samp1_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat1<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co"># deviance/(n - k)</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>phi <span class="ot">=</span> dev1 <span class="sc">/</span> (<span class="fu">length</span>(standat1<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">2</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="do">## 6.144344 6.210879</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>samp1_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>dev1 <span class="ot">=</span> <span class="fu">apply</span>(samp1_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat1<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># compute posterior distribution of dispersion parameter, which is just </span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co"># deviance/(n - k)</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># here k is 2, we have an intercept and one slope</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># if phi &gt; 1, we have overdispersion and need a better model</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>phi <span class="ot">=</span> dev1 <span class="sc">/</span> (<span class="fu">length</span>(standat1<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="do">## 6.144347 6.211081</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -686,18 +690,18 @@ parameters in the model.</p>
 <h1>4. Inference: Improve the model</h1>
 <div class="columns">
 <div class="column">
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-18-1.png" width="864" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-18-1.png" alt="" width="864" /></p>
 </div><div class="column">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>samp2_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>dev2 <span class="ot">=</span> <span class="fu">apply</span>(samp2_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat2<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>phi <span class="ot">=</span> dev2 <span class="sc">/</span> (<span class="fu">length</span>(standat2<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">9</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="do">## 7.367951 8.149738</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># extract the samples</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>samp2_lam <span class="ot">=</span> <span class="fu">as.matrix</span>(fit1, <span class="at">pars=</span><span class="st">&#39;lambda&#39;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co"># compute the posterior distribution of the residual deviance</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>dev2 <span class="ot">=</span> <span class="fu">apply</span>(samp2_lam, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(standat2<span class="sc">$</span>richness, x, <span class="at">log =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>phi <span class="ot">=</span> dev2 <span class="sc">/</span> (<span class="fu">length</span>(standat2<span class="sc">$</span>richness) <span class="sc">-</span> <span class="dv">9</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">quantile</span>(phi, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="do">##       5%      95% </span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="do">## 7.362231 8.159030</span></span></code></pre></div>
 <ul>
 <li>This model is still quite overdispersed
 <ul>
@@ -715,11 +719,11 @@ class="slide section level2">
 <li>How does richness respond to the individual variables, holding other
 variables constant?</li>
 </ul>
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-20-1.png" width="1344" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-20-1.png" alt="" width="1344" /></p>
 </div>
 <div id="inference-response-surfaces" class="slide section level2">
 <h1>4. Inference: Response Surfaces</h1>
-<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-21-1.png" width="1440" /></p>
+<p><img src="6_inference_ii_files/figure-slidy/unnamed-chunk-21-1.png" alt="" width="1440" /></p>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->
