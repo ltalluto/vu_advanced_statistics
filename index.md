@@ -191,4 +191,4 @@ These write-ups are due on **28.02.2026**. Please note that this is a hard deadl
 * 30%: Group presentation on **09.02.2026**
 * 30%: Group project writeup due **28.02.2026**
 
-<p style="font-size: small">*at least 50% is a passing mark*</p>
+<p style="font-size: small"><emph>at least 50% is a passing mark</emph></p>
