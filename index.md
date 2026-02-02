@@ -43,7 +43,7 @@ methods, in both R and Stan
 		<td><a href="lec/1_probability">Probability & Distributions </a><br/>(Lauren)</td>
 		<td>
 			<p><a href = "ex/ex1_distributions">Distributions in R</a></p>
-			<!-- <p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p> -->
+			<p class = "soln"><a href = "ex/soln1_distributions.html">Solutions</a></p>
 		</td>
 	</tr>
 	<tr>
