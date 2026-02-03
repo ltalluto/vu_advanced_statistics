@@ -794,7 +794,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 <span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p, <span class="at">data =</span> zomb_data)</span></code></pre></div>
 <pre><code>## $par
 ##         p 
-## 0.2800001 
+## 0.2800145 
 ## 
 ## $value
 ## [1] -14.82383
@@ -804,7 +804,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb11-1"><a href=
 ## 
 ## $theta_tilde
 ##              p
-## [1,] 0.2800001</code></pre>
+## [1,] 0.2800145</code></pre>
 </div>
 </div>
 </div>
@@ -890,8 +890,8 @@ multiple observations with no changes.</li>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs; <span class="co">// number of data points</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs]; <span class="co">// number of trials for each data point</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="dt">array</span> [n_obs] <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="dt">array</span> [n_obs] <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n; <span class="co">// number of trials for each data point</span></span>
 <span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>}</span>
 <span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="kw">parameters</span> {</span>
 <span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>, <span class="kw">upper</span> = <span class="dv">1</span>&gt; p;</span>
@@ -912,7 +912,7 @@ class="sourceCode stan"><code class="sourceCode stan"><span id="cb16-1"><a href=
 <span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co"># estimate the parameter</span></span>
 <span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p2, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="do">## 0.2222238</span></span></code></pre></div>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="do">## 0.2222237</span></span></code></pre></div>
 </div>
 <div id="why-bayes" class="slide section level2">
 <h1>Why Bayes?</h1>
@@ -1135,8 +1135,8 @@ methods we used before</li>
 class="sourceCode stan"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">// Saved in vu_advstats_students/stan/zomb_p_bayes.stan</span></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="kw">data</span> {</span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">1</span>&gt; n_obs;</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k [n_obs];</span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>    <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n [n_obs];</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>    <span class="dt">array</span> [n_obs] <span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; k;</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>    <span class="dt">array</span> [n_obs]<span class="dt">int</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; n;</span>
 <span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; a;</span>
 <span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>    <span class="dt">real</span> &lt;<span class="kw">lower</span> = <span class="dv">0</span>&gt; b;</span>
 <span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>}</span>
@@ -1174,8 +1174,8 @@ class="slide section level2">
 <span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="do">## [1] 0.28</span></span>
 <span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a></span>
 <span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
-<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a><span class="do">## 0.2800001</span></span></code></pre></div>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a><span class="do">##    p </span></span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a><span class="do">## 0.28</span></span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-38-1.png" alt="" width="528" /></p>
 <p>This prior has no influence on the posterior</p>
@@ -1189,11 +1189,11 @@ class="slide section level2">
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">2</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">2</span></span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.2963024</span></span></code></pre></div>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="do">## 0.2962964</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">3</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="fl">1.5</span></span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.3272737</span></span></code></pre></div>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="do">## 0.3272733</span></span></code></pre></div>
 <p>These priors are informative, but relatively weak (our data has
 weight equivalent to <code>alpha=7, beta=18</code>)</p>
 </div><div class="column">
@@ -1210,7 +1210,7 @@ zombies and 5 normals?</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>zomb_data<span class="sc">$</span>a <span class="ot">=</span> <span class="dv">20</span>; zomb_data<span class="sc">$</span>b <span class="ot">=</span> <span class="dv">5</span></span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">optimizing</span>(zomb_p_bayes, <span class="at">data =</span> zomb_data)<span class="sc">$</span>par</span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">##         p </span></span>
-<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## 0.5416618</span></span></code></pre></div>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="do">## 0.5416663</span></span></code></pre></div>
 </div><div class="column">
 <p><img src="2_mle_files/figure-slidy/unnamed-chunk-43-1.png" alt="" width="528" /></p>
 </div>

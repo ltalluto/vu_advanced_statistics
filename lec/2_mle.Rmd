@@ -748,8 +748,8 @@ optim(p_init, llfun, method = "Brent", n = n_vec, k = k_vec,
 ```{stan output.var = "zomb_p2", cache = TRUE}
 data {
 	int <lower = 1> n_obs; // number of data points
-	int <lower = 0> k [n_obs];
-	int <lower = 0> n [n_obs]; // number of trials for each data point
+	array [n_obs] int <lower = 0> k;
+	array [n_obs] int <lower = 0> n; // number of trials for each data point
 }
 parameters {
 	real <lower = 0, upper = 1> p;
@@ -992,8 +992,8 @@ log_posterior = function(p, n, k, a, b)
 // Saved in vu_advstats_students/stan/zomb_p_bayes.stan
 data {
 	int <lower = 1> n_obs;
-	int <lower = 0> k [n_obs];
-	int <lower = 0> n [n_obs];
+	array [n_obs] int <lower = 0> k;
+	array [n_obs]int <lower = 0> n;
 	real <lower = 0> a;
 	real <lower = 0> b;
 }
