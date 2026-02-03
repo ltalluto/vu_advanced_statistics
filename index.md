@@ -59,7 +59,7 @@ methods, in both R and Stan
 		</td>
 		<td>
 			<p><a href = "ex/ex2_tree.html">Tree mortality</a></p>
-			<!-- <p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p> -->
+			<p class = "soln"><a href = "ex/soln2_tree.html">Solutions</a></p>
 			<p><a href = "ex/ex3_tank">German tank problem</a></p>
 		</td>
 	</tr>
